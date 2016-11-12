@@ -9,14 +9,14 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
       {% for action in object_list %}
+      <tr>
           <td>{{ forloop.counter }}</td>
-          <td><a href="{{ action.get_link }}">{{ action.title }}</a></td>
+          <td><a href="{{ action.get_absolute_url }}">{{ action.title }}</a></td>
           <td>{{ action.creator }}</td>
           <td>{{ action.deadline }}</td>
           <td>{{ action.get_tags }}</td>
+      </tr>
       {% endfor %}
-    </tr>
   </tbody>
 </table>

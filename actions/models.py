@@ -39,8 +39,11 @@ class Action(models.Model):
     def __unicode__(self):
         return self.title
 
-    def get_link(self):
+    def get_absolute_url(self):
         return reverse('action', kwargs={'slug': self.slug})
+
+    def get_edit_url(self):
+        return reverse('edit_action', kwargs={'slug': self.slug})
 
     def get_action_creator_link(self):
         return reverse('profile', kwargs={'slug': self.creator.username})

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views import generic
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from django.contrib.auth.models import User
 from profiles.models import Profile
@@ -13,5 +14,12 @@ class ProfileView(generic.DetailView):
     template_name = 'profiles/profile.html'
     model = User
     slug_field = 'username'
+
+class ProfileEditView(generic.UpdateView):
+    model = Profile
+    fields = ['verified', 'text', 'location', 'links']
+
+    def get_success_url(self, **kwargs):
+        return self.object.get_absolute_url()    
 
 # Add friend list view (or maybe wrap it into profile view?)

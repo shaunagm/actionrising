@@ -11,7 +11,11 @@
 
   <div class="row">
      <div class="col-sm-10 col-sm-offset-1">
-       <h2>{{ action.title }}</h2>
+       <h2>{{ action.title }}
+         {% ifequal object.creator.username request.user.username %}
+             <a href="{{ object.get_edit_url }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+         {% endifequal %}
+       </h2>
        <h4>Created by {% if action.anonymize == True %} Anonymous {% else %}
            <a href="{{ action.get_action_creator_link }}">{{ action.creator }}</a> {% endif %}</h4>
        <i class="fa fa-location-arrow" aria-hidden="true"> <a href="{{ action.location }}">location</a> </i>

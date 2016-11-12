@@ -1,5 +1,8 @@
 from __future__ import unicode_literals
 from django.db import models
+from django.db.models.signals import post_save
+from django.core.urlresolvers import reverse
+
 from django.contrib.auth.models import User
 
 class Profile(models.Model):
@@ -15,6 +18,12 @@ class Profile(models.Model):
     def __unicode__(self):
         return u'Profile of user: %s' % self.user.username
 
+    def get_absolute_url(self):
+        return reverse('profile', kwargs={'slug': self.user.username })
+
+    def get_edit_url(self):
+        return reverse('edit_profile', kwargs={'pk': self.pk })
+
     # Add methods to save and access links as json objects
 
     # Add links to get specific kinds of links, so that Twitter for instance can be displayed with the
@@ -23,6 +32,12 @@ class Profile(models.Model):
     # Add methods to display actions data linked from actions app
 
     # Add methods to facilitate viewing on friendfeeds
+
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+post_save.connect(create_user_profile, sender=User)
 
 class Relationship(models.Model):
     person_from = models.ForeignKey(User, related_name='from_people')

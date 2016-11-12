@@ -4,5 +4,6 @@ from profiles import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'^(?P<slug>[-\w]+)$', views.ProfileView.as_view(), name='profile'),
+    url(r'^profile/(?P<slug>[-\w]+)$', views.ProfileView.as_view(), name='profile'),
+    url(r'^edit/(?P<pk>[-\w]+)$', views.ProfileEditView.as_view(), name='edit_profile'),
 ]

@@ -12,6 +12,23 @@ class IndexView(generic.ListView):
     template_name = "actions/actions.html"
     model = Action
 
+class ActionCreateView(generic.edit.CreateView):
+    model = Action
+    fields = ['slug', 'title', 'anonymize', 'main_link', 'text', 'privacy', 'location', 'status', 'has_deadline', 'deadline']
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.creator = self.request.user
+        self.object.save()
+        return super(ActionCreateView, self).form_valid(form)
+
+    def get_success_url(self, **kwargs):
+        return self.object.get_absolute_url() 
+
+class ActionEditView(generic.edit.UpdateView):
+    model = Action
+    fields = ['slug', 'title', 'anonymize', 'main_link', 'text', 'privacy', 'location', 'status', 'has_deadline', 'deadline']
+
 class ActionView(generic.DetailView):
     template_name = 'actions/action.html'
     model = Action
