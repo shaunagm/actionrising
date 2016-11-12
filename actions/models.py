@@ -36,6 +36,9 @@ class Action(models.Model):
     # Add get_privacy field which displays the privacy setting dependent on whether it's your
     # action, and what "inherit" is. (For now, it's just getting the field directly, which is not ideal.
 
+    def __unicode__(self):
+        return self.title
+
     def get_link(self):
         return reverse('action', kwargs={'slug': self.slug})
 
@@ -44,10 +47,24 @@ class Action(models.Model):
 
 class ActionTopic(models.Model):
     name = models.CharField(max_length=40, unique=True)
+    slug = models.CharField(max_length=50, unique=True)
     text = models.CharField(max_length=200, blank=True, null=True)  # Rich text?
     actions = models.ManyToManyField(Action, blank=True, related_name="topics")
 
+    def __unicode__(self):
+        return self.name
+
+    def get_link(self):
+        return reverse('topic', kwargs={'slug': self.slug})
+
 class ActionType(models.Model):
     name = models.CharField(max_length=40, unique=True)
+    slug = models.CharField(max_length=50, unique=True)
     text = models.CharField(max_length=200, blank=True, null=True)  # Rich text?
     actions = models.ManyToManyField(Action, blank=True, related_name="actiontypes")
+
+    def __unicode__(self):
+        return self.name
+
+    def get_link(self):
+        return reverse('type', kwargs={'slug': self.slug})

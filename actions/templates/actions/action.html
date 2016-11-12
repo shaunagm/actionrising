@@ -1,7 +1,10 @@
 {% extends "mysite/base.html" %}
 
 {% block page_specific_css %}
-    <style>i { padding-right: 20px; }</style>
+    <style>
+      i { padding-right: 20px; }
+      span.label a { color:white; decoration:none; }
+    </style>
 {% endblock page_specific_css%}
 
 {% block content %}
@@ -40,6 +43,10 @@
 
   <div class="row">
      <div class="col-sm-10 col-sm-offset-1">
+
+       {% for item in topic_or_type_list %}
+          <span class="label label-info"><a href="{{ item.get_link }}">{{ item.name }}</a></span>
+       {% endfor %}
      </div>
   </div>
 

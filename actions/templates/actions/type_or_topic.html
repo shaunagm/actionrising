@@ -1,0 +1,27 @@
+{% extends "mysite/base.html" %}
+
+{% block page_specific_css %}
+    <style>i { padding-right: 20px; }</style>
+{% endblock page_specific_css%}
+
+{% block content %}
+
+  <div class="row">
+     <div class="col-sm-10 col-sm-offset-1">
+       <h2>{{ object.name }}</h2>
+       <p>{{ object.text }}</p>
+     </div>
+  </div>
+
+  <div class="row">
+     <div class="col-sm-10 col-sm-offset-1">
+
+       <h2>Tagged Actions</h2>
+
+       {% include "actions/action_list_include.html" with object_list=action_list %}
+
+     </div>
+  </div>
+
+
+{% endblock content %}
