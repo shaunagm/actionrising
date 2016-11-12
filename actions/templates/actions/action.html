@@ -1,0 +1,46 @@
+{% extends "mysite/base.html" %}
+
+{% block page_specific_css %}
+    <style>i { padding-right: 20px; }</style>
+{% endblock page_specific_css%}
+
+{% block content %}
+
+  <div class="row">
+     <div class="col-sm-10 col-sm-offset-1">
+       <h2>{{ action.title }}</h2>
+       <h4>Created by {% if action.anonymize == True %} Anonymous {% else %}
+           <a href="{{ action.get_action_creator_link }}">{{ action.creator }}</a> {% endif %}</h4>
+       <i class="fa fa-location-arrow" aria-hidden="true"> <a href="{{ action.location }}">location</a> </i>
+       <i class="fa fa-eye" aria-hidden="true"> {{ action.get_privacy_display }} </i>
+       <i class="fa fa-space-shuttle" aria-hidden="true"> {{ action.get_status_display }} </i>
+     </div>
+  </div>
+
+  <div class="row">
+     <div class="col-sm-10 col-sm-offset-1">
+       <div class="btn-group">
+           <a href="#" class="btn btn-success">Manage Action</a>
+           <a aria-expanded="false" href="#" class="btn btn-success dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+           <ul class="dropdown-menu">
+               <li><a href="#">Add to Actions</a></li>  <!-- or, dynamically, remove from actions -->
+               <li><a href="#">Mark as Done</a></li>  <!-- or, dynamically, mark as undone -->
+               <li><a href="#">Suggest to Others</a></li>
+           </ul>
+       </div>
+    </div>
+  </div>
+
+  <div class="row">
+     <div class="col-sm-10 col-sm-offset-1">
+       <h4>Quick link: <a href="{{ action.main_link }}">{{ action.main_link }}</a></h4>
+       {{ action.text }}
+     </div>
+  </div>
+
+  <div class="row">
+     <div class="col-sm-10 col-sm-offset-1">
+     </div>
+  </div>
+
+{% endblock content %}
