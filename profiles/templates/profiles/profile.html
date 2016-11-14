@@ -1,5 +1,10 @@
 {% extends "mysite/base.html" %}
 
+{% block page_specific_css %}
+	.btn-group > .btn + .dropdown-toggle { padding-top:18px; }
+	.caret { padding-bottom: 7.5px;}
+{% endblock page_specific_css%}
+
 {% block content %}
 
   <div class="row">
