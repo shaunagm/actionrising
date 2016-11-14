@@ -7,6 +7,8 @@
        <h2>{{ object.username }}
          {% ifequal object.username request.user.username %}
              <a href="{{ object.profile.get_edit_url }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+         {% else %}
+             {% include "profiles/rel_management_include.html" with object=object %}
          {% endifequal %}
        </h2>
        <i class="fa fa-location-arrow" aria-hidden="true"> location </i>
