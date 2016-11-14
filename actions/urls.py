@@ -11,6 +11,9 @@ urlpatterns = [
     url(r'^topic/(?P<slug>[-\w]+)$', views.TopicView.as_view(), name='topic'),
     url(r'^types/?$', views.TypeListView.as_view(), name='types'),
     url(r'^type/(?P<slug>[-\w]+)$', views.TypeView.as_view(), name='type'),
+    url(r'^slates/?$', views.SlateListView.as_view(), name='slates'),
+    url(r'^slate/(?P<slug>[-\w]+)$', views.SlateView.as_view(), name='slate'),
+
     # Set up a redirect so url/topic or url/topic/ with no slug provided goes to /topics
     # And same for types
 ]

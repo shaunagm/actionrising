@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.views import generic
 
 from django.contrib.auth.models import User
-from actions.models import Action, ActionTopic, ActionType
+from actions.models import Action, ActionTopic, ActionType, Slate
 
 class IndexView(generic.ListView):
     template_name = "actions/actions.html"
@@ -66,3 +66,12 @@ class TypeView(generic.DetailView):
         context = super(TypeView, self).get_context_data(**kwargs)
         context['action_list'] = self.object.actions.all()
         return context
+
+class SlateView(generic.DetailView):
+    template_name = 'actions/slate.html'
+    model = Slate
+
+class SlateListView(generic.ListView):
+    # Note: templates can likely be refactored to use same template as TopicListView
+    template_name = "actions/slates.html"
+    model = Slate

@@ -5,6 +5,30 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.contrib.auth.models import User
 
+PRIVACY_CHOICES = (
+    ('pub', 'Visible to Public'),
+    ('sit', 'Visible Sitewide'),
+    ('fol', 'Visible to Buddies and Those You Follow'),
+    ('bud', 'Visible to Buddies'),
+    ('you', 'Only Visible to You'),
+    ('inh', 'Inherit'),
+)
+
+STATUS_CHOICES = (
+    ('cre', 'In creation'),
+    ('rea', 'Open for action'),
+    ('fin', 'Finished'),
+    ('wit', 'Withdrawn'),
+)
+
+PRIORITY_CHOICES = (
+    ('low', 'Low'),
+    ('med', 'Medium'),
+    ('hig', 'High'),
+    ('eme', 'Emergency'),
+
+)
+
 class Action(models.Model):
     slug = models.CharField(max_length=50, unique=True)
     title = models.CharField(max_length=300)
@@ -12,31 +36,19 @@ class Action(models.Model):
     anonymize = models.BooleanField(default=False)
     main_link = models.CharField(max_length=300, blank=True, null=True)
     text = models.CharField(max_length=500, blank=True, null=True)  # Rich text?
-    PRIVACY_CHOICES = (
-        ('pub', 'Visible to Public'),
-        ('sit', 'Visible Sitewide'),
-        ('fol', 'Visible to Buddies and Those You Follow'),
-        ('bud', 'Visible to Buddies'),
-        ('you', 'Only Visible to You'),
-        ('inh', 'Inherit'),
-    )
     privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
-    # Inherit will need to be calculated each time, so we might want current_privacy generated from privacy
     location = models.CharField(max_length=140, blank=True, null=True)
-    STATUS_CHOICES = (
-        ('cre', 'In creation'),
-        ('rea', 'Ready for action'),
-        ('wit', 'Withdrawn'),
-    )
     status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='cre')
     has_deadline = models.BooleanField(default=False)
     deadline = models.DateTimeField(blank=True, null=True)
+    suggested_priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='med')
 
     # Add get_status field which looks at has_deadline and returns either no deadline,
     # deadline not yet passed, or deadline passed.
 
     # Add get_privacy field which displays the privacy setting dependent on whether it's your
     # action, and what "inherit" is. (For now, it's just getting the field directly, which is not ideal.
+    # Inherit will need to be calculated each time, so we might want current_privacy generated from privacy
 
     def __unicode__(self):
         return self.title
@@ -96,3 +108,24 @@ class ActionType(models.Model):
 
     def get_link(self):
         return reverse('type', kwargs={'slug': self.slug})
+
+class Slate(models.Model):
+    slug = models.CharField(max_length=50, unique=True)
+    title = models.CharField(max_length=300)
+    creator = models.ForeignKey(User)
+    text = models.CharField(max_length=200, blank=True, null=True)  # Rich text?
+    status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='cre')
+    privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
+    actions = models.ManyToManyField(Action, through='SlateActionRelationship')
+
+    def __unicode__(self):
+        return self.slug
+
+    def get_absolute_url(self):
+        return reverse('slate', kwargs={'slug': self.slug})
+
+class SlateActionRelationship(models.Model):
+    slate = models.ForeignKey(Slate, on_delete=models.CASCADE)
+    action = models.ForeignKey(Action, on_delete=models.CASCADE)
+    priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='med')
+    privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
