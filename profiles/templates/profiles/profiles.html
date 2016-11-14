@@ -1,0 +1,33 @@
+{% extends "mysite/base.html" %}
+
+{% block page_specific_css %}
+  table { font-size: 16px !important; }
+  .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info { color: #ebebeb; }
+  .even { background-color: #2b3e50 !important;}
+{% endblock page_specific_css%}
+
+{% block page_specific_javascript %}
+
+    $(document).ready(function() {
+        $('#profiles').DataTable();
+    } );
+
+{% endblock page_specific_javascript %}
+
+{% block content %}
+
+    {% load profile_extras %}
+    {% get_friendslist as friendlist %}
+
+    <div class="row">
+       <div class="col-sm-10 col-sm-offset-1">
+
+         <h2>Users</h2>
+
+         {% include "profiles/profile_list_include.html" with object_list=object_list %}
+
+       </div>
+    </div>
+
+
+{% endblock content %}

@@ -20,6 +20,10 @@ class ProfileEditView(generic.UpdateView):
     fields = ['verified', 'text', 'location', 'links']
 
     def get_success_url(self, **kwargs):
-        return self.object.get_absolute_url()    
+        return self.object.get_absolute_url()
+
+class ProfileSearchView(generic.ListView):
+    template_name = 'profiles/profiles.html'
+    model = User
 
 # Add friend list view (or maybe wrap it into profile view?)
