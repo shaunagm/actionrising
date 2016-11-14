@@ -1,10 +1,12 @@
-<table class="table table-striped table-hover ">
+<table class="table table-striped table-hover" id="actions">
   <thead>
     <tr>
       <th>#</th>
       <th>Action</th>
       <th>Creator</th>
       <th>Deadline</th>
+      <th>Status</th>
+      <th>Friends?</th>
       <th>Tags</th>
     </tr>
   </thead>
@@ -13,9 +15,11 @@
       <tr>
           <td>{{ forloop.counter }}</td>
           <td><a href="{{ action.get_absolute_url }}">{{ action.title }}</a></td>
-          <td>{{ action.creator }}</td>
+          <td>{{ action.get_creator_with_link|safe }}</td>
           <td>{{ action.deadline }}</td>
-          <td>{{ action.get_tags }}</td>
+          <td>{{ action.get_status_display }}</td>
+          <td>{% if action.creator in friendlist %} True {% endif %} </td>
+          <td>{% include "actions/action_label_include.html" with object_list=action.get_tags %}</td>
       </tr>
       {% endfor %}
   </tbody>

@@ -1,4 +1,6 @@
 from __future__ import unicode_literals
+from itertools import chain
+
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.contrib.auth.models import User
@@ -48,6 +50,21 @@ class Action(models.Model):
     def get_action_creator_link(self):
         return reverse('profile', kwargs={'slug': self.creator.username})
 
+    def get_tags(self):
+        return list(chain(self.topics.all(), self.actiontypes.all()))
+
+    def get_creator(self):
+        if self.anonymize:
+            return "Anonymous"
+        else:
+            return self.creator
+
+    def get_creator_with_link(self):
+        if self.anonymize:
+            return "Anonymous"
+        else:
+            return "<a href='" + self.get_action_creator_link() + "'>" + self.creator.username + "</a>"
+
 class ActionTopic(models.Model):
     name = models.CharField(max_length=40, unique=True)
     slug = models.CharField(max_length=50, unique=True)
@@ -56,6 +73,10 @@ class ActionTopic(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def get_cname(self):
+        class_name = 'ActionTopic'
+        return class_name
 
     def get_link(self):
         return reverse('topic', kwargs={'slug': self.slug})
@@ -68,6 +89,10 @@ class ActionType(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def get_cname(self):
+        class_name = 'ActionType'
+        return class_name
 
     def get_link(self):
         return reverse('type', kwargs={'slug': self.slug})

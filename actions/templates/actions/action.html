@@ -1,11 +1,9 @@
 {% extends "mysite/base.html" %}
 
 {% block page_specific_css %}
-    <style>
 	i { padding-right: 20px; }
-	.btn-group > .btn + .dropdown-toggle { padding-top:18px; } 
+	.btn-group > .btn + .dropdown-toggle { padding-top:18px; }
 	.caret { padding-bottom: 7.5px;}
-    </style>
 {% endblock page_specific_css%}
 
 {% block content %}
@@ -17,8 +15,7 @@
              <a href="{{ object.get_edit_url }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
          {% endifequal %}
        </h2>
-       <h4>Created by {% if action.anonymize == True %} Anonymous {% else %}
-           <a href="{{ action.get_action_creator_link }}">{{ action.creator }}</a> {% endif %}</h4>
+       <h4>Created by {{ action.get_creator_with_link|safe }}</h4>
        <i class="fa fa-location-arrow" aria-hidden="true"> <a href="{{ action.location }}">location</a> </i>
        <i class="fa fa-eye" aria-hidden="true"> {{ action.get_privacy_display }} </i>
        <i class="fa fa-space-shuttle" aria-hidden="true"> {{ action.get_status_display }} </i>
@@ -48,10 +45,8 @@
 
   <div class="row">
      <div class="col-sm-10 col-sm-offset-1">
-
-       {% for item in topic_or_type_list %}
-          <span class="label label-info"><a href="{{ item.get_link }}">{{ item.name }}</a></span>
-       {% endfor %}
+        <p></p>  <!-- hack! -->
+        {% include "actions/action_label_include.html" with object_list=topic_or_type_list %}
      </div>
   </div>
 

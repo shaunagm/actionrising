@@ -23,7 +23,7 @@ class ActionCreateView(generic.edit.CreateView):
         return super(ActionCreateView, self).form_valid(form)
 
     def get_success_url(self, **kwargs):
-        return self.object.get_absolute_url() 
+        return self.object.get_absolute_url()
 
 class ActionEditView(generic.edit.UpdateView):
     model = Action

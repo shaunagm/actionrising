@@ -40,14 +40,22 @@ def create_user_profile(sender, instance, created, **kwargs):
 post_save.connect(create_user_profile, sender=User)
 
 class Relationship(models.Model):
-    person_from = models.ForeignKey(User, related_name='from_people')
-    person_to = models.ForeignKey(User, related_name='to_people')
+    person_from = models.ForeignKey(Profile, related_name='from_people')
+    person_to = models.ForeignKey(Profile, related_name='to_people')
     RELATIONSHIP_CHOICES = (
         ('fol', 'Following'),
         ('bud', 'Buddy'),
     )
     kind = models.CharField(max_length=3, choices=RELATIONSHIP_CHOICES, default='fol')
     mute = models.BooleanField(default=False)
+
+    def get_other(self, user):
+        if user == self.person_from:
+            return self.person_to
+        if user == self.person_to:
+            return self.person_from
+        else:
+            return False
 
 class PrivacyDefaults(models.Model):
     user = models.OneToOneField(User, unique=True)
