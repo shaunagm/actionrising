@@ -1,0 +1,22 @@
+{% extends "mysite/base.html" %}
+
+{% block page_specific_css %}
+  select { color: #2b3e50; }
+{% endblock page_specific_css%}
+
+{% block content %}
+
+<div class="row">
+   <div class="col-sm-10 col-sm-offset-1">
+       <h4>Manage Action <a href="{{ action.get_absolute_url }}">{{ action.title }}</a></h4>
+       <form class="form-horizontal" action="" method="post">
+           {% csrf_token %}
+           {{ form }}
+           <input type="submit" value="Submit" />
+       </form>
+
+
+   </div>
+</div>
+
+{% endblock content %}

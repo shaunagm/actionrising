@@ -5,29 +5,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.contrib.auth.models import User
 
-PRIVACY_CHOICES = (
-    ('pub', 'Visible to Public'),
-    ('sit', 'Visible Sitewide'),
-    ('fol', 'Visible to Buddies and Those You Follow'),
-    ('bud', 'Visible to Buddies'),
-    ('you', 'Only Visible to You'),
-    ('inh', 'Inherit'),
-)
-
-STATUS_CHOICES = (
-    ('cre', 'In creation'),
-    ('rea', 'Open for action'),
-    ('fin', 'Finished'),
-    ('wit', 'Withdrawn'),
-)
-
-PRIORITY_CHOICES = (
-    ('low', 'Low'),
-    ('med', 'Medium'),
-    ('hig', 'High'),
-    ('eme', 'Emergency'),
-
-)
+from mysite.utils import PRIVACY_CHOICES, PRIORITY_CHOICES, STATUS_CHOICES
 
 class ActionTopic(models.Model):
     name = models.CharField(max_length=40, unique=True)

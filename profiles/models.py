@@ -5,6 +5,9 @@ from django.core.urlresolvers import reverse
 
 from django.contrib.auth.models import User
 
+from actions.models import Action
+from mysite.utils import PRIVACY_CHOICES, PRIORITY_CHOICES, INDIVIDUAL_STATUS_CHOICES
+
 class Profile(models.Model):
     user = models.OneToOneField(User, unique=True)
     verified = models.BooleanField(default=False)
@@ -14,6 +17,7 @@ class Profile(models.Model):
     connections = models.ManyToManyField('self', through='Relationship',
                                            symmetrical=False,
                                            related_name='connected_to')
+    actions = models.ManyToManyField(Action, through='ProfileActionRelationship')
 
     def __unicode__(self):
         return u'Profile of user: %s' % self.user.username
@@ -32,6 +36,16 @@ class Profile(models.Model):
         if rel:
             return rel[0]
         return None
+
+    def get_followers(self):
+        followers = []
+        # This should be something like for rel in self.relationship_set.all()
+        # but it doesn't seem to work
+        for person in self.connections.all():
+            rel = self.get_relationship_given_profile(person)
+            if rel.target_follows_current_profile(self):
+                followers.append(person.pk)
+        return Profile.objects.filter(pk__in=followers)
 
     # Add methods to save and access links as json objects
 
@@ -60,6 +74,13 @@ class Relationship(models.Model):
 
     def __unicode__(self):
         return u'Relationship of : %s and %s' % (self.person_A, self.person_B)
+
+    def get_other(self, profile):
+        if profile == self.person_A:
+            return self.person_B
+        if profile == self.person_B:
+            return self.person_A
+        return None
 
     def target_follows_current_profile(self, current_profile):
         if current_profile == self.person_A:
@@ -152,11 +173,17 @@ class Relationship(models.Model):
 
 class PrivacyDefaults(models.Model):
     user = models.OneToOneField(User, unique=True)
-    PRIVACY_CHOICES = (
-        ('pub', 'Visible to Public'),
-        ('sit', 'Visible Sitewide'),
-        ('fol', 'Visible to Buddies and Those You Follow'),
-        ('bud', 'Visible to Buddies'),
-        ('you', 'Only Visible to You'),
-    )
     global_default = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='fol')
+
+class ProfileActionRelationship(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    action = models.ForeignKey(Action, on_delete=models.CASCADE)
+    priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='med')
+    privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
+    status = models.CharField(max_length=3, choices=INDIVIDUAL_STATUS_CHOICES, default='inh')
+    committed = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return u'Relationship of profile %s and action %s' % (self.profile, self.action)
+
+    # Should probably add field & method to show *who* suggested this action to you

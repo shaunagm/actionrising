@@ -1,0 +1,6 @@
+{% if object in request.user.profile.actions.all %}
+  <a href="{% url 'toggle_action_for_profile' object.slug 'remove' %}" class="btn btn-primary">Remove Action</a>
+  <a href="{% url 'manage_action_for_profile' object.slug %}" class="btn btn-primary">Manage Action</a>
+{% else %}
+  <a href="{% url 'toggle_action_for_profile' object.slug 'add' %}" class="btn btn-primary">Add Action</a>
+{% endif %}

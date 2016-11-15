@@ -20,7 +20,6 @@ class ActionView(generic.DetailView):
         topic_list = self.object.topics.all()
         type_list = self.object.actiontypes.all()
         context['topic_or_type_list'] = list(chain(topic_list, type_list))
-        print(context['topic_or_type_list'])
         return context
 
 class ActionListView(generic.ListView):
