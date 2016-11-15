@@ -102,6 +102,9 @@ class Slate(models.Model):
     def get_absolute_url(self):
         return reverse('slate', kwargs={'slug': self.slug})
 
+    def get_edit_url(self):
+        return reverse('edit_slate', kwargs={'slug': self.slug})
+
 class SlateActionRelationship(models.Model):
     slate = models.ForeignKey(Slate, on_delete=models.CASCADE)
     action = models.ForeignKey(Action, on_delete=models.CASCADE)
