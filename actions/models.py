@@ -29,6 +29,36 @@ PRIORITY_CHOICES = (
 
 )
 
+class ActionTopic(models.Model):
+    name = models.CharField(max_length=40, unique=True)
+    slug = models.CharField(max_length=50, unique=True)
+    text = models.CharField(max_length=200, blank=True, null=True)  # Rich text?
+
+    def __unicode__(self):
+        return self.name
+
+    def get_cname(self):
+        class_name = 'ActionTopic'
+        return class_name
+
+    def get_link(self):
+        return reverse('topic', kwargs={'slug': self.slug})
+
+class ActionType(models.Model):
+    name = models.CharField(max_length=40, unique=True)
+    slug = models.CharField(max_length=50, unique=True)
+    text = models.CharField(max_length=200, blank=True, null=True)  # Rich text?
+
+    def __unicode__(self):
+        return self.name
+
+    def get_cname(self):
+        class_name = 'ActionType'
+        return class_name
+
+    def get_link(self):
+        return reverse('type', kwargs={'slug': self.slug})
+
 class Action(models.Model):
     slug = models.CharField(max_length=50, unique=True)
     title = models.CharField(max_length=300)
@@ -42,6 +72,8 @@ class Action(models.Model):
     has_deadline = models.BooleanField(default=False)
     deadline = models.DateTimeField(blank=True, null=True)
     suggested_priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='med')
+    actiontypes = models.ManyToManyField(ActionType, blank=True, related_name="actions_for_type")
+    topics = models.ManyToManyField(ActionTopic, blank=True, related_name="actions_for_topic")
 
     # Add get_status field which looks at has_deadline and returns either no deadline,
     # deadline not yet passed, or deadline passed.
@@ -76,38 +108,6 @@ class Action(models.Model):
             return "Anonymous"
         else:
             return "<a href='" + self.get_action_creator_link() + "'>" + self.creator.username + "</a>"
-
-class ActionTopic(models.Model):
-    name = models.CharField(max_length=40, unique=True)
-    slug = models.CharField(max_length=50, unique=True)
-    text = models.CharField(max_length=200, blank=True, null=True)  # Rich text?
-    actions = models.ManyToManyField(Action, blank=True, related_name="topics")
-
-    def __unicode__(self):
-        return self.name
-
-    def get_cname(self):
-        class_name = 'ActionTopic'
-        return class_name
-
-    def get_link(self):
-        return reverse('topic', kwargs={'slug': self.slug})
-
-class ActionType(models.Model):
-    name = models.CharField(max_length=40, unique=True)
-    slug = models.CharField(max_length=50, unique=True)
-    text = models.CharField(max_length=200, blank=True, null=True)  # Rich text?
-    actions = models.ManyToManyField(Action, blank=True, related_name="actiontypes")
-
-    def __unicode__(self):
-        return self.name
-
-    def get_cname(self):
-        class_name = 'ActionType'
-        return class_name
-
-    def get_link(self):
-        return reverse('type', kwargs={'slug': self.slug})
 
 class Slate(models.Model):
     slug = models.CharField(max_length=50, unique=True)

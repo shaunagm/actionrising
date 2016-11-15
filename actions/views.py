@@ -20,6 +20,7 @@ class ActionView(generic.DetailView):
         topic_list = self.object.topics.all()
         type_list = self.object.actiontypes.all()
         context['topic_or_type_list'] = list(chain(topic_list, type_list))
+        print(context['topic_or_type_list'])
         return context
 
 class ActionListView(generic.ListView):
@@ -28,12 +29,18 @@ class ActionListView(generic.ListView):
 
 class ActionCreateView(generic.edit.CreateView):
     model = Action
-    fields = ['slug', 'title', 'anonymize', 'main_link', 'text', 'privacy', 'location', 'status', 'has_deadline', 'deadline']
+    fields = ['slug', 'title', 'anonymize', 'main_link', 'text', 'privacy', 'location', 'status', 'has_deadline', 'deadline', 'topics', 'actiontypes']
 
     def form_valid(self, form):
+        types = form.cleaned_data.pop('actiontypes')
+        topics = form.cleaned_data.pop('topics')
         self.object = form.save(commit=False)
         self.object.creator = self.request.user
         self.object.save()
+        for atype in types:
+            self.object.actiontypes.add(atype)
+        for topic in topics:
+            self.object.topics.add(topic)
         return super(ActionCreateView, self).form_valid(form)
 
     def get_success_url(self, **kwargs):
@@ -41,7 +48,7 @@ class ActionCreateView(generic.edit.CreateView):
 
 class ActionEditView(generic.edit.UpdateView):
     model = Action
-    fields = ['slug', 'title', 'anonymize', 'main_link', 'text', 'privacy', 'location', 'status', 'has_deadline', 'deadline']
+    fields = ['slug', 'title', 'anonymize', 'main_link', 'text', 'privacy', 'location', 'status', 'has_deadline', 'deadline', 'topics', 'actiontypes']
 
 class TopicView(generic.DetailView):
     template_name = 'actions/type_or_topic.html'
@@ -49,7 +56,7 @@ class TopicView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(TopicView, self).get_context_data(**kwargs)
-        context['action_list'] = self.object.actions.all()
+        context['action_list'] = self.object.actions_for_topic.all()
         return context
 
 class TopicListView(generic.ListView):
@@ -67,7 +74,7 @@ class TypeView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(TypeView, self).get_context_data(**kwargs)
-        context['action_list'] = self.object.actions.all()
+        context['action_list'] = self.object.actions_for_type.all()
         return context
 
 class SlateView(generic.DetailView):
