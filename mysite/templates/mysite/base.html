@@ -37,12 +37,15 @@
        <div class="navbar-collapse collapse" id="navbar-main">
          <ul class="nav navbar-nav">
            <li><a href="">About</a></li>
-           <li><a href="{% url 'index' %}">Search</a></li>
-           <li><a href="{% url 'create_action' %}">Add Action</a></li>
+           <li><a href="{{ request.user.profile.get_absolute_url }}">Your Profile</a></li>
+           <li><a href="">Your Feed</a></li>
          </ul>
          <ul class="nav navbar-nav navbar-right">
-           <li><a href="{{ request.user.profile.get_absolute_url }}">Profile</a></li>
-           <li><a href="" target="_blank">Feed</a></li>
+           <li><a href="{% url 'index' %}">Actions</a></li>
+           <li><a href="{% url 'create_action' %}">Add Action</a></li>
+           <li><a href="{% url 'slates' %}">Slates</a></li>
+           <li><a href="{% url 'create_slate' %}">Add Slate</a></li>
+           <li><a href="{% url 'profiles' %}">Profiles</a></li>
          </ul>
        </div>
      </div>

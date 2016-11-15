@@ -3,7 +3,8 @@ from django.conf.urls import url
 from actions import views
 
 urlpatterns = [
-    url(r'^$', views.IndexView.as_view(), name='index'),
+    url(r'^$', views.index, name='index'),
+    url(r'^actions/?$', views.ActionListView.as_view(), name='actions'),
     url(r'^action/(?P<slug>[-\w]+)$', views.ActionView.as_view(), name='action'),
     url(r'^create', views.ActionCreateView.as_view(), name='create_action'),
     url(r'^edit/(?P<slug>[-\w]+)$', views.ActionEditView.as_view(), name='edit_action'),
@@ -13,7 +14,8 @@ urlpatterns = [
     url(r'^type/(?P<slug>[-\w]+)$', views.TypeView.as_view(), name='type'),
     url(r'^slates/?$', views.SlateListView.as_view(), name='slates'),
     url(r'^slate/(?P<slug>[-\w]+)$', views.SlateView.as_view(), name='slate'),
-
+    url(r'^slate-create/?$', views.SlateCreateView.as_view(), name='create_slate'),
+    url(r'^slate-edit/(?P<slug>[-\w]+)$', views.SlateEditView.as_view(), name='edit_slate'),
     # Set up a redirect so url/topic or url/topic/ with no slug provided goes to /topics
     # And same for types
 ]

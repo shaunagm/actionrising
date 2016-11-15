@@ -8,13 +8,14 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
+
       {% for object in object_list %}
+      <tr>
           <td>{{ forloop.counter }}</td>
           <td><a href="{{ object.get_link }}">{{ object.name }}</a></td>
           <td>{{ object.text }}</td>
           <td>{{ object.actions.count }}</td>
+      </tr>
       {% endfor %}
-    </tr>
   </tbody>
 </table>

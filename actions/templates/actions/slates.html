@@ -23,14 +23,14 @@
              </tr>
            </thead>
            <tbody>
-             <tr>
                {% for object in object_list %}
+                <tr>
                    <td>{{ forloop.counter }}</td>
                    <td><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></td>
                    <td>{{ object.creator }}</td>
                    <td>{{ object.actions.count }}</td>
+                 </tr>
                {% endfor %}
-             </tr>
            </tbody>
          </table>
 

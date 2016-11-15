@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from profiles.models import Profile
 
 def index(request):
-    return HttpResponseRedirect(reverse('profile', kwargs={'slug':request.user.username}))
+    return HttpResponseRedirect(reverse('profiles'))
 
 class ProfileView(generic.DetailView):
     template_name = 'profiles/profile.html'
