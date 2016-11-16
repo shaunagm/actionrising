@@ -1,1 +1,623 @@
-[{"model": "contenttypes.contenttype", "pk": 1, "fields": {"app_label": "admin", "model": "logentry"}}, {"model": "contenttypes.contenttype", "pk": 2, "fields": {"app_label": "auth", "model": "permission"}}, {"model": "contenttypes.contenttype", "pk": 3, "fields": {"app_label": "auth", "model": "user"}}, {"model": "contenttypes.contenttype", "pk": 4, "fields": {"app_label": "auth", "model": "group"}}, {"model": "contenttypes.contenttype", "pk": 5, "fields": {"app_label": "contenttypes", "model": "contenttype"}}, {"model": "contenttypes.contenttype", "pk": 6, "fields": {"app_label": "sessions", "model": "session"}}, {"model": "contenttypes.contenttype", "pk": 7, "fields": {"app_label": "profiles", "model": "privacydefaults"}}, {"model": "contenttypes.contenttype", "pk": 8, "fields": {"app_label": "profiles", "model": "relationship"}}, {"model": "contenttypes.contenttype", "pk": 9, "fields": {"app_label": "profiles", "model": "profile"}}, {"model": "contenttypes.contenttype", "pk": 10, "fields": {"app_label": "actions", "model": "actiontopic"}}, {"model": "contenttypes.contenttype", "pk": 11, "fields": {"app_label": "actions", "model": "action"}}, {"model": "contenttypes.contenttype", "pk": 12, "fields": {"app_label": "actions", "model": "actiontype"}}, {"model": "contenttypes.contenttype", "pk": 13, "fields": {"app_label": "actions", "model": "slate"}}, {"model": "contenttypes.contenttype", "pk": 14, "fields": {"app_label": "actions", "model": "slateactionrelationship"}}, {"model": "contenttypes.contenttype", "pk": 15, "fields": {"app_label": "profiles", "model": "profileactionrelationship"}}, {"model": "contenttypes.contenttype", "pk": 16, "fields": {"app_label": "actstream", "model": "action"}}, {"model": "contenttypes.contenttype", "pk": 17, "fields": {"app_label": "actstream", "model": "follow"}}, {"model": "contenttypes.contenttype", "pk": 18, "fields": {"app_label": "sites", "model": "site"}}, {"model": "sessions.session", "pk": "258c83lsr9aaxiqewp8ddvjdxf64x4d5", "fields": {"session_data": "N2YzOWUxYzczZDIxODg5NDkyOTM4OTRiNDM4ZmRmYzkwZDU2OTgxYjp7Il9hdXRoX3VzZXJfaGFzaCI6IjIyNjc5YmNlZTc1ODdhNzg4NWExMDgwYWQ1ZDc1MDlhZTI0YmRiYmYiLCJfYXV0aF91c2VyX2lkIjoiNSIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIn0=", "expire_date": "2016-11-30T01:29:40.215Z"}}, {"model": "sessions.session", "pk": "6h4t66evmnbeyarc01v4dy1mt63wnb0u", "fields": {"session_data": "ODYzMGZkNjZmYTc0NjAwMDg0YTRiYzdlNThkZDMyZTNlNDJlMjEwMTp7Il9hdXRoX3VzZXJfaGFzaCI6ImVhMGQwNjMzNTZhYjllMzI5MmE0YzA2ZWU0MjU3YjUxYzc1Y2ExNTAiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIxIn0=", "expire_date": "2016-11-28T02:39:56.066Z"}}, {"model": "sessions.session", "pk": "bls5m90i1fqyi1awnj00kim6qpse9xvw", "fields": {"session_data": "YjE1Y2FhODNiNTlhN2M5ZGQyNDk2NzU2OWRiZTJhODBjZWY3MTE2ZDp7Il9hdXRoX3VzZXJfaGFzaCI6IjIyNjc5YmNlZTc1ODdhNzg4NWExMDgwYWQ1ZDc1MDlhZTI0YmRiYmYiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiI1In0=", "expire_date": "2016-11-30T02:05:36.495Z"}}, {"model": "sessions.session", "pk": "mbk1mtf6a11508qh5lrvy1omz0xj15aj", "fields": {"session_data": "ODYzMGZkNjZmYTc0NjAwMDg0YTRiYzdlNThkZDMyZTNlNDJlMjEwMTp7Il9hdXRoX3VzZXJfaGFzaCI6ImVhMGQwNjMzNTZhYjllMzI5MmE0YzA2ZWU0MjU3YjUxYzc1Y2ExNTAiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIxIn0=", "expire_date": "2016-11-25T23:45:42.449Z"}}, {"model": "profiles.privacydefaults", "pk": 3, "fields": {"profile": 1, "global_default": "pub"}}, {"model": "profiles.privacydefaults", "pk": 6, "fields": {"profile": 6, "global_default": "fol"}}, {"model": "profiles.privacydefaults", "pk": 7, "fields": {"profile": 7, "global_default": "fol"}}, {"model": "profiles.profileactionrelationship", "pk": 3, "fields": {"profile": 1, "action": 1, "priority": "low", "privacy": "bud", "status": "ace", "committed": false}}, {"model": "actions.actiontopic", "pk": 2, "fields": {"name": "Climate Change", "slug": "climate-change", "text": ""}}, {"model": "actions.actiontopic", "pk": 3, "fields": {"name": "Immigration", "slug": "immigration", "text": ""}}, {"model": "actions.actiontopic", "pk": 4, "fields": {"name": "Supreme Court", "slug": "supreme-court", "text": ""}}, {"model": "actions.actiontype", "pk": 1, "fields": {"name": "Boycott", "slug": "boycott", "text": "Y'all know what a boycott is"}}, {"model": "actions.actiontype", "pk": 2, "fields": {"name": "Phone Campaign", "slug": "phone-campaign", "text": ""}}, {"model": "actions.actiontype", "pk": 3, "fields": {"name": "Protest (Physical)", "slug": "physical-protest", "text": ""}}, {"model": "actions.slateactionrelationship", "pk": 14, "fields": {"slate": 1, "action": 1, "priority": "hig", "privacy": "inh"}}, {"model": "actions.slateactionrelationship", "pk": 15, "fields": {"slate": 1, "action": 7, "priority": "low", "privacy": "inh"}}, {"model": "auth.permission", "pk": 1, "fields": {"name": "Can add log entry", "content_type": 1, "codename": "add_logentry"}}, {"model": "auth.permission", "pk": 2, "fields": {"name": "Can change log entry", "content_type": 1, "codename": "change_logentry"}}, {"model": "auth.permission", "pk": 3, "fields": {"name": "Can delete log entry", "content_type": 1, "codename": "delete_logentry"}}, {"model": "auth.permission", "pk": 4, "fields": {"name": "Can add permission", "content_type": 2, "codename": "add_permission"}}, {"model": "auth.permission", "pk": 5, "fields": {"name": "Can change permission", "content_type": 2, "codename": "change_permission"}}, {"model": "auth.permission", "pk": 6, "fields": {"name": "Can delete permission", "content_type": 2, "codename": "delete_permission"}}, {"model": "auth.permission", "pk": 7, "fields": {"name": "Can add user", "content_type": 3, "codename": "add_user"}}, {"model": "auth.permission", "pk": 8, "fields": {"name": "Can change user", "content_type": 3, "codename": "change_user"}}, {"model": "auth.permission", "pk": 9, "fields": {"name": "Can delete user", "content_type": 3, "codename": "delete_user"}}, {"model": "auth.permission", "pk": 10, "fields": {"name": "Can add group", "content_type": 4, "codename": "add_group"}}, {"model": "auth.permission", "pk": 11, "fields": {"name": "Can change group", "content_type": 4, "codename": "change_group"}}, {"model": "auth.permission", "pk": 12, "fields": {"name": "Can delete group", "content_type": 4, "codename": "delete_group"}}, {"model": "auth.permission", "pk": 13, "fields": {"name": "Can add content type", "content_type": 5, "codename": "add_contenttype"}}, {"model": "auth.permission", "pk": 14, "fields": {"name": "Can change content type", "content_type": 5, "codename": "change_contenttype"}}, {"model": "auth.permission", "pk": 15, "fields": {"name": "Can delete content type", "content_type": 5, "codename": "delete_contenttype"}}, {"model": "auth.permission", "pk": 16, "fields": {"name": "Can add session", "content_type": 6, "codename": "add_session"}}, {"model": "auth.permission", "pk": 17, "fields": {"name": "Can change session", "content_type": 6, "codename": "change_session"}}, {"model": "auth.permission", "pk": 18, "fields": {"name": "Can delete session", "content_type": 6, "codename": "delete_session"}}, {"model": "auth.permission", "pk": 19, "fields": {"name": "Can add privacy defaults", "content_type": 7, "codename": "add_privacydefaults"}}, {"model": "auth.permission", "pk": 20, "fields": {"name": "Can change privacy defaults", "content_type": 7, "codename": "change_privacydefaults"}}, {"model": "auth.permission", "pk": 21, "fields": {"name": "Can delete privacy defaults", "content_type": 7, "codename": "delete_privacydefaults"}}, {"model": "auth.permission", "pk": 22, "fields": {"name": "Can add relationship", "content_type": 8, "codename": "add_relationship"}}, {"model": "auth.permission", "pk": 23, "fields": {"name": "Can change relationship", "content_type": 8, "codename": "change_relationship"}}, {"model": "auth.permission", "pk": 24, "fields": {"name": "Can delete relationship", "content_type": 8, "codename": "delete_relationship"}}, {"model": "auth.permission", "pk": 25, "fields": {"name": "Can add profile", "content_type": 9, "codename": "add_profile"}}, {"model": "auth.permission", "pk": 26, "fields": {"name": "Can change profile", "content_type": 9, "codename": "change_profile"}}, {"model": "auth.permission", "pk": 27, "fields": {"name": "Can delete profile", "content_type": 9, "codename": "delete_profile"}}, {"model": "auth.permission", "pk": 28, "fields": {"name": "Can add action topic", "content_type": 10, "codename": "add_actiontopic"}}, {"model": "auth.permission", "pk": 29, "fields": {"name": "Can change action topic", "content_type": 10, "codename": "change_actiontopic"}}, {"model": "auth.permission", "pk": 30, "fields": {"name": "Can delete action topic", "content_type": 10, "codename": "delete_actiontopic"}}, {"model": "auth.permission", "pk": 31, "fields": {"name": "Can add action", "content_type": 11, "codename": "add_action"}}, {"model": "auth.permission", "pk": 32, "fields": {"name": "Can change action", "content_type": 11, "codename": "change_action"}}, {"model": "auth.permission", "pk": 33, "fields": {"name": "Can delete action", "content_type": 11, "codename": "delete_action"}}, {"model": "auth.permission", "pk": 34, "fields": {"name": "Can add action type", "content_type": 12, "codename": "add_actiontype"}}, {"model": "auth.permission", "pk": 35, "fields": {"name": "Can change action type", "content_type": 12, "codename": "change_actiontype"}}, {"model": "auth.permission", "pk": 36, "fields": {"name": "Can delete action type", "content_type": 12, "codename": "delete_actiontype"}}, {"model": "auth.permission", "pk": 37, "fields": {"name": "Can add slate", "content_type": 13, "codename": "add_slate"}}, {"model": "auth.permission", "pk": 38, "fields": {"name": "Can change slate", "content_type": 13, "codename": "change_slate"}}, {"model": "auth.permission", "pk": 39, "fields": {"name": "Can delete slate", "content_type": 13, "codename": "delete_slate"}}, {"model": "auth.permission", "pk": 40, "fields": {"name": "Can add slate action relationship", "content_type": 14, "codename": "add_slateactionrelationship"}}, {"model": "auth.permission", "pk": 41, "fields": {"name": "Can change slate action relationship", "content_type": 14, "codename": "change_slateactionrelationship"}}, {"model": "auth.permission", "pk": 42, "fields": {"name": "Can delete slate action relationship", "content_type": 14, "codename": "delete_slateactionrelationship"}}, {"model": "auth.permission", "pk": 43, "fields": {"name": "Can add profile action relationship", "content_type": 15, "codename": "add_profileactionrelationship"}}, {"model": "auth.permission", "pk": 44, "fields": {"name": "Can change profile action relationship", "content_type": 15, "codename": "change_profileactionrelationship"}}, {"model": "auth.permission", "pk": 45, "fields": {"name": "Can delete profile action relationship", "content_type": 15, "codename": "delete_profileactionrelationship"}}, {"model": "auth.permission", "pk": 46, "fields": {"name": "Can add action", "content_type": 16, "codename": "add_action"}}, {"model": "auth.permission", "pk": 47, "fields": {"name": "Can change action", "content_type": 16, "codename": "change_action"}}, {"model": "auth.permission", "pk": 48, "fields": {"name": "Can delete action", "content_type": 16, "codename": "delete_action"}}, {"model": "auth.permission", "pk": 49, "fields": {"name": "Can add follow", "content_type": 17, "codename": "add_follow"}}, {"model": "auth.permission", "pk": 50, "fields": {"name": "Can change follow", "content_type": 17, "codename": "change_follow"}}, {"model": "auth.permission", "pk": 51, "fields": {"name": "Can delete follow", "content_type": 17, "codename": "delete_follow"}}, {"model": "auth.permission", "pk": 52, "fields": {"name": "Can add site", "content_type": 18, "codename": "add_site"}}, {"model": "auth.permission", "pk": 53, "fields": {"name": "Can change site", "content_type": 18, "codename": "change_site"}}, {"model": "auth.permission", "pk": 54, "fields": {"name": "Can delete site", "content_type": 18, "codename": "delete_site"}}, {"model": "auth.user", "pk": 1, "fields": {"password": "pbkdf2_sha256$30000$9FBVuKeZYIdz$JZltcxbOWyjl2FJm+C0VeHgHKCfv2xLROu35SfiT/wI=", "last_login": "2016-11-14T02:39:56Z", "is_superuser": true, "username": "shaunagm", "first_name": "Shauna", "last_name": "Gordon-McKeon", "email": "shaunagm@gmail.com", "is_staff": true, "is_active": true, "date_joined": "2016-11-11T23:45:33Z", "groups": [], "user_permissions": []}}, {"model": "auth.user", "pk": 6, "fields": {"password": "pbkdf2_sha256$30000$PX4Sv2gjTqRx$5xelZIwrmm2fGrhpIFjCvLdFfqTSa5mk3cJPOwXTpOU=", "last_login": null, "is_superuser": false, "username": "secretagentman", "first_name": "", "last_name": "", "email": "", "is_staff": false, "is_active": true, "date_joined": "2016-11-16T02:29:21.115Z", "groups": [], "user_permissions": []}}, {"model": "auth.user", "pk": 7, "fields": {"password": "pbkdf2_sha256$30000$Unhv4eY9JN8r$TaHc2hmDMV2fbRiWafJLtTJPSWnC3v6LjNyyTrFJR1A=", "last_login": null, "is_superuser": false, "username": "volcanolover", "first_name": "", "last_name": "", "email": "", "is_staff": false, "is_active": true, "date_joined": "2016-11-16T02:30:00.038Z", "groups": [], "user_permissions": []}}, {"model": "profiles.profile", "pk": 1, "fields": {"user": 1, "verified": false, "text": "Hi, I'm Shauna!!!!!!!!!!!!! :D  I made this site!", "location": "Somerville, MA", "links": "www.shaunagm.net", "privacy": "inh"}}, {"model": "profiles.profile", "pk": 6, "fields": {"user": 6, "verified": false, "text": "", "location": "", "links": "", "privacy": "sit"}}, {"model": "profiles.profile", "pk": 7, "fields": {"user": 7, "verified": false, "text": "I love volcanoes, and being an activist.", "location": "", "links": "", "privacy": "pub"}}, {"model": "actions.action", "pk": 1, "fields": {"slug": "boycott-new-balance", "title": "Boycott New Balance until they denounce Trump", "creator": 1, "anonymize": true, "main_link": "www.google.com", "text": "This is some reasoning for why to boycott new balance.  Woo!", "privacy": "inh", "location": "Boston, MA, United States", "status": "cre", "has_deadline": true, "deadline": "2016-11-16T12:00:00Z", "suggested_priority": "med", "actiontypes": [1], "topics": []}}, {"model": "actions.action", "pk": 7, "fields": {"slug": "reduce-reuse-recycle", "title": "Reduce, reuse, recycle!", "creator": 7, "anonymize": false, "main_link": "", "text": "", "privacy": "inh", "location": "", "status": "cre", "has_deadline": false, "deadline": null, "suggested_priority": "med", "actiontypes": [], "topics": [2]}}, {"model": "actions.action", "pk": 8, "fields": {"slug": "call-reps-bannon", "title": "Call your reps about Steve Bannon", "creator": 6, "anonymize": true, "main_link": "", "text": "", "privacy": "inh", "location": "", "status": "rea", "has_deadline": false, "deadline": null, "suggested_priority": "med", "actiontypes": [2], "topics": []}}, {"model": "actions.slate", "pk": 1, "fields": {"slug": "november-action-workshop", "title": "November's Action Workshop", "creator": 1, "text": "Every Saturday at November House, we get together to take action.  Here's what we're working on.", "status": "rea", "privacy": "sit"}}, {"model": "admin.logentry", "pk": 1, "fields": {"action_time": "2016-11-11T23:47:53.005Z", "user": 1, "content_type": 9, "object_id": "1", "object_repr": "Profile of user: shaunagm", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 2, "fields": {"action_time": "2016-11-12T16:32:03.658Z", "user": 1, "content_type": 11, "object_id": "1", "object_repr": "Action object", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 3, "fields": {"action_time": "2016-11-12T16:59:35.330Z", "user": 1, "content_type": 11, "object_id": "1", "object_repr": "Action object", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"anonymize\"]}}]"}}, {"model": "admin.logentry", "pk": 4, "fields": {"action_time": "2016-11-12T17:56:43.177Z", "user": 1, "content_type": 10, "object_id": "1", "object_repr": "ActionTopic object", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 5, "fields": {"action_time": "2016-11-12T17:57:00.343Z", "user": 1, "content_type": 12, "object_id": "1", "object_repr": "ActionType object", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 6, "fields": {"action_time": "2016-11-12T18:38:27.357Z", "user": 1, "content_type": 10, "object_id": "1", "object_repr": "normalization", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"slug\"]}}]"}}, {"model": "admin.logentry", "pk": 7, "fields": {"action_time": "2016-11-12T18:38:42.063Z", "user": 1, "content_type": 12, "object_id": "1", "object_repr": "Boycott", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"slug\"]}}]"}}, {"model": "admin.logentry", "pk": 8, "fields": {"action_time": "2016-11-12T19:59:00.007Z", "user": 1, "content_type": 3, "object_id": "2", "object_repr": "nodball", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 9, "fields": {"action_time": "2016-11-13T18:01:37.435Z", "user": 1, "content_type": 3, "object_id": "3", "object_repr": "potato", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 10, "fields": {"action_time": "2016-11-13T18:02:25.497Z", "user": 1, "content_type": 3, "object_id": "4", "object_repr": "try", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 11, "fields": {"action_time": "2016-11-13T18:02:48.541Z", "user": 1, "content_type": 3, "object_id": "4", "object_repr": "try", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"is_staff\"]}}]"}}, {"model": "admin.logentry", "pk": 12, "fields": {"action_time": "2016-11-13T18:03:25.122Z", "user": 1, "content_type": 3, "object_id": "4", "object_repr": "try", "action_flag": 2, "change_message": "[]"}}, {"model": "admin.logentry", "pk": 14, "fields": {"action_time": "2016-11-14T16:57:20.447Z", "user": 1, "content_type": 3, "object_id": "1", "object_repr": "shaunagm", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"first_name\", \"last_name\"]}}]"}}, {"model": "admin.logentry", "pk": 15, "fields": {"action_time": "2016-11-14T18:42:28.884Z", "user": 1, "content_type": 8, "object_id": "1", "object_repr": "Relationship of : Profile of user: shaunagm and Profile of user: nodball", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 16, "fields": {"action_time": "2016-11-14T21:15:55.363Z", "user": 1, "content_type": 8, "object_id": "1", "object_repr": "Relationship of : Profile of user: shaunagm and Profile of user: nodball", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"B_follows_A\"]}}]"}}, {"model": "admin.logentry", "pk": 17, "fields": {"action_time": "2016-11-14T22:36:57.658Z", "user": 1, "content_type": 13, "object_id": "1", "object_repr": "Slate object", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 18, "fields": {"action_time": "2016-11-14T22:37:48.615Z", "user": 1, "content_type": 14, "object_id": "1", "object_repr": "SlateActionRelationship object", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 19, "fields": {"action_time": "2016-11-15T16:55:18.664Z", "user": 1, "content_type": 13, "object_id": "3", "object_repr": "a-new-slate", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"slug\", \"title\"]}}]"}}, {"model": "admin.logentry", "pk": 20, "fields": {"action_time": "2016-11-15T17:06:44.096Z", "user": 1, "content_type": 11, "object_id": "1", "object_repr": "Boycott New Balance until they denounce Trump", "action_flag": 2, "change_message": "[]"}}, {"model": "admin.logentry", "pk": 21, "fields": {"action_time": "2016-11-15T18:45:12.174Z", "user": 1, "content_type": 15, "object_id": "2", "object_repr": "Relationship of profile Profile of user: shaunagm and action Boycott New Balance until they denounce Trump", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"status\"]}}]"}}, {"model": "admin.logentry", "pk": 22, "fields": {"action_time": "2016-11-15T21:04:23.345Z", "user": 1, "content_type": 15, "object_id": "2", "object_repr": "Relationship of profile Profile of user: shaunagm and action Boycott New Balance until they denounce Trump", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"priority\"]}}]"}}, {"model": "admin.logentry", "pk": 23, "fields": {"action_time": "2016-11-15T21:08:28.051Z", "user": 1, "content_type": 15, "object_id": "2", "object_repr": "Relationship of profile Profile of user: shaunagm and action Boycott New Balance until they denounce Trump", "action_flag": 2, "change_message": "[]"}}, {"model": "admin.logentry", "pk": 24, "fields": {"action_time": "2016-11-15T21:14:09.902Z", "user": 1, "content_type": 15, "object_id": "2", "object_repr": "Relationship of profile Profile of user: shaunagm and action Boycott New Balance until they denounce Trump", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 25, "fields": {"action_time": "2016-11-15T21:14:47.438Z", "user": 1, "content_type": 15, "object_id": "3", "object_repr": "Relationship of profile Profile of user: shaunagm and action Boycott New Balance until they denounce Trump", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"priority\"]}}]"}}, {"model": "admin.logentry", "pk": 26, "fields": {"action_time": "2016-11-15T21:30:56.550Z", "user": 1, "content_type": 15, "object_id": "3", "object_repr": "Relationship of profile Profile of user: shaunagm and action Boycott New Balance until they denounce Trump", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"priority\"]}}]"}}, {"model": "admin.logentry", "pk": 27, "fields": {"action_time": "2016-11-15T21:41:51.206Z", "user": 1, "content_type": 15, "object_id": "4", "object_repr": "Relationship of profile Profile of user: shaunagm and action Boycott New Balance until they denounce Trump", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 28, "fields": {"action_time": "2016-11-15T22:06:39.877Z", "user": 1, "content_type": 8, "object_id": "1", "object_repr": "Relationship of : Profile of user: shaunagm and Profile of user: nodball", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"B_follows_A\"]}}]"}}, {"model": "admin.logentry", "pk": 29, "fields": {"action_time": "2016-11-16T00:36:31.302Z", "user": 1, "content_type": 9, "object_id": "1", "object_repr": "Profile of user: shaunagm", "action_flag": 2, "change_message": "[]"}}, {"model": "admin.logentry", "pk": 30, "fields": {"action_time": "2016-11-16T00:36:36.261Z", "user": 1, "content_type": 9, "object_id": "2", "object_repr": "Profile of user: nodball", "action_flag": 2, "change_message": "[]"}}, {"model": "admin.logentry", "pk": 31, "fields": {"action_time": "2016-11-16T00:36:39.778Z", "user": 1, "content_type": 9, "object_id": "3", "object_repr": "Profile of user: potato", "action_flag": 2, "change_message": "[]"}}, {"model": "admin.logentry", "pk": 32, "fields": {"action_time": "2016-11-16T00:36:43.219Z", "user": 1, "content_type": 9, "object_id": "4", "object_repr": "Profile of user: try", "action_flag": 2, "change_message": "[]"}}, {"model": "admin.logentry", "pk": 33, "fields": {"action_time": "2016-11-16T00:38:14.505Z", "user": 1, "content_type": 3, "object_id": "2", "object_repr": "nodball", "action_flag": 2, "change_message": "[]"}}, {"model": "admin.logentry", "pk": 34, "fields": {"action_time": "2016-11-16T00:38:20.928Z", "user": 1, "content_type": 3, "object_id": "3", "object_repr": "potato", "action_flag": 2, "change_message": "[]"}}, {"model": "admin.logentry", "pk": 35, "fields": {"action_time": "2016-11-16T00:38:27.650Z", "user": 1, "content_type": 3, "object_id": "1", "object_repr": "shaunagm", "action_flag": 2, "change_message": "[]"}}, {"model": "admin.logentry", "pk": 36, "fields": {"action_time": "2016-11-16T00:38:33.613Z", "user": 1, "content_type": 3, "object_id": "4", "object_repr": "try", "action_flag": 2, "change_message": "[]"}}, {"model": "admin.logentry", "pk": 37, "fields": {"action_time": "2016-11-16T00:43:19.751Z", "user": 1, "content_type": 7, "object_id": "3", "object_repr": "Privacy defaults for shaunagm", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"global_default\"]}}]"}}, {"model": "admin.logentry", "pk": 38, "fields": {"action_time": "2016-11-16T01:28:33.427Z", "user": 1, "content_type": 3, "object_id": "5", "object_repr": "bottle", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 39, "fields": {"action_time": "2016-11-16T01:31:07.398Z", "user": 1, "content_type": 9, "object_id": "2", "object_repr": "Profile of user: nodball", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"privacy\"]}}]"}}, {"model": "admin.logentry", "pk": 40, "fields": {"action_time": "2016-11-16T01:31:34.623Z", "user": 1, "content_type": 9, "object_id": "4", "object_repr": "Profile of user: try", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"privacy\"]}}]"}}, {"model": "admin.logentry", "pk": 41, "fields": {"action_time": "2016-11-16T01:32:03.313Z", "user": 1, "content_type": 9, "object_id": "5", "object_repr": "Profile of user: bottle", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"privacy\"]}}]"}}, {"model": "admin.logentry", "pk": 42, "fields": {"action_time": "2016-11-16T01:32:19.787Z", "user": 1, "content_type": 9, "object_id": "3", "object_repr": "Profile of user: potato", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"privacy\"]}}]"}}, {"model": "admin.logentry", "pk": 43, "fields": {"action_time": "2016-11-16T01:33:24.632Z", "user": 1, "content_type": 9, "object_id": "2", "object_repr": "Profile of user: nodball", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"privacy\"]}}]"}}, {"model": "admin.logentry", "pk": 44, "fields": {"action_time": "2016-11-16T01:55:11.649Z", "user": 1, "content_type": 7, "object_id": "3", "object_repr": "Privacy defaults for shaunagm", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"global_default\"]}}]"}}, {"model": "admin.logentry", "pk": 45, "fields": {"action_time": "2016-11-16T02:00:07.540Z", "user": 1, "content_type": 7, "object_id": "3", "object_repr": "Privacy defaults for shaunagm", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"global_default\"]}}]"}}, {"model": "admin.logentry", "pk": 46, "fields": {"action_time": "2016-11-16T02:27:07.791Z", "user": 1, "content_type": 3, "object_id": "5", "object_repr": "bottle", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 47, "fields": {"action_time": "2016-11-16T02:27:07.820Z", "user": 1, "content_type": 3, "object_id": "2", "object_repr": "nodball", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 48, "fields": {"action_time": "2016-11-16T02:27:07.836Z", "user": 1, "content_type": 3, "object_id": "3", "object_repr": "potato", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 49, "fields": {"action_time": "2016-11-16T02:27:07.852Z", "user": 1, "content_type": 3, "object_id": "4", "object_repr": "try", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 50, "fields": {"action_time": "2016-11-16T02:27:29.471Z", "user": 1, "content_type": 11, "object_id": "5", "object_repr": "Ban All Cats", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 51, "fields": {"action_time": "2016-11-16T02:27:29.486Z", "user": 1, "content_type": 11, "object_id": "4", "object_repr": "love not war", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 52, "fields": {"action_time": "2016-11-16T02:27:29.504Z", "user": 1, "content_type": 11, "object_id": "3", "object_repr": "Don't. Blink.", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 53, "fields": {"action_time": "2016-11-16T02:27:29.521Z", "user": 1, "content_type": 11, "object_id": "2", "object_repr": "Eat ALL the potatoes", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 54, "fields": {"action_time": "2016-11-16T02:27:43.575Z", "user": 1, "content_type": 10, "object_id": "1", "object_repr": "normalization", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 55, "fields": {"action_time": "2016-11-16T02:28:08.210Z", "user": 1, "content_type": 13, "object_id": "3", "object_repr": "a-new-slate", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 56, "fields": {"action_time": "2016-11-16T02:28:08.225Z", "user": 1, "content_type": 13, "object_id": "2", "object_repr": "i-love-slates", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 57, "fields": {"action_time": "2016-11-16T02:28:39.064Z", "user": 1, "content_type": 13, "object_id": "1", "object_repr": "november-action-workshop", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"text\", \"status\", \"privacy\"]}}]"}}, {"model": "admin.logentry", "pk": 58, "fields": {"action_time": "2016-11-16T02:29:21.231Z", "user": 1, "content_type": 3, "object_id": "6", "object_repr": "secretagentman", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 59, "fields": {"action_time": "2016-11-16T02:30:00.175Z", "user": 1, "content_type": 3, "object_id": "7", "object_repr": "volcanolover", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 60, "fields": {"action_time": "2016-11-16T02:30:26.638Z", "user": 1, "content_type": 9, "object_id": "7", "object_repr": "Profile of user: volcanolover", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"text\", \"privacy\"]}}]"}}, {"model": "admin.logentry", "pk": 61, "fields": {"action_time": "2016-11-16T02:30:37.943Z", "user": 1, "content_type": 9, "object_id": "6", "object_repr": "Profile of user: secretagentman", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"privacy\"]}}]"}}, {"model": "admin.logentry", "pk": 62, "fields": {"action_time": "2016-11-16T02:31:35.845Z", "user": 1, "content_type": 11, "object_id": "7", "object_repr": "Reduce, reuse, recycle!", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 63, "fields": {"action_time": "2016-11-16T02:31:54.003Z", "user": 1, "content_type": 10, "object_id": "2", "object_repr": "Climate Change", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 64, "fields": {"action_time": "2016-11-16T02:32:04.468Z", "user": 1, "content_type": 10, "object_id": "3", "object_repr": "Immigration", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 65, "fields": {"action_time": "2016-11-16T02:32:13.591Z", "user": 1, "content_type": 10, "object_id": "4", "object_repr": "Supreme Court", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 66, "fields": {"action_time": "2016-11-16T02:32:42.757Z", "user": 1, "content_type": 12, "object_id": "2", "object_repr": "Phone Campaign", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 67, "fields": {"action_time": "2016-11-16T02:32:58.299Z", "user": 1, "content_type": 12, "object_id": "3", "object_repr": "Protest (Physical)", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 68, "fields": {"action_time": "2016-11-16T02:33:10.134Z", "user": 1, "content_type": 11, "object_id": "7", "object_repr": "Reduce, reuse, recycle!", "action_flag": 2, "change_message": "[]"}}, {"model": "admin.logentry", "pk": 69, "fields": {"action_time": "2016-11-16T02:33:43.675Z", "user": 1, "content_type": 11, "object_id": "8", "object_repr": "Call your reps about Steve Bannon", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 70, "fields": {"action_time": "2016-11-16T02:34:13.826Z", "user": 1, "content_type": 14, "object_id": "14", "object_repr": "SlateActionRelationship object", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 71, "fields": {"action_time": "2016-11-16T02:34:23.657Z", "user": 1, "content_type": 14, "object_id": "15", "object_repr": "SlateActionRelationship object", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}]
+[
+{
+    "model": "auth.user",
+    "pk": 8,
+    "fields": {
+        "password": "pbkdf2_sha256$30000$06Pt4s6XgY5h$pKAC05XglBrOj4rgJ+U1rESRqLnaRjclzVS7o1wJssA=",
+        "last_login": "2016-11-16T03:06:03Z",
+        "is_superuser": true,
+        "username": "buffysummers",
+        "first_name": "Buffy",
+        "last_name": "Summers",
+        "email": "buffy@sunnydale.edu",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2016-11-16T03:05:55Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 9,
+    "fields": {
+        "password": "pbkdf2_sha256$30000$LzUTrFJEvd4v$ZPB47ww5ZIr80fZjbtM8gtIoQzSRNaqHyN2lV0+Ppr4=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "thewitch",
+        "first_name": "Willow",
+        "last_name": "",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2016-11-16T03:06:40Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 10,
+    "fields": {
+        "password": "pbkdf2_sha256$30000$ucOzdcdyXYhw$m3/GSGNnEDH3lR1XwaaKMiM/PDYHalevq7NEMRc+ejg=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "giles",
+        "first_name": "Rupert",
+        "last_name": "Giles",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2016-11-16T03:07:03Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "6tt9nokqx0rpp24vy2lynn12duj2a23w",
+    "fields": {
+        "session_data": "Y2I4MGI3YmE4MDA3MTdiNzkxMTcxOGIxZjE5NzhjNDgxYTY5ODFhOTp7Il9hdXRoX3VzZXJfaGFzaCI6IjY4MjgzMmVhYTljNzAyOGQ2ZjY1MzJlYThiMGI2YjkyOThiYzZkNmQiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiI4In0=",
+        "expire_date": "2016-11-30T03:06:03.061Z"
+    }
+},
+{
+    "model": "actions.actiontopic",
+    "pk": 5,
+    "fields": {
+        "name": "Climate Change",
+        "slug": "climate-change",
+        "text": ""
+    }
+},
+{
+    "model": "actions.actiontopic",
+    "pk": 6,
+    "fields": {
+        "name": "Supreme Court",
+        "slug": "supreme-court",
+        "text": ""
+    }
+},
+{
+    "model": "actions.actiontopic",
+    "pk": 7,
+    "fields": {
+        "name": "Immigration",
+        "slug": "immigration",
+        "text": ""
+    }
+},
+{
+    "model": "actions.actiontype",
+    "pk": 4,
+    "fields": {
+        "name": "Phone Campaign",
+        "slug": "phone-campaign",
+        "text": ""
+    }
+},
+{
+    "model": "actions.actiontype",
+    "pk": 5,
+    "fields": {
+        "name": "Boycott",
+        "slug": "boycott",
+        "text": ""
+    }
+},
+{
+    "model": "actions.actiontype",
+    "pk": 6,
+    "fields": {
+        "name": "Making Art",
+        "slug": "art",
+        "text": ""
+    }
+},
+{
+    "model": "actions.actiontype",
+    "pk": 7,
+    "fields": {
+        "name": "Donation",
+        "slug": "donation",
+        "text": ""
+    }
+},
+{
+    "model": "actions.action",
+    "pk": 9,
+    "fields": {
+        "slug": "denounce-bannon",
+        "title": "Denounce Trump's proposed appointment of Steve Bannon",
+        "creator": [
+            "thewitch"
+        ],
+        "anonymize": true,
+        "main_link": "www.fakelinktomoreinfo.com",
+        "text": "Here's some instructions!",
+        "privacy": "inh",
+        "location": "",
+        "status": "rea",
+        "has_deadline": false,
+        "deadline": null,
+        "suggested_priority": "med",
+        "actiontypes": [
+            4
+        ],
+        "topics": []
+    }
+},
+{
+    "model": "actions.action",
+    "pk": 10,
+    "fields": {
+        "slug": "petition-boston-sanctuary-city",
+        "title": "Sign petition to make Boston a sanctuary city",
+        "creator": [
+            "buffysummers"
+        ],
+        "anonymize": false,
+        "main_link": "",
+        "text": "",
+        "privacy": "pub",
+        "location": "",
+        "status": "rea",
+        "has_deadline": false,
+        "deadline": null,
+        "suggested_priority": "med",
+        "actiontypes": [
+            4
+        ],
+        "topics": [
+            7
+        ]
+    }
+},
+{
+    "model": "actions.action",
+    "pk": 11,
+    "fields": {
+        "slug": "donate-planned-parenthood",
+        "title": "Donate to Planned Parenthood",
+        "creator": [
+            "giles"
+        ],
+        "anonymize": false,
+        "main_link": "",
+        "text": "",
+        "privacy": "sit",
+        "location": "",
+        "status": "cre",
+        "has_deadline": false,
+        "deadline": null,
+        "suggested_priority": "med",
+        "actiontypes": [
+            7
+        ],
+        "topics": []
+    }
+},
+{
+    "model": "actions.slate",
+    "pk": 4,
+    "fields": {
+        "slug": "november-saturday",
+        "title": "Saturday Action at November House",
+        "creator": [
+            "buffysummers"
+        ],
+        "text": "Every Saturday at November House, we get together to take action.  Here's what we're working on.",
+        "status": "rea",
+        "privacy": "pub"
+    }
+},
+{
+    "model": "actions.slateactionrelationship",
+    "pk": 16,
+    "fields": {
+        "slate": 4,
+        "action": 9,
+        "priority": "med",
+        "privacy": "inh"
+    }
+},
+{
+    "model": "actions.slateactionrelationship",
+    "pk": 17,
+    "fields": {
+        "slate": 4,
+        "action": 10,
+        "priority": "med",
+        "privacy": "inh"
+    }
+},
+{
+    "model": "actions.slateactionrelationship",
+    "pk": 18,
+    "fields": {
+        "slate": 4,
+        "action": 11,
+        "priority": "med",
+        "privacy": "inh"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 72,
+    "fields": {
+        "action_time": "2016-11-16T03:06:18.991Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "8",
+        "object_repr": "buffysummers",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"first_name\", \"last_name\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 73,
+    "fields": {
+        "action_time": "2016-11-16T03:06:40.214Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "9",
+        "object_repr": "thewitch",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 74,
+    "fields": {
+        "action_time": "2016-11-16T03:07:03.936Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "10",
+        "object_repr": "giles",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 75,
+    "fields": {
+        "action_time": "2016-11-16T03:07:15.815Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "10",
+        "object_repr": "giles",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"first_name\", \"last_name\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 76,
+    "fields": {
+        "action_time": "2016-11-16T03:07:28.526Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "9",
+        "object_repr": "thewitch",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"first_name\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 77,
+    "fields": {
+        "action_time": "2016-11-16T03:07:51.713Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "actions",
+            "actiontype"
+        ],
+        "object_id": "4",
+        "object_repr": "Phone Campaign",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 78,
+    "fields": {
+        "action_time": "2016-11-16T03:08:01.709Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "actions",
+            "actiontype"
+        ],
+        "object_id": "5",
+        "object_repr": "Boycott",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 79,
+    "fields": {
+        "action_time": "2016-11-16T03:08:22.490Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "actions",
+            "actiontype"
+        ],
+        "object_id": "6",
+        "object_repr": "Making Art",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 80,
+    "fields": {
+        "action_time": "2016-11-16T03:08:36.105Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "actions",
+            "actiontopic"
+        ],
+        "object_id": "5",
+        "object_repr": "Climate Change",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 81,
+    "fields": {
+        "action_time": "2016-11-16T03:08:48.132Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "actions",
+            "actiontopic"
+        ],
+        "object_id": "6",
+        "object_repr": "Supreme Court",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 82,
+    "fields": {
+        "action_time": "2016-11-16T03:08:58.712Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "actions",
+            "actiontopic"
+        ],
+        "object_id": "7",
+        "object_repr": "Immigration",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 83,
+    "fields": {
+        "action_time": "2016-11-16T03:10:06.904Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "9",
+        "object_repr": "denounce-bannon",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 84,
+    "fields": {
+        "action_time": "2016-11-16T03:10:32.800Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "9",
+        "object_repr": "Denounce Trump's proposed appointment of Steve Bannon",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"slug\", \"title\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 85,
+    "fields": {
+        "action_time": "2016-11-16T03:11:16.898Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "10",
+        "object_repr": "Sign petition to make Boston a sanctuary city",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 86,
+    "fields": {
+        "action_time": "2016-11-16T03:11:49.123Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "11",
+        "object_repr": "Donate to Planned Parenthood",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 87,
+    "fields": {
+        "action_time": "2016-11-16T03:12:01.423Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "actions",
+            "actiontype"
+        ],
+        "object_id": "7",
+        "object_repr": "Donation",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 88,
+    "fields": {
+        "action_time": "2016-11-16T03:12:18.362Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "11",
+        "object_repr": "Donate to Planned Parenthood",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 89,
+    "fields": {
+        "action_time": "2016-11-16T03:13:01.638Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "actions",
+            "slate"
+        ],
+        "object_id": "4",
+        "object_repr": "november-saturday",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 90,
+    "fields": {
+        "action_time": "2016-11-16T03:13:16.824Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "actions",
+            "slateactionrelationship"
+        ],
+        "object_id": "16",
+        "object_repr": "SlateActionRelationship object",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 91,
+    "fields": {
+        "action_time": "2016-11-16T03:13:25.663Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "actions",
+            "slateactionrelationship"
+        ],
+        "object_id": "17",
+        "object_repr": "SlateActionRelationship object",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 92,
+    "fields": {
+        "action_time": "2016-11-16T03:13:33.840Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "actions",
+            "slateactionrelationship"
+        ],
+        "object_id": "18",
+        "object_repr": "SlateActionRelationship object",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+}
+]
