@@ -20,9 +20,13 @@ OS X 10.12.1.
 
     python manage.py migrate
 
-5) Start site
+5) Load the test fixtures to get some fake data:
+
+    python manage.py loaddata fixtures.json
+
+6) Start site
 
     python manage.py runserver
 
-6) Open site in browser (see command line output of previous step for correct
+7) Open site in browser (see command line output of previous step for correct
   link, usually something like http://127.0.0.1:8000)
