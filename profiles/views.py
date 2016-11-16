@@ -4,31 +4,46 @@ from django.core.urlresolvers import reverse
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.views import login
+from django.contrib.auth.mixins import UserPassesTestMixin,  LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+
+from mysite.utils import check_privacy
 
 from django.contrib.auth.models import User
 from profiles.models import Profile, Relationship, ProfileActionRelationship
 from actions.models import Action
 from profiles.forms import ProfileActionRelationshipForm
 
+@login_required
 def index(request):
     return HttpResponseRedirect(reverse('profiles'))
 
-class ProfileView(generic.DetailView):
+class ProfileView(UserPassesTestMixin, generic.DetailView):
     template_name = 'profiles/profile.html'
     model = User
     slug_field = 'username'
 
-class ProfileEditView(generic.UpdateView):
+    def test_func(self):
+        obj = self.get_object()
+        return check_privacy(obj.profile, self.request.user)
+
+class ProfileEditView(UserPassesTestMixin, generic.UpdateView):
     model = Profile
     fields = ['verified', 'text', 'location', 'links']
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj.user == self.request.user
 
     def get_success_url(self, **kwargs):
         return self.object.get_absolute_url()
 
-class ProfileSearchView(generic.ListView):
+class ProfileSearchView(LoginRequiredMixin, generic.ListView):
     template_name = 'profiles/profiles.html'
     model = User
 
+@login_required
 def toggle_relationships(request, username, toggle_type):
     current_profile = request.user.profile
     try:
@@ -49,6 +64,7 @@ def toggle_relationships(request, username, toggle_type):
 
     return HttpResponseRedirect(reverse('profile', kwargs={'slug':target_user.username}))
 
+@login_required
 def toggle_action_for_profile(request, slug, toggle_type):
     current_profile = request.user.profile
     try:
@@ -66,6 +82,7 @@ def toggle_action_for_profile(request, slug, toggle_type):
         par.delete()
     return HttpResponseRedirect(reverse('action', kwargs={'slug':action.slug}))
 
+@login_required
 def manage_action(request, slug):
     par = ProfileActionRelationship.objects.get(action=Action.objects.get(slug=slug), profile=request.user.profile)
     if request.method == 'POST':
@@ -91,5 +108,3 @@ def manage_action(request, slug):
         form = ProfileActionRelationshipForm(par=par, initial={'privacy': par.privacy, 'priority': par.priority, 'status': par.status})
         context = {'form': form}
         return render(request, 'profiles/manage_action.html', context)
-
-# Add friend list view (or maybe wrap it into profile view?)

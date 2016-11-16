@@ -1,20 +1,24 @@
-{% load profile_extras %}
-{% get_relationship object as info %}
+{% if request.user.is_authenticated %}
 
-<div class="btn-group">
-  <a href="#" class="btn btn-default">Manage</a>
-  <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-  <ul class="dropdown-menu">
-    <li><a href="{% url 'toggle_relationships' username=object.username toggle_type='follow' %}">
-        {{ info.follow_statement }}
-    </a></li>
-    {% if info.is_following %}
-    <li><a href="{% url 'toggle_relationships' username=object.username toggle_type='account' %}">
-        {{ info.account_statement }}
-    </a></li>
-    {% endif %}
-    <li><a href="{% url 'toggle_relationships' username=object.username toggle_type='mute' %}">
-        {{ info.mute_statement }}
-    </a></li>
-  </ul>
-</div>
+  {% load profile_extras %}
+  {% get_relationship object as info %}
+
+  <div class="btn-group">
+    <a href="#" class="btn btn-default">Manage</a>
+    <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+    <ul class="dropdown-menu">
+      <li><a href="{% url 'toggle_relationships' username=object.username toggle_type='follow' %}">
+          {{ info.follow_statement }}
+      </a></li>
+      {% if info.is_following %}
+      <li><a href="{% url 'toggle_relationships' username=object.username toggle_type='account' %}">
+          {{ info.account_statement }}
+      </a></li>
+      {% endif %}
+      <li><a href="{% url 'toggle_relationships' username=object.username toggle_type='mute' %}">
+          {{ info.mute_statement }}
+      </a></li>
+    </ul>
+  </div>
+
+{% endif %}

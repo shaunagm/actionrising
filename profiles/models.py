@@ -18,9 +18,14 @@ class Profile(models.Model):
                                            symmetrical=False,
                                            related_name='connected_to')
     actions = models.ManyToManyField(Action, through='ProfileActionRelationship')
+    privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
 
     def __unicode__(self):
         return u'Profile of user: %s' % self.user.username
+
+    def get_cname(self):
+        class_name = 'Profile'
+        return class_name
 
     def get_absolute_url(self):
         return reverse('profile', kwargs={'slug': self.user.username })
@@ -58,8 +63,8 @@ class Profile(models.Model):
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        Profile.objects.create(user=instance)
-
+        profile = Profile.objects.create(user=instance)
+        PrivacyDefaults.objects.create(profile=profile)
 post_save.connect(create_user_profile, sender=User)
 
 class Relationship(models.Model):
@@ -172,8 +177,11 @@ class Relationship(models.Model):
         return result
 
 class PrivacyDefaults(models.Model):
-    user = models.OneToOneField(User, unique=True)
+    profile = models.OneToOneField(Profile, unique=True, related_name="privacy_defaults")
     global_default = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='fol')
+
+    def __unicode__(self):
+        return u'Privacy defaults for %s' % (self.profile.user.username)
 
 class ProfileActionRelationship(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
