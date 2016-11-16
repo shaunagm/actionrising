@@ -63,6 +63,10 @@ class Action(models.Model):
     def __unicode__(self):
         return self.title
 
+    def get_cname(self):
+        class_name = 'Action'
+        return class_name
+
     def get_absolute_url(self):
         return reverse('action', kwargs={'slug': self.slug})
 
@@ -98,6 +102,10 @@ class Slate(models.Model):
 
     def __unicode__(self):
         return self.slug
+
+    def get_cname(self):
+        class_name = 'Slate'
+        return class_name
 
     def get_absolute_url(self):
         return reverse('slate', kwargs={'slug': self.slug})

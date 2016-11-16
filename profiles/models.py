@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 
 from actions.models import Action
-from mysite.utils import PRIVACY_CHOICES, PRIORITY_CHOICES, INDIVIDUAL_STATUS_CHOICES
+from mysite.utils import PRIVACY_CHOICES, PRIORITY_CHOICES, INDIVIDUAL_STATUS_CHOICES, PRIVACY_DEFAULT_CHOICES
 
 class Profile(models.Model):
     user = models.OneToOneField(User, unique=True)
@@ -178,7 +178,7 @@ class Relationship(models.Model):
 
 class PrivacyDefaults(models.Model):
     profile = models.OneToOneField(Profile, unique=True, related_name="privacy_defaults")
-    global_default = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='fol')
+    global_default = models.CharField(max_length=3, choices=PRIVACY_DEFAULT_CHOICES, default='fol')
 
     def __unicode__(self):
         return u'Privacy defaults for %s' % (self.profile.user.username)

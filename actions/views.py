@@ -4,14 +4,19 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views import generic
+from django.contrib.auth.mixins import UserPassesTestMixin,  LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+
+from mysite.utils import check_privacy
 
 from django.contrib.auth.models import User
 from actions.models import Action, ActionTopic, ActionType, Slate, SlateActionRelationship
 
+@login_required
 def index(request):
     return HttpResponseRedirect(reverse('actions'))
 
-class ActionView(generic.DetailView):
+class ActionView(UserPassesTestMixin, generic.DetailView):
     template_name = 'actions/action.html'
     model = Action
 
@@ -22,11 +27,15 @@ class ActionView(generic.DetailView):
         context['topic_or_type_list'] = list(chain(topic_list, type_list))
         return context
 
-class ActionListView(generic.ListView):
+    def test_func(self):
+        obj = self.get_object()
+        return check_privacy(obj, self.request.user)
+
+class ActionListView(LoginRequiredMixin, generic.ListView):
     template_name = "actions/actions.html"
     model = Action
 
-class ActionCreateView(generic.edit.CreateView):
+class ActionCreateView(LoginRequiredMixin, generic.edit.CreateView):
     model = Action
     fields = ['slug', 'title', 'anonymize', 'main_link', 'text', 'privacy', 'location', 'status', 'has_deadline', 'deadline', 'topics', 'actiontypes']
 
@@ -45,11 +54,15 @@ class ActionCreateView(generic.edit.CreateView):
     def get_success_url(self, **kwargs):
         return self.object.get_absolute_url()
 
-class ActionEditView(generic.edit.UpdateView):
+class ActionEditView(UserPassesTestMixin, generic.edit.UpdateView):
     model = Action
     fields = ['slug', 'title', 'anonymize', 'main_link', 'text', 'privacy', 'location', 'status', 'has_deadline', 'deadline', 'topics', 'actiontypes']
 
-class TopicView(generic.DetailView):
+    def test_func(self):
+        obj = self.get_object()
+        return obj.creator == self.request.user
+
+class TopicView(LoginRequiredMixin, generic.DetailView):
     template_name = 'actions/type_or_topic.html'
     model = ActionTopic
 
@@ -58,16 +71,16 @@ class TopicView(generic.DetailView):
         context['action_list'] = self.object.actions_for_topic.all()
         return context
 
-class TopicListView(generic.ListView):
+class TopicListView(LoginRequiredMixin, generic.ListView):
     template_name = "actions/topics.html"
     model = ActionTopic
 
-class TypeListView(generic.ListView):
+class TypeListView(LoginRequiredMixin, generic.ListView):
     # Note: templates can likely be refactored to use same template as TopicListView
     template_name = "actions/types.html"
     model = ActionType
 
-class TypeView(generic.DetailView):
+class TypeView(LoginRequiredMixin, generic.DetailView):
     template_name = 'actions/type_or_topic.html'
     model = ActionType
 
@@ -76,16 +89,20 @@ class TypeView(generic.DetailView):
         context['action_list'] = self.object.actions_for_type.all()
         return context
 
-class SlateView(generic.DetailView):
+class SlateView(UserPassesTestMixin, generic.DetailView):
     template_name = 'actions/slate.html'
     model = Slate
 
-class SlateListView(generic.ListView):
+    def test_func(self):
+        obj = self.get_object()
+        return check_privacy(obj, self.request.user)
+
+class SlateListView(LoginRequiredMixin, generic.ListView):
     # Note: templates can likely be refactored to use same template as TopicListView
     template_name = "actions/slates.html"
     model = Slate
 
-class SlateCreateView(generic.edit.CreateView):
+class SlateCreateView(LoginRequiredMixin, generic.edit.CreateView):
     model = Slate
     fields = ['slug', 'title', 'text', 'status', 'privacy', 'actions']
 
@@ -101,7 +118,7 @@ class SlateCreateView(generic.edit.CreateView):
     def get_success_url(self, **kwargs):
         return self.object.get_absolute_url()
 
-class SlateEditView(generic.edit.UpdateView):
+class SlateEditView(UserPassesTestMixin, generic.edit.UpdateView):
     model = Slate
     fields = ['slug', 'title', 'text', 'status', 'privacy', 'actions']
 
@@ -121,3 +138,7 @@ class SlateEditView(generic.edit.UpdateView):
 
     def get_success_url(self, **kwargs):
         return self.object.get_absolute_url()
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj.creator == self.request.user

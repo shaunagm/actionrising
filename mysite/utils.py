@@ -4,7 +4,15 @@ PRIVACY_CHOICES = (
     # ('fol', 'Visible to Buddies and Those You Follow'),
     # ('bud', 'Visible to Buddies'),
     # ('you', 'Only Visible to You'),
-    # ('inh', 'Inherit'),
+    ('inh', 'Inherit'),
+)
+
+PRIVACY_DEFAULT_CHOICES = (
+    ('pub', 'Visible to Public'),
+    ('sit', 'Visible Sitewide'),
+    # ('fol', 'Visible to Buddies and Those You Follow'),
+    # ('bud', 'Visible to Buddies'),
+    # ('you', 'Only Visible to You'),
 )
 
 STATUS_CHOICES = (
@@ -28,15 +36,19 @@ PRIORITY_CHOICES = (
     ('eme', 'Emergency'),
 )
 
-def check_profile_privacy(object, user):
-    privacy_setting = object.privacy if object.privacy != "inh" else object.privacy_defaults.global_default
+def get_global_privacy_default(object):
+    if object.get_cname() == "Profile":
+        return object.privacy_defaults.global_default
+    if object.get_cname() in ["Action", "Slate"]:
+        return object.creator.profile.privacy_defaults.global_default
+
+def check_privacy(object, user):
+    if object.privacy == "inh":
+        privacy_setting = get_global_privacy_default(object)
+    else:
+        privacy_setting = object.privacy
     if privacy_setting == "pub":
         return True
     if privacy_setting == "sit" and user.is_authenticated():
         return True
-    return False
-
-def check_privacy(object, user):
-    if object.get_cname() == "Profile":
-        return check_profile_privacy(object, user)
     return False
