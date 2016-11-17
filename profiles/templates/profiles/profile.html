@@ -31,12 +31,13 @@
 
   <div class="row">
      <div class="col-sm-5 col-sm-offset-1">
-       <!-- Include of five most recent open actions, with link to view of all -->
+			 <h3>Actions {{ object.profile.get_name }} created</h3>
+			 		{% include "actions/action_list_limited_include.html" with object_list=object.action_set.all %}
      </div>
      <div class="col-sm-5 col-sm-offset-1">
-       <!-- Include of five most recent closed actions, with link to view of all -->
+			 <h3>Actions {{ object.profile.get_name }} tracked</h3>
+			 		{% include "actions/action_list_limited_include.html" with object_list=object.profile.actions.all %}
      </div>
    </div>
-
 
 {% endblock content %}

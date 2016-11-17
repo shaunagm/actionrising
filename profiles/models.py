@@ -27,6 +27,12 @@ class Profile(models.Model):
         class_name = 'Profile'
         return class_name
 
+    def get_name(self):
+        if self.user.first_name is not None:
+            return self.user.first_name + " " + self.user.last_name
+        else:
+            return self.username
+
     def get_absolute_url(self):
         return reverse('profile', kwargs={'slug': self.user.username })
 
