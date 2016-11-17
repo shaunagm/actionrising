@@ -1,0 +1,9 @@
+{% for person in trackers.public_list %}
+  <a class="tracker-link" href="{{ person.get_absolute_url }}">{{ person.get_name }}</a>
+{% endfor %}
+{% if trackers.anonymous_count %}
+    {% if trackers.public_list %}
+        and
+    {% endif %}
+    {{ trackers.anonymous_count }} anonymous users
+{% endif %}

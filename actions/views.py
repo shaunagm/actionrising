@@ -23,6 +23,8 @@ class ActionView(UserPassesTestMixin, generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(ActionView, self).get_context_data(**kwargs)
         context['topic_or_type_list'] = self.object.get_tags()
+        context['trackers'] = self.object.get_trackers(self.request.user)
+        context['slates'] = self.object.get_slates(self.request.user)
         return context
 
     def test_func(self):

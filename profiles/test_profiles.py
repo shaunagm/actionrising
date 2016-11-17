@@ -20,6 +20,8 @@ class TestProfileMethods(TestCase):
         self.relationship = Relationship.objects.create(person_A=self.buffy.profile,
             person_B=self.faith.profile)
         self.lorne = User.objects.create(username="lorne") # Relationshipless
+        self.action = Action.objects.create(slug="test-action", title="Test Action", creator=self.buffy)
+        self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action)
 
     def test_get_relationship_given_profile(self):
         relationship = self.buffy.profile.get_relationship_given_profile(self.faith.profile)
@@ -39,6 +41,12 @@ class TestProfileMethods(TestCase):
         self.assertEqual(list(self.buffy.profile.get_followers()), [self.faith.profile])
         self.assertEqual(list(self.faith.profile.get_followers()), [])
         self.assertEqual(list(self.lorne.profile.get_followers()), [])
+
+    def test_get_par_given_action(self):
+        par = self.buffy.profile.get_par_given_action(self.action)
+        self.assertEqual(par.profile, self.buffy.profile)
+        self.assertEqual(par.action, self.action)
+        self.assertEqual(par.pk, self.par.pk)
 
 class TestRelationshipMethods(TestCase):
 

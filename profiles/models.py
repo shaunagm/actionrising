@@ -48,6 +48,13 @@ class Profile(models.Model):
             return rel[0]
         return None
 
+    def get_par_given_action(self, action):
+        try:
+            par = ProfileActionRelationship.objects.get(profile=self, action=action)
+            return par
+        except:
+            return None
+
     def get_followers(self):
         followers = []
         # This should be something like for rel in self.relationship_set.all()
@@ -199,5 +206,9 @@ class ProfileActionRelationship(models.Model):
 
     def __unicode__(self):
         return u'Relationship of profile %s and action %s' % (self.profile, self.action)
+
+    def get_cname(self):
+        class_name = 'ProfileActionRelationship'
+        return class_name
 
     # Should probably add field & method to show *who* suggested this action to you

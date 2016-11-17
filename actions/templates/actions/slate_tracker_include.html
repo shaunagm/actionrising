@@ -1,0 +1,9 @@
+{% for slate in slates.public_list %}
+  <a class="tracker-link" href="{{ slate.get_absolute_url }}">{{ slate.title }}</a>
+{% endfor %}
+{% if slates.anonymous_count %}
+    {% if slates.public_list %}
+        and
+    {% endif %}
+    {{ slates.anonymous_count }} anonymous slates
+{% endif %}

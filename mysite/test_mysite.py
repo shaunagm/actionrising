@@ -1,8 +1,8 @@
 from django.test import TestCase
 
 from django.contrib.auth.models import User, AnonymousUser
-from actions.models import Action, Slate
-from profiles.models import Profile
+from actions.models import Action, Slate, SlateActionRelationship
+from profiles.models import Profile, ProfileActionRelationship
 
 from mysite.utils import check_for_ownership, get_global_privacy_default, check_privacy
 
@@ -18,6 +18,8 @@ class TestPrivacyUtils(TestCase):
         self.anon = AnonymousUser()
         self.action = Action.objects.create(slug="test-action", creator=self.faith)
         self.slate = Slate.objects.create(slug="test-slate", creator=self.faith)
+        self.par = ProfileActionRelationship(profile=self.faith.profile, action=self.action)
+        self.sar = SlateActionRelationship(slate=self.slate, action=self.action)
 
     def test_check_for_ownership_profile(self):
         self.assertFalse(check_for_ownership(self.faith.profile, self.buffy))
@@ -34,10 +36,24 @@ class TestPrivacyUtils(TestCase):
         self.assertTrue(check_for_ownership(self.slate, self.faith))
         self.assertFalse(check_for_ownership(self.slate, self.anon))
 
+    def test_check_for_ownership_par(self):
+        # No one "owns" a PAR
+        self.assertFalse(check_for_ownership(self.par, self.buffy))
+        self.assertFalse(check_for_ownership(self.par, self.faith))
+        self.assertFalse(check_for_ownership(self.par, self.anon))
+
+    def test_check_for_ownership_sar(self):
+        # No one "owns" an SAR
+        self.assertFalse(check_for_ownership(self.sar, self.buffy))
+        self.assertFalse(check_for_ownership(self.sar, self.faith))
+        self.assertFalse(check_for_ownership(self.sar, self.anon))
+
     def test_get_global_privacy_default_when_unchanged(self):
         self.assertEqual(get_global_privacy_default(self.faith.profile), "sit")
         self.assertEqual(get_global_privacy_default(self.action), "sit")
         self.assertEqual(get_global_privacy_default(self.slate), "sit")
+        self.assertEqual(get_global_privacy_default(self.par), "sit")
+        self.assertEqual(get_global_privacy_default(self.sar), "sit")
 
     def test_get_global_privacy_default_when_changed(self):
         self.faith.profile.privacy_defaults.global_default = "pub"
@@ -45,8 +61,10 @@ class TestPrivacyUtils(TestCase):
         self.assertEqual(get_global_privacy_default(self.faith.profile), "pub")
         self.assertEqual(get_global_privacy_default(self.action), "pub")
         self.assertEqual(get_global_privacy_default(self.slate), "pub")
+        self.assertEqual(get_global_privacy_default(self.par), "pub")
+        self.assertEqual(get_global_privacy_default(self.sar), "pub")
 
-    def test_check_privacy(self):
+    def test_check_privacy_of_action(self):
         # The global default is sitewide, so before changes, Buffy should have access
         # and Anon should not
         self.assertTrue(check_privacy(self.action, self.buffy))
@@ -63,4 +81,42 @@ class TestPrivacyUtils(TestCase):
         self.assertFalse(check_privacy(self.action, self.anon))
         # And let's just check that the actual fields are what we expect, because why not
         self.assertEqual([self.faith.profile.privacy_defaults.global_default, self.action.privacy],
+            ["pub", "sit"])
+
+    def test_check_privacy_of_par(self):
+        # The global default is sitewide, so before changes, Buffy should have access
+        # and Anon should not
+        self.assertTrue(check_privacy(self.par, self.buffy))
+        self.assertFalse(check_privacy(self.par, self.anon))
+        # Now we set the global default to pub and everyone can access
+        self.faith.profile.privacy_defaults.global_default = "pub"
+        self.faith.profile.privacy_defaults.save()
+        self.assertTrue(check_privacy(self.par, self.buffy))
+        self.assertTrue(check_privacy(self.par, self.anon))
+        # Now let's make access more restrictive on the individual objects
+        self.par.privacy = "sit"
+        self.par.save()
+        self.assertTrue(check_privacy(self.par, self.buffy))
+        self.assertFalse(check_privacy(self.par, self.anon))
+        # And let's just check that the actual fields are what we expect, because why not
+        self.assertEqual([self.faith.profile.privacy_defaults.global_default, self.par.privacy],
+            ["pub", "sit"])
+
+    def test_check_privacy_of_sar(self):
+        # The global default is sitewide, so before changes, Buffy should have access
+        # and Anon should not
+        self.assertTrue(check_privacy(self.sar, self.buffy))
+        self.assertFalse(check_privacy(self.sar, self.anon))
+        # Now we set the global default to pub and everyone can access
+        self.faith.profile.privacy_defaults.global_default = "pub"
+        self.faith.profile.privacy_defaults.save()
+        self.assertTrue(check_privacy(self.sar, self.buffy))
+        self.assertTrue(check_privacy(self.sar, self.anon))
+        # Now let's make access more restrictive on the individual objects
+        self.sar.privacy = "sit"
+        self.sar.save()
+        self.assertTrue(check_privacy(self.sar, self.buffy))
+        self.assertFalse(check_privacy(self.sar, self.anon))
+        # And let's just check that the actual fields are what we expect, because why not
+        self.assertEqual([self.faith.profile.privacy_defaults.global_default, self.sar.privacy],
             ["pub", "sit"])

@@ -46,10 +46,15 @@ def check_for_ownership(object, user):
     return False
 
 def get_global_privacy_default(object):
-    if object.get_cname() == "Profile":
+    # Some of this chaining seems inefficient and absurd :(
+    if object.get_cname() in "Profile":
         return object.privacy_defaults.global_default
     if object.get_cname() in ["Action", "Slate"]:
         return object.creator.profile.privacy_defaults.global_default
+    if object.get_cname() in "ProfileActionRelationship":
+        return object.profile.privacy_defaults.global_default
+    if object.get_cname() in "SlateActionRelationship":
+        return object.slate.creator.profile.privacy_defaults.global_default
 
 def check_privacy(object, user):
     if check_for_ownership(object, user):

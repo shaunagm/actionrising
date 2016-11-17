@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.contrib.auth.models import User
 
-from mysite.utils import PRIVACY_CHOICES, PRIORITY_CHOICES, STATUS_CHOICES
+from mysite.utils import PRIVACY_CHOICES, PRIORITY_CHOICES, STATUS_CHOICES, check_privacy
 
 class ActionTopic(models.Model):
     name = models.CharField(max_length=40, unique=True)
@@ -91,6 +91,30 @@ class Action(models.Model):
         else:
             return "<a href='" + self.get_action_creator_link() + "'>" + self.creator.username + "</a>"
 
+    def get_slates(self, user):
+        anonymous_count = 0
+        public_list = []
+        for slate in self.slate_set.all():
+            sar = slate.get_sar_given_action(self)
+            if check_privacy(sar, user):
+                public_list.append(slate)
+            else:
+                anonymous_count += 1
+        return {'anonymous_count': anonymous_count, 'total_count': anonymous_count + len(public_list),
+            'public_list': public_list }
+
+    def get_trackers(self, user):
+        anonymous_count = 0
+        public_list = []
+        for person in self.profile_set.all():
+            par = person.get_par_given_action(self)
+            if check_privacy(par, user):
+                public_list.append(person)
+            else:
+                anonymous_count += 1
+        return {'anonymous_count': anonymous_count, 'total_count': anonymous_count + len(public_list),
+            'public_list': public_list }
+
 class Slate(models.Model):
     slug = models.CharField(max_length=50, unique=True)
     title = models.CharField(max_length=300)
@@ -113,8 +137,21 @@ class Slate(models.Model):
     def get_edit_url(self):
         return reverse('edit_slate', kwargs={'slug': self.slug})
 
+    def get_sar_given_action(self, action):
+        try:
+            return SlateActionRelationship.objects.get(slate=self, action=action)
+        except:
+            return None
+
 class SlateActionRelationship(models.Model):
     slate = models.ForeignKey(Slate, on_delete=models.CASCADE)
     action = models.ForeignKey(Action, on_delete=models.CASCADE)
     priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='med')
     privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
+
+    def get_cname(self):
+        class_name = 'SlateActionRelationship'
+        return class_name
+
+    def __unicode__(self):
+        return "Relationship of slate: %s and action: %s " % (self.slate, self.action)
