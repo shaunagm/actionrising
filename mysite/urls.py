@@ -25,5 +25,6 @@ urlpatterns = [
     url(r'^profiles/', include('profiles.urls')),
     url(r'^actions/', include('actions.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^$', views.index),
+    url(r'^about/?$', views.about, name='about'),
+    url(r'^$', views.index, name='index'),
 ]
