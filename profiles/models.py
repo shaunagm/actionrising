@@ -90,17 +90,17 @@ class Relationship(models.Model):
     def target_follows_current_profile(self, current_profile):
         if current_profile == self.person_A:
             return self.B_follows_A
-        else:
+        elif current_profile == self.person_B:
             return self.A_follows_B
 
     def current_profile_follows_target(self, current_profile):
         if current_profile == self.person_A:
             return self.A_follows_B
-        else:
+        elif current_profile == self.person_B:
             return self.B_follows_A
 
     def toggle_following_for_current_profile(self, current_profile):
-        result = None
+        result = None # Falsy default value inappropriate here?  Should we raise error?
         if current_profile == self.person_A:
             if self.A_follows_B == True:
                 self.A_follows_B = False
@@ -108,7 +108,7 @@ class Relationship(models.Model):
             else:
                 self.A_follows_B = True
             result = self.A_follows_B
-        else:
+        elif current_profile == self.person_B:
             if self.B_follows_A == True:
                 self.B_follows_A = False
                 self.B_accountable_A = False  # You can't be accountable to someone you don't follow
@@ -121,24 +121,24 @@ class Relationship(models.Model):
     def target_accountable_to_current_profile(self, current_profile):
         if current_profile == self.person_A:
             return self.B_accountable_A
-        else:
+        elif current_profile == self.person_B:
             return self.A_accountable_B
 
     def current_profile_accountable_to_target(self, current_profile):
         if current_profile == self.person_A:
             return self.A_accountable_B
-        else:
+        elif current_profile == self.person_B:
             return self.B_accountable_A
 
     def toggle_accountability_for_current_profile(self, current_profile):
-        result = None
+        result = None  # Falsy default value inappropriate here?  Should we raise error?
         if current_profile == self.person_A:
             if self.A_accountable_B == True:
                 self.A_accountable_B = False
             else:
                 self.A_accountable_B = True
             result = self.A_accountable_B
-        else:
+        elif current_profile == self.person_B:
             if self.B_accountable_A == True:
                 self.B_accountable_A = False
             else:
@@ -150,24 +150,24 @@ class Relationship(models.Model):
     def target_mutes_current_profile(self, current_profile):
         if current_profile == self.person_A:
             return self.B_mutes_A
-        else:
+        elif current_profile == self.person_B:
             return self.A_mutes_B
 
     def current_profile_mutes_target(self, current_profile):
         if current_profile == self.person_A:
             return self.A_mutes_B
-        else:
+        elif current_profile == self.person_B:
             return self.B_mutes_A
 
     def toggle_mute_for_current_profile(self, current_profile):
-        result = None
+        result = None  # Falsy default value inappropriate here?  Should we raise error?
         if current_profile == self.person_A:
             if self.A_mutes_B == True:
                 self.A_mutes_B = False
             else:
                 self.A_mutes_B = True
             result = self.A_mutes_B
-        else:
+        elif current_profile == self.person_B:
             if self.B_mutes_A == True:
                 self.B_mutes_A = False
             else:

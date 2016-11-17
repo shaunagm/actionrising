@@ -42,6 +42,17 @@ class ProfileSearchView(LoginRequiredMixin, generic.ListView):
     template_name = 'profiles/profiles.html'
     model = User
 
+def toggle_relationships_helper(toggle_type, current_profile, target_profile):
+    relationship = current_profile.get_relationship_given_profile(target_profile)
+    if not relationship:
+        relationship = Relationship(person_A=current_profile, person_B=target_profile)
+    if toggle_type == 'follow':
+        return relationship.toggle_following_for_current_profile(current_profile)
+    elif toggle_type == 'account':
+        return relationship.toggle_accountability_for_current_profile(current_profile)
+    elif toggle_type == 'mute':
+        return relationship.toggle_mute_for_current_profile(current_profile)
+
 @login_required
 def toggle_relationships(request, username, toggle_type):
     current_profile = request.user.profile
@@ -49,37 +60,41 @@ def toggle_relationships(request, username, toggle_type):
         target_user = User.objects.get(username=username)
     except ObjectDoesNotExist: # If the target username got borked
         return HttpResponseRedirect(reverse('index'))
-
-    relationship = current_profile.get_relationship_given_profile(target_user.profile)
-    if not relationship:
-        relationship = Relationship(person_A=current_profile, person_B=target_user.profile)
-
-    if toggle_type == 'follow':
-        status = relationship.toggle_following_for_current_profile(current_profile)
-    elif toggle_type == 'account':
-        status = relationship.toggle_accountability_for_current_profile(current_profile)
-    elif toggle_type == 'mute':
-        status = relationship.toggle_mute_for_current_profile(current_profile)
-
+    status = toggle_relationships_helper(toggle_type, current_profile, target_user.profile)
     return HttpResponseRedirect(reverse('profile', kwargs={'slug':target_user.username}))
+
+def toggle_par_helper(toggle_type, current_profile, action):
+    if toggle_type == 'add':
+        par, create = ProfileActionRelationship.objects.get_or_create(profile=current_profile, action=action)
+        par.status = 'ace'
+        par.save()
+    if toggle_type == 'remove':
+        par = ProfileActionRelationship.objects.get(profile=current_profile, action=action)
+        par.delete()
 
 @login_required
 def toggle_action_for_profile(request, slug, toggle_type):
     current_profile = request.user.profile
     try:
         action = Action.objects.get(slug=slug)
-    except ObjectDoesNotExist: # If the target username got borked
+    except ObjectDoesNotExist: # If the action slug got borked
         return HttpResponseRedirect(reverse('index'))
-
-    if toggle_type == 'add':
-        par, create = ProfileActionRelationship.objects.get_or_create(profile=current_profile, action=action)
-        par.status = 'ace'
-        par.save()
-
-    if toggle_type == 'remove':
-        par = ProfileActionRelationship.objects.get(profile=current_profile, action=action)
-        par.delete()
+    toggle_par_helper(toggle_type, current_profile, action)
     return HttpResponseRedirect(reverse('action', kwargs={'slug':action.slug}))
+
+def manage_action_helper(par, form):
+    par.priority = form.cleaned_data['priority']
+    par.status = form.cleaned_data['status']
+    par.privacy = form.cleaned_data['privacy']
+    par.save()
+    for profile in form.cleaned_data['profiles']:
+        # Right now this is pretty inefficient.  Would be nice to show users which of
+        # their profile-buddies already had this action suggested to them.
+        new_profile = User.objects.get(username=profile.user.username).profile
+        new_par, created = ProfileActionRelationship.objects.get_or_create(profile=new_profile, action=par.action)
+        if created:
+            new_par.status = 'sug'
+            new_par.save()
 
 @login_required
 def manage_action(request, slug):
@@ -87,18 +102,7 @@ def manage_action(request, slug):
     if request.method == 'POST':
         form = ProfileActionRelationshipForm(request.POST)
         if form.is_valid():
-            par.priority = form.cleaned_data['priority']
-            par.status = form.cleaned_data['status']
-            par.privacy = form.cleaned_data['privacy']
-            par.save()
-            for profile in form.cleaned_data['profiles']:
-                # Right now this is pretty inefficient.  Would be nice to show users which of
-                # their profile-buddies already had this action suggested to them.
-                new_profile = User.objects.get(username=profile.user.username).profile
-                new_par, created = ProfileActionRelationship.objects.get_or_create(profile=new_profile, action=par.action)
-                if created:
-                    new_par.status = 'sug'
-                    new_par.save()
+            manage_action_helper(par, form)
             return HttpResponseRedirect(reverse('action', kwargs={'slug':par.action.slug}))
         else:
             context = {'form': form}
