@@ -30,3 +30,7 @@ OS X 10.12.1.
 
 7) Open site in browser (see command line output of previous step for correct
   link, usually something like http://127.0.0.1:8000)
+
+8) Remember to run the tests and make sure they're passing before you make any changes:
+
+     python manage.py test
