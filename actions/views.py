@@ -22,9 +22,7 @@ class ActionView(UserPassesTestMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ActionView, self).get_context_data(**kwargs)
-        topic_list = self.object.topics.all()
-        type_list = self.object.actiontypes.all()
-        context['topic_or_type_list'] = list(chain(topic_list, type_list))
+        context['topic_or_type_list'] = self.object.get_tags()
         return context
 
     def test_func(self):
@@ -35,6 +33,15 @@ class ActionListView(LoginRequiredMixin, generic.ListView):
     template_name = "actions/actions.html"
     model = Action
 
+def create_action_helper(object, types, topics, user):
+    object.creator = user
+    object.save()
+    for atype in types:
+        object.actiontypes.add(atype)
+    for topic in topics:
+        object.topics.add(topic)
+    return object
+
 class ActionCreateView(LoginRequiredMixin, generic.edit.CreateView):
     model = Action
     fields = ['slug', 'title', 'anonymize', 'main_link', 'text', 'privacy', 'location', 'status', 'has_deadline', 'deadline', 'topics', 'actiontypes']
@@ -42,13 +49,8 @@ class ActionCreateView(LoginRequiredMixin, generic.edit.CreateView):
     def form_valid(self, form):
         types = form.cleaned_data.pop('actiontypes')
         topics = form.cleaned_data.pop('topics')
-        self.object = form.save(commit=False)
-        self.object.creator = self.request.user
-        self.object.save()
-        for atype in types:
-            self.object.actiontypes.add(atype)
-        for topic in topics:
-            self.object.topics.add(topic)
+        object = form.save(commit=False)
+        self.object = create_action_helper(object, types, topics, self.request.user)
         return super(ActionCreateView, self).form_valid(form)
 
     def get_success_url(self, **kwargs):
@@ -102,21 +104,34 @@ class SlateListView(LoginRequiredMixin, generic.ListView):
     template_name = "actions/slates.html"
     model = Slate
 
+def create_slate_helper(object, actions, user):
+    object.creator = user
+    object.save()
+    for action in actions:
+        SlateActionRelationship.objects.create(slate=object, action=action)
+    return object
+
 class SlateCreateView(LoginRequiredMixin, generic.edit.CreateView):
     model = Slate
     fields = ['slug', 'title', 'text', 'status', 'privacy', 'actions']
 
     def form_valid(self, form):
         actions = form.cleaned_data.pop('actions')
-        self.object = form.save(commit=False)
-        self.object.creator = self.request.user
-        self.object.save()
-        for action in actions:
-            SlateActionRelationship.objects.create(slate=self.object, action=action)
+        object = form.save(commit=False)
+        self.object = create_slate_helper(object, actions, self.request.user)
         return super(SlateCreateView, self).form_valid(form)
 
     def get_success_url(self, **kwargs):
         return self.object.get_absolute_url()
+
+def edit_slate_helper(object, actions):
+    for action in actions:
+        if action not in object.actions.all():
+            SlateActionRelationship.objects.create(slate=object, action=action)
+    for action in object.actions.all():
+        if action not in actions:
+            sar = SlateActionRelationship.objects.get(slate=object, action=action)
+            sar.delete()
 
 class SlateEditView(UserPassesTestMixin, generic.edit.UpdateView):
     model = Slate
@@ -124,16 +139,8 @@ class SlateEditView(UserPassesTestMixin, generic.edit.UpdateView):
 
     def form_valid(self, form):
         actions = form.cleaned_data.pop('actions')
-        self.object = form.save(commit=False)
-        self.object.creator = self.request.user
-        self.object.save()
-        for action in actions:
-            if action not in self.object.actions.all():
-                SlateActionRelationship.objects.create(slate=self.object, action=action)
-        for action in self.object.actions.all():
-            if action not in actions:
-                sar = SlateActionRelationship.objects.get(slate=self.object, action=action)
-                sar.delete()
+        object = form.save(commit=False)
+        self.object = edit_slate_helper(object, actions)
         return super(SlateEditView, self).form_valid(form)
 
     def get_success_url(self, **kwargs):
