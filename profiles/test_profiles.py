@@ -48,6 +48,9 @@ class TestProfileMethods(TestCase):
         self.assertEqual(par.action, self.action)
         self.assertEqual(par.pk, self.par.pk)
 
+    def test_get_open_actions(self):
+        self.assertEqual(self.buffy.profile.get_open_actions(), [self.action])
+
 class TestRelationshipMethods(TestCase):
 
     def setUp(self):

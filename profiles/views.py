@@ -38,6 +38,20 @@ class ProfileEditView(UserPassesTestMixin, generic.UpdateView):
     def get_success_url(self, **kwargs):
         return self.object.get_absolute_url()
 
+class ProfileToDoView(UserPassesTestMixin, generic.DetailView):
+    template_name = 'profiles/todo.html'
+    model = User
+    slug_field = 'username'
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj == self.request.user  # No access unless this is you
+
+    def get_context_data(self, **kwargs):
+        context = super(ProfileToDoView, self).get_context_data(**kwargs)
+        context['actions'] = self.object.profile.get_open_actions()
+        return context
+
 class ProfileSearchView(LoginRequiredMixin, generic.ListView):
     template_name = 'profiles/profiles.html'
     model = User

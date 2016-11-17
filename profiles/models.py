@@ -65,6 +65,14 @@ class Profile(models.Model):
                 followers.append(person.pk)
         return Profile.objects.filter(pk__in=followers)
 
+    def get_open_actions(self):
+        open_actions = []
+        for action in self.actions.all():
+            par = ProfileActionRelationship.objects.get(profile=self, action=action)
+            if par.status in ["sug", "ace"]:
+                open_actions.append(action)
+        return open_actions
+
     # Add methods to save and access links as json objects
 
     # Add links to get specific kinds of links, so that Twitter for instance can be displayed with the
