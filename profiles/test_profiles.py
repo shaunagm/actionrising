@@ -220,7 +220,7 @@ class TestManageActionView(TestCase):
         self.mock_form = MockForm()
 
     def test_changes_fields_from_defaults(self):
-        self.assertEqual([self.par.priority, self.par.privacy, self.par.status], ["med", "inh", "inh"])
+        self.assertEqual([self.par.priority, self.par.privacy, self.par.status], ["med", "inh", "ace"])
         manage_action_helper(self.par, self.mock_form)
         self.assertEqual([self.par.priority, self.par.privacy, self.par.status], ["hig", "pub", "rea"])
 

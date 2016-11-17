@@ -178,7 +178,7 @@ class Relationship(models.Model):
 
 class PrivacyDefaults(models.Model):
     profile = models.OneToOneField(Profile, unique=True, related_name="privacy_defaults")
-    global_default = models.CharField(max_length=3, choices=PRIVACY_DEFAULT_CHOICES, default='fol')
+    global_default = models.CharField(max_length=3, choices=PRIVACY_DEFAULT_CHOICES, default='sit')
 
     def __unicode__(self):
         return u'Privacy defaults for %s' % (self.profile.user.username)
@@ -188,7 +188,7 @@ class ProfileActionRelationship(models.Model):
     action = models.ForeignKey(Action, on_delete=models.CASCADE)
     priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='med')
     privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
-    status = models.CharField(max_length=3, choices=INDIVIDUAL_STATUS_CHOICES, default='inh')
+    status = models.CharField(max_length=3, choices=INDIVIDUAL_STATUS_CHOICES, default='ace')
     committed = models.BooleanField(default=False)
 
     def __unicode__(self):
