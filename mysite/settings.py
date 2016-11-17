@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'mysite',
     'profiles',
     'actions',
+    'functional_tests',
 ]
 
 MIDDLEWARE = [
