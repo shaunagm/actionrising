@@ -27,4 +27,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^about/?$', views.about, name='about'),
     url(r'^$', views.index, name='index'),
+    url('^activity/', include('actstream.urls')),
 ]

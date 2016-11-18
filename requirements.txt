@@ -6,3 +6,4 @@ psycopg2==2.6.2
 selenium==2.53.6
 wheel==0.24.0
 whitenoise==3.2.2
+https://github.com/awatts/django-activity-stream/archive/ad4211199546fcbfe43e8f936c5d1265691c1ef4.zip
