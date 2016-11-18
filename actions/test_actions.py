@@ -39,6 +39,10 @@ class TestActionMethods(TestCase):
         self.action.save()
         self.assertEqual(self.action.get_creator_with_link(), "Anonymous")
 
+    def test_get_robust_url(self):
+        self.assertEqual(self.action.get_robust_url(), '/actions/action/test-action')
+        self.assertEqual(self.slate.get_robust_url(), '/actions/slate/test-slate')
+
     def test_get_slates(self):
         # This test ignores privacy permissions :( and is generally too simple
         slate_info = self.action.get_slates(self.buffy)
@@ -58,6 +62,7 @@ class TestActionMethods(TestCase):
         self.assertEqual(sar.slate, self.slate)
         self.assertEqual(sar.action, self.action)
         self.assertEqual(sar.pk, self.sar.pk)
+
 
 class TestActionViews(TestCase):
 

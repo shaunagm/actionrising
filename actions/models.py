@@ -84,7 +84,7 @@ class Action(models.Model):
         try:
             url = reverse('action', kwargs={'slug': self.slug})
             return url
-        else:
+        except:
             return ""
 
     def get_edit_url(self):
@@ -155,7 +155,7 @@ class Slate(models.Model):
         try:
             url = reverse('slate', kwargs={'slug': self.slug})
             return url
-        else:
+        except:
             return ""
 
     def get_edit_url(self):
