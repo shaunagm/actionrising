@@ -11,7 +11,7 @@
       {% for action in object_list %}
       <tr>
           <td>{{ forloop.counter }}</td>
-          <td><a href="{{ action.get_absolute_url }}">{{ action.title }}</a></td>
+          <td><a href="{{ action.get_robust_url }}">{{ action.title }}</a></td>
           <td>{{ action.get_status_display }}</td>
           <td>{% include "actions/action_label_include.html" with object_list=action.get_tags %}</td>
       </tr>

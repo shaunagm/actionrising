@@ -80,6 +80,13 @@ class Action(models.Model):
     def get_absolute_url(self):
         return reverse('action', kwargs={'slug': self.slug})
 
+    def get_robust_url(self):
+        try:
+            url = reverse('action', kwargs={'slug': self.slug})
+            return url
+        else:
+            return ""
+
     def get_edit_url(self):
         return reverse('edit_action', kwargs={'slug': self.slug})
 
@@ -143,6 +150,13 @@ class Slate(models.Model):
 
     def get_absolute_url(self):
         return reverse('slate', kwargs={'slug': self.slug})
+
+    def get_robust_url(self):
+        try:
+            url = reverse('slate', kwargs={'slug': self.slug})
+            return url
+        else:
+            return ""
 
     def get_edit_url(self):
         return reverse('edit_slate', kwargs={'slug': self.slug})

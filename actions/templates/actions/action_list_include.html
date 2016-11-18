@@ -14,7 +14,7 @@
       {% for action in object_list %}
       <tr>
           <td>{{ forloop.counter }}</td>
-          <td><a href="{{ action.get_absolute_url }}">{{ action.title }}</a></td>
+          <td><a href="{{ action.get_robust_url }}">{{ action.title }}</a></td>
           <td>{{ action.get_creator_with_link|safe }}</td>
           <td>{{ action.deadline }}</td>
           <td>{{ action.get_status_display }}</td>
