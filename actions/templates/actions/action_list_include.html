@@ -5,7 +5,7 @@
       <th>Action</th>
       <th>Creator</th>
       <th>Deadline</th>
-      <th>Status</th>
+      <th>Status?</th>
       <th>Friends?</th>
       <th>Tags</th>
     </tr>
@@ -17,7 +17,7 @@
           <td><a href="{{ action.get_robust_url }}">{{ action.title }}</a></td>
           <td>{{ action.get_creator_with_link|safe }}</td>
           <td>{{ action.deadline }}</td>
-          <td>{{ action.get_status_display }}</td>
+          <td>{{ action.is_active }}</td>
           <td>{% if action.creator in friendlist %} True {% endif %} </td>
           <td>{% include "actions/action_label_include.html" with object_list=action.get_tags %}</td>
       </tr>

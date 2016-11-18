@@ -132,6 +132,12 @@ class Action(models.Model):
         return {'anonymous_count': anonymous_count, 'total_count': anonymous_count + len(public_list),
             'public_list': public_list }
 
+    def is_active(self):
+        if self.status == "rea":  # Arguably we should add 'in creation' too
+            return True
+        else:
+            return False
+
 class Slate(models.Model):
     slug = models.CharField(max_length=50, unique=True, validators=slug_validator)
     title = models.CharField(max_length=300)
@@ -166,6 +172,12 @@ class Slate(models.Model):
             return SlateActionRelationship.objects.get(slate=self, action=action)
         except:
             return None
+
+    def is_active(self):
+        if self.status == "rea":  # Arguably we should add 'in creation' too
+            return True
+        else:
+            return False
 
 class SlateActionRelationship(models.Model):
     slate = models.ForeignKey(Slate, on_delete=models.CASCADE)

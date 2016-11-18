@@ -9,7 +9,7 @@
 {% block page_specific_javascript %}
 
     $.fn.dataTable.ext.search.push(function( settings, data, dataIndex ) {
-            var pass_status = (($('#filter-active').is(':checked') && (data[4] == "Active")) ||
+            var pass_status = (($('#filter-active').is(':checked') && (data[4] == "True")) ||
               (!$('#filter-active').is(':checked')));
             var pass_creator = (($('#filter-friends').is(':checked') && (data[5] == "True")) ||
               (!$('#filter-friends').is(':checked')));
@@ -23,8 +23,7 @@
             "columnDefs": [
                 {
                     "targets": [ 4 ],
-                    "visible": false,
-                    "searchable": false
+                    "visible": false
                 },
                 {
                     "targets": [ 5 ],
