@@ -1,5 +1,5 @@
 {% for item in object_list %}
-   <span class="label {% ifequal item.get_cname 'ActionType' %} label-info {% else %} label-warning {% endifequal %}">
+   <span class="label {% ifequal item.get_cname 'ActionType' %} label-info {% else %} label-danger {% endifequal %}">
      <a href="{{ item.get_link }}">{{ item.name }}</a>
    </span>
 {% endfor %}

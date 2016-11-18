@@ -1,9 +1,5 @@
 {% extends "mysite/base.html" %}
 
-{% block page_specific_css %}
-    <style>i { padding-right: 20px; }</style>
-{% endblock page_specific_css%}
-
 {% block page_specific_javascript %}
     $(document).ready(function() {
         var actionTable = $('#actions').DataTable({

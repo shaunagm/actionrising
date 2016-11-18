@@ -1,11 +1,5 @@
 {% extends "mysite/base.html" %}
 
-{% block page_specific_css %}
-  table { font-size: 16px !important; }
-  .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info { color: #ebebeb; }
-  .even { background-color: #2b3e50 !important;}
-{% endblock page_specific_css%}
-
 {% block page_specific_javascript %}
 
     $.fn.dataTable.ext.search.push(function( settings, data, dataIndex ) {
@@ -19,7 +13,6 @@
 
     $(document).ready(function() {
         var actionTable = $('#actions').DataTable({
-           "bPaginate": false,
             "columnDefs": [
                 {
                     "targets": [ 4 ],

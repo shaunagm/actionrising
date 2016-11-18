@@ -13,12 +13,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/superhero/bootstrap.min.css" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
 
-    <style>
-        body { padding-top: 70px; }
-        span.label { margin: 10px 10px 10px 0px; }
-        {% block page_specific_css %}
-        {% endblock page_specific_css%}
-    </style>
+    {% include "mysite/css_include.html" %}
+    {% block page_specific_css %}
+    {% endblock page_specific_css%}
 
 <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
 </head>
