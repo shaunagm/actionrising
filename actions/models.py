@@ -1,11 +1,21 @@
 from __future__ import unicode_literals
 from itertools import chain
+import re
 
 from django.core.urlresolvers import reverse
+from django.core.validators import RegexValidator
 from django.db import models
 from django.contrib.auth.models import User
 
 from mysite.utils import PRIVACY_CHOICES, PRIORITY_CHOICES, STATUS_CHOICES, check_privacy
+
+slug_validator = [
+    RegexValidator(
+        regex=re.compile(r"^[a-z0-9-]+$"),
+        message="Please enter a valid slug, using only lowercase letters, numbers, and dashes.",
+        code="invalid"
+    )
+]
 
 class ActionTopic(models.Model):
     name = models.CharField(max_length=40, unique=True)
@@ -38,7 +48,7 @@ class ActionType(models.Model):
         return reverse('type', kwargs={'slug': self.slug})
 
 class Action(models.Model):
-    slug = models.CharField(max_length=50, unique=True)
+    slug = models.CharField(max_length=50, unique=True, validators=slug_validator)
     title = models.CharField(max_length=300)
     creator = models.ForeignKey(User)
     anonymize = models.BooleanField(default=False)
@@ -116,7 +126,7 @@ class Action(models.Model):
             'public_list': public_list }
 
 class Slate(models.Model):
-    slug = models.CharField(max_length=50, unique=True)
+    slug = models.CharField(max_length=50, unique=True, validators=slug_validator)
     title = models.CharField(max_length=300)
     creator = models.ForeignKey(User)
     text = models.CharField(max_length=200, blank=True, null=True)  # Rich text?
