@@ -8,9 +8,9 @@ from django.contrib.auth.mixins import UserPassesTestMixin,  LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
 from mysite.utils import check_privacy
-
 from django.contrib.auth.models import User
 from actions.models import Action, ActionTopic, ActionType, Slate, SlateActionRelationship
+from actions.forms import ActionForm, SlateForm
 
 @login_required
 def index(request):
@@ -46,7 +46,7 @@ def create_action_helper(object, types, topics, user):
 
 class ActionCreateView(LoginRequiredMixin, generic.edit.CreateView):
     model = Action
-    fields = ['slug', 'title', 'anonymize', 'main_link', 'text', 'privacy', 'location', 'status', 'has_deadline', 'deadline', 'topics', 'actiontypes']
+    form_class = ActionForm
 
     def form_valid(self, form):
         types = form.cleaned_data.pop('actiontypes')
@@ -115,7 +115,7 @@ def create_slate_helper(object, actions, user):
 
 class SlateCreateView(LoginRequiredMixin, generic.edit.CreateView):
     model = Slate
-    fields = ['slug', 'title', 'text', 'status', 'privacy', 'actions']
+    form_class = SlateForm
 
     def form_valid(self, form):
         actions = form.cleaned_data.pop('actions')
