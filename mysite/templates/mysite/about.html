@@ -5,15 +5,29 @@
 <div class="row">
    <div class="col-sm-10 col-sm-offset-1">
      <h2>Help yourself and friends take action</h2>
-      
-      <p>ActNow is a way to help yourself figure out your next step right now: to take specific, meaningful, positive actions that fit the time and energy you have available.</p>
 
-      <p>Learn about actions you can take</p>
-      <p>Put together your personal ToDo list</p>
-      <p>Add new actions to suggest them as options to other people</p>
-      <p>Make a "slate" of suggested actions for an event or other specific goal or purpose</p>
-      <p>Check out the profiles of friends to learn about what they're doing</p>
-      
-      <p>[Replace this part with names of people made this and how to contact them or help]</p>
+     <p>ActionRising is a platform created to help individuals and communities
+       figure out their next steps.  We want you to take action - specific, meaningful,
+       positive action - that fits the time and energy you have available.</p>
+
+     {% if user.is_authenticated %}
+
+           <h4><a href="{% url 'actions' %}">Browse actions you can take</a></h4>
+           <h4><a href="{% url 'to_do' user.username %}">Put together your personal ToDo list</a></h4>
+           <h4><a href="{% url 'create_action' %}">Add new actions for you and others to do</a></h4>
+           <h4><a href="{% url 'create_slate' %}">Make a "slate" of suggested actions for an event or other specific goal or purpose</a></h4>
+           <h4><a href="{% url 'profiles' %}">Find and follow friends to see what they're working on</a></h4>
+
+           <p>This site has only been live since November 18th.  We need your help to
+             make it better.  Please tell Shauna, in person or via email, about any
+             problems yourun into or features you'd like.</p>
+
+     {% else %}
+
+     <p>Log in to learn more.</p>
+
+        <p>Not registered?  Ask Shauna to create an account for you.</p>
+
+     {% endif %}
 
 {% endblock content %}
