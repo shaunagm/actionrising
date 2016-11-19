@@ -138,6 +138,13 @@ class Action(models.Model):
         else:
             return False
 
+    def get_location(self):
+        if self.location:
+            return self.location
+        else:
+            return "Unknown"
+
+
 class Slate(models.Model):
     slug = models.CharField(max_length=50, unique=True, validators=slug_validator)
     title = models.CharField(max_length=300)

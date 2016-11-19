@@ -10,7 +10,7 @@
          {% endifequal %}
        </h2>
        <h4>Created by {{ action.get_creator_with_link|safe }}</h4>
-       <i class="fa fa-location-arrow" aria-hidden="true"> <a href="{{ action.location }}">location</a> </i>
+       <i class="fa fa-globe" aria-hidden="true"> {{ action.get_location }}</i>
        <i class="fa fa-eye" aria-hidden="true"> {{ action.get_privacy_display }} </i>
        <i class="fa fa-space-shuttle" aria-hidden="true"> {{ action.get_status_display }} </i>
      </div>

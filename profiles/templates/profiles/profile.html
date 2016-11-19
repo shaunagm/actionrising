@@ -11,7 +11,7 @@
              {% include "profiles/rel_management_include.html" with object=object %}
          {% endifequal %}
        </h2>
-       <i class="fa fa-location-arrow" aria-hidden="true"> location </i>
+       <i class="fa fa-globe" aria-hidden="true"> {{ object.profile.get_location }}</i>
        <h4>{{ object.profile.text }}</h4>
      </div>
   </div>

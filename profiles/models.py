@@ -73,6 +73,13 @@ class Profile(models.Model):
                 open_actions.append(action)
         return open_actions
 
+    def get_location(self):
+        if self.location:
+            return self.location
+        else:
+            return "Unknown"
+
+
     # Add methods to save and access links as json objects
 
     # Add links to get specific kinds of links, so that Twitter for instance can be displayed with the
