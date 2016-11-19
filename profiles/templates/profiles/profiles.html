@@ -3,7 +3,9 @@
 {% block page_specific_javascript %}
 
     $(document).ready(function() {
-        $('#profiles').DataTable();
+        $('#profiles').DataTable({
+          "iDisplayLength": 100,
+        });
     } );
 
 {% endblock page_specific_javascript %}

@@ -2,7 +2,9 @@
 
 {% block page_specific_javascript %}
     $(document).ready(function() {
-        $('#slates').DataTable();
+        $('#slates').DataTable({
+          "iDisplayLength": 100,
+        });
     } );
 {% endblock page_specific_javascript %}
 
