@@ -1,0 +1,10 @@
+
+{% if object.get_location %}
+    <i class="fa fa-globe" aria-hidden="true"> {{ object.get_location }}</i>
+{% endif %}
+{% if object.get_privacy %}
+    <i class="fa fa-eye" aria-hidden="true"> {{ object.get_privacy }} </i>
+{% endif %}
+{% if object.get_status_display %}
+    <i class="fa fa-space-shuttle" aria-hidden="true"> {{ object.get_status_display }} </i>
+{% endif %}

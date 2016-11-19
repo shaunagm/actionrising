@@ -144,6 +144,11 @@ class Action(models.Model):
         else:
             return "Unknown"
 
+    def get_privacy(self):
+        if self.privacy == "inh":
+            return self.creator.profile.privacy_defaults.get_global_default_display()
+        else:
+            return self.get_privacy_display()
 
 class Slate(models.Model):
     slug = models.CharField(max_length=50, unique=True, validators=slug_validator)
@@ -185,6 +190,12 @@ class Slate(models.Model):
             return True
         else:
             return False
+
+    def get_privacy(self):
+        if self.privacy == "inh":
+            return self.creator.profile.privacy_defaults.get_global_default_display()
+        else:
+            return self.get_privacy_display()
 
 class SlateActionRelationship(models.Model):
     slate = models.ForeignKey(Slate, on_delete=models.CASCADE)
