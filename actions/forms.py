@@ -11,7 +11,7 @@ class ActionForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ActionForm, self).__init__(*args, **kwargs)
         self.fields['slug'].widget.attrs['placeholder'] = 'please-use-alphanumerics-and-dashes-only'
-
+        self.fields['deadline'].widget.attrs['placeholder'] = 'MM/DD/YYYY HH:MM:SS (hours, minutes and seconds optional, defaults to midnight)'
 
 class SlateForm(ModelForm):
 
