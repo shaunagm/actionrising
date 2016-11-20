@@ -1,6 +1,9 @@
 # actnow
 
-This project uses Django version 1.10.3.
+Note: The production version is hosted at actionrising.com.
+
+This project uses Django version 1.10.3. See documentation in the `docs` directory for a brief
+[technical overview](docs/technical_overview.md) for contributors.
 
 ## Setting up the site locally
 
