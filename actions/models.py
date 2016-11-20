@@ -12,15 +12,16 @@ from mysite.utils import PRIVACY_CHOICES, PRIORITY_CHOICES, STATUS_CHOICES, chec
 slug_validator = [
     RegexValidator(
         regex=re.compile(r"^[a-z0-9-]+$"),
-        message="Please enter a valid slug, using only lowercase letters, numbers, and dashes.",
+        message="Enter a slug, using only lowercase letters, numbers, and dashes.",
         code="invalid"
     )
 ]
 
 class ActionTopic(models.Model):
+    """Stores the topic (name, slug, and description) of an action"""
     name = models.CharField(max_length=40, unique=True)
     slug = models.CharField(max_length=50, unique=True)
-    text = models.CharField(max_length=200, blank=True, null=True)  # Rich text?
+    text = models.CharField(max_length=200, blank=True, null=True)  # TODO Rich text?
 
     def __unicode__(self):
         return self.name
@@ -33,9 +34,10 @@ class ActionTopic(models.Model):
         return reverse('topic', kwargs={'slug': self.slug})
 
 class ActionType(models.Model):
+    """Stores the type (name, slug, and description) of an action"""
     name = models.CharField(max_length=40, unique=True)
     slug = models.CharField(max_length=50, unique=True)
-    text = models.CharField(max_length=200, blank=True, null=True)  # Rich text?
+    text = models.CharField(max_length=200, blank=True, null=True)  # TODO Rich text?
 
     def __unicode__(self):
         return self.name
@@ -48,27 +50,35 @@ class ActionType(models.Model):
         return reverse('type', kwargs={'slug': self.slug})
 
 class Action(models.Model):
+    """ Stores a single action """
     slug = models.CharField(max_length=50, unique=True, validators=slug_validator)
     title = models.CharField(max_length=300)
     creator = models.ForeignKey(User)
     anonymize = models.BooleanField(default=False)
     main_link = models.CharField(max_length=300, blank=True, null=True)
-    text = models.CharField(max_length=500, blank=True, null=True)  # Rich text?
+    text = models.CharField(max_length=500, blank=True, null=True)  # TODO Rich text?
+    # privacy default is inh == inherit
     privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
     location = models.CharField(max_length=140, blank=True, null=True)
+    # status default is cre == create
     status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='cre')
     has_deadline = models.BooleanField(default=False)
     deadline = models.DateTimeField(blank=True, null=True)
+    # suggested priority default is med == medium
     suggested_priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='med')
     actiontypes = models.ManyToManyField(ActionType, blank=True, related_name="actions_for_type")
     topics = models.ManyToManyField(ActionTopic, blank=True, related_name="actions_for_topic")
 
-    # Add get_status field which looks at has_deadline and returns either no deadline,
-    # deadline not yet passed, or deadline passed.
+    # TODO Add get_status field
+    #      which looks at has_deadline and returns either no deadline,
+    #      deadline not yet passed, or deadline passed.
 
-    # Add get_privacy field which displays the privacy setting dependent on whether it's your
-    # action, and what "inherit" is. (For now, it's just getting the field directly, which is not ideal.
-    # Inherit will need to be calculated each time, so we might want current_privacy generated from privacy
+    # TODO Add get_privacy field
+    #      which displays the privacy setting dependent on whether it's your
+    #      action, and what "inherit" is. (For now, it's just getting the
+    #      field directly, which is not ideal. Inherit will need to be
+    #      calculated each time, so we might want current_privacy generated
+    #      from privacy
 
     def __unicode__(self):
         return self.title
@@ -117,8 +127,9 @@ class Action(models.Model):
                 public_list.append(slate)
             else:
                 anonymous_count += 1
-        return {'anonymous_count': anonymous_count, 'total_count': anonymous_count + len(public_list),
-            'public_list': public_list }
+        return {'anonymous_count': anonymous_count,
+                'total_count': anonymous_count + len(public_list),
+                'public_list': public_list }
 
     def get_trackers(self, user):
         anonymous_count = 0
@@ -151,11 +162,14 @@ class Action(models.Model):
             return self.get_privacy_display()
 
 class Slate(models.Model):
+    """Stores a single slate."""
     slug = models.CharField(max_length=50, unique=True, validators=slug_validator)
     title = models.CharField(max_length=300)
     creator = models.ForeignKey(User)
-    text = models.CharField(max_length=200, blank=True, null=True)  # Rich text?
+    text = models.CharField(max_length=200, blank=True, null=True)  # TODO Rich text?
+    # default status is cre == Create
     status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='cre')
+    # default privacy is inh == inherit
     privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
     actions = models.ManyToManyField(Action, through='SlateActionRelationship')
 
@@ -179,7 +193,9 @@ class Slate(models.Model):
     def get_edit_url(self):
         return reverse('edit_slate', kwargs={'slug': self.slug})
 
+    # TODO rename method?
     def get_sar_given_action(self, action):
+        """Return SlateActionRelationship for a specific action"""
         try:
             return SlateActionRelationship.objects.get(slate=self, action=action)
         except:
@@ -198,9 +214,12 @@ class Slate(models.Model):
             return self.get_privacy_display()
 
 class SlateActionRelationship(models.Model):
+    """Stores relationship between a single slate and a single action."""
     slate = models.ForeignKey(Slate, on_delete=models.CASCADE)
     action = models.ForeignKey(Action, on_delete=models.CASCADE)
+    # default priority is med == medium
     priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='med')
+    # default privacy is inh == inherit
     privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
 
     def get_cname(self):
