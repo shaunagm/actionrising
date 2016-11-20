@@ -64,8 +64,6 @@ class TestActionMethods(TestCase):
         self.assertEqual(sar.pk, self.sar.pk)
 
     def test_is_active(self):
-        self.assertFalse(self.action.is_active())
-        self.assertFalse(self.slate.is_active())
         self.slate.status = 'rea'
         self.slate.save()
         self.action.status = 'rea'
@@ -78,7 +76,7 @@ class TestActionMethods(TestCase):
         self.action.save()
         self.assertFalse(self.action.is_active())
         self.assertFalse(self.slate.is_active())
-        
+
 class TestActionViews(TestCase):
 
     def setUp(self):

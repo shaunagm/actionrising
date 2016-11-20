@@ -83,7 +83,7 @@ class Profile(models.Model):
                 obj_to_check = action
             if privacy and not check_privacy(obj_to_check, user):
                 continue
-            if status and obj_to_check.status not in ["sug", "ace"]:
+            if status and obj_to_check.get_status() not in ["Suggested to you", "Accepted"]:
                 continue
             actions.append(action)
         return actions
@@ -95,7 +95,7 @@ class Profile(models.Model):
         return actions
 
     def get_most_recent_actions_tracked(self, user):
-        actions = self.vet_actions(self.actions.all(), user, status=False)
+        actions = self.vet_actions(self.actions.all(), user)
         if len(actions) > 5:
             return actions[-5:]
         return actions
@@ -254,5 +254,11 @@ class ProfileActionRelationship(models.Model):
     def get_cname(self):
         class_name = 'ProfileActionRelationship'
         return class_name
+
+    def get_status(self):
+        if self.action.status in ["wit", "rej"]:
+            return self.action.get_status_display()
+        else:
+            return self.get_status_display()
 
     # Should probably add field & method to show *who* suggested this action to you

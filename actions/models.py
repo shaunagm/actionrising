@@ -7,7 +7,8 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.contrib.auth.models import User
 
-from mysite.utils import PRIVACY_CHOICES, PRIORITY_CHOICES, STATUS_CHOICES, check_privacy
+from mysite.utils import (PRIVACY_CHOICES, PRIORITY_CHOICES, STATUS_CHOICES,
+    INDIVIDUAL_STATUS_CHOICES, check_privacy)
 
 slug_validator = [
     RegexValidator(
@@ -167,6 +168,10 @@ class Action(models.Model):
         else:
             return self.get_privacy_display()
 
+    def get_status(self):
+        # Added for conveniences' sake in vet_actions function
+        return self.get_status_display()
+
 class Slate(models.Model):
     """Stores a single slate."""
     slug = models.CharField(max_length=50, unique=True, validators=slug_validator)
@@ -227,6 +232,8 @@ class SlateActionRelationship(models.Model):
     priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='med')
     # default privacy is inh == inherit
     privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
+    # default status is ace == accepted
+    status = models.CharField(max_length=3, choices=INDIVIDUAL_STATUS_CHOICES, default='ace')
 
     def get_cname(self):
         class_name = 'SlateActionRelationship'
@@ -234,3 +241,9 @@ class SlateActionRelationship(models.Model):
 
     def __unicode__(self):
         return "Relationship of slate: %s and action: %s " % (self.slate, self.action)
+
+    def get_status(self):
+        if self.action.status in ["wit", "rej"]:
+            return self.action.get_status_display()
+        else:
+            return self.get_status_display()
