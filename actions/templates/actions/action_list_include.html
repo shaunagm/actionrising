@@ -7,6 +7,7 @@
       <th>Deadline</th>
       <th>Status?</th>
       <th>Friends?</th>
+      <th>Priority</th>
       <th>Tags</th>
     </tr>
   </thead>
@@ -19,6 +20,7 @@
           <td>{{ action.deadline }}</td>
           <td>{{ action.is_active }}</td>
           <td>{% if action.creator in friendlist %} True {% endif %} </td>
+          <td>{{ action.get_priority_display }}</td>
           <td>{% include "actions/action_label_include.html" with object_list=action.get_tags %}</td>
       </tr>
       {% endfor %}

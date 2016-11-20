@@ -1,4 +1,6 @@
-
+{% if object.priority %}
+    <i class="fa fa-exclamation-circle" aria-hidden="true"> {{ object.get_priority_display }} priority</i>
+{% endif %}
 {% if object.get_location %}
     <i class="fa fa-globe" aria-hidden="true"> {{ object.get_location }}</i>
 {% endif %}
