@@ -65,7 +65,7 @@ class Action(models.Model):
     has_deadline = models.BooleanField(default=False)
     deadline = models.DateTimeField(blank=True, null=True)
     # suggested priority default is med == medium
-    suggested_priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='med')
+    priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='med')
     actiontypes = models.ManyToManyField(ActionType, blank=True, related_name="actions_for_type")
     topics = models.ManyToManyField(ActionTopic, blank=True, related_name="actions_for_topic")
 
