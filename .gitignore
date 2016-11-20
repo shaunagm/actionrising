@@ -1,2 +1,18 @@
 *.pyc
 *venv*
+
+### OSX ###
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Basics
+*.py[cod]
+__pycache__
+
+# Unit test / coverage reports
+.coverage
+htmlcov
+
+# Pycharm
+.idea/*
