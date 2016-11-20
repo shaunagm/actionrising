@@ -34,6 +34,7 @@ class ActionView(UserPassesTestMixin, generic.DetailView):
 class ActionListView(LoginRequiredMixin, generic.ListView):
     template_name = "actions/actions.html"
     model = Action
+    queryset = Action.objects.filter(status="rea")
 
 def create_action_helper(object, types, topics, user):
     object.creator = user
@@ -137,7 +138,7 @@ def edit_slate_helper(object, actions):
 
 class SlateEditView(UserPassesTestMixin, generic.edit.UpdateView):
     model = Slate
-    fields = ['slug', 'title', 'text', 'status', 'privacy', 'actions']
+    form_class = SlateForm
 
     def form_valid(self, form):
         actions = form.cleaned_data.pop('actions')

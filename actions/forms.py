@@ -27,3 +27,7 @@ class SlateForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(SlateForm, self).__init__(*args, **kwargs)
         self.fields['slug'].widget.attrs['placeholder'] = 'please-use-alphanumerics-and-dashes-only'
+        # TODO For the editform, this will not show any actions that have since been finished/withdrawn.
+        # May want to override that behavior and populate the queryset with open actions
+        # plus currently linked actions?
+        self.fields['actions'].queryset = Action.objects.filter(status="rea")
