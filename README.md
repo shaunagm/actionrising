@@ -34,3 +34,8 @@ OS X 10.12.1.
 8) Remember to run the tests and make sure they're passing before you make any changes:
 
      python manage.py test
+
+   Consider running coverage on tests as well:
+   
+     coverage run manage.py test
+     coverage report
