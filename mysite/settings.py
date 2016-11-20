@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.sites',
     'django.contrib.staticfiles',
+    'datetimewidget',
     'bootstrap3',
     'actstream',
     'mysite',
