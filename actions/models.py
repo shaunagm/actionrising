@@ -66,8 +66,8 @@ class Action(models.Model):
     # privacy default is inh == inherit
     privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
     location = models.CharField(max_length=140, blank=True, null=True)
-    # status default is cre == create
-    status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='cre')
+    # status default is rea == open for action
+    status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='rea')
     has_deadline = models.BooleanField(default=False)
     deadline = models.DateTimeField(blank=True, null=True)
     # suggested priority default is med == medium
@@ -173,8 +173,8 @@ class Slate(models.Model):
     title = models.CharField(max_length=300)
     creator = models.ForeignKey(User)
     text = models.CharField(max_length=200, blank=True, null=True)  # TODO Rich text?
-    # default status is cre == Create
-    status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='cre')
+    # status default is rea == open for action
+    status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='rea')
     # default privacy is inh == inherit
     privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
     actions = models.ManyToManyField(Action, through='SlateActionRelationship')

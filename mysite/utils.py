@@ -16,7 +16,7 @@ PRIVACY_DEFAULT_CHOICES = (
 )
 
 STATUS_CHOICES = (
-    ('cre', 'In creation'),
+    # ('cre', 'In creation'),
     ('rea', 'Open for action'),
     ('fin', 'Finished'),
     ('wit', 'Withdrawn'),
