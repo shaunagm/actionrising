@@ -1,5 +1,7 @@
 from django.forms import ModelForm
 
+from datetimewidget.widgets import DateTimeWidget
+
 from actions.models import Action, Slate
 
 class ActionForm(ModelForm):
@@ -7,6 +9,9 @@ class ActionForm(ModelForm):
     class Meta:
         model = Action
         fields = ['slug', 'title', 'anonymize', 'main_link', 'text', 'privacy', 'location', 'status', 'has_deadline', 'deadline', 'topics', 'actiontypes']
+        widgets = {
+            'deadline': DateTimeWidget(bootstrap_version=3),
+        }
 
     def __init__(self, *args, **kwargs):
         super(ActionForm, self).__init__(*args, **kwargs)
