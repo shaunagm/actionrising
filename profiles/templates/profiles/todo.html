@@ -1,5 +1,9 @@
 {% extends "mysite/base.html" %}
 
+{% block page_specific_javascript %}
+    {% include "actions/action_datatablesjs_include.html" %}
+{% endblock page_specific_javascript %}
+
 {% block content %}
 
     <div class="row">

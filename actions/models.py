@@ -33,6 +33,9 @@ class ActionTopic(models.Model):
     def get_link(self):
         return reverse('topic', kwargs={'slug': self.slug})
 
+    def action_count(self):
+        return self.actions_for_topic.count()
+
 class ActionType(models.Model):
     """Stores the type (name, slug, and description) of an action"""
     name = models.CharField(max_length=40, unique=True)
@@ -48,6 +51,9 @@ class ActionType(models.Model):
 
     def get_link(self):
         return reverse('type', kwargs={'slug': self.slug})
+
+    def action_count(self):
+        return self.actions_for_type.count()
 
 class Action(models.Model):
     """ Stores a single action """

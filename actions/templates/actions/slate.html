@@ -1,22 +1,7 @@
 {% extends "mysite/base.html" %}
 
 {% block page_specific_javascript %}
-    $(document).ready(function() {
-        var actionTable = $('#actions').DataTable({
-           "bPaginate": false,
-            "columnDefs": [
-                {
-                    "targets": [ 4 ],
-                    "visible": false,
-                    "searchable": false
-                },
-                {
-                    "targets": [ 5 ],
-                    "visible": false
-                }
-            ]
-        });
-      });
+    {% include "actions/action_datatablesjs_include.html" %}
 {% endblock page_specific_javascript %}
 
 {% block content %}

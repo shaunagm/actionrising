@@ -27,6 +27,12 @@ class ProfileView(UserPassesTestMixin, generic.DetailView):
         obj = self.get_object()
         return check_privacy(obj.profile, self.request.user)
 
+    def get_context_data(self, **kwargs):
+        context = super(ProfileView, self).get_context_data(**kwargs)
+        context['created_actions'] = self.object.profile.get_most_recent_actions_created(self.request.user)
+        context['tracked_actions'] = self.object.profile.get_most_recent_actions_tracked(self.request.user)
+        return context
+
 class ProfileEditView(UserPassesTestMixin, generic.UpdateView):
     model = Profile
     fields = ['text', 'location', 'links']
@@ -49,7 +55,7 @@ class ProfileToDoView(UserPassesTestMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ProfileToDoView, self).get_context_data(**kwargs)
-        context['actions'] = self.object.profile.get_open_actions()
+        context['actions'] = self.object.profile.get_open_actions(self.request.user)
         return context
 
 class ProfileSearchView(LoginRequiredMixin, generic.ListView):

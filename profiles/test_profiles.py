@@ -49,7 +49,7 @@ class TestProfileMethods(TestCase):
         self.assertEqual(par.pk, self.par.pk)
 
     def test_get_open_actions(self):
-        self.assertEqual(self.buffy.profile.get_open_actions(), [self.action])
+        self.assertEqual(self.buffy.profile.get_open_actions(self.buffy), [self.action])
 
 class TestRelationshipMethods(TestCase):
 

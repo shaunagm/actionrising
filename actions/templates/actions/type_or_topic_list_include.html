@@ -14,7 +14,7 @@
           <td>{{ forloop.counter }}</td>
           <td><a href="{{ object.get_link }}">{{ object.name }}</a></td>
           <td>{{ object.text }}</td>
-          <td>{{ object.actions.count }}</td>
+          <td>{{ object.action_count }}</td>
       </tr>
       {% endfor %}
   </tbody>

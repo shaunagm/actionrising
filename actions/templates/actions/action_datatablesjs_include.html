@@ -1,0 +1,60 @@
+$(document).ready(function() {
+
+    var actionTable = $('#actions').DataTable({
+        "iDisplayLength": 100,
+        "columnDefs": [
+            {
+                "targets": [ 4 ],
+                "visible": false,
+                "name":  "status"
+            },
+            {
+                "targets": [ 5 ],
+                "visible": false,
+                "name":  "creator"
+            }
+        ]
+    });
+
+    var slateTable = $('#slates').DataTable({
+        "iDisplayLength": 100,
+        "columnDefs": [
+            {
+                "targets": [ 3 ],
+                "visible": false,
+                "name":  "status"
+            },
+            {
+                "targets": [ 4 ],
+                "visible": false,
+                "name":  "creator"
+            }
+        ]
+    });
+
+    if ($.fn.dataTable.isDataTable("#actions")) {
+      chosenTable = actionTable;
+    }
+
+    if ($.fn.dataTable.isDataTable("#slates")) {
+      chosenTable = slateTable;
+    }
+
+    status_index = chosenTable.column('status:name').index();
+    creator_index = chosenTable.column('creator:name').index();
+
+    $.fn.dataTable.ext.search.push(function( settings, data, dataIndex ) {
+            var pass_status = (($('#filter-active').is(':checked') && (data[status_index] == "True")) ||
+              (!$('#filter-active').is(':checked')));
+            var pass_creator = (($('#filter-friends').is(':checked') && (data[creator_index] == "True")) ||
+              (!$('#filter-friends').is(':checked')));
+            if (pass_status && pass_creator) {  return true; }
+            return false;
+    });
+
+    // Event listener to the two range filtering inputs to redraw on input
+    $('#filter-active, #filter-friends').on('change',function () {
+        chosenTable.draw();
+    } );
+
+} );

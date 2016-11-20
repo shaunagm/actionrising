@@ -1,5 +1,9 @@
 {% extends "mysite/base.html" %}
 
+{% block page_specific_javascript %}
+    {% include "actions/action_datatablesjs_include.html" %}
+{% endblock page_specific_javascript %}
+
 {% block content %}
 
   <div class="row">
@@ -13,6 +17,9 @@
      <div class="col-sm-10 col-sm-offset-1">
 
        <h2>Tagged Actions</h2>
+
+       {% load profile_extras %}
+       {% get_friendslist as friendlist %}
 
        {% include "actions/action_list_include.html" with object_list=action_list %}
 

@@ -6,7 +6,8 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 
 from actions.models import Action
-from mysite.utils import PRIVACY_CHOICES, PRIORITY_CHOICES, INDIVIDUAL_STATUS_CHOICES, PRIVACY_DEFAULT_CHOICES
+from mysite.utils import (PRIVACY_CHOICES, PRIORITY_CHOICES, INDIVIDUAL_STATUS_CHOICES,
+    PRIVACY_DEFAULT_CHOICES, check_privacy)
 
 class Profile(models.Model):
     """Stores a single user profile"""
@@ -68,27 +69,45 @@ class Profile(models.Model):
                 followers.append(person.pk)
         return Profile.objects.filter(pk__in=followers)
 
-    def get_open_actions(self):
-        open_actions = []
-        for action in self.actions.all():
-            par = ProfileActionRelationship.objects.get(profile=self, action=action)
-            if par.status in ["sug", "ace"]:
-                open_actions.append(action)
-        return open_actions
-
     def get_location(self):
         if self.location:
             return self.location
         else:
             return "Unknown"
 
+    def vet_actions(self, potential_actions, user, privacy=True, status=True):
+        actions = []
+        for action in potential_actions:
+            obj_to_check = ProfileActionRelationship.objects.filter(profile=self, action=action).first()
+            if not obj_to_check: # Created actions won't have a par
+                obj_to_check = action
+            if privacy and not check_privacy(obj_to_check, user):
+                continue
+            if status and obj_to_check.status not in ["sug", "ace"]:
+                continue
+            actions.append(action)
+        return actions
+
+    def get_most_recent_actions_created(self, user):
+        actions = self.vet_actions(self.user.action_set.all(), user, status=False)
+        if len(actions) > 5:
+            return actions[-5:]
+        return actions
+
+    def get_most_recent_actions_tracked(self, user):
+        actions = self.vet_actions(self.actions.all(), user, status=False)
+        if len(actions) > 5:
+            return actions[-5:]
+        return actions
+
+    def get_open_actions(self, user):
+        actions = self.vet_actions(self.actions.all(), user, privacy=False)
+        return actions
 
     # Add methods to save and access links as json objects
 
     # Add links to get specific kinds of links, so that Twitter for instance can be displayed with the
     # Twitter image
-
-    # Add methods to display actions data linked from actions app
 
     # Add methods to facilitate viewing on friendfeeds
 
