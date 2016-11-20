@@ -1,4 +1,4 @@
-# actnow
+# ActionRising
 
 Note: The production version is hosted at actionrising.com.
 
