@@ -9,15 +9,18 @@ from actions.models import Action
 from mysite.utils import PRIVACY_CHOICES, PRIORITY_CHOICES, INDIVIDUAL_STATUS_CHOICES, PRIVACY_DEFAULT_CHOICES
 
 class Profile(models.Model):
+    """Stores a single user profile"""
     user = models.OneToOneField(User, unique=True)
     verified = models.BooleanField(default=False)
-    text = models.CharField(max_length=500, blank=True, null=True)  # Rich text?
+    text = models.CharField(max_length=500, blank=True, null=True)  # TODO Rich text?
     location = models.CharField(max_length=140, blank=True, null=True)
     links = models.CharField(max_length=400, blank=True, null=True)
-    connections = models.ManyToManyField('self', through='Relationship',
-                                           symmetrical=False,
-                                           related_name='connected_to')
+    connections = models.ManyToManyField('self',
+                                        through='Relationship',
+                                        symmetrical=False,
+                                        related_name='connected_to')
     actions = models.ManyToManyField(Action, through='ProfileActionRelationship')
+    # privacy default is inh == inherit
     privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
 
     def __unicode__(self):
@@ -96,6 +99,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 post_save.connect(create_user_profile, sender=User)
 
 class Relationship(models.Model):
+    """Stores a single relationship"""
     person_A = models.ForeignKey(Profile, related_name='relationship_A')
     person_B = models.ForeignKey(Profile, related_name='relationship_B')
     A_follows_B = models.BooleanField(default=False)
@@ -205,17 +209,23 @@ class Relationship(models.Model):
         return result
 
 class PrivacyDefaults(models.Model):
+    """Stores default privacy"""
     profile = models.OneToOneField(Profile, unique=True, related_name="privacy_defaults")
+    # global default privacy is sit == Visible sitewide
     global_default = models.CharField(max_length=3, choices=PRIVACY_DEFAULT_CHOICES, default='sit')
 
     def __unicode__(self):
         return u'Privacy defaults for %s' % (self.profile.user.username)
 
 class ProfileActionRelationship(models.Model):
+    """Stores relationship between a profile and an action"""
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     action = models.ForeignKey(Action, on_delete=models.CASCADE)
+    # default priority is med == medium
     priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='med')
+    # default privacy is inh == inherit
     privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
+    # default status is ace == accepted
     status = models.CharField(max_length=3, choices=INDIVIDUAL_STATUS_CHOICES, default='ace')
     committed = models.BooleanField(default=False)
 
