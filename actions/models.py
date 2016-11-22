@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from itertools import chain
 import re
 
+from django.template.defaultfilters import slugify
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
 from django.db import models
@@ -27,6 +28,11 @@ class ActionTopic(models.Model):
     def __unicode__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.slug = slugify(self.name)
+        super(ActionTopic, self).save(*args, **kwargs)
+
     def get_cname(self):
         class_name = 'ActionTopic'
         return class_name
@@ -45,6 +51,11 @@ class ActionType(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.slug = slugify(self.name)
+        super(ActionType, self).save(*args, **kwargs)
 
     def get_cname(self):
         class_name = 'ActionType'
@@ -89,6 +100,11 @@ class Action(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.slug = slugify(self.title)
+        super(Action, self).save(*args, **kwargs)
 
     def get_cname(self):
         class_name = 'Action'
@@ -186,6 +202,11 @@ class Slate(models.Model):
 
     def __unicode__(self):
         return self.slug
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.slug = slugify(self.title)
+        super(Slate, self).save(*args, **kwargs)
 
     def get_cname(self):
         class_name = 'Slate'
