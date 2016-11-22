@@ -13,7 +13,7 @@
           <td>{{ forloop.counter }}</td>
           <td><a href="{{ user.profile.get_absolute_url }}">{{ user.username }}</a></td>
           <td>{{ user.first_name }} {{ user.last_name }}</td>
-          <td>{{ user.profile.location }}</td>
+          <td>{{ user.profile.get_location }}</td>
       </tr>
       {% endfor %}
   </tbody>
