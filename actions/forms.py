@@ -14,6 +14,7 @@ class ActionForm(ModelForm):
         }
         help_texts = {
             'anonymize': 'Show "anonymous" as creator. (Note: this changes the display only, and you can change your mind and choose to show your username later.)',
+            'privacy': 'Choosing "inherit" means privacy will be set to whatever your privacy default is, and will change if your default changes.  You can change your privacy default by editing your profile.'
         }
 
     def __init__(self, *args, **kwargs):
@@ -25,6 +26,9 @@ class SlateForm(ModelForm):
     class Meta:
         model = Slate
         fields = fields = ['title', 'description', 'status', 'privacy', 'actions']
+        help_texts = {
+            'privacy': 'Choosing "inherit" means privacy will be set to whatever your privacy default is, and will change if your default changes.  You can change your privacy default by editing your profile.'
+        }
 
     def __init__(self, *args, **kwargs):
         super(SlateForm, self).__init__(*args, **kwargs)
