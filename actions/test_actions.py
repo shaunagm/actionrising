@@ -2,7 +2,8 @@ from django.test import TestCase
 from django.core.exceptions import ObjectDoesNotExist
 
 from django.contrib.auth.models import User
-from actions.models import Action, Slate, ActionTopic, ActionType, SlateActionRelationship
+from actions.models import (Action, Slate, ActionTopic, ActionType, SlateActionRelationship,
+    slugify_helper)
 from profiles.models import Profile, ProfileActionRelationship
 from actions.views import create_action_helper, create_slate_helper, edit_slate_helper
 
@@ -76,6 +77,14 @@ class TestActionMethods(TestCase):
         self.action.save()
         self.assertFalse(self.action.is_active())
         self.assertFalse(self.slate.is_active())
+
+    def test_slugify_helper(self):
+        self.assertEqual(slugify_helper(Action, "Test Action"), "test-action0")
+        self.assertEqual(slugify_helper(Action, "Test Different Action"), "test-different-action")
+        self.assertEqual(slugify_helper(ActionType, "Test ActionType"), "test-actiontype0")
+        self.assertEqual(slugify_helper(ActionType, "Test Different ActionType"), "test-different-actiontype")
+        self.assertEqual(slugify_helper(Slate, "Test Slate"), "test-slate0")
+        self.assertEqual(slugify_helper(Slate, "Test Different Slate"), "test-different-slate")
 
 class TestActionViews(TestCase):
 

@@ -20,6 +20,17 @@ slug_validator = [
     )
 ]
 
+def slugify_helper(object_model, slug):
+    counter = 0
+    temp_slug = slugify(slug)
+    while True:
+        if object_model.objects.filter(slug=temp_slug):
+            temp_slug += str(counter)
+            counter += 1
+            continue
+        break
+    return temp_slug
+
 class ActionTopic(models.Model):
     """Stores the topic (name, slug, and description) of an action"""
     name = models.CharField(max_length=40, unique=True)
@@ -31,7 +42,7 @@ class ActionTopic(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.pk:
-            self.slug = slugify(self.name)
+            self.slug = slugify_helper(ActionTopic, self.name)
         super(ActionTopic, self).save(*args, **kwargs)
 
     def get_cname(self):
@@ -55,7 +66,7 @@ class ActionType(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.pk:
-            self.slug = slugify(self.name)
+            self.slug = slugify_helper(ActionType, self.name)
         super(ActionType, self).save(*args, **kwargs)
 
     def get_cname(self):
@@ -105,7 +116,7 @@ class Action(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.pk:
-            self.slug = slugify(self.title)
+            self.slug = slugify_helper(Action, self.title)
         super(Action, self).save(*args, **kwargs)
 
     def get_cname(self):
@@ -208,7 +219,7 @@ class Slate(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.pk:
-            self.slug = slugify(self.title)
+            self.slug = slugify_helper(Slate, self.title)            
         super(Slate, self).save(*args, **kwargs)
 
     def get_cname(self):
