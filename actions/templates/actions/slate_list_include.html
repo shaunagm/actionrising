@@ -15,7 +15,7 @@ Filter:
 <table class="table table-striped table-hover" id="slates">
   <thead>
     <tr>
-      <th>#</th>
+      <th>Date Created</th>
       <th>Name</th>
       <th>Created By</th>
       <th>Status?</th>
@@ -24,9 +24,9 @@ Filter:
     </tr>
   </thead>
   <tbody>
-      {% for object in object_list %}
+      {% for object in object_list reversed %}
        <tr>
-          <td>{{ forloop.counter }}</td>
+          <td>{{ object.date_created }}</td>
           <td><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></td>
           <td>{{ object.creator }}</td>
           <td>{{ object.is_active }}</td>

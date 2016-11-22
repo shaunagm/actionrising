@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from itertools import chain
 import re
 
+from django.utils import timezone
 from django.template.defaultfilters import slugify
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
@@ -86,6 +87,7 @@ class Action(models.Model):
     priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='med')
     actiontypes = models.ManyToManyField(ActionType, blank=True, related_name="actions_for_type")
     topics = models.ManyToManyField(ActionTopic, blank=True, related_name="actions_for_topic")
+    date_created = models.DateTimeField(default=timezone.now)
 
     # TODO Add get_status field
     #      which looks at has_deadline and returns either no deadline,
@@ -199,6 +201,7 @@ class Slate(models.Model):
     # default privacy is inh == inherit
     privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
     actions = models.ManyToManyField(Action, through='SlateActionRelationship')
+    date_created = models.DateTimeField(default=timezone.now)
 
     def __unicode__(self):
         return self.slug

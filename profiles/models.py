@@ -1,7 +1,9 @@
 from __future__ import unicode_literals
+
 from django.db import models
 from django.db.models.signals import post_save
 from django.core.urlresolvers import reverse
+from django.utils import timezone
 
 from django.contrib.auth.models import User
 
@@ -16,6 +18,7 @@ class Profile(models.Model):
     description = models.CharField(max_length=500, blank=True, null=True)  # TODO Rich text?
     location = models.CharField(max_length=140, blank=True, null=True)
     links = models.CharField(max_length=400, blank=True, null=True)
+    date_joined = models.DateTimeField(default=timezone.now)
     connections = models.ManyToManyField('self',
                                         through='Relationship',
                                         symmetrical=False,
