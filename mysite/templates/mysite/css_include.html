@@ -8,15 +8,21 @@
     select { color: #2b3e50; }
 
     span.label { margin: 5px 10px 5px 0px; display:inline-block; }
-    table span.label a, span.label a { color: white; text-decoration: none !important; font-size: 115%; }
+    table span.label a, span.label a { color: white; text-decoration: none !important;
+        font-size: 115%; }
     button, input[type="submit"] { color: #2b3e50; }
     #form-explanation { margin-bottom: 25px; }
 
     /*Datatables Styling*/
     table { font-size: 16px !important; }
     .dataTables_wrapper { margin-top: 20px; }
-    .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info { color: #ebebeb; }
+    .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter,
+        .dataTables_wrapper .dataTables_info { color: #ebebeb; }
     .even { background-color: #2b3e50 !important;}
-    .dataTables_wrapper .dataTables_paginate .paginate_button.disabled { color: #b2b2b2 !important; }
+    .dataTables_wrapper .dataTables_paginate .paginate_button { color: #333 !important;
+          background: linear-gradient(to bottom, #fff 0%, #dcdcdc 100%);}
+    .dataTables_wrapper .dataTables_paginate .paginate_button.previous,
+        .dataTables_wrapper .dataTables_paginate .paginate_button.next {
+        color: #b2b2b2 !important; background: transparent; border: none; }
 
 </style>
