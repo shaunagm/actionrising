@@ -35,4 +35,4 @@ class SlateForm(ModelForm):
         # TODO For the editform, this will not show any actions that have since been finished/withdrawn.
         # May want to override that behavior and populate the queryset with open actions
         # plus currently linked actions?
-        self.fields['actions'].queryset = Action.objects.filter(status="rea")
+        self.fields['actions'].queryset = Action.objects.filter(status="rea").order_by("title")
