@@ -1,5 +1,8 @@
 {% extends "mysite/base.html" %}
 
+{% block title %} {{ object.title }} | ActionRising{% endblock %}
+
+
 {% block page_specific_javascript %}
     {% include "actions/action_datatablesjs_include.html" %}
 {% endblock page_specific_javascript %}
