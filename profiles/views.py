@@ -35,7 +35,7 @@ class ProfileView(UserPassesTestMixin, generic.DetailView):
 
 class ProfileEditView(UserPassesTestMixin, generic.UpdateView):
     model = Profile
-    fields = ['text', 'location', 'links']
+    fields = ['description', 'location', 'links']
 
     def test_func(self):
         obj = self.get_object()

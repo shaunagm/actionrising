@@ -61,7 +61,7 @@ class ActionCreateView(LoginRequiredMixin, generic.edit.CreateView):
 
 class ActionEditView(UserPassesTestMixin, generic.edit.UpdateView):
     model = Action
-    fields = ['slug', 'title', 'anonymize', 'main_link', 'text', 'privacy', 'location', 'status', 'has_deadline', 'deadline', 'topics', 'actiontypes']
+    fields = ['slug', 'title', 'anonymize', 'main_link', 'description', 'privacy', 'location', 'status', 'has_deadline', 'deadline', 'topics', 'actiontypes']
 
     def test_func(self):
         obj = self.get_object()

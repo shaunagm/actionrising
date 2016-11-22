@@ -8,7 +8,7 @@ class ActionForm(ModelForm):
 
     class Meta:
         model = Action
-        fields = ['title', 'anonymize', 'main_link', 'text', 'privacy', 'location', 'status', 'has_deadline', 'deadline', 'topics', 'actiontypes']
+        fields = ['title', 'anonymize', 'main_link', 'description', 'privacy', 'location', 'status', 'has_deadline', 'deadline', 'topics', 'actiontypes']
         widgets = {
             'deadline': DateTimeWidget(bootstrap_version=3),
         }
@@ -24,7 +24,7 @@ class SlateForm(ModelForm):
 
     class Meta:
         model = Slate
-        fields = fields = ['title', 'text', 'status', 'privacy', 'actions']
+        fields = fields = ['title', 'description', 'status', 'privacy', 'actions']
 
     def __init__(self, *args, **kwargs):
         super(SlateForm, self).__init__(*args, **kwargs)

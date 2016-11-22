@@ -13,7 +13,7 @@ class Profile(models.Model):
     """Stores a single user profile"""
     user = models.OneToOneField(User, unique=True)
     verified = models.BooleanField(default=False)
-    text = models.CharField(max_length=500, blank=True, null=True)  # TODO Rich text?
+    description = models.CharField(max_length=500, blank=True, null=True)  # TODO Rich text?
     location = models.CharField(max_length=140, blank=True, null=True)
     links = models.CharField(max_length=400, blank=True, null=True)
     connections = models.ManyToManyField('self',
