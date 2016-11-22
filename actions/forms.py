@@ -12,6 +12,9 @@ class ActionForm(ModelForm):
         widgets = {
             'deadline': DateTimeWidget(bootstrap_version=3),
         }
+        help_texts = {
+            'anonymize': 'Show "anonymous" as creator. (Note: this changes the display only, and you can change your mind and choose to show your username later.)',
+        }
 
     def __init__(self, *args, **kwargs):
         super(ActionForm, self).__init__(*args, **kwargs)
