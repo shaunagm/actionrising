@@ -41,6 +41,7 @@
            {% if user.is_authenticated %}
                <li><a href="{{ request.user.profile.get_absolute_url }}">Your Profile</a></li>
                <li><a href="{% url 'to_do' request.user %}">Your ToDos</a></li>
+               <li><a href="{% url 'logout' %}">Log Out</a></li>
            {% else %}
                <li><a href="{% url 'login' %}">Log In</a></li>
            {% endif %}
