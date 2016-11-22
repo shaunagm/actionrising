@@ -39,14 +39,14 @@
 	<div class="row">
      <div class="col-sm-10 col-sm-offset-1">
 			  <h4>Tracking This Issue ({{ trackers.total_count }})</h4>
-				{% include "profiles/tracker_include.html" with person=trackers %}
+				{% include "profiles/tracker_include.html" with trackers=trackers %}
      </div>
   </div>
 
 	<div class="row">
 		 <div class="col-sm-10 col-sm-offset-1">
 				<h4>Slates With This Issue ({{ slates.total_count }})</h4>
-				{% include "actions/slate_tracker_include.html" with person=trackers %}
+				{% include "actions/slate_tracker_include.html" with slates=slates %}
 		 </div>
 	</div>
 

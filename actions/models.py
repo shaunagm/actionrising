@@ -219,7 +219,7 @@ class Slate(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.pk:
-            self.slug = slugify_helper(Slate, self.title)            
+            self.slug = slugify_helper(Slate, self.title)
         super(Slate, self).save(*args, **kwargs)
 
     def get_cname(self):

@@ -5,5 +5,5 @@
     {% if trackers.public_list %}
         and
     {% endif %}
-    {{ trackers.anonymous_count }} anonymous users
+    {{ trackers.anonymous_count }} anonymous user{% ifnotequal trackers.anonymous_count 1 %}s{% endifnotequal %}
 {% endif %}
