@@ -12,7 +12,7 @@ from mysite.utils import check_privacy
 from django.contrib.auth.models import User
 from profiles.models import Profile, Relationship, ProfileActionRelationship
 from actions.models import Action
-from profiles.forms import ProfileActionRelationshipForm
+from profiles.forms import ProfileForm, ProfileActionRelationshipForm
 
 @login_required
 def index(request):
@@ -35,7 +35,7 @@ class ProfileView(UserPassesTestMixin, generic.DetailView):
 
 class ProfileEditView(UserPassesTestMixin, generic.UpdateView):
     model = Profile
-    fields = ['description', 'location', 'links']
+    form_class = ProfileForm
 
     def test_func(self):
         obj = self.get_object()
