@@ -2,6 +2,10 @@
 
 {% load bootstrap3 %}
 
+{% block page_specific_javascript %}
+$("#id_topics, #id_actiontypes").chosen()
+{% endblock page_specific_javascript %}
+
 {% block content %}
 
 <div class="row">
