@@ -1,5 +1,5 @@
 from django import template
-from profiles.models import Profile, Relationship
+from profiles.models import ProfileActionRelationship, Profile, Relationship
 
 register = template.Library()
 
@@ -25,3 +25,9 @@ def get_relationship(context, target_user):
     if relationship.current_profile_mutes_target(current_profile):
         info['mute_statement'] = "Unmute this user"
     return info
+
+@register.assignment_tag(takes_context=True)
+def get_action_status(context, target_profile):
+	action=context['action']
+	par = ProfileActionRelationship.objects.filter(action=action, profile=target_profile).get()
+	return par.get_status()
