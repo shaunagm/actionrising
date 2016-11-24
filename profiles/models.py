@@ -28,7 +28,7 @@ class Profile(models.Model):
     privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
 
     def __unicode__(self):
-        return u'Profile of user: %s' % self.user.username
+        return self.user.username
 
     def get_cname(self):
         class_name = 'Profile'
