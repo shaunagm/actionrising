@@ -139,6 +139,7 @@ def mark_as_done_helper(profile, action, mark_as):
     else:
         par.status = 'ace'
     par.save()
+    return par
 
 @login_required
 def mark_as_done(request, slug, mark_as):

@@ -11,7 +11,8 @@ from profiles.templatetags.profile_extras import (
     get_relationship,
     get_action_status,
 )
-from profiles.views import toggle_relationships_helper, toggle_par_helper, manage_action_helper
+from profiles.views import (toggle_relationships_helper, toggle_par_helper,
+    manage_action_helper, mark_as_done_helper)
 
 ###################
 ### Test models ###
@@ -247,6 +248,20 @@ class TestManageActionView(TestCase):
         par = ProfileActionRelationship.objects.get(profile=self.lorne.profile, action=self.action)
         self.assertEqual(par.profile.user, self.lorne)
 
+class TestMarkAsDoneView(TestCase):
+
+    def setUp(self):
+        self.buffy = User.objects.create(username="buffysummers")
+        self.action = Action.objects.create(slug="test-action", creator=self.buffy)
+        self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action)
+
+    def test_mark_as_accepted(self):
+        self.assertEqual(self.par.status, "ace")
+        par = mark_as_done_helper(self.buffy.profile, self.action, "done")
+        self.assertEqual(par.status, "don")
+        par = mark_as_done_helper(self.buffy.profile, self.action, "accepted")
+        self.assertEqual(par.status, "ace")
+
 #########################
 ### Test templatetags ###
 #########################
@@ -286,7 +301,7 @@ class TestProfileExtras(TestCase):
         self.assertEqual(info["follow_statement"], "Unfollow this user")
         self.assertEqual(info["account_statement"], "Remove user as accountability buddy")
         self.assertEqual(info["mute_statement"], "Unmute this user")
-        
+
     def test_get_action_status(self):
         action_status = get_action_status(self.context, [self.buffy.profile])
         accepted_pars = action_status["ace"]
