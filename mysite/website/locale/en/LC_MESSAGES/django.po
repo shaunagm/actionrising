@@ -1,0 +1,86 @@
+# Initial .
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Goss Nuzzo-Jones <gossnj@gmail.com>, 2016.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-11-25 15:38+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: mysite/utils.py:4 mysite/utils.py:13
+msgid "Visible to Public"
+msgstr ""
+
+#: mysite/utils.py:5 mysite/utils.py:14
+msgid "Visible Sitewide"
+msgstr ""
+
+#: mysite/utils.py:9
+msgid "Inherit"
+msgstr ""
+
+#: mysite/utils.py:22
+msgid "Open for action"
+msgstr ""
+
+#: mysite/utils.py:23
+msgid "Finished"
+msgstr ""
+
+#: mysite/utils.py:24
+msgid "Withdrawn"
+msgstr ""
+
+#: mysite/utils.py:28
+msgid "Suggested to you"
+msgstr ""
+
+#: mysite/utils.py:29
+msgid "Accepted"
+msgstr ""
+
+#: mysite/utils.py:30
+msgid "Done"
+msgstr ""
+
+#: mysite/utils.py:31
+msgid "Rejected"
+msgstr ""
+
+#: mysite/utils.py:35
+msgid "Low"
+msgstr ""
+
+#: mysite/utils.py:36
+msgid "Medium"
+msgstr ""
+
+#: mysite/utils.py:37
+msgid "High"
+msgstr ""
+
+#: mysite/utils.py:38
+msgid "Emergency"
+msgstr ""
+
+msgid "sug"
+msgstr "Suggested"
+
+msgid "ace"
+msgstr "Accepted"
+
+msgid "don"
+msgstr "Done"
+
+msgid "wit"
+msgstr "Rejected"

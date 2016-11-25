@@ -4,11 +4,12 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from django.contrib.auth.models import User
 from actions.models import Action
+from mysite.utils import INDIVIDUAL_STATUS_CHOICES
 from profiles.models import Profile, Relationship, ProfileActionRelationship
 from profiles.templatetags.profile_extras import (
-	get_friendslist,
-	get_relationship,
-	get_action_status,
+    get_friendslist,
+    get_relationship,
+    get_action_status,
 )
 from profiles.views import toggle_relationships_helper, toggle_par_helper, manage_action_helper
 
@@ -259,6 +260,7 @@ class TestProfileExtras(TestCase):
             person_B=self.faith.profile)
         self.action = Action.objects.create(slug="test-action", title="Test Action", creator=self.buffy)
         self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action)
+        self.faith_par = ProfileActionRelationship.objects.create(profile=self.faith.profile, action=self.action)
         class MockRequest(object):
             user = self.buffy
         self.context = {'request': MockRequest(), 'action': self.action}
@@ -286,9 +288,45 @@ class TestProfileExtras(TestCase):
         self.assertEqual(info["mute_statement"], "Unmute this user")
         
     def test_get_action_status(self):
-    	status = get_action_status(self.context, self.buffy.profile)
-    	self.assertEqual(status, "Accepted")
-    	self.par.status = "don"
-    	self.par.save()
-    	status = get_action_status(self.context, self.buffy.profile)
-    	self.assertEqual(status, "Done")
+        action_status = get_action_status(self.context, [self.buffy.profile])
+        accepted_pars = action_status["ace"]
+        self.assertEqual(accepted_pars[0], self.par)
+        
+        self.par.status = "don"
+        self.par.save()
+        action_status = get_action_status(self.context, [self.buffy.profile])
+        accepted_pars = action_status["ace"]
+        done_pars = action_status["don"]
+        self.assertEqual(len(accepted_pars), 0)
+        self.assertEqual(done_pars[0], self.par)
+        
+    def test_get_action_status_filtering(self):
+        action_status = get_action_status(self.context, [])
+        for status in INDIVIDUAL_STATUS_CHOICES:
+            pars = action_status[status[0]]
+            self.assertEqual(len(pars), 0)
+    
+        action_status = get_action_status(self.context, [self.faith.profile])
+        suggested_pars = action_status["sug"]
+        accepted_pars = action_status["ace"]
+        done_pars = action_status["don"]
+        rejected_pars = action_status["wit"]
+        
+        self.assertEqual(len(suggested_pars), 0)
+        self.assertEqual(accepted_pars[0], self.faith_par)
+        self.assertEqual(len(done_pars), 0)
+        self.assertEqual(len(rejected_pars), 0)
+        
+        action_status = get_action_status(self.context, [
+            self.faith.profile,
+            self.buffy.profile
+        ])
+        suggested_pars = action_status["sug"]
+        accepted_pars = action_status["ace"]
+        done_pars = action_status["don"]
+        rejected_pars = action_status["wit"]
+        
+        self.assertEqual(len(suggested_pars), 0)
+        self.assertEqual(len(accepted_pars), 2)
+        self.assertEqual(len(done_pars), 0)
+        self.assertEqual(len(rejected_pars), 0)

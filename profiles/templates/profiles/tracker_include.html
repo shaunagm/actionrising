@@ -1,7 +1,15 @@
+{% load i18n %}
 {% load profile_extras %}
-{% for person in trackers.public_list %}
-  {% get_action_status person as action_status %}
-  <a class="tracker-link" href="{{ person.get_absolute_url }}">{{ person.get_name }} - {{action_status}}</a>
+{% get_action_status trackers.public_list as action_status %}
+{% for status, par_list in action_status.items %}
+    {% if par_list|length > 0 %}
+        <h5>{% trans status %} ({{par_list|length}})</h5>
+        <ul>
+            {% for par in par_list %}
+                <li><a class="tracker-link" href="{{ par.profile.get_absolute_url }}">{{ par.profile.get_name }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endfor %}
 {% if trackers.anonymous_count %}
     {% if trackers.public_list %}
