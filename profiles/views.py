@@ -11,7 +11,7 @@ from mysite.utils import check_privacy
 
 from django.contrib.auth.models import User
 from profiles.models import Profile, Relationship, ProfileActionRelationship
-from actions.models import Action
+from actions.models import Action, Slate, SlateActionRelationship
 from profiles.forms import ProfileForm, ProfileActionRelationshipForm
 
 @login_required
@@ -108,13 +108,18 @@ def manage_action_helper(par, form):
     par.privacy = form.cleaned_data['privacy']
     par.save()
     for profile in form.cleaned_data['profiles']:
-        # Right now this is pretty inefficient.  Would be nice to show users which of
+        # TODO: Right now this is pretty inefficient.  Would be nice to show users which of
         # their profile-buddies already had this action suggested to them.
         new_profile = User.objects.get(username=profile.user.username).profile
         new_par, created = ProfileActionRelationship.objects.get_or_create(profile=new_profile, action=par.action)
         if created:
             new_par.status = 'sug'
             new_par.save()
+    for slate in form.cleaned_data['slates']:
+        # TODO: Right now this is pretty inefficient.  Would be nice to show users which of
+        # their slates already had this action added to them.
+        new_slate = Slate.objects.get(slug=slate)
+        new_sar, created = SlateActionRelationship.objects.get_or_create(slate=new_slate, action=par.action)
 
 @login_required
 def manage_action(request, slug):

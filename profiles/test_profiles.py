@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 
 from django.contrib.auth.models import User
-from actions.models import Action
+from actions.models import Action, Slate, SlateActionRelationship
 from mysite.utils import INDIVIDUAL_STATUS_CHOICES
 from profiles.models import Profile, Relationship, ProfileActionRelationship
 from profiles.templatetags.profile_extras import (
@@ -230,10 +230,11 @@ class TestManageActionView(TestCase):
         self.faith = User.objects.create(username="faithlehane")
         self.lorne = User.objects.create(username="lorne")
         self.action = Action.objects.create(slug="test-action", creator=self.faith)
+        self.slate = Slate.objects.create(slug="test-slate", creator=self.faith, title="Test Slate")
         self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action)
         class MockForm(object):
             cleaned_data = {'priority': 'hig', 'status': 'rea', 'privacy': 'pub',
-                'profiles': [self.lorne.profile]}
+                'profiles': [self.lorne.profile], 'slates': [self.slate]}
         self.mock_form = MockForm()
 
     def test_changes_fields_from_defaults(self):
@@ -247,6 +248,13 @@ class TestManageActionView(TestCase):
         manage_action_helper(self.par, self.mock_form)
         par = ProfileActionRelationship.objects.get(profile=self.lorne.profile, action=self.action)
         self.assertEqual(par.profile.user, self.lorne)
+
+    def test_make_new_sar_for_action(self):
+        with self.assertRaises(ObjectDoesNotExist):
+            SlateActionRelationship.objects.get(slate=self.slate, action=self.action)
+        manage_action_helper(self.par, self.mock_form)
+        sar = SlateActionRelationship.objects.get(slate=self.slate, action=self.action)
+        self.assertEqual(sar.slate, self.slate)
 
 class TestMarkAsDoneView(TestCase):
 
@@ -306,7 +314,7 @@ class TestProfileExtras(TestCase):
         action_status = get_action_status(self.context, [self.buffy.profile])
         accepted_pars = action_status["ace"]
         self.assertEqual(accepted_pars[0], self.par)
-        
+
         self.par.status = "don"
         self.par.save()
         action_status = get_action_status(self.context, [self.buffy.profile])
@@ -314,24 +322,24 @@ class TestProfileExtras(TestCase):
         done_pars = action_status["don"]
         self.assertEqual(len(accepted_pars), 0)
         self.assertEqual(done_pars[0], self.par)
-        
+
     def test_get_action_status_filtering(self):
         action_status = get_action_status(self.context, [])
         for status in INDIVIDUAL_STATUS_CHOICES:
             pars = action_status[status[0]]
             self.assertEqual(len(pars), 0)
-    
+
         action_status = get_action_status(self.context, [self.faith.profile])
         suggested_pars = action_status["sug"]
         accepted_pars = action_status["ace"]
         done_pars = action_status["don"]
         rejected_pars = action_status["wit"]
-        
+
         self.assertEqual(len(suggested_pars), 0)
         self.assertEqual(accepted_pars[0], self.faith_par)
         self.assertEqual(len(done_pars), 0)
         self.assertEqual(len(rejected_pars), 0)
-        
+
         action_status = get_action_status(self.context, [
             self.faith.profile,
             self.buffy.profile
@@ -340,7 +348,7 @@ class TestProfileExtras(TestCase):
         accepted_pars = action_status["ace"]
         done_pars = action_status["don"]
         rejected_pars = action_status["wit"]
-        
+
         self.assertEqual(len(suggested_pars), 0)
         self.assertEqual(len(accepted_pars), 2)
         self.assertEqual(len(done_pars), 0)

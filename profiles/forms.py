@@ -4,6 +4,7 @@ from django.forms.widgets import HiddenInput
 
 from mysite.utils import PRIVACY_DEFAULT_CHOICES
 from profiles.models import Profile, ProfileActionRelationship, PrivacyDefaults
+from actions.models import Slate
 
 class ProfileForm(ModelForm):
     privacy_default = ChoiceField(label='Default privacy setting',
@@ -25,9 +26,13 @@ class ProfileForm(ModelForm):
         self.instance.privacy_defaults.save()
         return super(ProfileForm, self).save(commit=commit)
 
+class SlateChoiceField(ModelMultipleChoiceField):
+   def label_from_instance(self, obj):
+        return obj.title
+
 class ProfileActionRelationshipForm(ModelForm):
     profiles = ModelMultipleChoiceField(queryset=Profile.objects.all(), label="Suggest to friends", required=False)
-    # slates = ModelMultipleChoiceField(label="Add to slates", required=False)
+    slates = SlateChoiceField(queryset=Slate.objects.all(), label="Add to slates", required=False)
 
     class Meta:
         model = ProfileActionRelationship
@@ -38,6 +43,6 @@ class ProfileActionRelationshipForm(ModelForm):
             par = kwargs.pop('par')
             super(ProfileActionRelationshipForm, self).__init__(*args, **kwargs)
             self.fields['profiles'].queryset = par.profile.get_followers()
-            # self.fields['slates'].queryset = par.profile.slates.all()
+            self.fields['slates'].queryset = par.profile.user.slate_set.all()
         else:
             super(ProfileActionRelationshipForm, self).__init__(*args, **kwargs)
