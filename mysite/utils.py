@@ -1,15 +1,17 @@
+from django.utils.translation import ugettext as _
+
 PRIVACY_CHOICES = (
-    ('pub', 'Visible to Public'),
-    ('sit', 'Visible Sitewide'),
+    ('pub', _('Visible to Public')),
+    ('sit', _('Visible Sitewide')),
     # ('fol', 'Visible to Buddies and Those You Follow'),
     # ('bud', 'Visible to Buddies'),
     # ('you', 'Only Visible to You'),
-    ('inh', 'Inherit'),
+    ('inh', _('Inherit')),
 )
 
 PRIVACY_DEFAULT_CHOICES = (
-    ('pub', 'Visible to Public'),
-    ('sit', 'Visible Sitewide'),
+    ('pub', _('Visible to Public')),
+    ('sit', _('Visible Sitewide')),
     # ('fol', 'Visible to Buddies and Those You Follow'),
     # ('bud', 'Visible to Buddies'),
     # ('you', 'Only Visible to You'),
@@ -17,23 +19,23 @@ PRIVACY_DEFAULT_CHOICES = (
 
 STATUS_CHOICES = (
     # ('cre', 'In creation'),
-    ('rea', 'Open for action'),
-    ('fin', 'Finished'),
-    ('wit', 'Withdrawn'),
+    ('rea', _('Open for action')),
+    ('fin', _('Finished')),
+    ('wit', _('Withdrawn')),
 )
 
 INDIVIDUAL_STATUS_CHOICES = (
-    ('sug', 'Suggested to you'),
-    ('ace', 'Accepted'),
-    ('don', 'Done'),
-    ('wit', 'Rejected'),
+    ('sug', _('Suggested to you')),
+    ('ace', _('Accepted')),
+    ('don', _('Done')),
+    ('wit', _('Rejected')),
 )
 
 PRIORITY_CHOICES = (
-    ('low', 'Low'),
-    ('med', 'Medium'),
-    ('hig', 'High'),
-    ('eme', 'Emergency'),
+    ('low', _('Low')),
+    ('med', _('Medium')),
+    ('hig', _('High')),
+    ('eme', _('Emergency')),
 )
 
 def check_for_ownership(object, user):
