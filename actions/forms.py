@@ -8,9 +8,9 @@ class ActionForm(ModelForm):
 
     class Meta:
         model = Action
-        fields = ['title', 'anonymize', 'main_link', 'description', 'privacy', 'location', 'status', 'has_deadline', 'deadline', 'topics', 'actiontypes']
+        fields = ['title', 'anonymize', 'main_link', 'description', 'privacy', 'priority', 'location', 'status', 'deadline', 'topics', 'actiontypes']
         widgets = {
-            'deadline': DateTimeWidget(bootstrap_version=3),
+            'deadline': DateTimeWidget(options={'format': 'mm/dd/yyyy HH:mm'}, bootstrap_version=3),
         }
         help_texts = {
             'anonymize': 'Show "anonymous" as creator. (Note: this changes the display only, and you can change your mind and choose to show your username later.)',
