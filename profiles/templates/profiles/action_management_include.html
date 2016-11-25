@@ -1,6 +1,21 @@
-{% if object in request.user.profile.actions.all %}
-  <a href="{% url 'toggle_action_for_profile' object.slug 'remove' %}" class="btn btn-primary">Remove Action</a>
-  <a href="{% url 'manage_action_for_profile' object.slug %}" class="btn btn-primary">Manage Action</a>
-{% else %}
-  <a href="{% url 'toggle_action_for_profile' object.slug 'add' %}" class="btn btn-primary">Add to ToDos</a>
-{% endif %}
+<div class="btn-group">
+  {% if object in request.user.profile.actions.all %}
+      <a href="#" class="btn btn-primary">Manage Action</a>
+      <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+      <ul class="dropdown-menu">
+        {% ifequal par.status 'don' %}
+            <li><a href="{% url 'mark_as_done' object.slug 'accepted' %}">Change status to 'accepted'</a></li>
+        {% else %}
+            <li><a href="{% url 'mark_as_done' object.slug 'done' %}">Mark as Done</a></li>
+        {% endifequal %}
+        <li class="divider"></li>
+        <li><a href="{% url 'manage_action_for_profile' object.slug %}">Add to slates</a></li>
+        <li><a href="{% url 'manage_action_for_profile' object.slug %}">Suggest to friends</a></li>
+        <li><a href="{% url 'manage_action_for_profile' object.slug %}">Change settings</a></li>
+        <li class="divider"></li>
+        <li><a href="{% url 'toggle_action_for_profile' object.slug 'remove' %}">Remove Action</a></li>
+      </ul>
+    {% else %}
+        <a href="{% url 'toggle_action_for_profile' object.slug 'add' %}" class="btn btn-primary">Take Action</a>
+    {% endif %}
+</div>

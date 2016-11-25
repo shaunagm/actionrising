@@ -25,6 +25,7 @@ class ActionView(UserPassesTestMixin, generic.DetailView):
         context['topic_or_type_list'] = self.object.get_tags()
         context['trackers'] = self.object.get_trackers(self.request.user)
         context['slates'] = self.object.get_slates(self.request.user)
+        context['par'] = self.request.user.profile.get_par_given_action(self.object)
         return context
 
     def test_func(self):

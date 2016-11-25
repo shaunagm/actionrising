@@ -131,3 +131,21 @@ def manage_action(request, slug):
         form = ProfileActionRelationshipForm(par=par, initial={'privacy': par.privacy, 'priority': par.priority, 'status': par.status})
         context = {'form': form}
         return render(request, 'profiles/manage_action.html', context)
+
+def mark_as_done_helper(profile, action, mark_as):
+    par = ProfileActionRelationship.objects.filter(profile=profile, action=action).first()
+    if mark_as == 'done':
+        par.status = 'don'
+    else:
+        par.status = 'ace'
+    par.save()
+
+@login_required
+def mark_as_done(request, slug, mark_as):
+    current_profile = request.user.profile
+    try:
+        action = Action.objects.get(slug=slug)
+    except ObjectDoesNotExist: # If the action slug got borked
+        return HttpResponseRedirect(reverse('index'))
+    mark_as_done_helper(current_profile, action, mark_as)
+    return HttpResponseRedirect(reverse('action', kwargs={'slug':action.slug}))
