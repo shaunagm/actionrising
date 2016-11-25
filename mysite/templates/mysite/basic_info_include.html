@@ -10,6 +10,6 @@
 {% if object.get_status_display %}
     <i class="fa fa-space-shuttle" aria-hidden="true"> {{ object.get_status_display }} </i>
 {% endif %}
-{% if object.has_deadline %}
+{% if object.deadline %}
     <i class="fa fa-calendar" aria-hidden="true"> Deadline {{ object.deadline }} </i>
 {% endif%}
