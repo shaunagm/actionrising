@@ -1,5 +1,8 @@
+import datetime
+
 from django.test import TestCase
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils import timezone
 
 from django.contrib.auth.models import User
 from actions.models import (Action, Slate, ActionTopic, ActionType, SlateActionRelationship,
@@ -85,6 +88,15 @@ class TestActionMethods(TestCase):
         self.assertEqual(slugify_helper(ActionType, "Test Different ActionType"), "test-different-actiontype")
         self.assertEqual(slugify_helper(Slate, "Test Slate"), "test-slate0")
         self.assertEqual(slugify_helper(Slate, "Test Different Slate"), "test-different-slate")
+
+    def test_get_days_til_deadline(self):
+        self.assertEqual(self.action.get_days_til_deadline(), -1)
+        self.action.deadline = datetime.datetime.now(timezone.utc) + datetime.timedelta(days=21)
+        self.action.save()
+        self.assertEqual(self.action.get_days_til_deadline(), 20)
+        self.action.deadline = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=30)
+        self.action.save()
+        self.assertEqual(self.action.get_days_til_deadline(), -1)
 
 class TestActionViews(TestCase):
 

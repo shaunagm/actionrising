@@ -1,3 +1,21 @@
+function datelogic(days_til_deadline, deadline_status) {
+  if ((deadline_status == "Today") || (deadline_status == "This Week") || (deadline_status == "This Month")) {
+        if (days_til_deadline > 0) {
+                if ((deadline_status == "Today" && days_til_deadline < 2) ||
+                (deadline_status == "This Week" && days_til_deadline < 8) ||
+                (deadline_status == "This Month" && days_til_deadline < 31)) {
+                   return true;
+                } else {
+                   return false;  // If date too far in future
+                }
+        } else {
+                return false;  // If deadline requested but action has no deadline set
+        }
+  } else {
+        return true;  // If deadline not actually requested ("All", etc)
+  }
+}
+
 $(document).ready(function() {
 
     var actionTable = $('#actions').DataTable({
@@ -7,12 +25,27 @@ $(document).ready(function() {
             {
                 "targets": [ 4 ],
                 "visible": false,
-                "name":  "status"
+                "name":  "deadline"
             },
             {
                 "targets": [ 5 ],
                 "visible": false,
+                "name":  "priority"
+            },
+            {
+                "targets": [ 6 ],
+                "visible": false,
+                "name":  "status"
+            },
+            {
+                "targets": [ 7 ],
+                "visible": false,
                 "name":  "creator"
+            },
+            {
+                "targets": [ 8 ],
+                "visible": false,
+                "name":  "location"
             }
         ]
     });
@@ -42,21 +75,44 @@ $(document).ready(function() {
       chosenTable = slateTable;
     }
 
+    user_location = "{{ user.profile.location }}";
+    today = new Date();
     status_index = chosenTable.column('status:name').index();
     creator_index = chosenTable.column('creator:name').index();
+    location_index = chosenTable.column('location:name').index();
+    priority_index = chosenTable.column('priority:name').index();
+    deadline_index = chosenTable.column('deadline:name').index();
 
     $.fn.dataTable.ext.search.push(function( settings, data, dataIndex ) {
             var pass_status = (($('#filter-active').is(':checked') && (data[status_index] == "True")) ||
               (!$('#filter-active').is(':checked')));
             var pass_creator = (($('#filter-friends').is(':checked') && (data[creator_index] == "True")) ||
               (!$('#filter-friends').is(':checked')));
-            if (pass_status && pass_creator) {  return true; }
+            var pass_local = (($('#filter-local').is(':checked') && (data[location_index] == user_location)) ||
+              (!$('#filter-local').is(':checked')));
+            if (typeof priority !== 'undefined') {
+              var pass_priority = ((data[priority_index] == priority) || (priority == "") || (priority == "All"));
+            } else {
+              var pass_priority = true;
+            }
+            if (typeof deadline !== 'undefined') {
+              var pass_deadline = datelogic(data[deadline_index], deadline);
+            } else {
+              var pass_deadline = true;
+            }
+            if (pass_status && pass_creator && pass_local && pass_priority && pass_deadline) {  return true; }
             return false;
     });
 
     // Event listener to the two range filtering inputs to redraw on input
-    $('#filter-active, #filter-friends').on('change',function () {
+    $('#filter-active, #filter-friends, #filter-local').on('change',function () {
         chosenTable.draw();
-    } );
+    });
+    $('.filter-priority').on('click',function () {
+      chosenTable.draw(priority=$(this).text());
+    });
+    $('.filter-deadline').on('click',function () {
+      chosenTable.draw(deadline=$(this).text());
+    });
 
 } );

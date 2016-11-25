@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 from itertools import chain
-import re
+import re, datetime
 
 from django.utils import timezone
 from django.template.defaultfilters import slugify
@@ -200,6 +200,16 @@ class Action(models.Model):
     def get_status(self):
         # Added for conveniences' sake in vet_actions function
         return self.get_status_display()
+
+    def get_days_til_deadline(self):
+        now = datetime.datetime.now(timezone.utc)
+        if (self.deadline) and (self.deadline > now):
+            days = (self.deadline - now).days
+            if days > 0:
+                return days
+            else:
+                return float((self.deadline - now).seconds)/float(86400)
+        return -1
 
 class Slate(models.Model):
     """Stores a single slate."""

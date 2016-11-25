@@ -12,32 +12,63 @@ Filter:
   </label>
 </div>
 
+<div class="btn-group" data-toggle="buttons">
+ <label class="btn btn-primary">
+   <input type="checkbox" autocomplete="off" id="filter-local"> Local Only
+ </label>
+</div>
+
+<div class="btn-group">
+  <a href="#" class="btn btn-primary">Priority</a>
+  <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+  <ul class="dropdown-menu">
+    <li><a class="filter-priority" href="#">Emergency</a></li>
+    <li><a class="filter-priority" href="#">High</a></li>
+    <li><a class="filter-priority" href="#">Medium</a></li>
+    <li><a class="filter-priority" href="#">Low</a></li>
+    <li class="divider"></li>
+    <li><a class="filter-priority" href="#">All</a></li>
+  </ul>
+</div>
+
+<div class="btn-group">
+  <a href="#" class="btn btn-primary">Deadline</a>
+  <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+  <ul class="dropdown-menu">
+    <li><a class="filter-deadline" href="#">Today</a></li>
+    <li><a class="filter-deadline" href="#">This Week</a></li>
+    <li><a class="filter-deadline" href="#">This Month</a></li>
+    <li class="divider"></li>
+    <li><a class="filter-deadline" href="#">All</a></li>
+  </ul>
+</div>
+
 <table class="table table-striped table-hover" id="actions">
   <thead>
     <tr>
-      <th>Date Created</th>
+      <th>Created</th>
       <th>Action</th>
-      <th>Creator</th>
-      <th>Deadline</th>
+      <th>Tags</th>
+      <th>Trackers</th>
+      <th>Deadline?</th>
+      <th>Priority?</th>
       <th>Status?</th>
       <th>Friends?</th>
-      <th>Priority</th>
-      <th>People Tracking</th>
-      <th>Tags</th>
+      <th>Location?</th>
     </tr>
   </thead>
   <tbody>
       {% for action in object_list reversed %}
       <tr>
-          <td>{{ action.date_created }}</td>
+          <td>{{ action.date_created|date:"D M d"}}</td>
           <td><a href="{{ action.get_robust_url }}">{{ action.title }}</a></td>
-          <td>{{ action.get_creator_with_link|safe }}</td>
-          <td>{{ action.deadline }}</td>
+          <td>{% include "actions/action_label_include.html" with object_list=action.get_tags %}</td>
+          <td>{{ action.profile_set.count }}</td>
+          <td>{{ action.get_days_til_deadline }}</td>
+          <td>{{ action.get_priority_display }}</td>
           <td>{{ action.is_active }}</td>
           <td>{% if action.creator in friendlist %} True {% endif %} </td>
-          <td>{{ action.get_priority_display }}</td>
-          <td>{{ action.profile_set.count }}</td>
-          <td>{% include "actions/action_label_include.html" with object_list=action.get_tags %}</td>
+          <td>{{ action.location }}</td>
       </tr>
       {% endfor %}
   </tbody>
