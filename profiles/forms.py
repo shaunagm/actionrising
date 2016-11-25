@@ -1,8 +1,9 @@
-from django.forms import ModelForm, ModelMultipleChoiceField, ChoiceField, Select
+from django.forms import ModelForm, ModelMultipleChoiceField, ModelChoiceField, ChoiceField, Select
 from django.forms import inlineformset_factory
 from django.forms.widgets import HiddenInput
 
-from mysite.utils import PRIVACY_DEFAULT_CHOICES
+from mysite.utils import (PRIVACY_DEFAULT_CHOICES, PRIVACY_CHOICES,
+    get_global_privacy_default, get_global_privacy_string)
 from profiles.models import Profile, ProfileActionRelationship, PrivacyDefaults
 from actions.models import Slate
 
@@ -30,6 +31,10 @@ class SlateChoiceField(ModelMultipleChoiceField):
    def label_from_instance(self, obj):
         return obj.title
 
+class PrivacyChoiceField(ModelChoiceField):
+   def label_from_instance(self, obj):
+        return obj.get_privacy_string()
+
 class ProfileActionRelationshipForm(ModelForm):
     profiles = ModelMultipleChoiceField(queryset=Profile.objects.all(), label="Suggest to friends", required=False)
     slates = SlateChoiceField(queryset=Slate.objects.all(), label="Add to slates", required=False)
@@ -44,5 +49,7 @@ class ProfileActionRelationshipForm(ModelForm):
             super(ProfileActionRelationshipForm, self).__init__(*args, **kwargs)
             self.fields['profiles'].queryset = par.profile.get_followers()
             self.fields['slates'].queryset = par.profile.user.slate_set.all()
+            NEW_CHOICES = (PRIVACY_CHOICES[0], PRIVACY_CHOICES[1], ('inh', get_global_privacy_string(par)))
+            self.fields['privacy'].choices = NEW_CHOICES
         else:
             super(ProfileActionRelationshipForm, self).__init__(*args, **kwargs)

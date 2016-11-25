@@ -47,16 +47,20 @@ def check_for_ownership(object, user):
             return True
     return False
 
-def get_global_privacy_default(object):
+def get_global_privacy_default(object, shortname=True):
     # Some of this chaining seems inefficient and absurd :(
     if object.get_cname() in "Profile":
-        return object.privacy_defaults.global_default
+        pd = object.privacy_defaults
     if object.get_cname() in ["Action", "Slate"]:
-        return object.creator.profile.privacy_defaults.global_default
-    if object.get_cname() in "ProfileActionRelationship":
-        return object.profile.privacy_defaults.global_default
-    if object.get_cname() in "SlateActionRelationship":
-        return object.slate.creator.profile.privacy_defaults.global_default
+        pd = object.creator.profile.privacy_defaults
+    if object.get_cname() in ["ProfileActionRelationship"]:
+        pd = object.profile.privacy_defaults
+    if object.get_cname() in ["SlateActionRelationship"]:
+        pd = object.slate.creator.profile.privacy_defaults
+    if shortname:
+        return pd.global_default
+    else:
+        return pd.get_global_default_display()
 
 def check_privacy(object, user):
     if check_for_ownership(object, user):
@@ -70,3 +74,7 @@ def check_privacy(object, user):
     if privacy_setting == "sit" and user.is_authenticated():
         return True
     return False
+
+def get_global_privacy_string(obj):
+    privacy = get_global_privacy_default(obj, shortname=False)
+    return "Your Default (Currently '" + privacy + "')"

@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 
 from actions.models import Action
 from mysite.utils import (PRIVACY_CHOICES, PRIORITY_CHOICES, INDIVIDUAL_STATUS_CHOICES,
-    PRIVACY_DEFAULT_CHOICES, check_privacy)
+    PRIVACY_DEFAULT_CHOICES, check_privacy, get_global_privacy_default)
 
 class Profile(models.Model):
     """Stores a single user profile"""

@@ -51,6 +51,11 @@ class ActionCreateView(LoginRequiredMixin, generic.edit.CreateView):
     model = Action
     form_class = ActionForm
 
+    def get_form_kwargs(self):
+        form_kws = super(ActionCreateView, self).get_form_kwargs()
+        form_kws["user"] = self.request.user
+        return form_kws
+
     def form_valid(self, form):
         types = form.cleaned_data.pop('actiontypes')
         topics = form.cleaned_data.pop('topics')
@@ -68,6 +73,11 @@ class ActionEditView(UserPassesTestMixin, generic.edit.UpdateView):
     def test_func(self):
         obj = self.get_object()
         return obj.creator == self.request.user
+
+    def get_form_kwargs(self):
+        form_kws = super(ActionEditView, self).get_form_kwargs()
+        form_kws["user"] = self.request.user
+        return form_kws
 
 class TopicView(LoginRequiredMixin, generic.DetailView):
     template_name = 'actions/type_or_topic.html'
@@ -120,6 +130,11 @@ class SlateCreateView(LoginRequiredMixin, generic.edit.CreateView):
     model = Slate
     form_class = SlateForm
 
+    def get_form_kwargs(self):
+        form_kws = super(SlateCreateView, self).get_form_kwargs()
+        form_kws["user"] = self.request.user
+        return form_kws
+
     def form_valid(self, form):
         actions = form.cleaned_data.pop('actions')
         object = form.save(commit=False)
@@ -141,6 +156,11 @@ def edit_slate_helper(object, actions):
 class SlateEditView(UserPassesTestMixin, generic.edit.UpdateView):
     model = Slate
     form_class = SlateForm
+
+    def get_form_kwargs(self):
+        form_kws = super(SlateEditView, self).get_form_kwargs()
+        form_kws["user"] = self.request.user
+        return form_kws
 
     def form_valid(self, form):
         actions = form.cleaned_data.pop('actions')
