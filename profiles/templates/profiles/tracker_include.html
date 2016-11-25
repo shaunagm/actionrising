@@ -1,5 +1,7 @@
+{% load profile_extras %}
 {% for person in trackers.public_list %}
-  <a class="tracker-link" href="{{ person.get_absolute_url }}">{{ person.get_name }}</a>
+  {% get_action_status person as action_status %}
+  <a class="tracker-link" href="{{ person.get_absolute_url }}">{{ person.get_name }} - {{action_status}}</a>
 {% endfor %}
 {% if trackers.anonymous_count %}
     {% if trackers.public_list %}

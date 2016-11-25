@@ -5,7 +5,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from actions.models import Action
 from profiles.models import Profile, Relationship, ProfileActionRelationship
-from profiles.templatetags.profile_extras import get_friendslist, get_relationship
+from profiles.templatetags.profile_extras import (
+	get_friendslist,
+	get_relationship,
+	get_action_status,
+)
 from profiles.views import toggle_relationships_helper, toggle_par_helper, manage_action_helper
 
 ###################
@@ -253,9 +257,11 @@ class TestProfileExtras(TestCase):
         self.faith = User.objects.create(username="faithlehane")
         self.relationship = Relationship.objects.create(person_A=self.buffy.profile,
             person_B=self.faith.profile)
+        self.action = Action.objects.create(slug="test-action", title="Test Action", creator=self.buffy)
+        self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action)
         class MockRequest(object):
             user = self.buffy
-        self.context = {'request': MockRequest()}
+        self.context = {'request': MockRequest(), 'action': self.action}
 
     def test_get_friendslist(self):
         self.assertEqual(get_friendslist(self.context), [self.faith])
@@ -278,3 +284,11 @@ class TestProfileExtras(TestCase):
         self.assertEqual(info["follow_statement"], "Unfollow this user")
         self.assertEqual(info["account_statement"], "Remove user as accountability buddy")
         self.assertEqual(info["mute_statement"], "Unmute this user")
+        
+    def test_get_action_status(self):
+    	status = get_action_status(self.context, self.buffy.profile)
+    	self.assertEqual(status, "Accepted")
+    	self.par.status = "don"
+    	self.par.save()
+    	status = get_action_status(self.context, self.buffy.profile)
+    	self.assertEqual(status, "Done")
