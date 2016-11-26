@@ -12,7 +12,7 @@ from profiles.templatetags.profile_extras import (
     get_action_status,
 )
 from profiles.views import (toggle_relationships_helper, toggle_par_helper,
-    manage_action_helper, mark_as_done_helper)
+    manage_action_helper, mark_as_done_helper, manage_suggested_action_helper)
 
 ###################
 ### Test models ###
@@ -56,6 +56,12 @@ class TestProfileMethods(TestCase):
 
     def test_get_open_actions(self):
         self.assertEqual(self.buffy.profile.get_open_actions(self.buffy), [self.action])
+
+    def test_get_suggested_actions(self):
+        self.par.status = "sug"
+        self.par.save()
+        self.assertEqual(list(self.buffy.profile.get_suggested_actions()), [self.par])
+        self.assertEqual(self.buffy.profile.get_suggested_actions_count(), 1)
 
 class TestRelationshipMethods(TestCase):
 
@@ -153,6 +159,19 @@ class TestRelationshipMethods(TestCase):
         self.assertTrue(self.relationship.toggle_mute_for_current_profile(self.buffy.profile))
         self.assertIsNone(self.relationship.toggle_mute_for_current_profile(self.lorne.profile))
 
+class TestParMethods(TestCase):
+
+    def setUp(self):
+        self.buffy = User.objects.create(username="buffysummers")
+        self.faith = User.objects.create(username="faithlehane")
+        self.action = Action.objects.create(slug="test-action", title="Test Action", creator=self.buffy)
+        self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action)
+
+    def test_add_suggester(self):
+        self.assertEqual(self.par.get_suggesters(), [])
+        self.par.add_suggester(self.faith.username)
+        self.assertEqual(self.par.get_suggesters(), ['faithlehane'])
+
 ###########################
 ### Test view functions ###
 ###########################
@@ -239,20 +258,20 @@ class TestManageActionView(TestCase):
 
     def test_changes_fields_from_defaults(self):
         self.assertEqual([self.par.priority, self.par.privacy, self.par.status], ["med", "inh", "ace"])
-        manage_action_helper(self.par, self.mock_form)
+        manage_action_helper(self.par, self.mock_form, self.buffy)
         self.assertEqual([self.par.priority, self.par.privacy, self.par.status], ["hig", "pub", "rea"])
 
     def test_make_new_par_for_profile(self):
         with self.assertRaises(ObjectDoesNotExist):
             ProfileActionRelationship.objects.get(profile=self.lorne.profile, action=self.action)
-        manage_action_helper(self.par, self.mock_form)
+        manage_action_helper(self.par, self.mock_form, self.buffy)
         par = ProfileActionRelationship.objects.get(profile=self.lorne.profile, action=self.action)
         self.assertEqual(par.profile.user, self.lorne)
 
     def test_make_new_sar_for_action(self):
         with self.assertRaises(ObjectDoesNotExist):
             SlateActionRelationship.objects.get(slate=self.slate, action=self.action)
-        manage_action_helper(self.par, self.mock_form)
+        manage_action_helper(self.par, self.mock_form, self.buffy)
         sar = SlateActionRelationship.objects.get(slate=self.slate, action=self.action)
         self.assertEqual(sar.slate, self.slate)
 
@@ -269,6 +288,23 @@ class TestMarkAsDoneView(TestCase):
         self.assertEqual(par.status, "don")
         par = mark_as_done_helper(self.buffy.profile, self.action, "accepted")
         self.assertEqual(par.status, "ace")
+
+class TestManageSuggestedActionView(TestCase):
+
+    def setUp(self):
+        self.buffy = User.objects.create(username="buffysummers")
+        self.action = Action.objects.create(slug="test-action", creator=self.buffy)
+        self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action, status="sug")
+
+    def test_manage_suggested_action_helper_accept(self):
+        self.assertEqual(self.par.status, "sug")
+        par = manage_suggested_action_helper(self.par, "accept")
+        self.assertEqual(par.status, "ace")
+
+    def test_manage_suggested_action_helper_reject(self):
+        self.assertEqual(self.par.status, "sug")
+        par = manage_suggested_action_helper(self.par, "reject")
+        self.assertEqual(par.status, "wit")
 
 #########################
 ### Test templatetags ###

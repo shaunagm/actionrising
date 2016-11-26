@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+import json
+
 from django.db import models
 from django.db.models.signals import post_save
 from django.core.urlresolvers import reverse
@@ -86,7 +88,7 @@ class Profile(models.Model):
                 obj_to_check = action
             if privacy and not check_privacy(obj_to_check, user):
                 continue
-            if status and obj_to_check.get_status() not in ["Suggested to you", "Accepted"]:
+            if status and obj_to_check.get_status() != "Accepted":
                 continue
             actions.append(action)
         return actions
@@ -106,6 +108,12 @@ class Profile(models.Model):
     def get_open_actions(self, user):
         actions = self.vet_actions(self.actions.all(), user, privacy=False)
         return actions
+
+    def get_suggested_actions(self):
+        return ProfileActionRelationship.objects.filter(profile=self, status="sug")
+
+    def get_suggested_actions_count(self):
+        return len(self.get_suggested_actions())
 
     # Add methods to save and access links as json objects
 
@@ -250,6 +258,7 @@ class ProfileActionRelationship(models.Model):
     # default status is ace == accepted
     status = models.CharField(max_length=3, choices=INDIVIDUAL_STATUS_CHOICES, default='ace')
     committed = models.BooleanField(default=False)
+    suggested_by = models.CharField(max_length=500, blank=True, null=True)
 
     def __unicode__(self):
         return u'Relationship of profile %s and action %s' % (self.profile, self.action)
@@ -264,4 +273,24 @@ class ProfileActionRelationship(models.Model):
         else:
             return self.get_status_display()
 
-    # Should probably add field & method to show *who* suggested this action to you
+    def get_suggesters(self):
+        if self.suggested_by is not None:
+            return json.loads(self.suggested_by)
+        return []
+
+    def get_suggesters_html(self):
+        suggesters = ""
+        for user in self.get_suggesters():
+            user_obj = User.objects.get(username=user)
+            suggesters += "<a href='" + user_obj.profile.get_absolute_url() + "'>" + user_obj.username + "</a>, "
+        return suggesters[0:-2]
+
+    def set_suggesters(self, suggesters):
+        self.suggested_by = json.dumps(suggesters)
+        self.save()
+
+    def add_suggester(self, suggester):
+        suggesters = self.get_suggesters()
+        if suggester not in suggesters:
+            suggesters.append(suggester)
+        self.set_suggesters(suggesters)

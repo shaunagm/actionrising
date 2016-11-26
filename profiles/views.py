@@ -56,6 +56,21 @@ class ProfileToDoView(UserPassesTestMixin, generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProfileToDoView, self).get_context_data(**kwargs)
         context['actions'] = self.object.profile.get_open_actions(self.request.user)
+        context['suggested_actions'] = self.object.profile.get_suggested_actions_count()
+        return context
+
+class ProfileSuggestedView(UserPassesTestMixin, generic.DetailView):
+    template_name = 'profiles/suggested.html'
+    model = User
+    slug_field = 'username'
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj == self.request.user  # No access unless this is you
+
+    def get_context_data(self, **kwargs):
+        context = super(ProfileSuggestedView, self).get_context_data(**kwargs)
+        context['actions'] = self.object.profile.get_suggested_actions()
         return context
 
 class ProfileSearchView(LoginRequiredMixin, generic.ListView):
@@ -102,7 +117,7 @@ def toggle_action_for_profile(request, slug, toggle_type):
     toggle_par_helper(toggle_type, current_profile, action)
     return HttpResponseRedirect(reverse('action', kwargs={'slug':action.slug}))
 
-def manage_action_helper(par, form):
+def manage_action_helper(par, form, user):
     par.priority = form.cleaned_data['priority']
     par.status = form.cleaned_data['status']
     par.privacy = form.cleaned_data['privacy']
@@ -112,9 +127,9 @@ def manage_action_helper(par, form):
         # their profile-buddies already had this action suggested to them.
         new_profile = User.objects.get(username=profile.user.username).profile
         new_par, created = ProfileActionRelationship.objects.get_or_create(profile=new_profile, action=par.action)
-        if created:
-            new_par.status = 'sug'
-            new_par.save()
+        new_par.status = 'sug'
+        new_par.save()
+        new_par.add_suggester(user.username)
     for slate in form.cleaned_data['slates']:
         # TODO: Right now this is pretty inefficient.  Would be nice to show users which of
         # their slates already had this action added to them.
@@ -127,7 +142,7 @@ def manage_action(request, slug):
     if request.method == 'POST':
         form = ProfileActionRelationshipForm(request.POST)
         if form.is_valid():
-            manage_action_helper(par, form)
+            manage_action_helper(par, form, request.user)
             return HttpResponseRedirect(reverse('action', kwargs={'slug':par.action.slug}))
         else:
             context = {'form': form}
@@ -155,3 +170,22 @@ def mark_as_done(request, slug, mark_as):
         return HttpResponseRedirect(reverse('index'))
     mark_as_done_helper(current_profile, action, mark_as)
     return HttpResponseRedirect(reverse('action', kwargs={'slug':action.slug}))
+
+def manage_suggested_action_helper(par, type):
+    if type == 'accept':
+        par.status = "ace"
+    if type == 'reject':
+        par.status = "wit"
+    par.save()
+    return par
+
+@login_required
+def manage_suggested_action(request, slug, type):
+    current_profile = request.user.profile
+    try:
+        action = Action.objects.get(slug=slug)
+        par = ProfileActionRelationship.objects.get(action=action, profile=current_profile)
+    except ObjectDoesNotExist: # If the action slug got borked
+        return HttpResponseRedirect(reverse('index'))
+    manage_suggested_action_helper(par, type)
+    return HttpResponseRedirect(reverse('suggested', kwargs={'slug':request.user}))

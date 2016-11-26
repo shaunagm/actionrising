@@ -1,0 +1,24 @@
+<table class="table table-striped table-hover" id="suggested_actions">
+  <thead>
+    <tr>
+      <th>Action</th>
+      <th>Deadline</th>
+      <th>Suggested By</th>
+      <th>Accept/Reject</th>
+    </tr>
+  </thead>
+  <tbody>
+      {% for par in object_list %}
+      <tr>
+          <td><a href="{{ par.action.get_robust_url }}">{{ par.action.title }}</a></td>
+          <td>{{ par.action.deadline }}</td>
+          <td>{{ par.get_suggesters_html|safe }}</td>
+          <td><a href="{% url 'manage_suggested_action' slug=par.action.slug type='accept' %}">
+                  <span class="label label-success">Accept</span></a>
+              <a href="{% url 'manage_suggested_action' slug=par.action.slug type='reject' %}">
+                  <span class="label label-danger">Reject</span></a>
+          </td>
+      </tr>
+      {% endfor %}
+  </tbody>
+</table>
