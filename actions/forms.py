@@ -14,7 +14,9 @@ class ActionForm(ModelForm):
             'deadline': DateTimeWidget(options={'format': 'mm/dd/yyyy HH:mm'}, bootstrap_version=3),
         }
         help_texts = {
-            'anonymize': 'Show "anonymous" as creator. (Note: this changes the display only, and you can change your mind and choose to show your username later.)'
+            'anonymize': 'Show "anonymous" as creator. (Note: this changes the display only, and you can change your mind and choose to show your username later.)',
+            'topics': "Don't see the topic you need?  Request a new topic <a href='https://goo.gl/forms/g5AT4GdTXqcNi62q1'>here</a>.",
+            'actiontypes': "Don't see the type of action you need?  Request a new action type <a href='https://goo.gl/forms/g5AT4GdTXqcNi62q1'>here</a>.",
         }
 
     def __init__(self, user, *args, **kwargs):
@@ -22,6 +24,7 @@ class ActionForm(ModelForm):
         self.fields['deadline'].widget.attrs['placeholder'] = 'MM/DD/YYYY HH:MM:SS (hours, minutes and seconds optional, defaults to midnight)'
         NEW_CHOICES = (PRIVACY_CHOICES[0], PRIVACY_CHOICES[1], ('inh', get_global_privacy_string(user.profile)))
         self.fields['privacy'].choices = NEW_CHOICES
+        self.fields['actiontypes'].label = "Types of action"
 
 class SlateForm(ModelForm):
 
