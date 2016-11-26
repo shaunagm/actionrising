@@ -22,6 +22,8 @@ from mysite import views
 urlpatterns = [
     url(r'^login/$', auth_views.login, {'template_name': 'profiles/login.html'}, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
+    url(r'^password/$', auth_views.password_change, {'template_name': 'mysite/password.html'}, name='password_reset'),
+    url(r'^password/changed$', views.change_password_redirect, name='password_change_done'),
     url(r'^profiles/', include('profiles.urls')),
     url(r'^actions/', include('actions.urls')),
     url(r'^admin/', admin.site.urls),
