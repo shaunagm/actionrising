@@ -15,7 +15,7 @@ class Profile(models.Model):
     """Stores a single user profile"""
     user = models.OneToOneField(User, unique=True)
     verified = models.BooleanField(default=False)
-    description = models.CharField(max_length=500, blank=True, null=True)  # TODO Rich text?
+    description = models.CharField(max_length=2500, blank=True, null=True)  # TODO Rich text?
     location = models.CharField(max_length=140, blank=True, null=True)
     links = models.CharField(max_length=400, blank=True, null=True)
     date_joined = models.DateTimeField(default=timezone.now)
