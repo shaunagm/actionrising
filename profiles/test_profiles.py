@@ -253,7 +253,7 @@ class TestManageActionView(TestCase):
         self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action)
         class MockForm(object):
             cleaned_data = {'priority': 'hig', 'status': 'rea', 'privacy': 'pub',
-                'profiles': [self.lorne.profile], 'slates': [self.slate]}
+                'profiles': [self.lorne.profile], 'slates': [self.slate], 'notes': "A note"}
         self.mock_form = MockForm()
 
     def test_changes_fields_from_defaults(self):

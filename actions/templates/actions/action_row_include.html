@@ -1,0 +1,12 @@
+<tr>
+    <td>{{ action.date_created|date:"D M d"}}</td>
+    <td><a href="{{ action.get_robust_url }}">{{ action.title }}</a></td>
+    <td>{% include "actions/action_label_include.html" with object_list=action.get_tags %}</td>
+    <td>{{ action.profile_set.count }}</td>
+    <td>{{ action.get_days_til_deadline }}</td>
+    <td>{{ action.get_priority_display }}</td>
+    <td>{{ action.is_active }}</td>
+    <td>{% if action.creator in friendlist %} True {% endif %} </td>
+    <td>{{ action.location }}</td>
+    <td>{{ rel.notes }}</td>
+</tr>

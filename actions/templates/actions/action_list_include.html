@@ -43,6 +43,14 @@ Filter:
   </ul>
 </div>
 
+{% if has_notes %}
+    <div class="btn-group" data-toggle="buttons">
+      <label class="btn btn-info">
+        <input type="checkbox" autocomplete="off" id="show-notes"> Toggle Notes
+      </label>
+    </div>
+{% endif %}
+
 <table class="table table-striped table-hover" id="actions">
   <thead>
     <tr>
@@ -55,21 +63,16 @@ Filter:
       <th>Status?</th>
       <th>Friends?</th>
       <th>Location?</th>
+      <th>Notes?</th>
     </tr>
   </thead>
   <tbody>
-      {% for action in object_list reversed %}
-      <tr>
-          <td>{{ action.date_created|date:"D M d"}}</td>
-          <td><a href="{{ action.get_robust_url }}">{{ action.title }}</a></td>
-          <td>{% include "actions/action_label_include.html" with object_list=action.get_tags %}</td>
-          <td>{{ action.profile_set.count }}</td>
-          <td>{{ action.get_days_til_deadline }}</td>
-          <td>{{ action.get_priority_display }}</td>
-          <td>{{ action.is_active }}</td>
-          <td>{% if action.creator in friendlist %} True {% endif %} </td>
-          <td>{{ action.location }}</td>
-      </tr>
+      {% for object in object_list reversed %}
+          {% if has_notes %}
+              {% include "actions/action_row_include.html" with action=object.action rel=object %}
+          {% else %}
+              {% include "actions/action_row_include.html" with action=object %}
+          {% endif %}
       {% endfor %}
   </tbody>
 </table>

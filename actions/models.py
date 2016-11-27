@@ -279,6 +279,7 @@ class SlateActionRelationship(models.Model):
     privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
     # default status is ace == accepted
     status = models.CharField(max_length=3, choices=INDIVIDUAL_STATUS_CHOICES, default='ace')
+    notes = models.CharField(max_length=2500, blank=True, null=True) 
 
     def get_cname(self):
         class_name = 'SlateActionRelationship'

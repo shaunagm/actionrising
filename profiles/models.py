@@ -80,12 +80,19 @@ class Profile(models.Model):
         else:
             return "Unknown"
 
+    def get_object_to_check(self, object, profile):
+        '''Given object and profile, returns PAR if it exists'''
+        if type(object) == ProfileActionRelationship:
+            return object
+        par = ProfileActionRelationship.objects.filter(profile=profile, action=object).first()
+        if par:
+            return par
+        return object  # Created actions won't have a par
+
     def vet_actions(self, potential_actions, user, privacy=True, status=True):
         actions = []
         for action in potential_actions:
-            obj_to_check = ProfileActionRelationship.objects.filter(profile=self, action=action).first()
-            if not obj_to_check: # Created actions won't have a par
-                obj_to_check = action
+            obj_to_check = self.get_object_to_check(action, user.profile)
             if privacy and not check_privacy(obj_to_check, user):
                 continue
             if status and obj_to_check.get_status() != "Accepted":
@@ -108,6 +115,10 @@ class Profile(models.Model):
     def get_open_actions(self, user):
         actions = self.vet_actions(self.actions.all(), user, privacy=False)
         return actions
+
+    def get_open_pars(self, user):
+        pars = self.vet_actions(self.profileactionrelationship_set.all(), user, privacy=False)
+        return pars
 
     def get_suggested_actions(self):
         return ProfileActionRelationship.objects.filter(profile=self, status="sug")
@@ -259,6 +270,7 @@ class ProfileActionRelationship(models.Model):
     status = models.CharField(max_length=3, choices=INDIVIDUAL_STATUS_CHOICES, default='ace')
     committed = models.BooleanField(default=False)
     suggested_by = models.CharField(max_length=500, blank=True, null=True)
+    notes = models.CharField(max_length=2500, blank=True, null=True) 
 
     def __unicode__(self):
         return u'Relationship of profile %s and action %s' % (self.profile, self.action)

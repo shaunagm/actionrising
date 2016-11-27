@@ -110,6 +110,11 @@ class SlateView(UserPassesTestMixin, generic.DetailView):
     template_name = 'actions/slate.html'
     model = Slate
 
+    def get_context_data(self, **kwargs):
+        context = super(SlateView, self).get_context_data(**kwargs)
+        context['has_notes'] = True
+        return context
+
     def test_func(self):
         obj = self.get_object()
         return check_privacy(obj, self.request.user)

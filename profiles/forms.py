@@ -41,7 +41,7 @@ class ProfileActionRelationshipForm(ModelForm):
 
     class Meta:
         model = ProfileActionRelationship
-        fields = ['priority', 'privacy', 'status']
+        fields = ['priority', 'privacy', 'status', 'notes']
 
     def __init__(self, *args, **kwargs):
         if 'par' in kwargs:

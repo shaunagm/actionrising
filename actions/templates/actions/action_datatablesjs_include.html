@@ -16,6 +16,11 @@ function datelogic(days_til_deadline, deadline_status) {
   }
 }
 
+function format ( d ) {
+    // `d` is the original data object for the row
+    return '<tr class="notesrow"><td>Notes: ' + d[9] + '</td></tr>';
+}
+
 $(document).ready(function() {
 
     var actionTable = $('#actions').DataTable({
@@ -46,6 +51,11 @@ $(document).ready(function() {
                 "targets": [ 8 ],
                 "visible": false,
                 "name":  "location"
+            },
+            {
+                "targets": [ 9 ],
+                "visible": false,
+                "name":  "notes"
             }
         ]
     });
@@ -113,6 +123,16 @@ $(document).ready(function() {
     });
     $('.filter-deadline').on('click',function () {
       chosenTable.draw(deadline=$(this).text());
+    });
+    $('#show-notes').on('change', function () {
+      chosenTable.rows().every(function(){
+        if ( this.child.isShown() ) {
+            this.child.hide();
+        }
+        else {
+            this.child( format(this.data()) ).show();
+        }
+      });
     });
 
 } );

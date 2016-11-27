@@ -2,7 +2,6 @@
 
 {% block title %} {{ object.title }} | ActionRising{% endblock %}
 
-
 {% block page_specific_javascript %}
     {% include "actions/action_datatablesjs_include.html" %}
 {% endblock page_specific_javascript %}
@@ -38,7 +37,7 @@
 
        <h2>Actions</h2>
 
-       {% include "actions/action_list_include.html" with object_list=object.actions.all %}
+       {% include "actions/action_list_include.html" with object_list=object.slateactionrelationship_set.all %}
 
      </div>
   </div>
