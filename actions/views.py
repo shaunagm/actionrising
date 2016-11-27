@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from mysite.utils import check_privacy
 from django.contrib.auth.models import User
 from actions.models import Action, ActionTopic, ActionType, Slate, SlateActionRelationship
-from actions.forms import ActionForm, SlateForm
+from actions.forms import ActionForm, SlateForm, SlateActionRelationshipForm
 
 @login_required
 def index(request):
@@ -113,6 +113,8 @@ class SlateView(UserPassesTestMixin, generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(SlateView, self).get_context_data(**kwargs)
         context['has_notes'] = True
+        context['can_edit_actions'] = True if self.object.creator == self.request.user else False
+        context['is_slate'] = True
         return context
 
     def test_func(self):
@@ -179,3 +181,23 @@ class SlateEditView(UserPassesTestMixin, generic.edit.UpdateView):
     def test_func(self):
         obj = self.get_object()
         return obj.creator == self.request.user
+
+@login_required
+def manage_action_for_slate(request, pk):
+    sar = SlateActionRelationship.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = SlateActionRelationshipForm(request.POST)
+        if form.is_valid():
+            sar.privacy = form.cleaned_data['privacy']
+            sar.priority = form.cleaned_data['priority']
+            sar.status = form.cleaned_data['status']
+            sar.notes = form.cleaned_data['notes']
+            sar.save()
+            return HttpResponseRedirect(reverse('slate', kwargs={'slug':sar.slate.slug}))
+        else:
+            context = {'form': form}
+            render(request, 'actions/manage_action_for_slate.html', context)
+    else:
+        form = SlateActionRelationshipForm(sar=sar, initial={'privacy': sar.privacy, 'priority': sar.priority, 'status': sar.status, 'notes': sar.notes})
+        context = {'form': form}
+        return render(request, 'actions/manage_action_for_slate.html', context)

@@ -64,6 +64,9 @@ Filter:
       <th>Friends?</th>
       <th>Location?</th>
       <th>Notes?</th>
+      {% if can_edit_actions %}
+          <th>Manage</th>
+      {% endif %}
     </tr>
   </thead>
   <tbody>

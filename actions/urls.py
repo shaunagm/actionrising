@@ -16,6 +16,8 @@ urlpatterns = [
     url(r'^slate/(?P<slug>[-\w]+)$', views.SlateView.as_view(), name='slate'),
     url(r'^slate-create/?$', views.SlateCreateView.as_view(), name='create_slate'),
     url(r'^slate-edit/(?P<slug>[-\w]+)$', views.SlateEditView.as_view(), name='edit_slate'),
+    url(r'^manage-action/(?P<pk>[0-9]+)/?$', views.manage_action_for_slate, name = "manage_action_for_slate"),
+
     # Set up a redirect so url/topic or url/topic/ with no slug provided goes to /topics
     # And same for types
 ]

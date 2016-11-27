@@ -9,4 +9,13 @@
     <td>{% if action.creator in friendlist %} True {% endif %} </td>
     <td>{{ action.location }}</td>
     <td>{{ rel.notes }}</td>
+    {% if can_edit_actions %}
+        <td>
+        {% if is_slate %}
+          <a href="{% url 'manage_action_for_slate' rel.pk %}" class="btn btn-success">
+        {% else %}
+          <a href="{% url 'manage_action_for_profile' action.slug %}" class="btn btn-success">
+        {% endif %}
+        Manage Action</a></td>
+    {% endif %}
 </tr>

@@ -2,7 +2,7 @@ from django.forms import ModelForm
 
 from datetimewidget.widgets import DateTimeWidget
 
-from actions.models import Action, Slate
+from actions.models import Action, Slate, SlateActionRelationship
 from mysite.utils import (PRIVACY_CHOICES, get_global_privacy_string)
 
 class ActionForm(ModelForm):
@@ -40,3 +40,18 @@ class SlateForm(ModelForm):
         self.fields['actions'].queryset = Action.objects.filter(status="rea").order_by("title")
         NEW_CHOICES = (PRIVACY_CHOICES[0], PRIVACY_CHOICES[1], ('inh', get_global_privacy_string(user.profile)))
         self.fields['privacy'].choices = NEW_CHOICES
+
+class SlateActionRelationshipForm(ModelForm):
+
+    class Meta:
+        model = SlateActionRelationship
+        fields = ['priority', 'privacy', 'status', 'notes']
+
+    def __init__(self, *args, **kwargs):
+        if 'sar' in kwargs:
+            sar = kwargs.pop('sar')
+            super(SlateActionRelationshipForm, self).__init__(*args, **kwargs)
+            NEW_CHOICES = (PRIVACY_CHOICES[0], PRIVACY_CHOICES[1], ('inh', get_global_privacy_string(sar)))
+            self.fields['privacy'].choices = NEW_CHOICES
+        else:
+            super(SlateActionRelationshipForm, self).__init__(*args, **kwargs)
