@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'mysite',
     'profiles',
     'actions',
+    'flags',
     'functional_tests',
     'django_comments',
 ]

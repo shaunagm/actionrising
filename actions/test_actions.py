@@ -8,6 +8,8 @@ from django.contrib.auth.models import User
 from actions.models import (Action, Slate, ActionTopic, ActionType, SlateActionRelationship,
     slugify_helper)
 from profiles.models import Profile, ProfileActionRelationship
+from flags.models import Flag
+from django.contrib.contenttypes.models import ContentType
 from actions.views import create_action_helper, create_slate_helper, edit_slate_helper
 
 ###################
@@ -18,6 +20,7 @@ class TestActionMethods(TestCase):
 
     def setUp(self):
         self.buffy = User.objects.create(username="buffysummers")
+        self.faith = User.objects.create(username="faithlehane")
         self.action = Action.objects.create(title="Test Action", creator=self.buffy)
         self.topic = ActionTopic.objects.create(name="Test Topic")
         self.actiontype = ActionType.objects.create(name="Test ActionType")
@@ -97,6 +100,22 @@ class TestActionMethods(TestCase):
         self.action.deadline = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=30)
         self.action.save()
         self.assertEqual(self.action.get_days_til_deadline(), -1)
+
+    def test_is_flagged_by_user(self):
+        # Test that we start with no flags
+        self.assertEqual(self.action.is_flagged_by_user(self.buffy), "No flags")
+        # Add flag and try again
+        ct = ContentType.objects.get(app_label="actions", model="action")
+        content_object = ct.get_object_for_this_type(pk=self.action.pk)
+        flag = Flag.objects.create(content_object=content_object, flagged_by=self.buffy, flag_choice="wrong")
+        self.assertEqual(self.action.is_flagged_by_user(self.buffy), flag)
+        # Try with non-flagging User
+        self.assertEqual(self.action.is_flagged_by_user(self.faith), "No flags")
+        # Try with status
+        self.assertEqual(self.action.is_flagged_by_user(self.buffy, new_only=True), flag)
+        flag.flag_status = "reject"
+        flag.save()
+        self.assertEqual(self.action.is_flagged_by_user(self.buffy, new_only=True), "No flags")
 
 class TestActionViews(TestCase):
 

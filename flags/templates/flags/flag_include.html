@@ -1,0 +1,24 @@
+{% if flag == 'No flags' %}
+    <script>
+    $(function () {
+        $('#flag-button').popover({content: $('#flag-list').html(), html:true});
+        console.log("WEEEE");
+    });
+    </script>
+
+    <div style="display:none">
+          <button class="btn btn-primary" type="button" id="flag-list" aria-haspopup="true"
+            aria-expanded="false">
+                <a href="{% url 'flag' model=object.get_cname pk=object.pk reason='spam' %}">I believe that this is spam</a><br />
+                <a href="{% url 'flag' model=object.get_cname pk=object.pk reason='abuse' %}">I believe that this is abusive</a><br />
+                <a href="{% url 'flag' model=object.get_cname pk=object.pk reason='wrong' %}">I believe that this is inaccurate</a><br />
+                <a href="{% url 'flag' model=object.get_cname pk=object.pk reason='other' %}">I am flagging this for other reasons</a><br />
+          </button>
+    </div>
+
+    <button type="button" id="flag-button" class="btn btn-sm" data-toggle="popover" title="Select reason for flagging">
+        <span class="glyphicon glyphicon-flag" aria-hidden="true"></span>
+    </button>
+{% elif flag %}
+    <span id="flag-button" class="glyphicon glyphicon-flag" aria-hidden="true"> Flagged as {{ flag.flag_choice }}</span>
+{% endif %}

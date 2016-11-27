@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.fields import GenericRelation
 
 from mysite.utils import (PRIVACY_CHOICES, PRIORITY_CHOICES, STATUS_CHOICES,
     INDIVIDUAL_STATUS_CHOICES, check_privacy)
@@ -99,6 +100,7 @@ class Action(models.Model):
     actiontypes = models.ManyToManyField(ActionType, blank=True, related_name="actions_for_type")
     topics = models.ManyToManyField(ActionTopic, blank=True, related_name="actions_for_topic")
     date_created = models.DateTimeField(default=timezone.now)
+    flags = GenericRelation('flags.Flag')
 
     # TODO Add get_status field
     #      which looks at has_deadline and returns either no deadline,
@@ -211,6 +213,15 @@ class Action(models.Model):
                 return float((self.deadline - now).seconds)/float(86400)
         return -1
 
+    def is_flagged_by_user(self, user, new_only=False):
+        for flag in self.flags.all():
+            if flag.flagged_by == user:
+                if new_only:
+                    return flag if flag.flag_status == "new" else "No flags"
+                else:
+                    return flag
+        return "No flags"
+
 class Slate(models.Model):
     """Stores a single slate."""
     slug = models.CharField(max_length=50, unique=True, validators=slug_validator)
@@ -223,6 +234,7 @@ class Slate(models.Model):
     privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
     actions = models.ManyToManyField(Action, through='SlateActionRelationship')
     date_created = models.DateTimeField(default=timezone.now)
+    flags = GenericRelation('flags.Flag')
 
     def __unicode__(self):
         return self.slug
@@ -269,6 +281,15 @@ class Slate(models.Model):
         else:
             return self.get_privacy_display()
 
+    def is_flagged_by_user(self, user, new_only=False):
+        for flag in self.flags.all():
+            if flag.flagged_by == user:
+                if new_only:
+                    return flag if flag.flag_status == "new" else "No flags"
+                else:
+                    return flag
+        return "No flags"
+
 class SlateActionRelationship(models.Model):
     """Stores relationship between a single slate and a single action."""
     slate = models.ForeignKey(Slate, on_delete=models.CASCADE)
@@ -279,7 +300,7 @@ class SlateActionRelationship(models.Model):
     privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
     # default status is ace == accepted
     status = models.CharField(max_length=3, choices=INDIVIDUAL_STATUS_CHOICES, default='ace')
-    notes = models.CharField(max_length=2500, blank=True, null=True) 
+    notes = models.CharField(max_length=2500, blank=True, null=True)
 
     def get_cname(self):
         class_name = 'SlateActionRelationship'

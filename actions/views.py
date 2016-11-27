@@ -27,6 +27,7 @@ class ActionView(UserPassesTestMixin, generic.DetailView):
         context['slates'] = self.object.get_slates(self.request.user)
         if self.request.user.is_authenticated():
             context['par'] = self.request.user.profile.get_par_given_action(self.object)
+        context['flag'] = self.object.is_flagged_by_user(self.request.user, new_only=False)
         return context
 
     def test_func(self):
@@ -115,6 +116,7 @@ class SlateView(UserPassesTestMixin, generic.DetailView):
         context['has_notes'] = True
         context['can_edit_actions'] = True if self.object.creator == self.request.user else False
         context['is_slate'] = True
+        context['flag'] = self.object.is_flagged_by_user(self.request.user, new_only=False)
         return context
 
     def test_func(self):
