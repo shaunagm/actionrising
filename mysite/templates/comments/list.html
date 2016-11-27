@@ -1,0 +1,10 @@
+<dl id="comments">
+  {% for comment in comment_list %}
+    <dt id="c{{ comment.id }}">
+      {{ comment.submit_date }} by <a href="{% url 'profile' slug=comment.name %}">{{ comment.name }}</a>
+    </dt>
+    <dd>
+      <p>{{ comment.comment }}</p>
+    </dd>
+  {% endfor %}
+</dl>

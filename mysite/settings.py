@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'profiles',
     'actions',
     'functional_tests',
+    'django_comments',
 ]
 
 MIDDLEWARE = [
@@ -168,6 +169,5 @@ STATICFILES_DIRS = (
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 LOCALE_PATHS = (
-    PROJECT_ROOT + '/website/locale', 
+    PROJECT_ROOT + '/website/locale',
 )
-

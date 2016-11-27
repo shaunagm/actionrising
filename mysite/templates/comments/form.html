@@ -1,0 +1,19 @@
+{% load comments i18n %}
+{% get_comment_form for object as form %}
+<form action="{% comment_form_target %}" method="post">{% csrf_token %}
+      {{ form.comment }}
+      {{ form.honeypot }}
+      {{ form.content_type }}
+      {{ form.object_pk }}
+      {{ form.timestamp }}
+      {{ form.security_hash }}
+
+      <!-- Junk input since removing/making these fields not required is complicated. -->
+      <input type="hidden" name="email" value="example@example.com" />
+      <input type="hidden" name="url" value="http://www.example.com" />
+      
+  <p class="submit">
+    <input type="hidden" name="next" value="{{ object.get_absolute_url }}" />
+    <input type="submit" name="post" class="submit-post" value="{% trans "Post" %}"/>
+  </p>
+</form>

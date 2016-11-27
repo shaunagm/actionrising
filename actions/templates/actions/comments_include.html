@@ -1,0 +1,16 @@
+{% load comments %}
+
+<h4>Comments</h4>
+
+{% if user.is_authenticated %}
+
+    <a id="add_comment_button" href="#add_comment" class="btn btn-warning" data-toggle="collapse">
+      Add a comment</a>
+
+    <div id="add_comment" class="collapse">
+    {% render_comment_form for object %}
+    </div>
+
+{% endif %}
+
+{% render_comment_list for object %}
