@@ -197,9 +197,9 @@ def manage_action_for_slate(request, pk):
             sar.save()
             return HttpResponseRedirect(reverse('slate', kwargs={'slug':sar.slate.slug}))
         else:
-            context = {'form': form}
+            context = {'form': form, 'sar': sar }
             render(request, 'actions/manage_action_for_slate.html', context)
     else:
         form = SlateActionRelationshipForm(sar=sar, initial={'privacy': sar.privacy, 'priority': sar.priority, 'status': sar.status, 'notes': sar.notes})
-        context = {'form': form}
+        context = {'form': form, 'sar': sar}
         return render(request, 'actions/manage_action_for_slate.html', context)

@@ -1,44 +1,69 @@
 <style>
-    body { padding-top: 70px; }
 
+    /*Sitewide styles*/
+
+    body { padding-top: 70px; }
     i { padding-right: 20px; }
-    #flag-button { margin-right: 15px; }
-    .popover-content a { color:white;}
+
+    .extra-margin-row { margin-top: 10px; margin-bottom: 10px; }
+    .basic-info { font-size: 12px; }
+    #manage-action-button { margin-bottom: 15px; }
+
     .btn-group > .btn + .dropdown-toggle { padding-top:18px; }
     .caret { padding-bottom: 7.5px;}
     .tracker-link { padding-right: 5px; }
+
+    /*Form styles*/
+
     select { color: #2b3e50; }
+    button, input[type="submit"] { color: #2b3e50; }
+    #id_honeypot { display: none; }
+    #form-explanation { margin-bottom: 15px; }
+
+    /*Flag styles*/
+
+    .flag-content { margin-left: 5px; color: white; background-color: #2b3e50;
+        margin-bottom: 15px;}
+    .inline-flag .flag-content{ margin-left: 0px; margin-bottom: 0px;}
+    .popover-content a { color:white;}
+
+    /*About page styles*/
 
     #about p { font-size: 18px; margin-top:10px; margin-bottom:20px;}
     #about h3 {font-weight: bold;}
 
+    /*Comment styles*/
+
+    #add_comment_button { margin-top: 0px; margin-bottom: 15px; }
+    dl dd { background-color: #4e5d6c; padding: 10px; margin-bottom: 15px;}
+    dl dd p { margin: 0px; padding: 0px;}
+
+    /*Labels styles*/
+
     span.label { margin: 5px 10px 5px 0px; display:inline-block; }
     table span.label a, span.label a { color: white; text-decoration: none !important;
         font-size: 115%; }
-    button, input[type="submit"] { color: #2b3e50; }
-    #form-explanation, #password-reset-button, #suggested_actions_button, #add_comment_button
-        { margin-bottom: 25px; }
-    #password-reset-button { margin-left:73px;}
-    #add_comment_button { margin-top: 10px; }
-    dl dd { background-color: #4e5d6c; padding: 10px; margin-bottom: 15px;}
-    dl dd p { margin: 0px; padding: 0px;}
-    #id_honeypot { display: none; }
 
+    /*Datatables Styles*/
 
-
-    /*Datatables Styling*/
     table { font-size: 16px !important; }
     table a:not(.btn), .table a:not(.btn) {text-decoration: none; font-weight: bold;}
     .dataTables_wrapper { margin-top: 20px; }
     .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter,
         .dataTables_wrapper .dataTables_info { color: #ebebeb; }
-    .even { background-color: #2b3e50 !important;}
+    .even, .even .child { background-color: #2b3e50 !important;}
     .dataTables_wrapper .dataTables_paginate .paginate_button { color: #333 !important;
           background: linear-gradient(to bottom, #fff 0%, #dcdcdc 100%);}
     .dataTables_wrapper .dataTables_paginate .paginate_button.previous,
         .dataTables_wrapper .dataTables_paginate .paginate_button.next {
         color: #b2b2b2 !important; background: transparent; border: none; }
+    .notesrow {background-color: #7e8891; color: white;}
+    td.manage { text-align: center; }
 
-    .notesrow { color: #2b3e50; }
+    /*Misc Button Styles*/
+
+    #password-reset-button { margin-bottom: 15px; margin-left:73px; }
+    #suggested_actions_button { margin-bottom: 15px; }
+    #rel-management-button { margin-left: 15px; }
 
 </style>

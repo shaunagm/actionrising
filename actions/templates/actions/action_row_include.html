@@ -10,12 +10,13 @@
     <td>{{ action.location }}</td>
     <td>{{ rel.notes }}</td>
     {% if can_edit_actions %}
-        <td>
+        <td class="manage">
         {% if is_slate %}
-          <a href="{% url 'manage_action_for_slate' rel.pk %}" class="btn btn-success">
+          <a href="{% url 'manage_action_for_slate' rel.pk %}">
         {% else %}
-          <a href="{% url 'manage_action_for_profile' action.slug %}" class="btn btn-success">
+          <a href="{% url 'manage_action_for_profile' action.slug %}">
         {% endif %}
-        Manage Action</a></td>
+        <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+        </a></td>
     {% endif %}
 </tr>

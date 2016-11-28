@@ -18,7 +18,7 @@ function datelogic(days_til_deadline, deadline_status) {
 
 function format ( d ) {
     // `d` is the original data object for the row
-    return '<tr class="notesrow"><td>Notes: ' + d[9] + '</td></tr>';
+    return 'Notes: ' + d[9];
 }
 
 $(document).ready(function() {
@@ -56,6 +56,11 @@ $(document).ready(function() {
                 "targets": [ 9 ],
                 "visible": false,
                 "name":  "notes"
+            },
+            {
+                "targets": [ 10 ],
+                "orderable": false,
+                "name":  "manage"
             }
         ]
     });
@@ -130,7 +135,7 @@ $(document).ready(function() {
             this.child.hide();
         }
         else {
-            this.child( format(this.data()) ).show();
+            this.child( format(this.data()), "notesrow").show();
         }
       });
     });

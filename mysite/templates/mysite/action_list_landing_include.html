@@ -1,0 +1,16 @@
+<table class="table table-striped table-hover" id="actions">
+  <thead>
+    <tr>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+      {% for action in object_list %}
+      <tr>
+          <td><a href="{{ action.get_robust_url }}">{{ action.title }}</a>
+            <br />
+          {% include "actions/action_label_include.html" with object_list=action.get_tags %}</td>
+      </tr>
+      {% endfor %}
+  </tbody>
+</table>

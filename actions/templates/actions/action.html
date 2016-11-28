@@ -4,56 +4,83 @@
 
 {% block content %}
 
-  <div class="row">
-     <div class="col-sm-10 col-sm-offset-1">
-       <h2>{{ action.title }}
-         {% ifequal object.creator.username request.user.username %}
-             <a href="{{ object.get_edit_url }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-         {% endifequal %}
-       </h2>
-       <h4>Created by {{ action.get_creator_with_link|safe }}</h4>
-       {% include "mysite/basic_info_include.html" %}
-     </div>
-  </div>
 
-  <div class="row">
-     <div class="col-sm-10 col-sm-offset-1">
-        {% include "profiles/action_management_include.html" %}
-    </div>
+<div class="row">
+  <div class="col-sm-11 col-sm-offset-1">
+    <h2>{{ action.title }}
+      {% ifequal object.creator.username request.user.username %}
+          <a href="{{ object.get_edit_url }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+      {% endifequal %}
+    </h2>
   </div>
+</div>
 
   <div class="row">
-     <div class="col-sm-10 col-sm-offset-1">
-       <h4>Quick link: <a href="{{ action.main_link }}">{{ action.main_link }}</a></h4>
-       {{ action.description|safe }}
-     </div>
+    <div class="col-sm-7 col-sm-offset-1">
+        <div class="row">
+           <div class="col-sm-12">
+             <h4>Created by {{ action.get_creator_with_link|safe }}</h4>
+           </div>
+        </div>
+
+        <div class="row">
+           <div class="col-sm-12">
+              {% include "profiles/action_management_include.html" %}
+              {% include 'flags/flag_include.html' with flag=flag %}
+          </div>
+        </div>
+
+        <div class="row">
+           <div class="col-sm-12">
+              {% include "mysite/basic_info_include.html" %}
+          </div>
+        </div>
+
+        <div class="row">
+           <div class="col-sm-12">
+             <h4>Quick link: <a href="{{ action.main_link }}">{{ action.main_link }}</a></h4>
+           </div>
+        </div>
+
+        <div class="row">
+           <div class="col-sm-12 extra-margin-row">
+             {{ action.description|safe }}
+           </div>
+        </div>
+
+        <div class="row">
+           <div class="col-sm-12">
+              <p></p>  <!-- hack! -->
+              {% include "actions/action_label_include.html" with object_list=topic_or_type_list %}
+           </div>
+        </div>
+
+      	<div class="row">
+           <div class="col-sm-12">
+      			  <h4>Tracking This Issue ({{ trackers.total_count }})</h4>
+      				{% include "profiles/tracker_include.html" with trackers=trackers action=action %}
+           </div>
+        </div>
+
+      	<div class="row">
+      		 <div class="col-sm-12">
+      				<h4>Slates With This Issue ({{ slates.total_count }})</h4>
+      				{% include "actions/slate_tracker_include.html" with slates=slates %}
+      		 </div>
+      	</div>
+
+    </div> <!-- End left side-->
+
+    <div class="col-sm-3">
+
+        <div class="row">
+      		 <div class="col-sm-12" id="comment-sidebar">
+             <h4>Comments</h4>
+      				{% include "actions/comments_include.html" with object=action %}
+      		 </div>
+      	</div>
+
+    </div> <!-- End right side-->
   </div>
-
-  <div class="row">
-     <div class="col-sm-10 col-sm-offset-1">
-        <p></p>  <!-- hack! -->
-        {% include "actions/action_label_include.html" with object_list=topic_or_type_list %}
-     </div>
-  </div>
-
-	<div class="row">
-     <div class="col-sm-10 col-sm-offset-1">
-			  <h4>Tracking This Issue ({{ trackers.total_count }})</h4>
-				{% include "profiles/tracker_include.html" with trackers=trackers action=action %}
-     </div>
-  </div>
-
-	<div class="row">
-		 <div class="col-sm-10 col-sm-offset-1">
-				<h4>Slates With This Issue ({{ slates.total_count }})</h4>
-				{% include "actions/slate_tracker_include.html" with slates=slates %}
-		 </div>
-	</div>
-
-  <div class="row">
-		 <div class="col-sm-10 col-sm-offset-1">
-				{% include "actions/comments_include.html" with object=action %}
-		 </div>
-	</div>
 
 {% endblock content %}

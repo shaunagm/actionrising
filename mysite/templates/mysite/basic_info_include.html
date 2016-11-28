@@ -1,16 +1,17 @@
-{% include 'flags/flag_include.html' with flag=flag %}
-{% if object.priority %}
-    <i class="fa fa-exclamation-circle" aria-hidden="true"> {{ object.get_priority_display }} priority</i>
-{% endif %}
-{% if object.get_location %}
-    <i class="fa fa-globe" aria-hidden="true"> {{ object.get_location }}</i>
-{% endif %}
-{% if object.get_privacy %}
-    <i class="fa fa-eye" aria-hidden="true"> {{ object.get_privacy }} </i>
-{% endif %}
-{% if object.get_status_display %}
-    <i class="fa fa-space-shuttle" aria-hidden="true"> {{ object.get_status_display }} </i>
-{% endif %}
-{% if object.deadline %}
-    <i class="fa fa-calendar" aria-hidden="true"> Deadline {{ object.deadline }} </i>
-{% endif%}
+<span class="basic-info">
+    {% if object.priority %}
+        <i class="fa fa-exclamation-circle" aria-hidden="true"> {{ object.get_priority_display }} priority</i>
+    {% endif %}
+    {% if object.location %}
+        <i class="fa fa-globe" aria-hidden="true"> {{ object.get_location }}</i>
+    {% endif %}
+    {% if object.get_privacy %}
+        <i class="fa fa-eye" aria-hidden="true"> {{ object.get_privacy }} </i>
+    {% endif %}
+    {% if object.get_status_display %}
+        <i class="fa fa-space-shuttle" aria-hidden="true"> {{ object.get_status_display }} </i>
+    {% endif %}
+    {% if object.deadline %}
+        <i class="fa fa-calendar" aria-hidden="true"> Deadline {{ object.deadline }} </i>
+    {% endif%}
+</span>

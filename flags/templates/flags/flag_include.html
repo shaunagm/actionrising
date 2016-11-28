@@ -2,7 +2,6 @@
     <script>
     $(function () {
         $('#flag-button').popover({content: $('#flag-list').html(), html:true});
-        console.log("WEEEE");
     });
     </script>
 
@@ -16,9 +15,12 @@
           </button>
     </div>
 
-    <button type="button" id="flag-button" class="btn btn-sm" data-toggle="popover" title="Select reason for flagging">
+    <button type="button" id="flag-button" class="btn btn-sm flag-content" data-toggle="popover" title="Select reason for flagging">
         <span class="glyphicon glyphicon-flag" aria-hidden="true"></span>
     </button>
 {% elif flag %}
-    <span id="flag-button" class="glyphicon glyphicon-flag" aria-hidden="true"> Flagged as {{ flag.flag_choice }}</span>
+    <button type="button" class="btn btn-sm flag-content">
+        <span id="flag-button" class="glyphicon glyphicon-flag" aria-hidden="true"></span>
+        Flagged as {{ flag.flag_choice }}
+    </button>
 {% endif %}

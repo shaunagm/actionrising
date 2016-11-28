@@ -14,36 +14,38 @@
          {% ifequal object.creator.username request.user.username %}
              <a href="{{ object.get_edit_url }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
          {% endifequal %}
-       </h2>
+     </div>
+  </div>
+
+  <div class="row">
+     <div class="col-sm-2 col-sm-offset-1">
        <h4>created by <a href="{{ object.creator.get_absolute_url }}">{{ object.creator }}</a></h4>
-
      </div>
   </div>
 
   <div class="row">
-     <div class="col-sm-10 col-sm-offset-1">
+     <div class="col-sm-10 col-sm-offset-1 inline-flag">
+        {% include 'flags/flag_include.html' with flag=flag %}
         {% include "mysite/basic_info_include.html" %}
-     </div>
+    </div>
   </div>
 
   <div class="row">
-     <div class="col-sm-10 col-sm-offset-1">
+     <div class="col-sm-10 col-sm-offset-1 extra-margin-row">
          <p>{{ object.description|safe }}</p>
      </div>
   </div>
 
   <div class="row">
      <div class="col-sm-10 col-sm-offset-1">
-
        <h2>Actions</h2>
-
        {% include "actions/action_list_include.html" with object_list=object.slateactionrelationship_set.all %}
-
      </div>
   </div>
 
   <div class="row">
 		 <div class="col-sm-10 col-sm-offset-1">
+       <h2>Comments</h2>
        {% include "actions/comments_include.html" with object=object %}
 		 </div>
 	</div>
