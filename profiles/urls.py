@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^profiles$', views.ProfileSearchView.as_view(), name='profiles'),
     url(r'^profile/(?P<slug>[-\w]+)$', views.ProfileView.as_view(), name='profile'),
     url(r'^to-do/(?P<slug>[-\w]+)$', views.ProfileToDoView.as_view(), name='to_do'),
+    url(r'^feed/(?P<slug>[-\w]+)$', views.FeedView.as_view(), name='feed'),    
     url(r'^suggested/(?P<slug>[-\w]+)$', views.ProfileSuggestedView.as_view(), name='suggested'),
     url(r'^edit/(?P<pk>[-\w]+)$', views.ProfileEditView.as_view(), name='edit_profile'),
     url(r'^toggle/(?P<username>[-\w]+)/(?P<toggle_type>[-\w]+)$', views.toggle_relationships, name='toggle_relationships'),

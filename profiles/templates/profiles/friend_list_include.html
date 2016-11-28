@@ -1,0 +1,19 @@
+<table class="table table-striped table-hover" id="friendlist">
+  <thead>
+    <tr>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+      {% for info in object_list %}
+      <tr>
+          <td><a href="{{ info.user.profile.get_absolute_url }}">{{ info.user.username }}</a>
+          {% if info.user.profile.location %} {{ info.user.profile.location }} {% endif %}
+          <br />
+          {% if info.follows_you %} <span class="label label-success">Follows you back</span> {% endif %}
+          {% if info.muted %} <span class="label label-info">Muted</span> {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+  </tbody>
+</table>

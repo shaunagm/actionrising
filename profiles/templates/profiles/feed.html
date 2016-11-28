@@ -1,0 +1,19 @@
+{% extends "mysite/base.html" %}
+
+{% block content %}
+
+<div class="row">
+   <div class="col-sm-3 col-sm-offset-1">
+     <h2>People You Follow</h2>
+     {% include 'profiles/friend_list_include.html' with object_list=profiles %}
+   </div>
+
+   <div class="col-sm-6 col-sm-offset-1">
+     <h2>Your Feed</h2>
+     <p>This feed is very much in progress!  Check back soon for a more comprehensive
+       and accurate feed.</p>
+      {% include 'profiles/friend_feed_include.html' with object_list=feed_data %}
+   </div>
+</div>
+
+{% endblock content %}

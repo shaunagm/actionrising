@@ -6,7 +6,7 @@
 <title>{% block title %}ActionRising{% endblock %}</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.6.2/chosen.jquery.js"></script>
@@ -45,6 +45,7 @@
                <li><a href="{% url 'about' %}">About</a></li>
                <li><a href="{{ request.user.profile.get_absolute_url }}">Your Profile</a></li>
                <li><a href="{% url 'to_do' request.user %}">Your ToDos</a></li>
+               <li><a href="{% url 'feed' request.user %}">Your Feed</a></li>             
                <li><a href="{% url 'logout' %}">Log Out</a></li>
            {% else %}
                <li><a href="{% url 'login' %}">Log In</a></li>

@@ -79,6 +79,21 @@ class ProfileSearchView(LoginRequiredMixin, generic.ListView):
     template_name = 'profiles/profiles.html'
     model = User
 
+class FeedView(UserPassesTestMixin, generic.DetailView):
+    template_name = 'profiles/feed.html'
+    model = User
+    slug_field = 'username'
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj == self.request.user  # No access unless this is you
+
+    def get_context_data(self, **kwargs):
+        context = super(FeedView, self).get_context_data(**kwargs)
+        context['profiles'] = self.object.profile.get_list_of_relationships()
+        context['feed_data'] = self.object.profile.get_follow_activity()
+        return context
+
 def toggle_relationships_helper(toggle_type, current_profile, target_profile):
     relationship = current_profile.get_relationship_given_profile(target_profile)
     if not relationship:

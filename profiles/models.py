@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 import json
+from random import shuffle
 
 from django.db import models
 from django.db.models.signals import post_save
@@ -9,7 +10,7 @@ from django.utils import timezone
 
 from django.contrib.auth.models import User
 
-from actions.models import Action
+from actions.models import Action, Slate
 from mysite.utils import (PRIVACY_CHOICES, PRIORITY_CHOICES, INDIVIDUAL_STATUS_CHOICES,
     PRIVACY_DEFAULT_CHOICES, check_privacy, get_global_privacy_default)
 
@@ -128,12 +129,60 @@ class Profile(models.Model):
     def get_suggested_actions_count(self):
         return len(self.get_suggested_actions())
 
+    def get_list_of_relationships(self):
+        people = []
+        for person in self.connections.all():
+            rel = self.get_relationship_given_profile(person)
+            follows_you = rel.target_follows_current_profile(self)
+            muted = rel.current_profile_mutes_target(self)
+            profile = rel.get_other(self)
+            people.append({'user': profile.user, 'follows_you': follows_you, 'muted': muted})
+        return people
+
+    def get_people_tracking(self):
+        people = []
+        for person in self.connections.all():
+            rel = self.get_relationship_given_profile(person)
+            if rel.current_profile_follows_target(self) and not rel.current_profile_mutes_target(self):
+                people.append(person.user)
+        return people
+
+    def get_follow_activity(self):
+        # This is sooo hacky but will do until activity streams is set up
+        people_tracking = self.get_people_tracking()
+        activity = []
+        action_list = Action.objects.all().order_by('-pk')
+        actions = action_list[:20] if len(action_list) > 20 else action_list
+        for action in actions:
+            if action.creator in people_tracking:
+                temp_string = "<a href='%s'>%s</a> created action <a href='%s'>%s</a>" \
+                    % (action.creator.profile.get_absolute_url(), action.creator.username,
+                    action.get_absolute_url(), action.title)
+                activity.append(temp_string)
+        slate_list = Slate.objects.all().order_by('-pk')
+        slates = slate_list[:20] if len(slate_list) > 20 else slate_list
+        for slate in slates:
+            if slate.creator in people_tracking:
+                temp_string = "<a href='%s'>%s</a> created slate <a href='%s'>%s</a>" \
+                    % (slate.creator.profile.get_absolute_url(), slate.creator.username,
+                    slate.get_absolute_url(), slate.title)
+                activity.append(temp_string)
+        par_list = ProfileActionRelationship.objects.all().order_by('-pk')
+        pars = par_list[:20] if len(par_list) > 20 else par_list
+        for par in pars:
+            if par.profile.user in people_tracking:
+                temp_string = "<a href='%s'>%s</a> accepted action <a href='%s'>%s</a>" \
+                    % (par.profile.get_absolute_url(), par.profile.user.username,
+                    par.action.get_absolute_url(), par.action.title)
+                activity.append(temp_string)
+        shuffle(activity)
+        return activity
+
     # Add methods to save and access links as json objects
 
     # Add links to get specific kinds of links, so that Twitter for instance can be displayed with the
     # Twitter image
 
-    # Add methods to facilitate viewing on friendfeeds
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
