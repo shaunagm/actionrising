@@ -13,7 +13,7 @@ from django.contrib.auth.models import User
 
 from actions.models import Action, Slate
 from mysite.utils import (PRIVACY_CHOICES, PRIORITY_CHOICES, INDIVIDUAL_STATUS_CHOICES,
-    PRIVACY_DEFAULT_CHOICES, check_privacy, get_global_privacy_default)
+    PRIVACY_DEFAULT_CHOICES, check_privacy, get_global_privacy_default, disable_for_loaddata)
 
 class Profile(models.Model):
     """Stores a single user profile"""
@@ -189,7 +189,7 @@ class Profile(models.Model):
     # Add links to get specific kinds of links, so that Twitter for instance can be displayed with the
     # Twitter image
 
-
+@disable_for_loaddata
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         profile = Profile.objects.create(user=instance)
