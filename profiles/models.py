@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 import json
 from random import shuffle
+from itertools import chain
 
 from django.db import models
 from django.db.models.signals import post_save
@@ -69,7 +70,7 @@ class Profile(models.Model):
         followers = []
         # This should be something like for rel in self.relationship_set.all()
         # but it doesn't seem to work
-        for person in self.connections.all():
+        for person in self.get_connected_people():
             rel = self.get_relationship_given_profile(person)
             if rel.target_follows_current_profile(self):
                 followers.append(person.pk)
@@ -129,9 +130,14 @@ class Profile(models.Model):
     def get_suggested_actions_count(self):
         return len(self.get_suggested_actions())
 
+    def get_connected_people(self):
+        for_a = [rel.person_B for rel in Relationship.objects.filter(person_A=self)]
+        for_b = [rel.person_A for rel in Relationship.objects.filter(person_B=self)]
+        return list(chain(for_a, for_b))
+
     def get_list_of_relationships(self):
         people = []
-        for person in self.connections.all():
+        for person in self.get_connected_people():
             rel = self.get_relationship_given_profile(person)
             follows_you = rel.target_follows_current_profile(self)
             muted = rel.current_profile_mutes_target(self)
@@ -141,7 +147,7 @@ class Profile(models.Model):
 
     def get_people_tracking(self):
         people = []
-        for person in self.connections.all():
+        for person in self.get_connected_people():
             rel = self.get_relationship_given_profile(person)
             if rel.current_profile_follows_target(self) and not rel.current_profile_mutes_target(self):
                 people.append(person.user)
