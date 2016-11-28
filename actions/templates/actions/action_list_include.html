@@ -64,9 +64,7 @@ Filter:
       <th>Friends?</th>
       <th>Location?</th>
       <th>Notes?</th>
-      {% if can_edit_actions %}
-          <th>Manage</th>
-      {% endif %}
+      <th>Manage</th>
     </tr>
   </thead>
   <tbody>
@@ -79,3 +77,5 @@ Filter:
       {% endfor %}
   </tbody>
 </table>
+
+<span class="hidden {% if can_edit_actions %}view_manage{% endif %}">

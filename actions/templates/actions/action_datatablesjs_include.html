@@ -23,6 +23,12 @@ function format ( d ) {
 
 $(document).ready(function() {
 
+    if ($('.view_manage')[0]) {
+      var manager_column_visible = true;
+    } else {
+      var manager_column_visible = false;
+    };
+
     var actionTable = $('#actions').DataTable({
         "iDisplayLength": 100,
         "aaSorting": [],
@@ -60,6 +66,7 @@ $(document).ready(function() {
             {
                 "targets": [ 10 ],
                 "orderable": false,
+                "visible": manager_column_visible,
                 "name":  "manage"
             }
         ]
