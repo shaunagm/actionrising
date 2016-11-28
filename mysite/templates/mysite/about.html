@@ -5,31 +5,85 @@
 {% block content %}
 
 <div class="row">
-   <div class="col-sm-10 col-sm-offset-1">
-     <h2>Help yourself and friends take action</h2>
+   <div class="col-sm-10 col-sm-offset-1" id="about">
+     <h2>About ActionRising</h2>
 
-     <p>ActionRising is a platform created to help individuals and communities
-       figure out their next steps.  We want you to take action - specific, meaningful,
-       positive action - that fits the time and energy you have available.</p>
+     <p>ActionRising is a platform created to help individuals and communities figure
+       out their next steps. We want you to take action - specific, meaningful, positive
+       action - that fits the time and energy you have available.</p>
 
-     {% if user.is_authenticated %}
+     <p>The site is in its early stages.  (It's only been in development for {{ time_elapsed }} days!)
+       Know someone who'd like to join?  They can request an account
+       <a href="https://docs.google.com/forms/d/e/1FAIpQLSdvjpdigDpDfxfp7uMEFIb4LxMgVKezhF_XoiPJos-Ieph7uw/viewform">here</a>.</p>
 
-           <h4><a href="{% url 'actions' %}">Browse actions you can take</a></h4>
-           <h4><a href="{% url 'to_do' user.username %}">Put together your personal ToDo list</a></h4>
-           <h4><a href="{% url 'create_action' %}">Add new actions for you and others to do</a></h4>
-           <h4><a href="{% url 'create_slate' %}">Make a "slate" of suggested actions for an event or other specific goal or purpose</a></h4>
-           <h4><a href="{% url 'profiles' %}">Find and follow friends to see what they're working on</a></h4>
+     <h2>FAQ</h2>
 
-           <p>This site has only been live since November 18th.  We need your help to
-             make it better.  Please tell Shauna, in person or via email, about any
-             problems you run into or features you'd like.</p>
+     <p>Do you have a question not answered by the faq?  Email actionrisingsite -at- gmail -dot- com.
+       We'll answer it, and probably add it to this FAQ.</p>
 
-     {% else %}
+     <h3 class="text-info">So how do I use this thing?</h3>
 
-     <p>Log in to learn more.</p>
+     <p>Let's start with the basics.  The heart of this site are the <a href="{% url 'actions' %}">
+       actions</a>.  You can search for posted actions by date created, by tags, by popularity, or in
+       a number of other ways.  When you see an action you want to attempt, you can add it to your actions
+       by clicking the "Take Action" button.  Once you've done that, you can also suggest the action to
+       friends or add it to one of your slates.</p>
 
-        <p>Not registered?  Ask Shauna to create an account for you.</p>
+     <p>A friend is someone you follow who also follows you.  (You can't suggest actions to people who don't
+       follow you.)  You can find friends by searching our <a href="{% url 'profiles' %}">profiles</a> page.
+       A slate is a collection of actions, typically selected to suit a particular theme, event, or political outcome.
+       You can find those by searching the <a href="{% url 'slates' %}">slates</a> page.</p>
 
-     {% endif %}
+     <p>You can view all of your open actions via your <a href="{% url 'to_do' user.username %}">to do list</a>.
+
+     <p>That's all you really need to know.  If you're interested, you can also override an action's default
+       priority, privacy or status, or you can add notes to it.  These changes don't show up for everyone,
+       just you.  You can set these things differently for each action added to a slate, and for the actions
+       on your to do list.</p>
+
+     <h3 class="text-info">What if there's a problem with an action?</h3>
+
+     <p>If it's a minor problem, you can leave a comment on the action and ask the creator to fix it.  If there's
+       no response, or the action has a bigger problem like spreading inaccuracies or using offensive language,
+       you can flag the action and we'll get to it as quickly as possible.</p>
+
+     <p>The creator of an action can always withdraw the action, if updating the content is not enough to
+       fix the problem.  If someone reports a problem with your action, moderators may withdraw the
+       action as well.</p>
+
+     <p>Withdrawn actions are not searchable on the site, but still exist in the database.  In extreme cases,
+       such as doxxing, the action may be completely deleted.</p>
+
+     <h3 class="text-info">How does privacy work here?</h3>
+
+     <p>Good question!  Your privacy is very important to us, but it's also something that
+       takes time to get right.  Currently we <span class="text-danger"><b><u>cannot promise you</u></b></span>
+       any kind of privacy.  All we can do is tell you how things are supposed to work and promise
+       a prompt response to any requests to delete data or ban bad actors.</p>
+
+     <p>Here's how things currently work.  There are two possible privacy settings, "public" and "sitewide".
+       The former is visible to anyone on the internet, while the latter is only visible to logged in users.
+       (Sign up to the site will always be limited, but we can't promise that no one with bad intentions will
+       get access.)  When editing
+       your profile, you can choose a "default" privacy setting.  Any actions or slates you create will
+       have this privacy setting by default unless you specifically override it.  Note that if you
+       change your default, it will change the privacy of all past actions or slates that you did not override
+       previously.</p>
+
+     <p>We plan to add "completely private" and "friends only" privacy fields, set up email notifications when
+       someone changes the privacy setting of something you've commented on, and to do a thorough
+       security audit.</p>
+
+     <p>Philosophically, our goal is to give you the greatest control over your privacy possible.  Please
+       let us know if there are ways we can improve.</p>
+
+     <h3 class="text-info">How do I verify my account?</h3>
+
+     <p>If you'd like to verify your account, please email actionrisingsite -at- gmail -dot- com.  Eventually
+       we'll have a system for doing automatic verification with <a href="https://keybase.io/">Keybase</a>.</p>
+
+     <h3 class="text-info">Can I contribute to the site?</h3>
+
+     <p>Yes!  Email actionrisingsite -at- gmail -dot- com if you'd like to contribute.</p>
 
 {% endblock content %}

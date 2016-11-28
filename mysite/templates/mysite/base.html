@@ -39,8 +39,8 @@
        </div>
        <div class="navbar-collapse collapse" id="navbar-main">
          <ul class="nav navbar-nav">
-           <li><a href="{% url 'about' %}">About</a></li>
            {% if user.is_authenticated %}
+               <li><a href="{% url 'about' %}">About</a></li>
                <li><a href="{{ request.user.profile.get_absolute_url }}">Your Profile</a></li>
                <li><a href="{% url 'to_do' request.user %}">Your ToDos</a></li>
                <li><a href="{% url 'logout' %}">Log Out</a></li>

@@ -112,7 +112,9 @@ class Profile(models.Model):
             return actions[-5:]
         return actions
 
-    def get_open_actions(self, user):
+    def get_open_actions(self, user=None):
+        if not user:
+            user = self.user
         actions = self.vet_actions(self.actions.all(), user, privacy=False)
         return actions
 
@@ -270,7 +272,7 @@ class ProfileActionRelationship(models.Model):
     status = models.CharField(max_length=3, choices=INDIVIDUAL_STATUS_CHOICES, default='ace')
     committed = models.BooleanField(default=False)
     suggested_by = models.CharField(max_length=500, blank=True, null=True)
-    notes = models.CharField(max_length=2500, blank=True, null=True) 
+    notes = models.CharField(max_length=2500, blank=True, null=True)
 
     def __unicode__(self):
         return u'Relationship of profile %s and action %s' % (self.profile, self.action)
