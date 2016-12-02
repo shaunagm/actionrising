@@ -709,10 +709,40 @@
         "creator": [
             "buffysummers"
         ],
-        "description": "",
+        "description": "Indescribable.",
         "status": "rea",
         "privacy": "inh",
         "date_created": "2016-11-28T22:26:42Z"
+    }
+},
+{
+    "model": "actions.slate",
+    "pk": 11,
+    "fields": {
+        "slug": "how-to-prevent-an-apocalypse",
+        "title": "How to prevent an apocalypse",
+        "creator": [
+            "giles"
+        ],
+        "description": "",
+        "status": "fin",
+        "privacy": "inh",
+        "date_created": "2016-12-02T21:42:10Z"
+    }
+},
+{
+    "model": "actions.slate",
+    "pk": 12,
+    "fields": {
+        "slug": "high-stakes-slate-of-actions",
+        "title": "High stakes slate of actions",
+        "creator": [
+            "dru"
+        ],
+        "description": "",
+        "status": "rea",
+        "privacy": "inh",
+        "date_created": "2016-12-02T21:43:05Z"
     }
 },
 {
@@ -734,6 +764,42 @@
         "slate": 10,
         "action": 11,
         "priority": "med",
+        "privacy": "inh",
+        "status": "ace",
+        "notes": ""
+    }
+},
+{
+    "model": "actions.slateactionrelationship",
+    "pk": 33,
+    "fields": {
+        "slate": 12,
+        "action": 25,
+        "priority": "med",
+        "privacy": "inh",
+        "status": "ace",
+        "notes": ""
+    }
+},
+{
+    "model": "actions.slateactionrelationship",
+    "pk": 34,
+    "fields": {
+        "slate": 12,
+        "action": 10,
+        "priority": "med",
+        "privacy": "inh",
+        "status": "ace",
+        "notes": ""
+    }
+},
+{
+    "model": "actions.slateactionrelationship",
+    "pk": 35,
+    "fields": {
+        "slate": 12,
+        "action": 11,
+        "priority": "eme",
         "privacy": "inh",
         "status": "ace",
         "notes": ""
@@ -1851,6 +1917,150 @@
         ],
         "object_id": "19",
         "object_repr": "Relationship of profile 5by5 and action Denounce Trump's proposed appointment of Steve Bannon",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 156,
+    "fields": {
+        "action_time": "2016-12-02T21:42:53.227Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "slate"
+        ],
+        "object_id": "11",
+        "object_repr": "how-to-prevent-an-apocalypse",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 157,
+    "fields": {
+        "action_time": "2016-12-02T21:44:22.118Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "slate"
+        ],
+        "object_id": "12",
+        "object_repr": "high-stakes-slate-of-actions",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 158,
+    "fields": {
+        "action_time": "2016-12-02T21:57:40.301Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "profiles",
+            "profileactionrelationship"
+        ],
+        "object_id": "24",
+        "object_repr": "Relationship of profile admin and action Donate to Planned Parenthood",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 159,
+    "fields": {
+        "action_time": "2016-12-02T21:57:40.305Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "profiles",
+            "profileactionrelationship"
+        ],
+        "object_id": "23",
+        "object_repr": "Relationship of profile admin and action Denounce Trump's proposed appointment of Steve Bannon",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 160,
+    "fields": {
+        "action_time": "2016-12-02T22:05:58.467Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "slate"
+        ],
+        "object_id": "10",
+        "object_repr": "things-to-do-on-the-hellmouth",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"description\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 161,
+    "fields": {
+        "action_time": "2016-12-02T22:20:09.658Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "slateactionrelationship"
+        ],
+        "object_id": "33",
+        "object_repr": "Relationship of slate: high-stakes-slate-of-actions and action: Join the site ",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 162,
+    "fields": {
+        "action_time": "2016-12-02T22:20:16.690Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "slateactionrelationship"
+        ],
+        "object_id": "34",
+        "object_repr": "Relationship of slate: high-stakes-slate-of-actions and action: Sign petition to make Boston a sanctuary city ",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 163,
+    "fields": {
+        "action_time": "2016-12-02T22:45:07.227Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "slateactionrelationship"
+        ],
+        "object_id": "35",
+        "object_repr": "Relationship of slate: high-stakes-slate-of-actions and action: Donate to Planned Parenthood ",
         "action_flag": 1,
         "change_message": "[{\"added\": {}}]"
     }

@@ -1,7 +1,7 @@
 import time, sys
 from page_objects import PageObject, PageElement, MultiPageElement
 
-from actions.models import Action
+from actions.models import Action, Slate
 
 # Util/Base Pages
 
@@ -53,21 +53,30 @@ class LoggedInLandingPage(BasePage):
     open_actions_list = PageElement(id_="open-actions")
     open_actions_items = MultiPageElement(css="tr")
 
-class BasicActionPage(BasePage):
-    action_table = MultiPageElement(id_="actions")
+class BaseListPage(BasePage):
     datatables_search_field = PageElement(css="input[type='search']")
-    # Action Data
-    columns = MultiPageElement(css="#actions thead th")
-    rows = MultiPageElement(css="#actions tbody tr")
-    labels = MultiPageElement(css="span.label")
+    # Controls for all datatables-enabled lists
+    active_only = PageElement(id_="filter-active-button")
+    friends_only = PageElement(id_="filter-friends-button")
+    sort_buttons = MultiPageElement(css=".sorting")
+    # Data for all datatables-enabled lists
+    columns = MultiPageElement(css=".main-list thead th")
+    rows = MultiPageElement(css=".main-list tbody tr")
+
+    def datatables_js_is_enabled(self):
+        if self.datatables_search_field:
+            return True
+        return False
+
+class BasicActionListPage(BaseListPage):
+    action_table = MultiPageElement(id_="actions")
+    # Additional Action Data
     first_row_date = PageElement(css=".odd > td:nth-child(1)")
     first_row_action = PageElement(css=".odd > td:nth-child(2)")
     first_row_tags = PageElement(css=".odd > td:nth-child(3)")
     first_row_tracker_count = PageElement(css=".odd > td:nth-child(4)")
-    # Action Controls
-    sort_buttons = MultiPageElement(css=".sorting")
-    active_only = PageElement(id_="filter-active-button")
-    friends_only = PageElement(id_="filter-friends-button")
+    labels = MultiPageElement(css="span.label")
+    # Additional Action Controls
     local_only = PageElement(id_="filter-local")
     filter_priority_dropdown = PageElement(id_="filter-priority-group")
     filter_priority_links = MultiPageElement(css=".filter-priority")
@@ -79,22 +88,44 @@ class BasicActionPage(BasePage):
             # This is a decent guess at where we want to be
             self.w.get(self.root_uri + "/actions/actions")
 
-    def datatables_js_is_enabled(self):
-        self.go_to_default_actions_page_if_necessary()
-        if self.datatables_search_field:
-            return True
-        return False
-
     def select_priority(self, selection):
         self.filter_priority_dropdown.click()
         for link in self.filter_priority_links:
             if link.text == selection:
                 link.click()
 
-class BasicActionDetailPage(BasePage):
+class SlateActionsListPage(BasicActionListPage):
+
+    def go_to_detail_page(self, title=None):
+        if title:
+            self.slate = Slate.objects.get(title=title)
+        else:
+            self.slate = Slate.objects.last()
+        self.w.get(self.root_uri + self.slate.get_absolute_url())
+
+class SlateListPage(BaseListPage):
+    slates_table = MultiPageElement(id_="slates")
+    first_row_date = PageElement(css=".odd > td:nth-child(1)")
+    first_row_slate = PageElement(css=".odd > td:nth-child(2)")
+    first_row_creator = PageElement(css=".odd > td:nth-child(3)")
+    first_row_action_count = PageElement(css=".odd > td:nth-child(4)")
+
+    def go_to_default_slates_page_if_necessary(self):
+        if not self.slates_table:
+            # This is a decent guess at where we want to be
+            self.w.get(self.root_uri + "/actions/slates")
+
+class BaseObjectDetailPage(BasePage):
     creator = PageElement(id_="created_by")
     quick_link = PageElement(id_="quick_link")
     description = PageElement(id_="description")
+    priority = PageElement(id_="priority-info")
+    location = PageElement(id_="location-info")
+    privacy = PageElement(id_="privacy-info")
+    status = PageElement(id_="status-info")
+    deadline = PageElement(id_="deadline-info")
+
+class BasicActionDetailPage(BaseObjectDetailPage):
     labels = MultiPageElement(css="span.label")
     comments_div = PageElement(id_="comment-sidebar")
     add_comment_button = PageElement(id_="add_comment_button")
@@ -106,10 +137,10 @@ class BasicActionDetailPage(BasePage):
 
     def go_to_detail_page(self, title=None):
         if title:
-            action = Action.objects.get(title=title)
+            self.action = Action.objects.get(title=title)
         else:
-            action = Action.objects.last()
-        self.w.get(self.root_uri + action.get_absolute_url())
+            self.action = Action.objects.last()
+        self.w.get(self.root_uri + self.action.get_absolute_url())
 
     def select_manage_action_option(self, selection):
         self.take_action_button.click()
@@ -117,3 +148,12 @@ class BasicActionDetailPage(BasePage):
             if link.text == selection:
                 link.click()
                 break
+
+class SlateDetailPage(BaseObjectDetailPage):
+
+    def go_to_detail_page(self, title=None):
+        if title:
+            self.slate = Slate.objects.get(title=title)
+        else:
+            self.slate = Slate.objects.last()
+        self.w.get(self.root_uri + self.slate.get_absolute_url())

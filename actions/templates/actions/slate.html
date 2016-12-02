@@ -8,6 +8,9 @@
 
 {% block content %}
 
+  {% load profile_extras %}
+  {% get_friendslist as friendlist %}
+
   <div class="row">
      <div class="col-sm-10 col-sm-offset-1">
        <h2>{{ object.title }}
@@ -18,8 +21,8 @@
   </div>
 
   <div class="row">
-     <div class="col-sm-2 col-sm-offset-1">
-       <h4>created by <a href="{{ object.creator.get_absolute_url }}">{{ object.creator }}</a></h4>
+     <div class="col-sm-4 col-sm-offset-1">
+       <h4 id="created_by">created by <a href="{{ object.creator.get_absolute_url }}">{{ object.creator }}</a></h4>
      </div>
   </div>
 
@@ -31,7 +34,7 @@
   </div>
 
   <div class="row">
-     <div class="col-sm-10 col-sm-offset-1 extra-margin-row">
+     <div class="col-sm-10 col-sm-offset-1 extra-margin-row" id="description">
          <p>{{ object.description|safe }}</p>
      </div>
   </div>
