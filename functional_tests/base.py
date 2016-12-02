@@ -4,13 +4,23 @@ from selenium import webdriver
 
 class SeleniumTestCase(StaticLiveServerTestCase):
 
+    fixtures = ['fixtures.json']
+
     """Test case for Selenium-driven functional tests."""
 
-    def setUp(self):
-        self.browser = webdriver.Firefox()
-        self.browser.implicitly_wait(5)  # wait 5 seconds
-        super().setUp()
+    @classmethod
+    def setUpClass(cls):
+        cls.browser = webdriver.Firefox()
+        super(SeleniumTestCase, cls).setUpClass()
 
-    def tearDown(self):
-        self.browser.quit()
-        super().tearDown()
+    def setUp(self):
+        self.browser.get(self.live_server_url)
+        super(SeleniumTestCase, self).setUp()
+
+    # def tearDown(self):
+    #     super(SeleniumTestCase, self).tearDown()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.browser.quit()
+        super(SeleniumTestCase, cls).tearDownClass()
