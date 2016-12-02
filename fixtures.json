@@ -4,13 +4,13 @@
     "pk": 8,
     "fields": {
         "password": "pbkdf2_sha256$30000$06Pt4s6XgY5h$pKAC05XglBrOj4rgJ+U1rESRqLnaRjclzVS7o1wJssA=",
-        "last_login": "2016-11-16T03:06:03Z",
-        "is_superuser": true,
+        "last_login": "2016-12-02T15:11:37.493Z",
+        "is_superuser": false,
         "username": "buffysummers",
         "first_name": "Buffy",
         "last_name": "Summers",
         "email": "buffy@sunnydale.edu",
-        "is_staff": true,
+        "is_staff": false,
         "is_active": true,
         "date_joined": "2016-11-16T03:05:55Z",
         "groups": [],
@@ -21,8 +21,8 @@
     "model": "auth.user",
     "pk": 9,
     "fields": {
-        "password": "pbkdf2_sha256$30000$LzUTrFJEvd4v$ZPB47ww5ZIr80fZjbtM8gtIoQzSRNaqHyN2lV0+Ppr4=",
-        "last_login": null,
+        "password": "pbkdf2_sha256$30000$0L7jsffzAcIy$TWVyJYug4SYXDqPjvHXYjapY3k4TPMBK8OqHarhlf4E=",
+        "last_login": "2016-11-26T21:27:56.537Z",
         "is_superuser": false,
         "username": "thewitch",
         "first_name": "Willow",
@@ -54,6 +54,94 @@
     }
 },
 {
+    "model": "auth.user",
+    "pk": 11,
+    "fields": {
+        "password": "pbkdf2_sha256$30000$KNI6whMWaoBn$MPQKByTbxHlGf9fsbymHZa941Jt2hpUGXCKgo+HCuJk=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "5by5",
+        "first_name": "Faith",
+        "last_name": "Lehane",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2016-11-28T22:22:33Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 12,
+    "fields": {
+        "password": "pbkdf2_sha256$30000$FUOFgZeeV23E$C5cPTWjOGa0uL2EwAuFS7HFTvgmmo+nqR0RQ9Jw6DDA=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "tara_m",
+        "first_name": "Tara",
+        "last_name": "",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2016-11-28T22:23:30Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 13,
+    "fields": {
+        "password": "pbkdf2_sha256$30000$9UKJjBtRpGx0$RW2H5bRgTGt4dWJBSkkEMD/GnnxVXptnUHfvdLz0+f0=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "dru",
+        "first_name": "Drusilla",
+        "last_name": "",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2016-12-02T14:58:39Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 14,
+    "fields": {
+        "password": "pbkdf2_sha256$30000$PRORrfnS2lz8$YQSVwqnLDtihtxFWOMTdcdyHgMv0S1XWjuT1rQzkTyY=",
+        "last_login": "2016-12-02T15:01:56.987Z",
+        "is_superuser": true,
+        "username": "admin",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2016-12-02T15:01:21Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "2pkofjprw50cbttjsmxcj0o826eb61g9",
+    "fields": {
+        "session_data": "Y2I4MGI3YmE4MDA3MTdiNzkxMTcxOGIxZjE5NzhjNDgxYTY5ODFhOTp7Il9hdXRoX3VzZXJfaGFzaCI6IjY4MjgzMmVhYTljNzAyOGQ2ZjY1MzJlYThiMGI2YjkyOThiYzZkNmQiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiI4In0=",
+        "expire_date": "2016-12-12T22:00:36.701Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "2w5404lo9o5mr3ci9sy09vwk3jvpktwj",
+    "fields": {
+        "session_data": "Y2I4MGI3YmE4MDA3MTdiNzkxMTcxOGIxZjE5NzhjNDgxYTY5ODFhOTp7Il9hdXRoX3VzZXJfaGFzaCI6IjY4MjgzMmVhYTljNzAyOGQ2ZjY1MzJlYThiMGI2YjkyOThiYzZkNmQiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiI4In0=",
+        "expire_date": "2016-12-12T22:02:42.433Z"
+    }
+},
+{
     "model": "sessions.session",
     "pk": "6tt9nokqx0rpp24vy2lynn12duj2a23w",
     "fields": {
@@ -62,12 +150,373 @@
     }
 },
 {
+    "model": "sessions.session",
+    "pk": "91qadni97cnj5a90ac4j7kh9uphxh857",
+    "fields": {
+        "session_data": "Y2I4MGI3YmE4MDA3MTdiNzkxMTcxOGIxZjE5NzhjNDgxYTY5ODFhOTp7Il9hdXRoX3VzZXJfaGFzaCI6IjY4MjgzMmVhYTljNzAyOGQ2ZjY1MzJlYThiMGI2YjkyOThiYzZkNmQiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiI4In0=",
+        "expire_date": "2016-12-12T22:02:18.508Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "bch8gs082hb57jp7qe7ffexqi7h3b9zt",
+    "fields": {
+        "session_data": "Y2I4MGI3YmE4MDA3MTdiNzkxMTcxOGIxZjE5NzhjNDgxYTY5ODFhOTp7Il9hdXRoX3VzZXJfaGFzaCI6IjY4MjgzMmVhYTljNzAyOGQ2ZjY1MzJlYThiMGI2YjkyOThiYzZkNmQiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiI4In0=",
+        "expire_date": "2016-12-12T22:06:55.395Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "benq9qbni1icjikzjkwmi9otxesx9269",
+    "fields": {
+        "session_data": "MGFjOTJmYTAyZmVjNWExZjZhNmMwMWU3NjA2ZjcwNjBkMzlmNjdjNzp7Il9hdXRoX3VzZXJfaGFzaCI6IjliMTIwMjk2Zjg1NzE4ZTllYzhiYWI2ZWQyNThmNGJjZTY2ZGU4NzkiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIxNCJ9",
+        "expire_date": "2016-12-16T15:01:56.995Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "bmwbyzwy2nc7osdqavs7ffyeypt9dgvy",
+    "fields": {
+        "session_data": "Y2I4MGI3YmE4MDA3MTdiNzkxMTcxOGIxZjE5NzhjNDgxYTY5ODFhOTp7Il9hdXRoX3VzZXJfaGFzaCI6IjY4MjgzMmVhYTljNzAyOGQ2ZjY1MzJlYThiMGI2YjkyOThiYzZkNmQiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiI4In0=",
+        "expire_date": "2016-12-12T22:03:58.997Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "jh9h8q9r8wrw0umnokbk1qsyfb5t9dij",
+    "fields": {
+        "session_data": "Y2I4MGI3YmE4MDA3MTdiNzkxMTcxOGIxZjE5NzhjNDgxYTY5ODFhOTp7Il9hdXRoX3VzZXJfaGFzaCI6IjY4MjgzMmVhYTljNzAyOGQ2ZjY1MzJlYThiMGI2YjkyOThiYzZkNmQiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiI4In0=",
+        "expire_date": "2016-12-16T15:11:37.498Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "kstroqt9w43iju4gshdcpvcbnmf9h641",
+    "fields": {
+        "session_data": "Y2I4MGI3YmE4MDA3MTdiNzkxMTcxOGIxZjE5NzhjNDgxYTY5ODFhOTp7Il9hdXRoX3VzZXJfaGFzaCI6IjY4MjgzMmVhYTljNzAyOGQ2ZjY1MzJlYThiMGI2YjkyOThiYzZkNmQiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiI4In0=",
+        "expire_date": "2016-12-12T21:52:52.695Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "uqnqhiydzur0huqouegxl3tp11rl8ri0",
+    "fields": {
+        "session_data": "Y2I4MGI3YmE4MDA3MTdiNzkxMTcxOGIxZjE5NzhjNDgxYTY5ODFhOTp7Il9hdXRoX3VzZXJfaGFzaCI6IjY4MjgzMmVhYTljNzAyOGQ2ZjY1MzJlYThiMGI2YjkyOThiYzZkNmQiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiI4In0=",
+        "expire_date": "2016-12-12T21:53:52.125Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "uz4vll5803v6rp8ej29i4kcz1syaurst",
+    "fields": {
+        "session_data": "Y2I4MGI3YmE4MDA3MTdiNzkxMTcxOGIxZjE5NzhjNDgxYTY5ODFhOTp7Il9hdXRoX3VzZXJfaGFzaCI6IjY4MjgzMmVhYTljNzAyOGQ2ZjY1MzJlYThiMGI2YjkyOThiYzZkNmQiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiI4In0=",
+        "expire_date": "2016-12-02T01:40:24.523Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "yzwbjbu8mcqjij279110xh02r5bu5yxx",
+    "fields": {
+        "session_data": "Y2I4MGI3YmE4MDA3MTdiNzkxMTcxOGIxZjE5NzhjNDgxYTY5ODFhOTp7Il9hdXRoX3VzZXJfaGFzaCI6IjY4MjgzMmVhYTljNzAyOGQ2ZjY1MzJlYThiMGI2YjkyOThiYzZkNmQiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiI4In0=",
+        "expire_date": "2016-12-12T22:01:26.043Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "z3lkh5drpvmshv7le7qr2ipfcdaqjnu1",
+    "fields": {
+        "session_data": "Y2I4MGI3YmE4MDA3MTdiNzkxMTcxOGIxZjE5NzhjNDgxYTY5ODFhOTp7Il9hdXRoX3VzZXJfaGFzaCI6IjY4MjgzMmVhYTljNzAyOGQ2ZjY1MzJlYThiMGI2YjkyOThiYzZkNmQiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiI4In0=",
+        "expire_date": "2016-12-12T22:09:02.482Z"
+    }
+},
+{
+    "model": "sites.site",
+    "pk": 1,
+    "fields": {
+        "domain": "example.com",
+        "name": "example.com"
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 5,
+    "fields": {
+        "user": [
+            "buffysummers"
+        ],
+        "verified": false,
+        "description": null,
+        "location": null,
+        "links": null,
+        "date_joined": "2016-11-22T04:14:02.912Z",
+        "privacy": "inh"
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 6,
+    "fields": {
+        "user": [
+            "thewitch"
+        ],
+        "verified": false,
+        "description": "",
+        "location": "Sunnydale, CA",
+        "links": "",
+        "date_joined": "2016-11-22T04:14:02Z",
+        "privacy": "inh"
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 7,
+    "fields": {
+        "user": [
+            "giles"
+        ],
+        "verified": false,
+        "description": null,
+        "location": null,
+        "links": null,
+        "date_joined": "2016-11-22T04:14:02.912Z",
+        "privacy": "inh"
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 8,
+    "fields": {
+        "user": [
+            "5by5"
+        ],
+        "verified": false,
+        "description": null,
+        "location": null,
+        "links": null,
+        "date_joined": "2016-11-28T22:22:33.956Z",
+        "privacy": "inh"
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 9,
+    "fields": {
+        "user": [
+            "tara_m"
+        ],
+        "verified": false,
+        "description": null,
+        "location": null,
+        "links": null,
+        "date_joined": "2016-11-28T22:23:30.382Z",
+        "privacy": "inh"
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 10,
+    "fields": {
+        "user": [
+            "dru"
+        ],
+        "verified": false,
+        "description": null,
+        "location": null,
+        "links": null,
+        "date_joined": "2016-12-02T14:58:39.472Z",
+        "privacy": "inh"
+    }
+},
+{
+    "model": "profiles.profile",
+    "pk": 11,
+    "fields": {
+        "user": [
+            "admin"
+        ],
+        "verified": false,
+        "description": null,
+        "location": null,
+        "links": null,
+        "date_joined": "2016-12-02T15:01:21.108Z",
+        "privacy": "inh"
+    }
+},
+{
+    "model": "profiles.relationship",
+    "pk": 4,
+    "fields": {
+        "person_A": 6,
+        "person_B": 5,
+        "A_follows_B": true,
+        "B_follows_A": true,
+        "A_accountable_B": false,
+        "B_accountable_A": false,
+        "A_mutes_B": true,
+        "B_mutes_A": false
+    }
+},
+{
+    "model": "profiles.relationship",
+    "pk": 5,
+    "fields": {
+        "person_A": 7,
+        "person_B": 5,
+        "A_follows_B": true,
+        "B_follows_A": true,
+        "A_accountable_B": false,
+        "B_accountable_A": false,
+        "A_mutes_B": false,
+        "B_mutes_A": false
+    }
+},
+{
+    "model": "profiles.relationship",
+    "pk": 6,
+    "fields": {
+        "person_A": 5,
+        "person_B": 8,
+        "A_follows_B": false,
+        "B_follows_A": true,
+        "A_accountable_B": false,
+        "B_accountable_A": false,
+        "A_mutes_B": false,
+        "B_mutes_A": false
+    }
+},
+{
+    "model": "profiles.relationship",
+    "pk": 7,
+    "fields": {
+        "person_A": 5,
+        "person_B": 9,
+        "A_follows_B": true,
+        "B_follows_A": false,
+        "A_accountable_B": false,
+        "B_accountable_A": false,
+        "A_mutes_B": false,
+        "B_mutes_A": false
+    }
+},
+{
+    "model": "profiles.privacydefaults",
+    "pk": 5,
+    "fields": {
+        "profile": 5,
+        "global_default": "sit"
+    }
+},
+{
+    "model": "profiles.privacydefaults",
+    "pk": 6,
+    "fields": {
+        "profile": 6,
+        "global_default": "sit"
+    }
+},
+{
+    "model": "profiles.privacydefaults",
+    "pk": 7,
+    "fields": {
+        "profile": 7,
+        "global_default": "pub"
+    }
+},
+{
+    "model": "profiles.privacydefaults",
+    "pk": 8,
+    "fields": {
+        "profile": 8,
+        "global_default": "pub"
+    }
+},
+{
+    "model": "profiles.privacydefaults",
+    "pk": 9,
+    "fields": {
+        "profile": 9,
+        "global_default": "sit"
+    }
+},
+{
+    "model": "profiles.privacydefaults",
+    "pk": 10,
+    "fields": {
+        "profile": 10,
+        "global_default": "sit"
+    }
+},
+{
+    "model": "profiles.privacydefaults",
+    "pk": 11,
+    "fields": {
+        "profile": 11,
+        "global_default": "sit"
+    }
+},
+{
+    "model": "profiles.profileactionrelationship",
+    "pk": 15,
+    "fields": {
+        "profile": 6,
+        "action": 9,
+        "priority": "med",
+        "privacy": "inh",
+        "status": "ace",
+        "committed": false,
+        "suggested_by": "[\"shauna\"]",
+        "notes": null
+    }
+},
+{
+    "model": "profiles.profileactionrelationship",
+    "pk": 17,
+    "fields": {
+        "profile": 6,
+        "action": 11,
+        "priority": "med",
+        "privacy": "inh",
+        "status": "ace",
+        "committed": false,
+        "suggested_by": "",
+        "notes": ""
+    }
+},
+{
+    "model": "profiles.profileactionrelationship",
+    "pk": 18,
+    "fields": {
+        "profile": 7,
+        "action": 9,
+        "priority": "med",
+        "privacy": "inh",
+        "status": "don",
+        "committed": false,
+        "suggested_by": "",
+        "notes": ""
+    }
+},
+{
+    "model": "profiles.profileactionrelationship",
+    "pk": 19,
+    "fields": {
+        "profile": 8,
+        "action": 9,
+        "priority": "med",
+        "privacy": "inh",
+        "status": "sug",
+        "committed": false,
+        "suggested_by": "",
+        "notes": ""
+    }
+},
+{
     "model": "actions.actiontopic",
     "pk": 5,
     "fields": {
         "name": "Climate Change",
         "slug": "climate-change",
-        "text": ""
+        "description": ""
     }
 },
 {
@@ -76,7 +525,7 @@
     "fields": {
         "name": "Supreme Court",
         "slug": "supreme-court",
-        "text": ""
+        "description": ""
     }
 },
 {
@@ -85,7 +534,7 @@
     "fields": {
         "name": "Immigration",
         "slug": "immigration",
-        "text": ""
+        "description": ""
     }
 },
 {
@@ -94,7 +543,7 @@
     "fields": {
         "name": "Phone Campaign",
         "slug": "phone-campaign",
-        "text": ""
+        "description": ""
     }
 },
 {
@@ -103,7 +552,7 @@
     "fields": {
         "name": "Boycott",
         "slug": "boycott",
-        "text": ""
+        "description": ""
     }
 },
 {
@@ -112,7 +561,7 @@
     "fields": {
         "name": "Making Art",
         "slug": "art",
-        "text": ""
+        "description": ""
     }
 },
 {
@@ -121,7 +570,7 @@
     "fields": {
         "name": "Donation",
         "slug": "donation",
-        "text": ""
+        "description": ""
     }
 },
 {
@@ -133,15 +582,16 @@
         "creator": [
             "thewitch"
         ],
-        "anonymize": true,
+        "anonymize": false,
         "main_link": "www.fakelinktomoreinfo.com",
-        "text": "Here's some instructions!",
+        "description": "Here's some instructions!",
         "privacy": "inh",
         "location": "",
         "status": "rea",
         "has_deadline": false,
         "deadline": null,
-        "suggested_priority": "med",
+        "priority": "eme",
+        "date_created": "2016-11-22T04:14:02Z",
         "actiontypes": [
             4
         ],
@@ -159,13 +609,14 @@
         ],
         "anonymize": false,
         "main_link": "",
-        "text": "",
+        "description": "",
         "privacy": "pub",
         "location": "",
         "status": "rea",
         "has_deadline": false,
         "deadline": null,
-        "suggested_priority": "med",
+        "priority": "hig",
+        "date_created": "2016-11-25T04:14:02Z",
         "actiontypes": [
             4
         ],
@@ -185,13 +636,14 @@
         ],
         "anonymize": false,
         "main_link": "",
-        "text": "",
+        "description": "",
         "privacy": "sit",
         "location": "",
-        "status": "cre",
+        "status": "rea",
         "has_deadline": false,
         "deadline": null,
-        "suggested_priority": "med",
+        "priority": "med",
+        "date_created": "2016-11-23T04:14:02Z",
         "actiontypes": [
             7
         ],
@@ -199,47 +651,92 @@
     }
 },
 {
-    "model": "actions.slate",
-    "pk": 4,
+    "model": "actions.action",
+    "pk": 24,
     "fields": {
-        "slug": "november-saturday",
-        "title": "Saturday Action at November House",
+        "slug": "do-an-unproductive-thing",
+        "title": "Do an unproductive thing",
+        "creator": [
+            "thewitch"
+        ],
+        "anonymize": false,
+        "main_link": "",
+        "description": "Do a thing!  Edited to say: actually we should probably not do this thing.",
+        "privacy": "inh",
+        "location": "",
+        "status": "wit",
+        "has_deadline": false,
+        "deadline": null,
+        "priority": "med",
+        "date_created": "2016-12-02T14:52:20Z",
+        "actiontypes": [
+            7
+        ],
+        "topics": [
+            6
+        ]
+    }
+},
+{
+    "model": "actions.action",
+    "pk": 25,
+    "fields": {
+        "slug": "join-the-site",
+        "title": "Join the site",
+        "creator": [
+            "admin"
+        ],
+        "anonymize": false,
+        "main_link": "",
+        "description": "",
+        "privacy": "inh",
+        "location": "",
+        "status": "fin",
+        "has_deadline": false,
+        "deadline": null,
+        "priority": "low",
+        "date_created": "2016-12-02T15:04:48Z",
+        "actiontypes": [],
+        "topics": []
+    }
+},
+{
+    "model": "actions.slate",
+    "pk": 10,
+    "fields": {
+        "slug": "things-to-do-on-the-hellmouth",
+        "title": "Things to do on the Hellmouth",
         "creator": [
             "buffysummers"
         ],
-        "text": "Every Saturday at November House, we get together to take action.  Here's what we're working on.",
+        "description": "",
         "status": "rea",
-        "privacy": "pub"
+        "privacy": "inh",
+        "date_created": "2016-11-28T22:26:42Z"
     }
 },
 {
     "model": "actions.slateactionrelationship",
-    "pk": 16,
+    "pk": 31,
     "fields": {
-        "slate": 4,
+        "slate": 10,
         "action": 9,
         "priority": "med",
-        "privacy": "inh"
+        "privacy": "inh",
+        "status": "ace",
+        "notes": ""
     }
 },
 {
     "model": "actions.slateactionrelationship",
-    "pk": 17,
+    "pk": 32,
     "fields": {
-        "slate": 4,
-        "action": 10,
-        "priority": "med",
-        "privacy": "inh"
-    }
-},
-{
-    "model": "actions.slateactionrelationship",
-    "pk": 18,
-    "fields": {
-        "slate": 4,
+        "slate": 10,
         "action": 11,
         "priority": "med",
-        "privacy": "inh"
+        "privacy": "inh",
+        "status": "ace",
+        "notes": ""
     }
 },
 {
@@ -616,6 +1113,744 @@
         ],
         "object_id": "18",
         "object_repr": "SlateActionRelationship object",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 115,
+    "fields": {
+        "action_time": "2016-11-28T22:22:33.959Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "11",
+        "object_repr": "5by5",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 116,
+    "fields": {
+        "action_time": "2016-11-28T22:22:43.900Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "11",
+        "object_repr": "5by5",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"first_name\", \"last_name\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 117,
+    "fields": {
+        "action_time": "2016-11-28T22:23:30.384Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "12",
+        "object_repr": "tara_m",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 118,
+    "fields": {
+        "action_time": "2016-11-28T22:23:45.340Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "12",
+        "object_repr": "tara_m",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"first_name\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 119,
+    "fields": {
+        "action_time": "2016-11-28T22:24:08.410Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "profiles",
+            "privacydefaults"
+        ],
+        "object_id": "8",
+        "object_repr": "Privacy defaults for 5by5",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"global_default\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 120,
+    "fields": {
+        "action_time": "2016-11-28T22:24:14.154Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "profiles",
+            "privacydefaults"
+        ],
+        "object_id": "7",
+        "object_repr": "Privacy defaults for giles",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"global_default\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 121,
+    "fields": {
+        "action_time": "2016-11-28T22:25:23.417Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "profiles",
+            "profileactionrelationship"
+        ],
+        "object_id": "17",
+        "object_repr": "Relationship of profile thewitch and action Donate to Planned Parenthood",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 122,
+    "fields": {
+        "action_time": "2016-11-28T22:26:22.083Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "django_comments",
+            "comment"
+        ],
+        "object_id": "8",
+        "object_repr": "shauna: Another comment!...",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 123,
+    "fields": {
+        "action_time": "2016-11-28T22:26:22.087Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "django_comments",
+            "comment"
+        ],
+        "object_id": "7",
+        "object_repr": "shauna: A comment!...",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 124,
+    "fields": {
+        "action_time": "2016-11-28T22:26:22.090Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "django_comments",
+            "comment"
+        ],
+        "object_id": "6",
+        "object_repr": "shauna: I love slates....",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 125,
+    "fields": {
+        "action_time": "2016-11-28T22:26:22.093Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "django_comments",
+            "comment"
+        ],
+        "object_id": "5",
+        "object_repr": "shauna: And here's another comment....",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 126,
+    "fields": {
+        "action_time": "2016-11-28T22:26:22.096Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "django_comments",
+            "comment"
+        ],
+        "object_id": "4",
+        "object_repr": "shauna: I've got a comment yo....",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 127,
+    "fields": {
+        "action_time": "2016-11-28T22:26:22.099Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "django_comments",
+            "comment"
+        ],
+        "object_id": "3",
+        "object_repr": "shauna: I've got a comment to say!...",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 128,
+    "fields": {
+        "action_time": "2016-11-28T22:26:40.568Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "actions",
+            "slate"
+        ],
+        "object_id": "4",
+        "object_repr": "november-saturday",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 129,
+    "fields": {
+        "action_time": "2016-11-28T22:27:15.389Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "actions",
+            "slate"
+        ],
+        "object_id": "10",
+        "object_repr": "things-to-do-on-the-hellmouth",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 130,
+    "fields": {
+        "action_time": "2016-11-28T22:27:28.384Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "actions",
+            "slateactionrelationship"
+        ],
+        "object_id": "31",
+        "object_repr": "Relationship of slate: things-to-do-on-the-hellmouth and action: Denounce Trump's proposed appointment of Steve Bannon ",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 131,
+    "fields": {
+        "action_time": "2016-11-28T22:27:35.695Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "actions",
+            "slateactionrelationship"
+        ],
+        "object_id": "32",
+        "object_repr": "Relationship of slate: things-to-do-on-the-hellmouth and action: Donate to Planned Parenthood ",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 132,
+    "fields": {
+        "action_time": "2016-12-02T14:51:58.696Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "11",
+        "object_repr": "Donate to Planned Parenthood",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"status\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 133,
+    "fields": {
+        "action_time": "2016-12-02T14:55:55.450Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "24",
+        "object_repr": "Do an unproductive thing",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 134,
+    "fields": {
+        "action_time": "2016-12-02T14:56:10.381Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "24",
+        "object_repr": "Do an Unproductive Thing",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"title\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 135,
+    "fields": {
+        "action_time": "2016-12-02T14:56:27.089Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "24",
+        "object_repr": "Do an unproductive thing",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"title\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 136,
+    "fields": {
+        "action_time": "2016-12-02T14:56:47.053Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "profiles",
+            "relationship"
+        ],
+        "object_id": "5",
+        "object_repr": "Relationship of : giles and buffysummers",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"B_follows_A\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 137,
+    "fields": {
+        "action_time": "2016-12-02T14:56:50.904Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "profiles",
+            "relationship"
+        ],
+        "object_id": "4",
+        "object_repr": "Relationship of : thewitch and buffysummers",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 138,
+    "fields": {
+        "action_time": "2016-12-02T14:57:38.081Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "profiles",
+            "relationship"
+        ],
+        "object_id": "6",
+        "object_repr": "Relationship of : buffysummers and 5by5",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 139,
+    "fields": {
+        "action_time": "2016-12-02T14:57:52.153Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "profiles",
+            "relationship"
+        ],
+        "object_id": "7",
+        "object_repr": "Relationship of : buffysummers and tara_m",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 140,
+    "fields": {
+        "action_time": "2016-12-02T14:58:39.477Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "13",
+        "object_repr": "dru",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 141,
+    "fields": {
+        "action_time": "2016-12-02T14:58:47.820Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "13",
+        "object_repr": "dru",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"first_name\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 142,
+    "fields": {
+        "action_time": "2016-12-02T15:01:21.110Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "14",
+        "object_repr": "admin",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 143,
+    "fields": {
+        "action_time": "2016-12-02T15:01:38.659Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "14",
+        "object_repr": "admin",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"is_staff\", \"is_superuser\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 144,
+    "fields": {
+        "action_time": "2016-12-02T15:01:50.412Z",
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "8",
+        "object_repr": "buffysummers",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"is_staff\", \"is_superuser\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 145,
+    "fields": {
+        "action_time": "2016-12-02T15:05:08.630Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "25",
+        "object_repr": "Join the site",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 146,
+    "fields": {
+        "action_time": "2016-12-02T15:05:36.054Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "9",
+        "object_repr": "Denounce Trump's proposed appointment of Steve Bannon",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"priority\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 147,
+    "fields": {
+        "action_time": "2016-12-02T15:05:48.264Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "10",
+        "object_repr": "Sign petition to make Boston a sanctuary city",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"priority\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 148,
+    "fields": {
+        "action_time": "2016-12-02T15:06:06.969Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "25",
+        "object_repr": "Join the site",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"priority\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 149,
+    "fields": {
+        "action_time": "2016-12-02T15:18:27.166Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "11",
+        "object_repr": "Donate to Planned Parenthood",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"date_created\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 150,
+    "fields": {
+        "action_time": "2016-12-02T15:18:38.333Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "10",
+        "object_repr": "Sign petition to make Boston a sanctuary city",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"date_created\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 151,
+    "fields": {
+        "action_time": "2016-12-02T17:27:11.695Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "11",
+        "object_repr": "Donate to Planned Parenthood",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"anonymize\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 152,
+    "fields": {
+        "action_time": "2016-12-02T17:27:28.665Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "9",
+        "object_repr": "Denounce Trump's proposed appointment of Steve Bannon",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"anonymize\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 153,
+    "fields": {
+        "action_time": "2016-12-02T17:27:57.027Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "11",
+        "object_repr": "Donate to Planned Parenthood",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"anonymize\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 154,
+    "fields": {
+        "action_time": "2016-12-02T17:39:25.418Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "profiles",
+            "profileactionrelationship"
+        ],
+        "object_id": "18",
+        "object_repr": "Relationship of profile giles and action Denounce Trump's proposed appointment of Steve Bannon",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 155,
+    "fields": {
+        "action_time": "2016-12-02T17:39:42.190Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "profiles",
+            "profileactionrelationship"
+        ],
+        "object_id": "19",
+        "object_repr": "Relationship of profile 5by5 and action Denounce Trump's proposed appointment of Steve Bannon",
         "action_flag": 1,
         "change_message": "[{\"added\": {}}]"
     }
