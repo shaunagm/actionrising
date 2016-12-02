@@ -1,26 +1,26 @@
 Filter:
 
-<div class="btn-group" data-toggle="buttons">
+<div class="btn-group" data-toggle="buttons" id="filter-active-button">
   <label class="btn btn-primary">
     <input type="checkbox" autocomplete="off" id="filter-active"> Active Only
   </label>
  </div>
 
- <div class="btn-group" data-toggle="buttons">
+ <div class="btn-group" data-toggle="buttons" id="filter-friends-button">
   <label class="btn btn-primary">
     <input type="checkbox" autocomplete="off" id="filter-friends"> Friends Only
   </label>
 </div>
 
-<div class="btn-group" data-toggle="buttons">
+<div class="btn-group" data-toggle="buttons" id="filter-local-button">
  <label class="btn btn-primary">
    <input type="checkbox" autocomplete="off" id="filter-local"> Local Only
  </label>
 </div>
 
-<div class="btn-group">
-  <a href="#" class="btn btn-primary">Priority</a>
-  <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+<div class="btn-group" id="filter-priority-group">
+  <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+    Priority<span class="caret"></span></a>
   <ul class="dropdown-menu">
     <li><a class="filter-priority" href="#">Emergency</a></li>
     <li><a class="filter-priority" href="#">High</a></li>
@@ -31,9 +31,9 @@ Filter:
   </ul>
 </div>
 
-<div class="btn-group">
-  <a href="#" class="btn btn-primary">Deadline</a>
-  <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+<div class="btn-group" id="filter-deadline-group">
+  <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+    Deadline <span class="caret"></span></a>
   <ul class="dropdown-menu">
     <li><a class="filter-deadline" href="#">Today</a></li>
     <li><a class="filter-deadline" href="#">This Week</a></li>

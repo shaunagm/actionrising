@@ -4,7 +4,7 @@
 {% for status, par_list in action_status.items %}
     {% if par_list|length > 0 %}
         <h5>{% trans status %} ({{par_list|length}})</h5>
-        <ul>
+        <ul id={{status}}>
             {% for par in par_list %}
                 <li><a class="tracker-link" href="{{ par.profile.get_absolute_url }}">{{ par.profile.get_name }}</a></li>
             {% endfor %}

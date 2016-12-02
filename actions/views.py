@@ -37,7 +37,7 @@ class ActionView(UserPassesTestMixin, generic.DetailView):
 class ActionListView(LoginRequiredMixin, generic.ListView):
     template_name = "actions/actions.html"
     model = Action
-    queryset = Action.objects.filter(status="rea")
+    queryset = Action.objects.filter(status__in=["rea", "fin"])
 
 def create_action_helper(object, types, topics, user):
     object.creator = user
