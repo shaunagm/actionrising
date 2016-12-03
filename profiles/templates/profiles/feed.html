@@ -14,7 +14,16 @@
      <h2>Your Feed</h2>
       {% activity_stream 'user' user with_user_activity=True %}
       {% for action in stream %}
-          <div class="actstream-action">{% display_action action %}</div>
+          <div class="actstream-action">
+            <a href="{{ action.actor.get_absolute_url }}">{{ action.actor }}</a> {{ action.verb }}
+            {% if action.action_object %}
+            <a href="{{ action.action_object.get_absolute_url }}">{{ action.action_object }}</a> to
+            {% endif %}
+            <a href="{{ action.target.get_absolute_url }}">{{ action.target }}</a>
+          </div>
+          <div class="actstream-action-time">
+            {{ action.timestamp }}
+          </div>
       {% endfor %}
    </div>
 </div>
