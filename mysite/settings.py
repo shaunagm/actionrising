@@ -42,13 +42,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'datetimewidget',
     'bootstrap3',
-    'actstream',
     'mysite',
     'profiles',
     'actions',
     'flags',
     'functional_tests',
     'django_comments',
+    'actstream',
 ]
 
 MIDDLEWARE = [
@@ -172,3 +172,12 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 LOCALE_PATHS = (
     PROJECT_ROOT + '/website/locale',
 )
+
+
+ACTSTREAM_SETTINGS = {
+    'MANAGER': 'actstream.managers.ActionManager',
+    'FETCH_RELATIONS': True,
+    'USE_PREFETCH': True,
+    'USE_JSONFIELD': False,
+    'GFK_FETCH_DEPTH': 1,
+}

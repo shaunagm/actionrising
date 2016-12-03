@@ -4,6 +4,7 @@ import json
 from random import shuffle
 from itertools import chain
 
+from actstream import action
 from django.db import models
 from django.db.models.signals import post_save
 from django.core.urlresolvers import reverse
@@ -11,6 +12,7 @@ from django.utils import timezone
 
 from django.contrib.auth.models import User
 
+from actstream.actions import follow, unfollow
 from actions.models import Action, Slate
 from mysite.utils import (PRIVACY_CHOICES, PRIORITY_CHOICES, INDIVIDUAL_STATUS_CHOICES,
     PRIVACY_DEFAULT_CHOICES, check_privacy, get_global_privacy_default, disable_for_loaddata)
@@ -235,15 +237,19 @@ class Relationship(models.Model):
             if self.A_follows_B == True:
                 self.A_follows_B = False
                 self.A_accountable_B = False  # You can't be accountable to someone you don't follow
+                unfollow(self.person_A.user, self.person_B.user)
             else:
                 self.A_follows_B = True
+                follow(self.person_A.user, self.person_B.user, actor_only=False)
             result = self.A_follows_B
         elif current_profile == self.person_B:
             if self.B_follows_A == True:
                 self.B_follows_A = False
                 self.B_accountable_A = False  # You can't be accountable to someone you don't follow
+                unfollow(self.person_B.user, self.person_A.user)
             else:
                 self.B_follows_A = True
+                follow(self.person_B.user, self.person_A.user, actor_only=False)
             result = self.B_follows_A
         self.save()
         return result
@@ -363,3 +369,10 @@ class ProfileActionRelationship(models.Model):
         if suggester not in suggesters:
             suggesters.append(suggester)
         self.set_suggesters(suggesters)
+
+# I think we just want to track PAR for now.
+@disable_for_loaddata
+def par_handler(sender, instance, created, **kwargs):
+    if created:
+        action.send(instance.profile.user, verb='is taking action', target=instance.action)
+post_save.connect(par_handler, sender=ProfileActionRelationship)

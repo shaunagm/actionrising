@@ -2,6 +2,8 @@
 
 {% block content %}
 
+{% load activity_tags %}
+
 <div class="row">
    <div class="col-sm-3 col-sm-offset-1">
      <h2>People You Follow</h2>
@@ -10,9 +12,10 @@
 
    <div class="col-sm-6 col-sm-offset-1">
      <h2>Your Feed</h2>
-     <p>This feed is very much in progress!  Check back soon for a more comprehensive
-       and accurate feed.</p>
-      {% include 'profiles/friend_feed_include.html' with object_list=feed_data %}
+      {% activity_stream 'user' user with_user_activity=True %}
+      {% for action in stream %}
+          <div class="actstream-action">{% display_action action %}</div>
+      {% endfor %}
    </div>
 </div>
 

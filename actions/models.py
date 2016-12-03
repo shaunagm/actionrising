@@ -2,6 +2,8 @@ from __future__ import unicode_literals
 from itertools import chain
 import re, datetime
 
+from actstream import action
+from django.db.models.signals import post_save
 from django.utils import timezone
 from django.template.defaultfilters import slugify
 from django.core.urlresolvers import reverse
@@ -11,7 +13,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericRelation
 
 from mysite.utils import (PRIVACY_CHOICES, PRIORITY_CHOICES, STATUS_CHOICES,
-    INDIVIDUAL_STATUS_CHOICES, check_privacy)
+    INDIVIDUAL_STATUS_CHOICES, check_privacy, disable_for_loaddata)
 
 slug_validator = [
     RegexValidator(
@@ -222,6 +224,20 @@ class Action(models.Model):
                     return flag
         return "No flags"
 
+@disable_for_loaddata
+def action_handler(sender, instance, created, **kwargs):
+    if not created and (timezone.now() - instance.date_created).seconds < 600:
+        return  # Don't show updated if the action was created in the last ten minutes
+    verb_to_use = "created" if created else "updated"
+    if instance.get_creator() == "Anonymous":
+        # TODO: This is still going to be a problem if you change anonymity after creation,
+        # we'll need to break some of the following links after anonymizing.
+        action.send(instance, verb="was "+verb_to_use)
+    else:
+        action.send(instance.creator, verb=verb_to_use, target=instance)
+post_save.connect(action_handler, sender=Action)
+
+
 class Slate(models.Model):
     """Stores a single slate."""
     slug = models.CharField(max_length=50, unique=True, validators=slug_validator)
@@ -237,7 +253,7 @@ class Slate(models.Model):
     flags = GenericRelation('flags.Flag')
 
     def __unicode__(self):
-        return self.slug
+        return self.title
 
     def save(self, *args, **kwargs):
         if not self.pk:
@@ -290,6 +306,17 @@ class Slate(models.Model):
                     return flag
         return "No flags"
 
+@disable_for_loaddata
+def slate_handler(sender, instance, created, **kwargs):
+    if not created and (timezone.now() - instance.date_created).seconds < 600:
+        return  # Don't show updated if the slate was created in the last ten minutes
+    if created:
+        action.send(instance.creator, verb='created', target=instance)
+    else:
+        # TODO: Check if only the associated actions changed, and if so squash this
+        action.send(instance.creator, verb='updated', target=instance)
+post_save.connect(slate_handler, sender=Slate)
+
 class SlateActionRelationship(models.Model):
     """Stores relationship between a single slate and a single action."""
     slate = models.ForeignKey(Slate, on_delete=models.CASCADE)
@@ -314,3 +341,9 @@ class SlateActionRelationship(models.Model):
             return self.action.get_status_display()
         else:
             return self.get_status_display()
+
+@disable_for_loaddata
+def sar_handler(sender, instance, created, **kwargs):
+    if created:
+        action.send(instance.slate.creator, verb="added", action_object=instance.action, target=instance.slate)
+post_save.connect(sar_handler, sender=SlateActionRelationship)

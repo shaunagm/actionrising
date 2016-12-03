@@ -91,7 +91,6 @@ class FeedView(UserPassesTestMixin, generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(FeedView, self).get_context_data(**kwargs)
         context['profiles'] = self.object.profile.get_list_of_relationships()
-        context['feed_data'] = self.object.profile.get_follow_activity()
         return context
 
 def toggle_relationships_helper(toggle_type, current_profile, target_profile):
@@ -151,7 +150,7 @@ def manage_action_helper(par, form, user):
     for slate in form.cleaned_data['slates']:
         # TODO: Right now this is pretty inefficient.  Would be nice to show users which of
         # their slates already had this action added to them.
-        new_slate = Slate.objects.get(slug=slate)
+        new_slate = Slate.objects.get(slug=slate.slug)
         new_sar, created = SlateActionRelationship.objects.get_or_create(slate=new_slate, action=par.action)
 
 @login_required

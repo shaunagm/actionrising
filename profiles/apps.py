@@ -5,3 +5,11 @@ from django.apps import AppConfig
 
 class ProfilesConfig(AppConfig):
     name = 'profiles'
+
+    def ready(self):
+        from actstream import registry
+        registry.register(self.get_model('Profile'))
+        registry.register(self.get_model('ProfileActionRelationship'))
+        registry.register(self.get_model('Relationship'))
+        from django.contrib.auth.models import User
+        registry.register(User)
