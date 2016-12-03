@@ -7,7 +7,9 @@ register = template.Library()
 @register.assignment_tag(takes_context=True)
 def get_friendslist(context):
     user = context['request'].user
-    return [profile.user for profile in user.profile.get_connected_people()]
+    if user.is_authenticated():
+        return [profile.user for profile in user.profile.get_connected_people()]
+    return []
 
 @register.assignment_tag(takes_context=True)
 def get_relationship(context, target_user):
