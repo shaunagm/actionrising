@@ -201,4 +201,4 @@ EMAIL_USE_TLS = True
 
 PRODUCTION_DOMAIN = "http://www.actionrising.com"
 
-NOTIFY_EMAIL = "Action Rising <notify@www.actionrising.com>"   # was django-sparkpost@sparkpostbox.com
+NOTIFY_EMAIL = "ActionRising <notify@www.actionrising.com>"   # was django-sparkpost@sparkpostbox.com
