@@ -18,3 +18,6 @@ def change_password_redirect(request):
 
 def acme_challenge(request):
     return render(request, 'mysite/challenge.html')
+
+def acme_challenge2(request):
+    return render(request, 'mysite/challenge2.html')
