@@ -1,0 +1,92 @@
+domain = "http://www.actionrising.com"
+
+# Follow email templates
+FOLLOW_SUBJ = "%s is now following you on ActionRising"
+FOLLOW_PLAIN_MUTUAL = "%s is following you on ActionRising. You now follow each other!"
+FOLLOW_HTML_MUTUAL = "<a href='%s'>%s</a> is following you on ActionRising. You now follow each other!"
+FOLLOW_PLAIN_NEW = "%sis following you on ActionRising. You don't follow them, so consider following them back!"
+FOLLOW_HTML_NEW = "<a href='%s'>%s</a> is following you on ActionRising. You don't follow them, so consider following them back!"
+
+def generate_follow_email(follower, target):
+    relationship = target.get_relationship_given_profile(follower)
+    email_subject = FOLLOW_SUBJ % follower.get_name()
+    if relationship.current_profile_follows_target(target):
+        email_message = FOLLOW_PLAIN_MUTUAL % follower.get_name()
+        html_message = FOLLOW_HTML_MUTUAL % (follower.get_absolute_url_with_domain(),
+            follower.get_name())
+    else:
+        email_message = FOLLOW_PLAIN_NEW % follower.get_name()
+        html_message = FOLLOW_HTML_NEW % (follower.get_absolute_url_with_domain(),
+            follower.get_name())
+    return email_subject, email_message, html_message
+
+# Someone "taking" your action templates
+TAKE_ACTION_SUBJ = "%s is taking one of your actions on ActionRising"
+TAKE_ACTION_PLAIN = "%s is taking your action, %s.  Your action now has %s."
+TAKE_ACTION_HTML = "<a href='%s'>%s</a> is taking your action, <a href='%s'>%s</a>.  " \
+    "Your action now has %s."
+
+def generate_take_action_email(creator, instance):
+    actor = instance.actor.profile
+    action = instance.target
+    trackers = action.get_trackers(actor.user)['total_count']
+    tracker_string = "%s people tracking it" % trackers if trackers > 1 else "%s person tracking it" % trackers
+    email_subject = TAKE_ACTION_SUBJ % actor.get_name()
+    email_message = TAKE_ACTION_PLAIN % (actor.get_name(), action, tracker_string)
+    html_message = TAKE_ACTION_HTML % (actor.get_absolute_url_with_domain(),
+        actor.get_name(), action.get_absolute_url_with_domain(), action, tracker_string)
+    return email_subject, email_message, html_message
+
+# Add action to slate templates
+ADD_SLATE_SUBJ = "%s added your action to a slate on ActionRising"
+ADD_SLATE_PLAIN = "%s added your action %s to the slate %s.  Your action is now part of %s."
+ADD_SLATE_HTML = "<a href='%s'>%s</a> added your action <a href='%s'>%s</a> to the slate " \
+    "<a href='%s'>%s</a>.  Your action is now part of %s."
+
+def generate_add_to_slate_email(creator, instance):
+    adder = instance.actor.profile
+    action = instance.action_object
+    slate = instance.target
+    linked_slates = action.slate_set.count()
+    slate_string = "%s slates" % linked_slates if linked_slates > 1 else "%s slate" % linked_slates
+    email_subject = ADD_SLATE_SUBJ % adder.get_name()
+    email_message = ADD_SLATE_PLAIN % (adder.get_name(), action, slate, slate_string)
+    html_message = ADD_SLATE_HTML % (adder.get_absolute_url_with_domain(),
+        adder.get_name(), action.get_absolute_url_with_domain(), action,
+        slate.get_absolute_url_with_domain(), slate, slate_string)
+    return email_subject, email_message, html_message
+
+
+# Comment templates
+COMMENT_SUBJ = "%s commented on your action on ActionRising"
+COMMENT_PLAIN = "%s commented on your action %s."
+COMMENT_HTML = "<a href='%s'>%s</a> commented on your action <a href='%s'>%s</a>."
+
+def generate_comment_email(instance):
+    commenter = instance.actor.profile
+    action = instance.target
+    email_subject = COMMENT_SUBJ % commenter.get_name()
+    email_message = COMMENT_PLAIN % (commenter.get_name(), action)
+    html_message = COMMENT_HTML % (commenter.get_absolute_url_with_domain(),
+        commenter.get_name(), action.get_absolute_url_with_domain(), action)
+    return email_subject, email_message, html_message
+
+# Daily action template
+DAILY_SUBJ = "Your Daily Action from ActionRising"
+DAILY_YOURS_PLAIN = "Your action for today comes from your personal list of actions:\n\n" \
+    "%s\n\nReady to take action?"
+DAILY_YOURS_HTML = "Your action for today comes from your personal list of actions:<br /><br />" \
+    "<a href='%s'>%s</a><br /><br />Ready to take action?"
+DAILY_TOP_PLAIN = "Your action for today comes from the most popular actions on the site:\n\n" \
+    "%s\n\nReady to take action?"
+DAILY_TOP_HTML = "Your action for today comes from the most popular actions on the site:<br /><br />" \
+    "<a href='%s'>%s</a><br /><br />Ready to take action?"
+
+def generate_daily_action_email(action, kind):
+    if kind == "yours":
+        email_message = DAILY_YOURS_PLAIN % action
+        html_message = DAILY_YOURS_HTML % (action.get_absolute_url_with_domain(), action)
+    else:
+        email_message = DAILY_TOP_PLAIN % action
+        html_message = DAILY_TOP_HTML % (action.get_absolute_url_with_domain(), action)
+    return DAILY_SUBJ, email_message, html_message

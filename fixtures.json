@@ -4,7 +4,7 @@
     "pk": 8,
     "fields": {
         "password": "pbkdf2_sha256$30000$06Pt4s6XgY5h$pKAC05XglBrOj4rgJ+U1rESRqLnaRjclzVS7o1wJssA=",
-        "last_login": "2016-12-02T15:11:37.493Z",
+        "last_login": "2016-12-03T02:15:25.231Z",
         "is_superuser": false,
         "username": "buffysummers",
         "first_name": "Buffy",
@@ -112,12 +112,12 @@
     "pk": 14,
     "fields": {
         "password": "pbkdf2_sha256$30000$PRORrfnS2lz8$YQSVwqnLDtihtxFWOMTdcdyHgMv0S1XWjuT1rQzkTyY=",
-        "last_login": "2016-12-02T15:01:56.987Z",
+        "last_login": "2016-12-07T23:55:05.329Z",
         "is_superuser": true,
         "username": "admin",
         "first_name": "",
         "last_name": "",
-        "email": "",
+        "email": "shaunagm@gmail.com",
         "is_staff": true,
         "is_active": true,
         "date_joined": "2016-12-02T15:01:21Z",
@@ -167,18 +167,18 @@
 },
 {
     "model": "sessions.session",
-    "pk": "benq9qbni1icjikzjkwmi9otxesx9269",
-    "fields": {
-        "session_data": "MGFjOTJmYTAyZmVjNWExZjZhNmMwMWU3NjA2ZjcwNjBkMzlmNjdjNzp7Il9hdXRoX3VzZXJfaGFzaCI6IjliMTIwMjk2Zjg1NzE4ZTllYzhiYWI2ZWQyNThmNGJjZTY2ZGU4NzkiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIxNCJ9",
-        "expire_date": "2016-12-16T15:01:56.995Z"
-    }
-},
-{
-    "model": "sessions.session",
     "pk": "bmwbyzwy2nc7osdqavs7ffyeypt9dgvy",
     "fields": {
         "session_data": "Y2I4MGI3YmE4MDA3MTdiNzkxMTcxOGIxZjE5NzhjNDgxYTY5ODFhOTp7Il9hdXRoX3VzZXJfaGFzaCI6IjY4MjgzMmVhYTljNzAyOGQ2ZjY1MzJlYThiMGI2YjkyOThiYzZkNmQiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiI4In0=",
         "expire_date": "2016-12-12T22:03:58.997Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "cfd93293lj6u6mhzt9wea14ugtl0boqs",
+    "fields": {
+        "session_data": "MGFjOTJmYTAyZmVjNWExZjZhNmMwMWU3NjA2ZjcwNjBkMzlmNjdjNzp7Il9hdXRoX3VzZXJfaGFzaCI6IjliMTIwMjk2Zjg1NzE4ZTllYzhiYWI2ZWQyNThmNGJjZTY2ZGU4NzkiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIxNCJ9",
+        "expire_date": "2016-12-17T04:41:13.121Z"
     }
 },
 {
@@ -211,6 +211,14 @@
     "fields": {
         "session_data": "Y2I4MGI3YmE4MDA3MTdiNzkxMTcxOGIxZjE5NzhjNDgxYTY5ODFhOTp7Il9hdXRoX3VzZXJfaGFzaCI6IjY4MjgzMmVhYTljNzAyOGQ2ZjY1MzJlYThiMGI2YjkyOThiYzZkNmQiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiI4In0=",
         "expire_date": "2016-12-02T01:40:24.523Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "v5w4mm5ommk0nj7mq1fagv4trk7g4tvu",
+    "fields": {
+        "session_data": "MGFjOTJmYTAyZmVjNWExZjZhNmMwMWU3NjA2ZjcwNjBkMzlmNjdjNzp7Il9hdXRoX3VzZXJfaGFzaCI6IjliMTIwMjk2Zjg1NzE4ZTllYzhiYWI2ZWQyNThmNGJjZTY2ZGU4NzkiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIxNCJ9",
+        "expire_date": "2016-12-21T23:55:05.338Z"
     }
 },
 {
@@ -686,9 +694,9 @@
         "creator": [
             "admin"
         ],
-        "anonymize": false,
+        "anonymize": true,
         "main_link": "",
-        "description": "",
+        "description": "Let's see if this makes an activitystream update!?!?!!",
         "privacy": "inh",
         "location": "",
         "status": "fin",
@@ -741,7 +749,7 @@
         ],
         "description": "",
         "status": "rea",
-        "privacy": "inh",
+        "privacy": "pub",
         "date_created": "2016-12-02T21:43:05Z"
     }
 },
@@ -803,6 +811,1001 @@
         "privacy": "inh",
         "status": "ace",
         "notes": ""
+    }
+},
+{
+    "model": "notifications.notificationsettings",
+    "pk": 1,
+    "fields": {
+        "user": [
+            "buffysummers"
+        ],
+        "daily_action": true,
+        "use_own_actions_if_exist": true,
+        "weekly_summary": false,
+        "if_followed": true,
+        "if_actions_followed": true,
+        "if_comments_on_my_actions": true,
+        "if_my_actions_added_to_slate": true
+    }
+},
+{
+    "model": "notifications.notificationsettings",
+    "pk": 2,
+    "fields": {
+        "user": [
+            "giles"
+        ],
+        "daily_action": true,
+        "use_own_actions_if_exist": true,
+        "weekly_summary": false,
+        "if_followed": true,
+        "if_actions_followed": true,
+        "if_comments_on_my_actions": true,
+        "if_my_actions_added_to_slate": true
+    }
+},
+{
+    "model": "notifications.notificationsettings",
+    "pk": 3,
+    "fields": {
+        "user": [
+            "admin"
+        ],
+        "daily_action": true,
+        "use_own_actions_if_exist": true,
+        "weekly_summary": true,
+        "if_followed": true,
+        "if_actions_followed": true,
+        "if_comments_on_my_actions": true,
+        "if_my_actions_added_to_slate": true
+    }
+},
+{
+    "model": "notifications.notificationsettings",
+    "pk": 5,
+    "fields": {
+        "user": [
+            "thewitch"
+        ],
+        "daily_action": true,
+        "use_own_actions_if_exist": true,
+        "weekly_summary": false,
+        "if_followed": true,
+        "if_actions_followed": true,
+        "if_comments_on_my_actions": true,
+        "if_my_actions_added_to_slate": true
+    }
+},
+{
+    "model": "notifications.notificationsettings",
+    "pk": 6,
+    "fields": {
+        "user": [
+            "5by5"
+        ],
+        "daily_action": true,
+        "use_own_actions_if_exist": true,
+        "weekly_summary": false,
+        "if_followed": true,
+        "if_actions_followed": true,
+        "if_comments_on_my_actions": true,
+        "if_my_actions_added_to_slate": true
+    }
+},
+{
+    "model": "notifications.notificationsettings",
+    "pk": 7,
+    "fields": {
+        "user": [
+            "tara_m"
+        ],
+        "daily_action": true,
+        "use_own_actions_if_exist": true,
+        "weekly_summary": false,
+        "if_followed": true,
+        "if_actions_followed": true,
+        "if_comments_on_my_actions": true,
+        "if_my_actions_added_to_slate": true
+    }
+},
+{
+    "model": "notifications.notificationsettings",
+    "pk": 8,
+    "fields": {
+        "user": [
+            "dru"
+        ],
+        "daily_action": true,
+        "use_own_actions_if_exist": true,
+        "weekly_summary": false,
+        "if_followed": true,
+        "if_actions_followed": true,
+        "if_comments_on_my_actions": true,
+        "if_my_actions_added_to_slate": true
+    }
+},
+{
+    "model": "django_comments.comment",
+    "pk": 19,
+    "fields": {
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_pk": "9",
+        "site": [
+            "example.com"
+        ],
+        "user": [
+            "buffysummers"
+        ],
+        "user_name": "",
+        "user_email": "",
+        "user_url": "",
+        "comment": "",
+        "submit_date": "2016-12-08T01:00:27.057Z",
+        "ip_address": null,
+        "is_public": true,
+        "is_removed": false
+    }
+},
+{
+    "model": "django_comments.comment",
+    "pk": 20,
+    "fields": {
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_pk": "9",
+        "site": [
+            "example.com"
+        ],
+        "user": [
+            "buffysummers"
+        ],
+        "user_name": "",
+        "user_email": "",
+        "user_url": "",
+        "comment": "",
+        "submit_date": "2016-12-08T01:01:28.230Z",
+        "ip_address": null,
+        "is_public": true,
+        "is_removed": false
+    }
+},
+{
+    "model": "django_comments.comment",
+    "pk": 21,
+    "fields": {
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_pk": "9",
+        "site": [
+            "example.com"
+        ],
+        "user": [
+            "buffysummers"
+        ],
+        "user_name": "",
+        "user_email": "",
+        "user_url": "",
+        "comment": "",
+        "submit_date": "2016-12-08T01:01:40.923Z",
+        "ip_address": null,
+        "is_public": true,
+        "is_removed": false
+    }
+},
+{
+    "model": "django_comments.comment",
+    "pk": 22,
+    "fields": {
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_pk": "9",
+        "site": [
+            "example.com"
+        ],
+        "user": [
+            "buffysummers"
+        ],
+        "user_name": "",
+        "user_email": "",
+        "user_url": "",
+        "comment": "",
+        "submit_date": "2016-12-08T01:02:37.094Z",
+        "ip_address": null,
+        "is_public": true,
+        "is_removed": false
+    }
+},
+{
+    "model": "actstream.follow",
+    "pk": 8,
+    "fields": {
+        "user": [
+            "giles"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "8",
+        "actor_only": false,
+        "started": "2016-12-03T05:09:24.983Z"
+    }
+},
+{
+    "model": "actstream.follow",
+    "pk": 9,
+    "fields": {
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "10",
+        "actor_only": false,
+        "started": "2016-12-03T05:09:25.000Z"
+    }
+},
+{
+    "model": "actstream.follow",
+    "pk": 10,
+    "fields": {
+        "user": [
+            "thewitch"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "8",
+        "actor_only": false,
+        "started": "2016-12-03T05:09:25.026Z"
+    }
+},
+{
+    "model": "actstream.follow",
+    "pk": 11,
+    "fields": {
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "9",
+        "actor_only": false,
+        "started": "2016-12-03T05:09:25.039Z"
+    }
+},
+{
+    "model": "actstream.follow",
+    "pk": 13,
+    "fields": {
+        "user": [
+            "5by5"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "8",
+        "actor_only": false,
+        "started": "2016-12-03T05:09:25.088Z"
+    }
+},
+{
+    "model": "actstream.follow",
+    "pk": 15,
+    "fields": {
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "12",
+        "actor_only": false,
+        "started": "2016-12-03T05:09:25.116Z"
+    }
+},
+{
+    "model": "actstream.follow",
+    "pk": 17,
+    "fields": {
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "9",
+        "actor_only": false,
+        "started": "2016-12-03T05:09:25.164Z"
+    }
+},
+{
+    "model": "actstream.follow",
+    "pk": 19,
+    "fields": {
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "11",
+        "actor_only": false,
+        "started": "2016-12-03T05:09:25.215Z"
+    }
+},
+{
+    "model": "actstream.follow",
+    "pk": 21,
+    "fields": {
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "10",
+        "actor_only": false,
+        "started": "2016-12-03T05:09:25.257Z"
+    }
+},
+{
+    "model": "actstream.follow",
+    "pk": 22,
+    "fields": {
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "8",
+        "actor_only": false,
+        "started": "2016-12-03T05:09:25.290Z"
+    }
+},
+{
+    "model": "actstream.follow",
+    "pk": 23,
+    "fields": {
+        "user": [
+            "buffysummers"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "14",
+        "actor_only": false,
+        "started": "2016-12-03T05:09:25.301Z"
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 1,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "25",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-03T03:00:17.419Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 12,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "9",
+        "verb": "started following",
+        "description": null,
+        "target_content_type": [
+            "auth",
+            "user"
+        ],
+        "target_object_id": "8",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-03T03:36:16.223Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 13,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "8",
+        "verb": "started following",
+        "description": null,
+        "target_content_type": [
+            "auth",
+            "user"
+        ],
+        "target_object_id": "9",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-03T03:36:51.440Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 14,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "14",
+        "verb": "started following",
+        "description": null,
+        "target_content_type": [
+            "auth",
+            "user"
+        ],
+        "target_object_id": "11",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-03T03:38:04.535Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 15,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "14",
+        "verb": "started following",
+        "description": null,
+        "target_content_type": [
+            "auth",
+            "user"
+        ],
+        "target_object_id": "10",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-03T03:38:36.527Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 16,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "14",
+        "verb": "started following",
+        "description": null,
+        "target_content_type": [
+            "auth",
+            "user"
+        ],
+        "target_object_id": "8",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-03T03:39:11.707Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 20,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "14",
+        "verb": "created",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-03T03:45:40.126Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 21,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "14",
+        "verb": "updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-03T03:45:40.134Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 32,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "8",
+        "verb": "started following",
+        "description": null,
+        "target_content_type": [
+            "auth",
+            "user"
+        ],
+        "target_object_id": "14",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-03T04:04:38.534Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 37,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "14",
+        "verb": "started following",
+        "description": null,
+        "target_content_type": [
+            "auth",
+            "user"
+        ],
+        "target_object_id": "8",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-03T04:07:29.982Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 52,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "10",
+        "verb": "started following",
+        "description": null,
+        "target_content_type": [
+            "auth",
+            "user"
+        ],
+        "target_object_id": "8",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-03T05:09:24.987Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 53,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "8",
+        "verb": "started following",
+        "description": null,
+        "target_content_type": [
+            "auth",
+            "user"
+        ],
+        "target_object_id": "10",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-03T05:09:25.003Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 54,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "9",
+        "verb": "started following",
+        "description": null,
+        "target_content_type": [
+            "auth",
+            "user"
+        ],
+        "target_object_id": "8",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-03T05:09:25.030Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 55,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "8",
+        "verb": "started following",
+        "description": null,
+        "target_content_type": [
+            "auth",
+            "user"
+        ],
+        "target_object_id": "9",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-03T05:09:25.046Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 56,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "8",
+        "verb": "started following",
+        "description": null,
+        "target_content_type": [
+            "auth",
+            "user"
+        ],
+        "target_object_id": "11",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-03T05:09:25.068Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 57,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "11",
+        "verb": "started following",
+        "description": null,
+        "target_content_type": [
+            "auth",
+            "user"
+        ],
+        "target_object_id": "8",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-03T05:09:25.092Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 58,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "12",
+        "verb": "started following",
+        "description": null,
+        "target_content_type": [
+            "auth",
+            "user"
+        ],
+        "target_object_id": "8",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-03T05:09:25.109Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 59,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "8",
+        "verb": "started following",
+        "description": null,
+        "target_content_type": [
+            "auth",
+            "user"
+        ],
+        "target_object_id": "12",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-03T05:09:25.121Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 60,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "9",
+        "verb": "started following",
+        "description": null,
+        "target_content_type": [
+            "auth",
+            "user"
+        ],
+        "target_object_id": "14",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-03T05:09:25.157Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 61,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "14",
+        "verb": "started following",
+        "description": null,
+        "target_content_type": [
+            "auth",
+            "user"
+        ],
+        "target_object_id": "9",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-03T05:09:25.166Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 62,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "11",
+        "verb": "started following",
+        "description": null,
+        "target_content_type": [
+            "auth",
+            "user"
+        ],
+        "target_object_id": "14",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-03T05:09:25.202Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 63,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "14",
+        "verb": "started following",
+        "description": null,
+        "target_content_type": [
+            "auth",
+            "user"
+        ],
+        "target_object_id": "11",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-03T05:09:25.221Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 64,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "10",
+        "verb": "started following",
+        "description": null,
+        "target_content_type": [
+            "auth",
+            "user"
+        ],
+        "target_object_id": "14",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-03T05:09:25.250Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 65,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "14",
+        "verb": "started following",
+        "description": null,
+        "target_content_type": [
+            "auth",
+            "user"
+        ],
+        "target_object_id": "10",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-03T05:09:25.260Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 66,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "14",
+        "verb": "started following",
+        "description": null,
+        "target_content_type": [
+            "auth",
+            "user"
+        ],
+        "target_object_id": "8",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-03T05:09:25.292Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 67,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "8",
+        "verb": "started following",
+        "description": null,
+        "target_content_type": [
+            "auth",
+            "user"
+        ],
+        "target_object_id": "14",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-03T05:09:25.306Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 68,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "13",
+        "verb": "updated",
+        "description": null,
+        "target_content_type": [
+            "actions",
+            "slate"
+        ],
+        "target_object_id": "12",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-03T22:29:13.464Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 93,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "8",
+        "verb": "commented on",
+        "description": null,
+        "target_content_type": [
+            "actions",
+            "action"
+        ],
+        "target_object_id": "9",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2016-12-08T01:02:37.103Z",
+        "public": true
     }
 },
 {
@@ -2063,6 +3066,546 @@
         "object_repr": "Relationship of slate: high-stakes-slate-of-actions and action: Donate to Planned Parenthood ",
         "action_flag": 1,
         "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 164,
+    "fields": {
+        "action_time": "2016-12-03T22:29:13.476Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "slate"
+        ],
+        "object_id": "12",
+        "object_repr": "High stakes slate of actions",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"privacy\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 165,
+    "fields": {
+        "action_time": "2016-12-07T18:34:34.087Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "15",
+        "object_repr": "newtest",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 166,
+    "fields": {
+        "action_time": "2016-12-07T18:34:47.549Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "14",
+        "object_repr": "admin",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"email\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 167,
+    "fields": {
+        "action_time": "2016-12-07T23:55:33.485Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "36",
+        "object_repr": "Aheh",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 168,
+    "fields": {
+        "action_time": "2016-12-07T23:55:33.491Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "35",
+        "object_repr": "Timely no?",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 169,
+    "fields": {
+        "action_time": "2016-12-07T23:55:33.495Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "34",
+        "object_repr": "WOWEW",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 170,
+    "fields": {
+        "action_time": "2016-12-07T23:55:33.498Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "33",
+        "object_repr": "Why duplicate?",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 171,
+    "fields": {
+        "action_time": "2016-12-07T23:55:33.500Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "32",
+        "object_repr": "AHAHHAA",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 172,
+    "fields": {
+        "action_time": "2016-12-07T23:55:33.503Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "31",
+        "object_repr": "OH CAY",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 173,
+    "fields": {
+        "action_time": "2016-12-07T23:55:33.506Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "30",
+        "object_repr": "HEHEHHE",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 174,
+    "fields": {
+        "action_time": "2016-12-07T23:55:33.510Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "29",
+        "object_repr": "SO MUCH JUNK",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 175,
+    "fields": {
+        "action_time": "2016-12-07T23:55:33.512Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "28",
+        "object_repr": "YAY",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 176,
+    "fields": {
+        "action_time": "2016-12-07T23:55:33.515Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "27",
+        "object_repr": "YAY",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 177,
+    "fields": {
+        "action_time": "2016-12-07T23:55:33.517Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "26",
+        "object_repr": "Gonna be so much stuff to clean up in the fixtures",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 178,
+    "fields": {
+        "action_time": "2016-12-07T23:56:25.309Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "slate"
+        ],
+        "object_id": "15",
+        "object_repr": "I love slates",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 179,
+    "fields": {
+        "action_time": "2016-12-07T23:56:25.313Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "slate"
+        ],
+        "object_id": "14",
+        "object_repr": "So much to delete!",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 180,
+    "fields": {
+        "action_time": "2016-12-07T23:56:25.315Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "slate"
+        ],
+        "object_id": "13",
+        "object_repr": "Boring administrative things",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 181,
+    "fields": {
+        "action_time": "2016-12-07T23:56:47.198Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "15",
+        "object_repr": "newtest",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 182,
+    "fields": {
+        "action_time": "2016-12-07T23:57:30.172Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "django_comments",
+            "comment"
+        ],
+        "object_id": "15",
+        "object_repr": "newtest: ???ASDASDASD...",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 183,
+    "fields": {
+        "action_time": "2016-12-07T23:57:30.176Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "django_comments",
+            "comment"
+        ],
+        "object_id": "14",
+        "object_repr": "newtest: Mwaha!...",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 184,
+    "fields": {
+        "action_time": "2016-12-07T23:57:30.178Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "django_comments",
+            "comment"
+        ],
+        "object_id": "13",
+        "object_repr": "newtest: WOO...",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 185,
+    "fields": {
+        "action_time": "2016-12-07T23:57:30.181Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "django_comments",
+            "comment"
+        ],
+        "object_id": "12",
+        "object_repr": "newtest: AHE...",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 186,
+    "fields": {
+        "action_time": "2016-12-07T23:57:30.184Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "django_comments",
+            "comment"
+        ],
+        "object_id": "11",
+        "object_repr": "newtest: WOOO...",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 187,
+    "fields": {
+        "action_time": "2016-12-07T23:57:30.187Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "django_comments",
+            "comment"
+        ],
+        "object_id": "10",
+        "object_repr": "newtest: HEY!...",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 188,
+    "fields": {
+        "action_time": "2016-12-07T23:57:30.190Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "django_comments",
+            "comment"
+        ],
+        "object_id": "9",
+        "object_repr": "newtest: Woo I made a comment....",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 189,
+    "fields": {
+        "action_time": "2016-12-07T23:57:54.662Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "notifications",
+            "notificationsettings"
+        ],
+        "object_id": "3",
+        "object_repr": "Notification Settings for admin",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"weekly_summary\", \"if_followed\", \"if_comments_on_my_actions\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 190,
+    "fields": {
+        "action_time": "2016-12-08T02:05:39.205Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "profiles",
+            "relationship"
+        ],
+        "object_id": "11",
+        "object_repr": "Relationship of : admin and giles",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 191,
+    "fields": {
+        "action_time": "2016-12-08T02:05:39.212Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "profiles",
+            "relationship"
+        ],
+        "object_id": "10",
+        "object_repr": "Relationship of : admin and 5by5",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 192,
+    "fields": {
+        "action_time": "2016-12-08T02:05:39.215Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "profiles",
+            "relationship"
+        ],
+        "object_id": "9",
+        "object_repr": "Relationship of : admin and buffysummers",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 193,
+    "fields": {
+        "action_time": "2016-12-08T02:05:39.218Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "profiles",
+            "relationship"
+        ],
+        "object_id": "8",
+        "object_repr": "Relationship of : admin and thewitch",
+        "action_flag": 3,
+        "change_message": ""
     }
 }
 ]

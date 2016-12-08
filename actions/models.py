@@ -12,6 +12,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericRelation
 
+from mysite.settings import PRODUCTION_DOMAIN
+
 from mysite.utils import (PRIVACY_CHOICES, PRIORITY_CHOICES, STATUS_CHOICES,
     INDIVIDUAL_STATUS_CHOICES, check_privacy, disable_for_loaddata)
 
@@ -129,6 +131,9 @@ class Action(models.Model):
 
     def get_absolute_url(self):
         return reverse('action', kwargs={'slug': self.slug})
+
+    def get_absolute_url_with_domain(self):
+        return PRODUCTION_DOMAIN + self.get_absolute_url()
 
     def get_robust_url(self):
         try:
@@ -266,6 +271,9 @@ class Slate(models.Model):
 
     def get_absolute_url(self):
         return reverse('slate', kwargs={'slug': self.slug})
+
+    def get_absolute_url_with_domain(self):
+        return PRODUCTION_DOMAIN + self.get_absolute_url()
 
     def get_robust_url(self):
         try:

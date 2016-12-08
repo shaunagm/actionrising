@@ -9,11 +9,12 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.core.urlresolvers import reverse
 from django.utils import timezone
-
 from django.contrib.auth.models import User
 
+from mysite.settings import PRODUCTION_DOMAIN
 from actstream.actions import follow, unfollow
 from actions.models import Action, Slate
+from notifications.models import NotificationSettings
 from mysite.utils import (PRIVACY_CHOICES, PRIORITY_CHOICES, INDIVIDUAL_STATUS_CHOICES,
     PRIVACY_DEFAULT_CHOICES, check_privacy, get_global_privacy_default, disable_for_loaddata)
 
@@ -48,6 +49,9 @@ class Profile(models.Model):
 
     def get_absolute_url(self):
         return reverse('profile', kwargs={'slug': self.user.username })
+
+    def get_absolute_url_with_domain(self):
+        return PRODUCTION_DOMAIN + self.get_absolute_url()
 
     def get_edit_url(self):
         return reverse('edit_profile', kwargs={'pk': self.pk })
@@ -196,6 +200,7 @@ def create_user_profile(sender, instance, created, **kwargs):
     if created:
         profile = Profile.objects.create(user=instance)
         PrivacyDefaults.objects.create(profile=profile)
+        NotificationSettings.objects.create(user=instance)
 post_save.connect(create_user_profile, sender=User)
 
 class Relationship(models.Model):

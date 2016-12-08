@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'profiles',
     'actions',
     'flags',
+    'notifications',
     'functional_tests',
     'django_comments',
     'actstream',
@@ -174,6 +175,7 @@ LOCALE_PATHS = (
 )
 
 
+# Actstream
 ACTSTREAM_SETTINGS = {
     'MANAGER': 'actstream.managers.ActionManager',
     'FETCH_RELATIONS': True,
@@ -186,3 +188,12 @@ ACTSTREAM_SETTINGS = {
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+
+# Email
+EMAIL_HOST = 'smtp.sparkpostmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'SMTP_Injection'
+EMAIL_HOST_PASSWORD =  os.environ['SPARKPOST_API_KEY']
+EMAIL_USE_TLS = True
+
+PRODUCTION_DOMAIN = "http://www.actionrising.com"
