@@ -11,6 +11,7 @@ from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+from ckeditor.fields import RichTextField
 from mysite.settings import PRODUCTION_DOMAIN
 from actstream.actions import follow, unfollow
 from actions.models import Action, Slate
@@ -22,7 +23,7 @@ class Profile(models.Model):
     """Stores a single user profile"""
     user = models.OneToOneField(User, unique=True)
     verified = models.BooleanField(default=False)
-    description = models.CharField(max_length=2500, blank=True, null=True)  # TODO Rich text?
+    description = RichTextField(max_length=2500, blank=True, null=True)  # TODO Rich text?
     location = models.CharField(max_length=140, blank=True, null=True)
     links = models.CharField(max_length=400, blank=True, null=True)
     date_joined = models.DateTimeField(default=timezone.now)

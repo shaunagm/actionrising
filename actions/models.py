@@ -12,6 +12,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericRelation
 
+from ckeditor.fields import RichTextField
 from mysite.settings import PRODUCTION_DOMAIN
 
 from mysite.utils import (PRIVACY_CHOICES, PRIORITY_CHOICES, STATUS_CHOICES,
@@ -91,7 +92,7 @@ class Action(models.Model):
     creator = models.ForeignKey(User)
     anonymize = models.BooleanField(default=False)
     main_link = models.CharField(max_length=300, blank=True, null=True)
-    description = models.CharField(max_length=2500, blank=True, null=True)  # TODO Rich text?
+    description = RichTextField(max_length=2500, blank=True, null=True)  # TODO Rich text?
     # privacy default is inh == inherit
     privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
     location = models.CharField(max_length=140, blank=True, null=True)
@@ -248,7 +249,7 @@ class Slate(models.Model):
     slug = models.CharField(max_length=50, unique=True, validators=slug_validator)
     title = models.CharField(max_length=300)
     creator = models.ForeignKey(User)
-    description = models.CharField(max_length=2500, blank=True, null=True)  # TODO Rich text?
+    description = RichTextField(max_length=2500, blank=True, null=True)  # TODO Rich text?
     # status default is rea == open for action
     status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='rea')
     # default privacy is inh == inherit

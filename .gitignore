@@ -16,3 +16,6 @@ htmlcov
 
 # Pycharm
 .idea/*
+
+# Static files
+mysite/staticfiles/*

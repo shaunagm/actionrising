@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'notifications',
     'functional_tests',
     'django_comments',
+    'ckeditor',
     'actstream',
 ]
 
@@ -187,7 +188,7 @@ ACTSTREAM_SETTINGS = {
 # SSL settings
 
 import sys
-if sys.argv[1:2] != ['test']:
+if sys.argv[1:2] != ['test'] and sys.argv[1] != 'runserver':
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True

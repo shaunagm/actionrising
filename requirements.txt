@@ -2,6 +2,7 @@ coverage==4.2
 dj-database-url==0.4.1
 Django==1.10.3
 django-bootstrap3==7.1.0
+django-ckeditor==5.1.1
 django-contrib-comments==1.7.3
 django-datetime-widget==0.9.3
 django-jsonfield==1.0.1
