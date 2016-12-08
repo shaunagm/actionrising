@@ -15,3 +15,6 @@ def about(request):
 
 def change_password_redirect(request):
     return HttpResponseRedirect(reverse('profile', kwargs={'slug': request.user.username }))
+
+def acme_challenge(request):
+    return render(request, 'mysite/challenge.html')

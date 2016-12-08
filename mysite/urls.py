@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'^comments/', include('django_comments.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^about/?$', views.about, name='about'),
+    url(r'^.well-known/acme-challenge/MdzRdJXytZiBN7PYPMUbU6HjvFP2aUDEN8saHRXGBCY', views.acme_challenge),
     url(r'^$', views.index, name='index'),
     url('^activity/', include('actstream.urls')),
 ]
