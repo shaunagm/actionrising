@@ -120,9 +120,9 @@ def send_daily_actions():
             continue
         actions = user.profile.get_open_actions() if user.notificationsettings.use_own_actions_if_exist else []
         if actions:
-            email_subj, email_message, html_message = generate_daily_action_email(random.choice(actions), "yours")
+            email_subj, email_message, html_message = generate_daily_action_email(random.choice(actions), "yours", user.profile)
         else:
-            email_subj, email_message, html_message = generate_daily_action_email(random.choice(top_five_actions), "top")
+            email_subj, email_message, html_message = generate_daily_action_email(random.choice(top_five_actions), "top", user.profile)
         sent = send_mail(email_subj, email_message, 'django-sparkpost@sparkpostbox.com', # TODO: figure out a better looking host email
             [user.email], fail_silently=False, html_message=html_message)
 

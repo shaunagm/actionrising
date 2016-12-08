@@ -49,14 +49,14 @@ class FollowNotificationTests(TestCase):
         self.assertTrue(self.relationship.current_profile_follows_target(self.faith.profile))
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].body,
-            "faithlehaneis following you on ActionRising. You don't follow them, so consider following them back!")
+            "faithlehaneis following you on ActionRising. You don't follow them, so consider following them back!\n\nTo edit your notification settings, go to 'Your Profile' on www.actionrising.com.")
         # Now faith follows back
         self.faith.email = "faith@sunnydale.edu" # Add Faith's email first
         self.faith.save()
         self.relationship.toggle_following_for_current_profile(self.buffy.profile)
         self.assertEqual(len(mail.outbox), 2)
         self.assertEqual(mail.outbox[1].body,
-            "buffysummers is following you on ActionRising. You now follow each other!")
+            "buffysummers is following you on ActionRising. You now follow each other!\n\nTo edit your notification settings, go to 'Your Profile' on www.actionrising.com.")
 
 class TakeActionNotificationTests(TestCase):
 
