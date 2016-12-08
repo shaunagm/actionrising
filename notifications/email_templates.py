@@ -3,7 +3,7 @@ domain = "http://www.actionrising.com"
 def add_footer(email_message, html_message, profile):
     plain_footer = "\n\nTo edit your notification settings, go to 'Your Profile' on www.actionrising.com."
     html_footer = "<br /><br /><a href='%s'>Change your notification settings</a>." % profile.get_edit_url_with_domain()
-    return email_message + plain_footer, html_message + plain_footer
+    return email_message + plain_footer, html_message + html_footer
 
 # Follow email templates
 FOLLOW_SUBJ = "%s is now following you on ActionRising"

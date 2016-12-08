@@ -185,9 +185,12 @@ ACTSTREAM_SETTINGS = {
 }
 
 # SSL settings
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+
+import sys
+if sys.argv[1:2] != ['test']:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 
 # Email
 EMAIL_HOST = 'smtp.sparkpostmail.com'
@@ -197,3 +200,5 @@ EMAIL_HOST_PASSWORD =  os.environ['SPARKPOST_API_KEY']
 EMAIL_USE_TLS = True
 
 PRODUCTION_DOMAIN = "http://www.actionrising.com"
+
+NOTIFY_EMAIL = "Action Rising <notify@www.actionrising.com>"   # was django-sparkpost@sparkpostbox.com

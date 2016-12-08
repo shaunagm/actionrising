@@ -15,6 +15,7 @@ from actstream.models import Action
 from actions.models import Action as ActionRisingAction # TODO: Fix name collision
 from django.contrib.auth.models import User
 from mysite.utils import disable_for_loaddata
+from mysite.settings import NOTIFY_EMAIL
 from email_templates import (generate_follow_email, generate_add_to_slate_email,
     generate_take_action_email, generate_comment_email, generate_daily_action_email)
 
@@ -52,8 +53,8 @@ def send_follow_notification(instance):
     if target.notificationsettings.if_followed and target.email:
         notification = Notification.objects.create(user=target, event=instance)
         email_subj, email_message, html_message = generate_follow_email(follower.profile, target.profile)
-        sent = send_mail(email_subj, email_message, 'django-sparkpost@sparkpostbox.com', # TODO: figure out a better looking host email
-            [target.email], fail_silently=False, html_message=html_message)
+        sent = send_mail(email_subj, email_message, NOTIFY_EMAIL, [target.email],
+            fail_silently=False, html_message=html_message)
         if sent:
             notification.sent = True
             notification.save()
@@ -63,8 +64,8 @@ def send_take_action_notification(instance):
     if action_creator.notificationsettings.if_actions_followed and action_creator.email:
         notification = Notification.objects.create(user=action_creator, event=instance)
         email_subj, email_message, html_message = generate_take_action_email(action_creator.profile, instance)
-        sent = send_mail(email_subj, email_message, 'django-sparkpost@sparkpostbox.com', # TODO: figure out a better looking host email
-            [action_creator.email], fail_silently=False, html_message=html_message)
+        sent = send_mail(email_subj, email_message, NOTIFY_EMAIL, [action_creator.email],
+            fail_silently=False, html_message=html_message)
         if sent:
             notification.sent = True
             notification.save()
@@ -74,8 +75,8 @@ def send_added_to_slate_notification(instance):
     if action_creator.notificationsettings.if_my_actions_added_to_slate and action_creator.email:
         notification = Notification.objects.create(user=action_creator, event=instance)
         email_subj, email_message, html_message = generate_add_to_slate_email(action_creator.profile, instance)
-        sent = send_mail(email_subj, email_message, 'django-sparkpost@sparkpostbox.com', # TODO: figure out a better looking host email
-            [action_creator.email], fail_silently=False, html_message=html_message)
+        sent = send_mail(email_subj, email_message, NOTIFY_EMAIL, [action_creator.email],
+            fail_silently=False, html_message=html_message)
         if sent:
             notification.sent = True
             notification.save()
@@ -85,8 +86,8 @@ def send_comment_notification(instance):
     if action_creator.notificationsettings.if_comments_on_my_actions and action_creator.email:
         notification = Notification.objects.create(user=action_creator, event=instance)
         email_subj, email_message, html_message = generate_comment_email(instance)
-        sent = send_mail(email_subj, email_message, 'django-sparkpost@sparkpostbox.com', # TODO: figure out a better looking host email
-            [action_creator.email], fail_silently=False, html_message=html_message)
+        sent = send_mail(email_subj, email_message, NOTIFY_EMAIL, [action_creator.email],
+            fail_silently=False, html_message=html_message)
         if sent:
             notification.sent = True
             notification.save()
@@ -123,8 +124,7 @@ def send_daily_actions():
             email_subj, email_message, html_message = generate_daily_action_email(random.choice(actions), "yours", user.profile)
         else:
             email_subj, email_message, html_message = generate_daily_action_email(random.choice(top_five_actions), "top", user.profile)
-        sent = send_mail(email_subj, email_message, 'django-sparkpost@sparkpostbox.com', # TODO: figure out a better looking host email
-            [user.email], fail_silently=False, html_message=html_message)
+        sent = send_mail(email_subj, email_message, NOTIFY_EMAIL, [user.email], fail_silently=False, html_message=html_message)
 
 # TODO: Weekly summary: chron job sometime on weekend, calculates your activity and sitewide activity,
 # sends.
