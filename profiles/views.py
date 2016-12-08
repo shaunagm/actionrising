@@ -96,7 +96,7 @@ class FeedView(UserPassesTestMixin, generic.DetailView):
 def toggle_relationships_helper(toggle_type, current_profile, target_profile):
     relationship = current_profile.get_relationship_given_profile(target_profile)
     if not relationship:
-        relationship = Relationship(person_A=current_profile, person_B=target_profile)
+        relationship = Relationship.objects.create(person_A=current_profile, person_B=target_profile)
     if toggle_type == 'follow':
         return relationship.toggle_following_for_current_profile(current_profile)
     elif toggle_type == 'account':
