@@ -29,8 +29,9 @@ class ProfileView(UserPassesTestMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ProfileView, self).get_context_data(**kwargs)
-        context['created_actions'] = self.object.profile.get_most_recent_actions_created(self.request.user)
-        context['tracked_actions'] = self.object.profile.get_most_recent_actions_tracked(self.request.user)
+        if self.request.user.is_authenticated():
+            context['created_actions'] = self.object.profile.get_most_recent_actions_created(self.request.user)
+            context['tracked_actions'] = self.object.profile.get_most_recent_actions_tracked(self.request.user)
         return context
 
 class ProfileEditView(UserPassesTestMixin, generic.UpdateView):
