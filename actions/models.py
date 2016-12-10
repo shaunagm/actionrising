@@ -16,7 +16,7 @@ from ckeditor.fields import RichTextField
 from mysite.settings import PRODUCTION_DOMAIN
 
 from mysite.utils import (PRIVACY_CHOICES, PRIORITY_CHOICES, STATUS_CHOICES,
-    INDIVIDUAL_STATUS_CHOICES, check_privacy, disable_for_loaddata)
+    INDIVIDUAL_STATUS_CHOICES, disable_for_loaddata)
 
 slug_validator = [
     RegexValidator(
@@ -156,29 +156,6 @@ class Action(models.Model):
             return "Anonymous"
         else:
             return "<a href='" + self.get_action_creator_link() + "'>" + self.creator.username + "</a>"
-
-    def get_slates(self, user):
-        anonymous_count = 0
-        public_list = []
-        for slate in self.slate_set.all():
-            if check_privacy(slate, user):
-                public_list.append(slate)
-            else:
-                anonymous_count += 1
-        return {'anonymous_count': anonymous_count,
-                'total_count': anonymous_count + len(public_list),
-                'public_list': public_list }
-
-    def get_trackers(self, user):
-        anonymous_count = 0
-        public_list = []
-        for profile in self.profile_set.all():
-            if check_privacy(profile, user):
-                public_list.append(profile)
-            else:
-                anonymous_count += 1
-        return {'anonymous_count': anonymous_count, 'total_count': anonymous_count + len(public_list),
-            'public_list': public_list }
 
     def is_active(self):
         if self.status == "rea":  # Arguably we should add 'in creation' too

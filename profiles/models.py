@@ -17,7 +17,7 @@ from actstream.actions import follow, unfollow
 from actions.models import Action, Slate
 from notifications.models import NotificationSettings
 from mysite.utils import (PRIVACY_CHOICES, PRIORITY_CHOICES, INDIVIDUAL_STATUS_CHOICES,
-    PRIVACY_DEFAULT_CHOICES, check_privacy, get_global_privacy_default, disable_for_loaddata)
+    PRIVACY_DEFAULT_CHOICES, disable_for_loaddata)
 
 class Profile(models.Model):
     """Stores a single user profile"""
@@ -92,47 +92,23 @@ class Profile(models.Model):
         else:
             return "Unknown"
 
-    def get_object_to_check(self, object, profile):
-        '''Given object and profile, returns PAR if it exists'''
-        if type(object) == ProfileActionRelationship:
-            return object
-        par = ProfileActionRelationship.objects.filter(profile=profile, action=object).first()
-        if par:
-            return par
-        return object  # Created actions won't have a par
-
-    def vet_actions(self, potential_actions, user, privacy=True, status=True):
-        actions = []
-        for action in potential_actions:
-            obj_to_check = self.get_object_to_check(action, user.profile)
-            if privacy and not check_privacy(obj_to_check, user):
-                continue
-            if status and obj_to_check.get_status() != "Accepted":
-                continue
-            actions.append(action)
-        return actions
-
     def get_most_recent_actions_created(self, user):
-        actions = self.vet_actions(self.user.action_set.all(), user, status=False)
+        actions = self.user.action_set.filter(status__in=["rea", "fin"])
         if len(actions) > 5:
             return actions[-5:]
         return actions
 
     def get_most_recent_actions_tracked(self, user):
-        actions = self.vet_actions(self.actions.all(), user)
+        actions = self.user.actions.filter(status__in=["rea", "fin"])
         if len(actions) > 5:
             return actions[-5:]
         return actions
 
     def get_open_actions(self, user=None):
-        if not user:
-            user = self.user
-        actions = self.vet_actions(self.actions.all(), user, privacy=False)
-        return actions
+        return self.user.actions.filter(status="rea")
 
     def get_open_pars(self, user):
-        pars = self.vet_actions(self.profileactionrelationship_set.all(), user, privacy=False)
-        return pars
+        return ProfileActionRelationship.objects.filter(profile=self, status="rea")
 
     def get_suggested_actions(self):
         return ProfileActionRelationship.objects.filter(profile=self, status="sug")
@@ -162,38 +138,7 @@ class Profile(models.Model):
             if rel.current_profile_follows_target(self) and not rel.current_profile_mutes_target(self):
                 people.append(person.user)
         return people
-
-    def get_follow_activity(self):
-        # This is sooo hacky but will do until activity streams is set up
-        people_tracking = self.get_people_tracking()
-        activity = []
-        action_list = Action.objects.all().order_by('-pk')
-        actions = action_list[:20] if len(action_list) > 20 else action_list
-        for action in actions:
-            if action.creator in people_tracking:
-                temp_string = "<a href='%s'>%s</a> created action <a href='%s'>%s</a>" \
-                    % (action.creator.profile.get_absolute_url(), action.creator.username,
-                    action.get_absolute_url(), action.title)
-                activity.append(temp_string)
-        slate_list = Slate.objects.all().order_by('-pk')
-        slates = slate_list[:20] if len(slate_list) > 20 else slate_list
-        for slate in slates:
-            if slate.creator in people_tracking:
-                temp_string = "<a href='%s'>%s</a> created slate <a href='%s'>%s</a>" \
-                    % (slate.creator.profile.get_absolute_url(), slate.creator.username,
-                    slate.get_absolute_url(), slate.title)
-                activity.append(temp_string)
-        par_list = ProfileActionRelationship.objects.all().order_by('-pk')
-        pars = par_list[:20] if len(par_list) > 20 else par_list
-        for par in pars:
-            if par.profile.user in people_tracking:
-                temp_string = "<a href='%s'>%s</a> accepted action <a href='%s'>%s</a>" \
-                    % (par.profile.get_absolute_url(), par.profile.user.username,
-                    par.action.get_absolute_url(), par.action.title)
-                activity.append(temp_string)
-        shuffle(activity)
-        return activity
-
+        
     # Add methods to save and access links as json objects
 
     # Add links to get specific kinds of links, so that Twitter for instance can be displayed with the
