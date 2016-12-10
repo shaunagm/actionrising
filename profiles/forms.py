@@ -41,7 +41,7 @@ class ProfileActionRelationshipForm(ModelForm):
 
     class Meta:
         model = ProfileActionRelationship
-        fields = ['priority', 'privacy', 'status', 'notes']
+        fields = ['priority', 'status', 'notes']
 
     def __init__(self, *args, **kwargs):
         if 'par' in kwargs:
@@ -49,7 +49,5 @@ class ProfileActionRelationshipForm(ModelForm):
             super(ProfileActionRelationshipForm, self).__init__(*args, **kwargs)
             self.fields['profiles'].queryset = par.profile.get_followers()
             self.fields['slates'].queryset = par.profile.user.slate_set.all()
-            NEW_CHOICES = (PRIVACY_CHOICES[0], PRIVACY_CHOICES[1], ('inh', get_global_privacy_string(par)))
-            self.fields['privacy'].choices = NEW_CHOICES
         else:
             super(ProfileActionRelationshipForm, self).__init__(*args, **kwargs)

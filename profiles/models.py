@@ -336,8 +336,6 @@ class ProfileActionRelationship(models.Model):
     action = models.ForeignKey(Action, on_delete=models.CASCADE)
     # default priority is med == medium
     priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='med')
-    # default privacy is inh == inherit
-    privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
     # default status is ace == accepted
     status = models.CharField(max_length=3, choices=INDIVIDUAL_STATUS_CHOICES, default='ace')
     committed = models.BooleanField(default=False)

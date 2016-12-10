@@ -111,13 +111,6 @@ class Action(models.Model):
     #      which looks at has_deadline and returns either no deadline,
     #      deadline not yet passed, or deadline passed.
 
-    # TODO Add get_privacy field
-    #      which displays the privacy setting dependent on whether it's your
-    #      action, and what "inherit" is. (For now, it's just getting the
-    #      field directly, which is not ideal. Inherit will need to be
-    #      calculated each time, so we might want current_privacy generated
-    #      from privacy
-
     def __unicode__(self):
         return self.title
 
@@ -168,8 +161,7 @@ class Action(models.Model):
         anonymous_count = 0
         public_list = []
         for slate in self.slate_set.all():
-            sar = slate.get_sar_given_action(self)
-            if check_privacy(sar, user):
+            if check_privacy(slate, user):
                 public_list.append(slate)
             else:
                 anonymous_count += 1
@@ -180,10 +172,9 @@ class Action(models.Model):
     def get_trackers(self, user):
         anonymous_count = 0
         public_list = []
-        for person in self.profile_set.all():
-            par = person.get_par_given_action(self)
-            if check_privacy(par, user):
-                public_list.append(person)
+        for profile in self.profile_set.all():
+            if check_privacy(profile, user):
+                public_list.append(profile)
             else:
                 anonymous_count += 1
         return {'anonymous_count': anonymous_count, 'total_count': anonymous_count + len(public_list),
@@ -332,8 +323,6 @@ class SlateActionRelationship(models.Model):
     action = models.ForeignKey(Action, on_delete=models.CASCADE)
     # default priority is med == medium
     priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='med')
-    # default privacy is inh == inherit
-    privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
     # default status is ace == accepted
     status = models.CharField(max_length=3, choices=INDIVIDUAL_STATUS_CHOICES, default='ace')
     notes = models.CharField(max_length=2500, blank=True, null=True)

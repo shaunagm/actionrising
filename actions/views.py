@@ -190,7 +190,6 @@ def manage_action_for_slate(request, pk):
     if request.method == 'POST':
         form = SlateActionRelationshipForm(request.POST)
         if form.is_valid():
-            sar.privacy = form.cleaned_data['privacy']
             sar.priority = form.cleaned_data['priority']
             sar.status = form.cleaned_data['status']
             sar.notes = form.cleaned_data['notes']
@@ -200,6 +199,6 @@ def manage_action_for_slate(request, pk):
             context = {'form': form, 'sar': sar }
             render(request, 'actions/manage_action_for_slate.html', context)
     else:
-        form = SlateActionRelationshipForm(sar=sar, initial={'privacy': sar.privacy, 'priority': sar.priority, 'status': sar.status, 'notes': sar.notes})
+        form = SlateActionRelationshipForm(initial={'priority': sar.priority, 'status': sar.status, 'notes': sar.notes})
         context = {'form': form, 'sar': sar}
         return render(request, 'actions/manage_action_for_slate.html', context)

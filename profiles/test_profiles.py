@@ -257,9 +257,9 @@ class TestManageActionView(TestCase):
         self.mock_form = MockForm()
 
     def test_changes_fields_from_defaults(self):
-        self.assertEqual([self.par.priority, self.par.privacy, self.par.status], ["med", "inh", "ace"])
+        self.assertEqual([self.par.priority, self.par.status], ["med", "ace"])
         manage_action_helper(self.par, self.mock_form, self.buffy)
-        self.assertEqual([self.par.priority, self.par.privacy, self.par.status], ["hig", "pub", "rea"])
+        self.assertEqual([self.par.priority, self.par.status], ["hig", "rea"])
 
     def test_make_new_par_for_profile(self):
         with self.assertRaises(ObjectDoesNotExist):

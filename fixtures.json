@@ -469,7 +469,6 @@
         "profile": 6,
         "action": 9,
         "priority": "med",
-        "privacy": "inh",
         "status": "ace",
         "committed": false,
         "suggested_by": "[\"shauna\"]",
@@ -483,7 +482,6 @@
         "profile": 6,
         "action": 11,
         "priority": "med",
-        "privacy": "inh",
         "status": "ace",
         "committed": false,
         "suggested_by": "",
@@ -497,7 +495,6 @@
         "profile": 7,
         "action": 9,
         "priority": "med",
-        "privacy": "inh",
         "status": "don",
         "committed": false,
         "suggested_by": "",
@@ -511,7 +508,6 @@
         "profile": 8,
         "action": 9,
         "priority": "med",
-        "privacy": "inh",
         "status": "sug",
         "committed": false,
         "suggested_by": "",
@@ -760,7 +756,6 @@
         "slate": 10,
         "action": 9,
         "priority": "med",
-        "privacy": "inh",
         "status": "ace",
         "notes": ""
     }
@@ -772,7 +767,6 @@
         "slate": 10,
         "action": 11,
         "priority": "med",
-        "privacy": "inh",
         "status": "ace",
         "notes": ""
     }
@@ -784,7 +778,6 @@
         "slate": 12,
         "action": 25,
         "priority": "med",
-        "privacy": "inh",
         "status": "ace",
         "notes": ""
     }
@@ -796,7 +789,6 @@
         "slate": 12,
         "action": 10,
         "priority": "med",
-        "privacy": "inh",
         "status": "ace",
         "notes": ""
     }
@@ -808,7 +800,6 @@
         "slate": 12,
         "action": 11,
         "priority": "eme",
-        "privacy": "inh",
         "status": "ace",
         "notes": ""
     }

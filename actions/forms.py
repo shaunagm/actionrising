@@ -45,13 +45,4 @@ class SlateActionRelationshipForm(ModelForm):
 
     class Meta:
         model = SlateActionRelationship
-        fields = ['priority', 'privacy', 'status', 'notes']
-
-    def __init__(self, *args, **kwargs):
-        if 'sar' in kwargs:
-            sar = kwargs.pop('sar')
-            super(SlateActionRelationshipForm, self).__init__(*args, **kwargs)
-            NEW_CHOICES = (PRIVACY_CHOICES[0], PRIVACY_CHOICES[1], ('inh', get_global_privacy_string(sar)))
-            self.fields['privacy'].choices = NEW_CHOICES
-        else:
-            super(SlateActionRelationshipForm, self).__init__(*args, **kwargs)
+        fields = ['priority', 'status', 'notes']

@@ -84,39 +84,27 @@ class TestPrivacyUtils(TestCase):
             ["pub", "sit"])
 
     def test_check_privacy_of_par(self):
-        # The global default is sitewide, so before changes, Buffy should have access
-        # and Anon should not
-        self.assertTrue(check_privacy(self.par, self.buffy))
-        self.assertFalse(check_privacy(self.par, self.anon))
+        # PAR privacy is set to the profile's privacy.  The global default is sitewide,
+        # so before changes, Buffy should have access and Anon should not
+        # TODO: soon PAR privacy will be set to the more restrictive of Action or Profile,
+        # update the tests then
+        self.assertTrue(check_privacy(self.par.profile, self.buffy))
+        self.assertFalse(check_privacy(self.par.profile, self.anon))
         # Now we set the global default to pub and everyone can access
         self.faith.profile.privacy_defaults.global_default = "pub"
         self.faith.profile.privacy_defaults.save()
-        self.assertTrue(check_privacy(self.par, self.buffy))
-        self.assertTrue(check_privacy(self.par, self.anon))
-        # Now let's make access more restrictive on the individual objects
-        self.par.privacy = "sit"
-        self.par.save()
-        self.assertTrue(check_privacy(self.par, self.buffy))
-        self.assertFalse(check_privacy(self.par, self.anon))
-        # And let's just check that the actual fields are what we expect, because why not
-        self.assertEqual([self.faith.profile.privacy_defaults.global_default, self.par.privacy],
-            ["pub", "sit"])
+        self.assertTrue(check_privacy(self.par.profile, self.buffy))
+        self.assertTrue(check_privacy(self.par.profile, self.anon))
 
     def test_check_privacy_of_sar(self):
-        # The global default is sitewide, so before changes, Buffy should have access
-        # and Anon should not
-        self.assertTrue(check_privacy(self.sar, self.buffy))
-        self.assertFalse(check_privacy(self.sar, self.anon))
+        # SAR privacy is set to the slate's privacy.  The global default is sitewide,
+        # so before changes, Buffy should have access and Anon should not.
+        # TODO: soon SAR privacy will be set to the more restrictive of Action or Slate,
+        # update the tests then
+        self.assertTrue(check_privacy(self.sar.slate, self.buffy))
+        self.assertFalse(check_privacy(self.sar.slate, self.anon))
         # Now we set the global default to pub and everyone can access
         self.faith.profile.privacy_defaults.global_default = "pub"
         self.faith.profile.privacy_defaults.save()
-        self.assertTrue(check_privacy(self.sar, self.buffy))
-        self.assertTrue(check_privacy(self.sar, self.anon))
-        # Now let's make access more restrictive on the individual objects
-        self.sar.privacy = "sit"
-        self.sar.save()
-        self.assertTrue(check_privacy(self.sar, self.buffy))
-        self.assertFalse(check_privacy(self.sar, self.anon))
-        # And let's just check that the actual fields are what we expect, because why not
-        self.assertEqual([self.faith.profile.privacy_defaults.global_default, self.sar.privacy],
-            ["pub", "sit"])
+        self.assertTrue(check_privacy(self.sar.slate, self.buffy))
+        self.assertTrue(check_privacy(self.sar.slate, self.anon))
