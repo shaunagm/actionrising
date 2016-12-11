@@ -22,7 +22,7 @@ class ActionForm(ModelForm):
     def __init__(self, user, *args, **kwargs):
         super(ActionForm, self).__init__(*args, **kwargs)
         self.fields['deadline'].widget.attrs['placeholder'] = 'MM/DD/YYYY HH:MM:SS (hours, minutes and seconds optional, defaults to midnight)'
-        NEW_CHOICES = (PRIVACY_CHOICES[0], PRIVACY_CHOICES[1], ('inh', get_global_privacy_string(user.profile)))
+        NEW_CHOICES = (PRIVACY_CHOICES[0], PRIVACY_CHOICES[1], PRIVACY_CHOICES[2], ('inh', get_global_privacy_string(user.profile)))
         self.fields['privacy'].choices = NEW_CHOICES
         self.fields['actiontypes'].label = "Types of action"
 
@@ -38,7 +38,7 @@ class SlateForm(ModelForm):
         # May want to override that behavior and populate the queryset with open actions
         # plus currently linked actions?
         self.fields['actions'].queryset = Action.objects.filter(status="rea").filter(privacy__in=["pub", "sit"]).order_by("title")
-        NEW_CHOICES = (PRIVACY_CHOICES[0], PRIVACY_CHOICES[1], ('inh', get_global_privacy_string(user.profile)))
+        NEW_CHOICES = (PRIVACY_CHOICES[0], PRIVACY_CHOICES[1], PRIVACY_CHOICES[2], ('inh', get_global_privacy_string(user.profile)))
         self.fields['privacy'].choices = NEW_CHOICES
 
 class SlateActionRelationshipForm(ModelForm):

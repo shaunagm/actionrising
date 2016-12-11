@@ -43,6 +43,11 @@ class ProfileEditView(UserPassesTestMixin, generic.UpdateView):
         obj = self.get_object()
         return obj.user == self.request.user
 
+    def get_form_kwargs(self):
+        form_kws = super(ProfileEditView, self).get_form_kwargs()
+        form_kws["user"] = self.request.user
+        return form_kws
+
     def get_success_url(self, **kwargs):
         return self.object.get_absolute_url()
 

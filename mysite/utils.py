@@ -3,8 +3,7 @@ from django.utils.translation import ugettext as _
 PRIVACY_CHOICES = (
     ('pub', _('Visible to Public')),
     ('sit', _('Visible Sitewide')),
-    # ('fol', 'Visible to Buddies and Those You Follow'),
-    # ('bud', 'Visible to Buddies'),
+    ('fol', _('Visible to Follows')),
     # ('you', 'Only Visible to You'),
     ('inh', _('Inherit')),
 )
@@ -12,6 +11,7 @@ PRIVACY_CHOICES = (
 PRIVACY_DEFAULT_CHOICES = (
     ('pub', _('Visible to Public')),
     ('sit', _('Visible Sitewide')),
+    ('fol', _('Visible to Follows')),
     # ('fol', 'Visible to Buddies and Those You Follow'),
     # ('bud', 'Visible to Buddies'),
     # ('you', 'Only Visible to You'),
@@ -62,6 +62,13 @@ def get_global_privacy_default(object, shortname=True):
     else:
         return pd.get_global_default_display()
 
+def get_follows(object):
+    if object.get_cname() == "Profile":
+        profile = object
+    if object.get_cname() in ["Slate", "Action"]:
+        profile = object.creator.profile
+    return profile.get_people_tracking()
+
 def check_privacy(object, user):
     if check_for_ownership(object, user):
         return True
@@ -74,6 +81,10 @@ def check_privacy(object, user):
         return True
     if privacy_setting == "sit" and user.is_authenticated():
         return True
+    if privacy_setting == "fol":
+        follows = get_follows(object)
+        if user in follows:
+            return True
     return False
 
 def filter_list_for_privacy(object_list, user):

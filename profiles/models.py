@@ -98,23 +98,23 @@ class Profile(models.Model):
         else:
             return "Unknown"
 
-    def get_most_recent_actions_created(self, user):
+    def get_most_recent_actions_created(self):
         actions = self.user.action_set.filter(status__in=["rea", "fin"])
         if len(actions) > 5:
             return actions[-5:]
         return actions
 
-    def get_most_recent_actions_tracked(self, user):
-        actions = self.user.actions.filter(status__in=["rea", "fin"])
+    def get_most_recent_actions_tracked(self):
+        actions = self.user.action_set.filter(status__in=["rea", "fin"])
         if len(actions) > 5:
             return actions[-5:]
         return actions
 
-    def get_open_actions(self, user=None):
+    def get_open_actions(self):
         actions = [par.action for par in self.profileactionrelationship_set.filter(status="ace")]
         return [action for action in actions if action.status == "rea"]
 
-    def get_open_pars(self, user):
+    def get_open_pars(self):
         return ProfileActionRelationship.objects.filter(profile=self, status="ace")
 
     def get_suggested_actions(self):
@@ -130,7 +130,10 @@ class Profile(models.Model):
 
     def get_list_of_relationships(self):
         people = []
+        print("la")
         for person in self.get_connected_people():
+            print("AHAHAH")
+            print(person)
             rel = self.get_relationship_given_profile(person)
             follows_you = rel.target_follows_current_profile(self)
             muted = rel.current_profile_mutes_target(self)

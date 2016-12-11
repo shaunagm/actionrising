@@ -55,7 +55,7 @@ class TestProfileMethods(TestCase):
         self.assertEqual(par.pk, self.par.pk)
 
     def test_get_open_actions(self):
-        self.assertEqual(self.buffy.profile.get_open_actions(self.buffy), [self.action])
+        self.assertEqual(self.buffy.profile.get_open_actions(), [self.action])
 
     def test_get_suggested_actions(self):
         self.par.status = "sug"

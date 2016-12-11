@@ -15,12 +15,14 @@ class ProfileForm(ModelForm):
 
     class Meta:
         model = Profile
-        fields = ['description', 'location']
+        fields = ['description', 'privacy', 'location']
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, user, *args, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)
         self.fields['privacy_default'].help_text = 'This setting will apply to all actions and slates you create unless you override them individually.'
         self.fields['privacy_default'].initial = self.instance.privacy_defaults.global_default
+        NEW_CHOICES = (PRIVACY_CHOICES[0], PRIVACY_CHOICES[1], PRIVACY_CHOICES[2], ('inh', get_global_privacy_string(user.profile)))
+        self.fields['privacy'].choices = NEW_CHOICES
 
     def save(self, commit=True):
         self.instance.privacy_defaults.global_default = self.cleaned_data['privacy_default']
