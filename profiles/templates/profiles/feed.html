@@ -3,6 +3,7 @@
 {% block content %}
 
 {% load activity_tags %}
+{% load profile_extras %}
 
 <div class="row">
    <div class="col-sm-3 col-sm-offset-1">
@@ -14,6 +15,8 @@
      <h2>Your Feed</h2>
       {% activity_stream 'user' user with_user_activity=True %}
       {% for action in stream %}
+        {% filtered_feed action as filtered_action %}
+        {% if filtered_action %}
           <div class="actstream-action">
             <a href="{{ action.actor.profile.get_absolute_url }}">{{ action.actor }}</a> {{ action.verb }}
             {% if action.action_object %}
@@ -24,6 +27,7 @@
           <div class="actstream-action-time">
             {{ action.timestamp }}
           </div>
+        {% endif %}
       {% endfor %}
    </div>
 </div>

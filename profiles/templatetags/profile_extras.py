@@ -1,5 +1,6 @@
 from django import template
-from mysite.utils import INDIVIDUAL_STATUS_CHOICES
+from django.contrib.auth.models import User
+from mysite.utils import INDIVIDUAL_STATUS_CHOICES, check_privacy
 from profiles.models import ProfileActionRelationship, Profile, Relationship
 
 register = template.Library()
@@ -45,3 +46,19 @@ def get_action_status(context, public_list):
         action_status[par.status].append(par)
 
     return action_status
+
+@register.assignment_tag(takes_context=True)
+def filtered_feed(context, action):
+    user = context['request'].user
+    if not check_privacy(action.actor.profile, user):
+        return []
+    if action.target is not None:
+        if type(action.target) == User:
+            if not check_privacy(action.target.profile, user):
+                return []
+        else:
+            if not check_privacy(action.target, user):
+                return []
+    if action.action_object is not None and not check_privacy(action.action_object, user):
+        return []
+    return action
