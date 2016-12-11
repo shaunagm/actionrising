@@ -57,22 +57,33 @@
      <h3 class="text-info">How does privacy work here?</h3>
 
      <p>Good question!  Your privacy is very important to us, but it's also something that
-       takes time to get right.  Currently we <span class="text-danger"><b><u>cannot promise you</u></b></span>
+       takes time and resources to get right.  Currently we <span class="text-danger"><b><u>cannot guarantee you</u></b></span>
        any kind of privacy.  All we can do is tell you how things are supposed to work and promise
        a prompt response to any requests to delete data or ban bad actors.</p>
 
-     <p>Here's how things currently work.  There are two possible privacy settings, "public" and "sitewide".
-       The former is visible to anyone on the internet, while the latter is only visible to logged in users.
-       (Sign up to the site will always be limited, but we can't promise that no one with bad intentions will
-       get access.)  When editing
-       your profile, you can choose a "default" privacy setting.  Any actions or slates you create will
-       have this privacy setting by default unless you specifically override it.  Note that if you
-       change your default, it will change the privacy of all past actions or slates that you did not override
-       previously.</p>
+     <p>There are three possible privacy settings: public, sitewide, and follows only. The first
+       is visible to anyone on the internet, the second to anyone with an account on the site,
+       and the third only to people you follow. You can pick one of these settings as your
+       <a href='{{ user.profile.get_edit_url }}'>global default</a>. Your profile page and any
+       actions or slates you create will have this default privacy setting unless you
+       specifically override it.  Because this is a site for sharing information,
+       we recommend you set your default to 'public', but it's up to you.</p>
 
-     <p>We plan to add "completely private" and "friends only" privacy fields, set up email notifications when
-       someone changes the privacy setting of something you've commented on, and to do a thorough
-       security audit.</p>
+     <p>Some notes about how we implement privacy, for those who want the nitty gritty details:
+       <ul>
+         <li>If you change your default privacy setting, this will change the settings
+          of all past actions, slates, etc that were not overridden.</li>
+         <li>When multiple privacy settings are in play, we err on the side of privacy.
+          So, for instance, if we're trying to decide whether to display the fact that
+          person A is taking action B, we check both the privacy settings of person A
+          and action B.  Unless the viewer has access to both person A and action B, they
+          will not see anything displayed.</i>
+          <li>You can also choose to make an action "anonymous".  This prevents the action
+          from naming you as the creator or linking back to your profile, but it is not
+          'truly' anonymous.  You'll still be able to edit your anonymous action and see
+          it in your lists of created actions.</li>
+       </ul>
+     </p>
 
      <p>Philosophically, our goal is to give you the greatest control over your privacy possible.  Please
        let us know if there are ways we can improve.</p>
