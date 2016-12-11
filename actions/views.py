@@ -118,8 +118,10 @@ class SlateView(UserPassesTestMixin, generic.DetailView):
         context['can_edit_actions'] = True if self.object.creator == self.request.user else False
         context['is_slate'] = True
         context['flag'] = self.object.is_flagged_by_user(self.request.user, new_only=False)
-        context['actions'] = filter_list_for_privacy(self.object.slateactionrelationship_set.all(),
+        annotated_list = filter_list_for_privacy_annotated(self.object.slateactionrelationship_set.all(),
             self.request.user)
+        context['actions'] = annotated_list['public_list']
+        context['hidden_actions'] = annotated_list['anonymous_count']
         return context
 
     def test_func(self):

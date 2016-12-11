@@ -1,0 +1,15 @@
+{% if hidden_actions %}
+<div class="row">
+   <div class="col-sm-10 col-sm-offset-1 extra-margin-row" id="description">
+         <p class="text-info">This slate has {{ hidden_actions }} private
+           action{{ hidden_actions|pluralize }}.
+           {% if user.is_authenticated %}
+              These actions may have been set to 'friends only'. Ask the slate
+              creator for details.
+           {% else %}
+              Try <a href="{% url 'login' %}">logging in</a> to access them.
+           {% endif %}
+           </p>
+   </div>
+</div>
+{% endif %}
