@@ -14,7 +14,7 @@ from actstream.models import following, followers
 from actstream.models import Action
 from actions.models import Action as ActionRisingAction # TODO: Fix name collision
 from django.contrib.auth.models import User
-from mysite.utils import disable_for_loaddata
+from mysite.utils import disable_for_loaddata, check_privacy, check_privacy_given_setting
 from mysite.settings import NOTIFY_EMAIL
 from email_templates import (generate_follow_email, generate_add_to_slate_email,
     generate_take_action_email, generate_comment_email, generate_daily_action_email)
@@ -62,6 +62,9 @@ def send_follow_notification(instance):
 def send_take_action_notification(instance):
     action_creator = instance.target.creator
     if action_creator.notificationsettings.if_actions_followed and action_creator.email:
+        actor_privacy_setting = instance.actor.profile.privacy_defaults.global_default
+        if not check_privacy_given_setting(actor_privacy_setting, instance.actor, action_creator):
+            return
         notification = Notification.objects.create(user=action_creator, event=instance)
         email_subj, email_message, html_message = generate_take_action_email(action_creator.profile, instance)
         sent = send_mail(email_subj, email_message, NOTIFY_EMAIL, [action_creator.email],
@@ -73,6 +76,11 @@ def send_take_action_notification(instance):
 def send_added_to_slate_notification(instance):
     action_creator = instance.action_object.creator
     if action_creator.notificationsettings.if_my_actions_added_to_slate and action_creator.email:
+        actor_privacy_setting = instance.actor.profile.privacy_defaults.global_default
+        if not check_privacy_given_setting(actor_privacy_setting, instance.actor, action_creator):
+            return
+        if not check_privacy(instance.target, action_creator):
+            return
         notification = Notification.objects.create(user=action_creator, event=instance)
         email_subj, email_message, html_message = generate_add_to_slate_email(action_creator.profile, instance)
         sent = send_mail(email_subj, email_message, NOTIFY_EMAIL, [action_creator.email],

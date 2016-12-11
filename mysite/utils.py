@@ -69,14 +69,7 @@ def get_follows(object):
         profile = object.creator.profile
     return profile.get_people_tracking()
 
-def check_privacy(object, user):
-    if check_for_ownership(object, user):
-        return True
-    if object.get_cname() == "ProfileActionRelationship":
-        return check_privacy(object.profile, user) and check_privacy(object.action, user)
-    if object.get_cname() == "SlateActionRelationship":
-        return check_privacy(object.slate, user) and check_privacy(object.action, user)
-    privacy_setting = get_global_privacy_default(object) if object.privacy == "inh" else object.privacy
+def check_privacy_given_setting(privacy_setting, object, user):
     if privacy_setting == "pub":
         return True
     if privacy_setting == "sit" and user.is_authenticated():
@@ -86,6 +79,16 @@ def check_privacy(object, user):
         if user in follows:
             return True
     return False
+
+def check_privacy(object, user):
+    if check_for_ownership(object, user):
+        return True
+    if object.get_cname() == "ProfileActionRelationship":
+        return check_privacy(object.profile, user) and check_privacy(object.action, user)
+    if object.get_cname() == "SlateActionRelationship":
+        return check_privacy(object.slate, user) and check_privacy(object.action, user)
+    privacy_setting = get_global_privacy_default(object) if object.privacy == "inh" else object.privacy
+    return check_privacy_given_setting(privacy_setting, object, user)
 
 def filter_list_for_privacy(object_list, user):
     return [obj for obj in object_list if check_privacy(obj, user)]
