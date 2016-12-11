@@ -695,7 +695,7 @@
         "description": "Let's see if this makes an activitystream update!?!?!!",
         "privacy": "inh",
         "location": "",
-        "status": "fin",
+        "status": "rea",
         "has_deadline": false,
         "deadline": null,
         "priority": "low",
@@ -729,7 +729,7 @@
             "giles"
         ],
         "description": "",
-        "status": "fin",
+        "status": "rea",
         "privacy": "inh",
         "date_created": "2016-12-02T21:42:10Z"
     }

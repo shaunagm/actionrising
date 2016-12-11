@@ -5,8 +5,8 @@
     {% if object.location %}
         <i id="location-info" class="fa fa-globe" aria-hidden="true"> {{ object.get_location }}</i>
     {% endif %}
-    {% if object.get_privacy %}
-        <i id="privacy-info" class="fa fa-eye" aria-hidden="true"> {{ object.get_privacy }} </i>
+    {% if object.current_privacy %}
+        <i id="privacy-info" class="fa fa-eye" aria-hidden="true"> {{ object.get_current_privacy_display }} </i>
     {% endif %}
     {% if object.get_status_display %}
         <i id="status-info" class="fa fa-space-shuttle" aria-hidden="true"> {{ object.get_status_display }} </i>

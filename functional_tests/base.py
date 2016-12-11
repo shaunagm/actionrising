@@ -1,7 +1,8 @@
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.test import override_settings
 from selenium import webdriver
 
-
+@override_settings(DEBUG=True)
 class SeleniumTestCase(StaticLiveServerTestCase):
 
     fixtures = ['fixtures.json']

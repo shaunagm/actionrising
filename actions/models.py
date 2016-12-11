@@ -95,6 +95,7 @@ class Action(models.Model):
     description = RichTextField(max_length=2500, blank=True, null=True)  # TODO Rich text?
     # privacy default is inh == inherit
     privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
+    current_privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='sit')
     location = models.CharField(max_length=140, blank=True, null=True)
     # status default is rea == open for action
     status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='rea')
@@ -117,6 +118,8 @@ class Action(models.Model):
     def save(self, *args, **kwargs):
         if not self.pk:
             self.slug = slugify_helper(Action, self.title)
+        if self.privacy != "inh" and self.privacy != self.current_privacy:
+            self.current_privacy = self.privacy
         super(Action, self).save(*args, **kwargs)
 
     def get_cname(self):
@@ -169,12 +172,6 @@ class Action(models.Model):
         else:
             return "Unknown"
 
-    def get_privacy(self):
-        if self.privacy == "inh":
-            return self.creator.profile.privacy_defaults.get_global_default_display()
-        else:
-            return self.get_privacy_display()
-
     def get_status(self):
         # Added for conveniences' sake in vet_actions function
         return self.get_status_display()
@@ -222,6 +219,7 @@ class Slate(models.Model):
     status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='rea')
     # default privacy is inh == inherit
     privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
+    current_privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='sit')
     actions = models.ManyToManyField(Action, through='SlateActionRelationship')
     date_created = models.DateTimeField(default=timezone.now)
     flags = GenericRelation('flags.Flag')
@@ -232,6 +230,9 @@ class Slate(models.Model):
     def save(self, *args, **kwargs):
         if not self.pk:
             self.slug = slugify_helper(Slate, self.title)
+        else:
+            if self.privacy != "inh" and self.privacy != self.current_privacy:
+                self.current_privacy = self.privacy
         super(Slate, self).save(*args, **kwargs)
 
     def get_cname(self):
@@ -267,12 +268,6 @@ class Slate(models.Model):
             return True
         else:
             return False
-
-    def get_privacy(self):
-        if self.privacy == "inh":
-            return self.creator.profile.privacy_defaults.get_global_default_display()
-        else:
-            return self.get_privacy_display()
 
     def is_flagged_by_user(self, user, new_only=False):
         for flag in self.flags.all():

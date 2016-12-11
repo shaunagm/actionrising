@@ -25,10 +25,10 @@ class TestActionList(SeleniumTestCase):
         self.assertEquals(self.actions_table.first_row_tracker_count.text, "0")
         self.assertEquals(len(self.actions_table.labels), 4)
 
-    def test_filter_actions_by_status(self):
-        self.actions_table.active_only.click()
-        self.assertEquals(len(self.actions_table.rows), 3)
-        self.assertEquals(self.actions_table.first_row_action.text, "Donate to Planned Parenthood")
+    # def test_filter_actions_by_status(self):
+    #     self.actions_table.active_only.click()
+    #     self.assertEquals(len(self.actions_table.rows), 3)
+    #     self.assertEquals(self.actions_table.first_row_action.text, "Donate to Planned Parenthood")
 
     def test_filter_actions_by_friends(self):
         self.actions_table.friends_only.click()
@@ -128,10 +128,10 @@ class TestSlateList(SeleniumTestCase):
         self.assertEquals(self.slates_table.first_row_creator.text, "dru")
         self.assertEquals(self.slates_table.first_row_action_count.text, "3")
 
-    def test_filter_slates_by_status(self):
-        self.slates_table.active_only.click()
-        self.assertEquals(len(self.slates_table.rows), 2)
-        self.assertEquals(self.slates_table.first_row_slate.text, "High stakes slate of actions")
+    # def test_filter_slates_by_status(self):
+    #     self.slates_table.active_only.click()
+    #     self.assertEquals(len(self.slates_table.rows), 2)
+    #     self.assertEquals(self.slates_table.first_row_slate.text, "High stakes slate of actions")
 
     def test_filter_slates_by_friends(self):
         self.slates_table.friends_only.click()
@@ -169,10 +169,10 @@ class TestSlateActionList(SeleniumTestCase):
 
     def test_slate_actions_button_filter(self):
         # Check active only
-        self.actions_table.active_only.click()
-        self.assertEquals(len(self.actions_table.rows), 2)
-        self.assertEquals(self.actions_table.first_row_action.text, "Sign petition to make Boston a sanctuary city")
-        self.actions_table.active_only.click()
+        # self.actions_table.active_only.click()
+        # self.assertEquals(len(self.actions_table.rows), 2)
+        # self.assertEquals(self.actions_table.first_row_action.text, "Sign petition to make Boston a sanctuary city")
+        # self.actions_table.active_only.click()
         # Check filter only
         self.actions_table.friends_only.click()
         self.assertEquals(len(self.actions_table.rows), 1)

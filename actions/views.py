@@ -7,7 +7,7 @@ from django.views import generic
 from django.contrib.auth.mixins import UserPassesTestMixin,  LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
-from mysite.utils import check_privacy
+from mysite.utils import check_privacy, filter_list_for_privacy, filter_list_for_privacy_annotated
 from django.contrib.auth.models import User
 from actions.models import Action, ActionTopic, ActionType, Slate, SlateActionRelationship
 from actions.forms import ActionForm, SlateForm, SlateActionRelationshipForm
@@ -23,8 +23,8 @@ class ActionView(UserPassesTestMixin, generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(ActionView, self).get_context_data(**kwargs)
         context['topic_or_type_list'] = self.object.get_tags()
-        context['trackers'] = self.object.get_trackers(self.request.user)
-        context['slates'] = self.object.get_slates(self.request.user)
+        context['trackers'] = filter_list_for_privacy_annotated(self.object.profile_set.all(), self.request.user)
+        context['slates'] = filter_list_for_privacy_annotated(self.object.slate_set.all(), self.request.user)
         if self.request.user.is_authenticated():
             context['par'] = self.request.user.profile.get_par_given_action(self.object)
         context['flag'] = self.object.is_flagged_by_user(self.request.user, new_only=False)
@@ -37,7 +37,7 @@ class ActionView(UserPassesTestMixin, generic.DetailView):
 class ActionListView(LoginRequiredMixin, generic.ListView):
     template_name = "actions/actions.html"
     model = Action
-    queryset = Action.objects.filter(status__in=["rea", "fin"])
+    queryset = Action.objects.filter(status="rea").filter(current_privacy__in=["pub", "sit"])
 
 def create_action_helper(object, types, topics, user):
     object.creator = user
@@ -86,17 +86,13 @@ class TopicView(LoginRequiredMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(TopicView, self).get_context_data(**kwargs)
-        context['action_list'] = self.object.actions_for_topic.all()
+        context['action_list'] = filter_list_for_privacy(self.object.actions_for_topic.all(),
+            self.request.user)
         return context
 
 class TopicListView(LoginRequiredMixin, generic.ListView):
     template_name = "actions/topics.html"
     model = ActionTopic
-
-class TypeListView(LoginRequiredMixin, generic.ListView):
-    # Note: templates can likely be refactored to use same template as TopicListView
-    template_name = "actions/types.html"
-    model = ActionType
 
 class TypeView(LoginRequiredMixin, generic.DetailView):
     template_name = 'actions/type_or_topic.html'
@@ -104,8 +100,13 @@ class TypeView(LoginRequiredMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(TypeView, self).get_context_data(**kwargs)
-        context['action_list'] = self.object.actions_for_type.all()
+        context['action_list'] = filter_list_for_privacy(self.object.actions_for_type.all(),
+            self.request.user)
         return context
+
+class TypeListView(LoginRequiredMixin, generic.ListView):
+    template_name = "actions/types.html"
+    model = ActionType
 
 class SlateView(UserPassesTestMixin, generic.DetailView):
     template_name = 'actions/slate.html'
@@ -117,6 +118,8 @@ class SlateView(UserPassesTestMixin, generic.DetailView):
         context['can_edit_actions'] = True if self.object.creator == self.request.user else False
         context['is_slate'] = True
         context['flag'] = self.object.is_flagged_by_user(self.request.user, new_only=False)
+        context['actions'] = filter_list_for_privacy(self.object.slateactionrelationship_set.all(),
+            self.request.user)
         return context
 
     def test_func(self):
@@ -127,6 +130,7 @@ class SlateListView(LoginRequiredMixin, generic.ListView):
     # Note: templates can likely be refactored to use same template as TopicListView
     template_name = "actions/slates.html"
     model = Slate
+    queryset = Slate.objects.filter(status="rea").filter(current_privacy__in=["pub", "sit"])
 
 def create_slate_helper(object, actions, user):
     object.creator = user

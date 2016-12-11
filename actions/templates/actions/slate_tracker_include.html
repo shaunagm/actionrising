@@ -5,5 +5,5 @@
     {% if slates.public_list %}
         and
     {% endif %}
-    {{ slates.anonymous_count }} anonymous slate{% ifnotequal slates.anonymous_count 1 %}s{% endifnotequal %}
+    {{ slates.anonymous_count }} anonymous user{{ slates.anonymous_count|pluralize }}    
 {% endif %}

@@ -33,9 +33,10 @@ TAKE_ACTION_HTML = "<a href='%s'>%s</a> is taking your action, <a href='%s'>%s</
     "Your action now has %s."
 
 def generate_take_action_email(creator, instance):
+    from mysite.utils import filter_list_for_privacy_annotated
     actor = instance.actor.profile
     action = instance.target
-    trackers = action.get_trackers(actor.user)['total_count']
+    trackers = filter_list_for_privacy_annotated(action.profileactionrelationship_set.all(), actor.user)
     tracker_string = "%s people tracking it" % trackers if trackers > 1 else "%s person tracking it" % trackers
     email_subject = TAKE_ACTION_SUBJ % actor.get_name()
     email_message = TAKE_ACTION_PLAIN % (actor.get_name(), action, tracker_string)

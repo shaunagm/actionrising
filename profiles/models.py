@@ -34,9 +34,15 @@ class Profile(models.Model):
     actions = models.ManyToManyField(Action, through='ProfileActionRelationship')
     # privacy default is inh == inherit
     privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
+    current_privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='sit')
 
     def __unicode__(self):
         return self.user.username
+
+    def save(self, *args, **kwargs):
+        if self.pk and self.privacy != "inh" and self.privacy != self.current_privacy:
+            self.current_privacy = self.privacy
+        super(Profile, self).save(*args, **kwargs)
 
     def get_cname(self):
         class_name = 'Profile'
@@ -105,10 +111,11 @@ class Profile(models.Model):
         return actions
 
     def get_open_actions(self, user=None):
-        return self.user.actions.filter(status="rea")
+        actions = [par.action for par in self.profileactionrelationship_set.filter(status="ace")]
+        return [action for action in actions if action.status == "rea"]
 
     def get_open_pars(self, user):
-        return ProfileActionRelationship.objects.filter(profile=self, status="rea")
+        return ProfileActionRelationship.objects.filter(profile=self, status="ace")
 
     def get_suggested_actions(self):
         return ProfileActionRelationship.objects.filter(profile=self, status="sug")
@@ -138,7 +145,7 @@ class Profile(models.Model):
             if rel.current_profile_follows_target(self) and not rel.current_profile_mutes_target(self):
                 people.append(person.user)
         return people
-        
+
     # Add methods to save and access links as json objects
 
     # Add links to get specific kinds of links, so that Twitter for instance can be displayed with the
@@ -274,6 +281,25 @@ class PrivacyDefaults(models.Model):
 
     def __unicode__(self):
         return u'Privacy defaults for %s' % (self.profile.user.username)
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            orig = PrivacyDefaults.objects.get(pk=self.pk)
+            if orig.global_default != self.global_default:
+                self.save_dependencies()
+        else:
+            self.save_dependencies()
+        super(PrivacyDefaults, self).save(*args, **kwargs)
+
+    def save_dependencies(self):
+        self.profile.current_privacy = self.global_default
+        self.profile.save()
+        for slate in self.profile.user.slate_set.all():
+            slate.current_privacy = self.global_default
+            slate.save()
+        for action in self.profile.user.action_set.all():
+            action.current_privacy = self.global_default
+            action.save()
 
 class ProfileActionRelationship(models.Model):
     """Stores relationship between a profile and an action"""

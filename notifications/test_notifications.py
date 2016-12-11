@@ -172,6 +172,7 @@ class DailyActionTests(TestCase):
     def test_daily_actions(self):
         send_daily_actions()
         self.assertEqual(len(mail.outbox), 3)
+        self.assertEqual(mail.outbox[0].to, ["buffy@sunnydale.edu"])
         self.assertEqual(mail.outbox[0].body[:62], "Your action for today comes from your personal list of actions")
         self.assertEqual(mail.outbox[1].body[:69], "Your action for today comes from the most popular actions on the site")
         self.assertEqual(mail.outbox[2].body[:69], "Your action for today comes from the most popular actions on the site")

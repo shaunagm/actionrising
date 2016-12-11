@@ -50,20 +50,6 @@ class TestActionMethods(TestCase):
         self.assertEqual(self.action.get_robust_url(), '/actions/action/test-action')
         self.assertEqual(self.slate.get_robust_url(), '/actions/slate/test-slate')
 
-    def test_get_slates(self):
-        # This test ignores privacy permissions :( and is generally too simple
-        slate_info = self.action.get_slates(self.buffy)
-        self.assertEqual(slate_info['anonymous_count'], 0)
-        self.assertEqual(slate_info['total_count'], 1)
-        self.assertEqual(slate_info['public_list'], [self.slate])
-
-    def test_get_trackers(self):
-        # This test ignores privacy permissions :( and is generally too simple
-        tracker_info = self.action.get_trackers(self.buffy)
-        self.assertEqual(tracker_info['anonymous_count'], 0)
-        self.assertEqual(tracker_info['total_count'], 1)
-        self.assertEqual(tracker_info['public_list'], [self.buffy.profile])
-
     def test_get_sar_given_action(self):
         sar = self.slate.get_sar_given_action(self.action)
         self.assertEqual(sar.slate, self.slate)

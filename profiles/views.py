@@ -7,8 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.mixins import UserPassesTestMixin,  LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
-from mysite.utils import check_privacy
-
+from mysite.utils import check_privacy, filter_list_for_privacy, filter_list_for_privacy_annotated
 from django.contrib.auth.models import User
 from profiles.models import Profile, Relationship, ProfileActionRelationship
 from actions.models import Action, Slate, SlateActionRelationship
@@ -30,8 +29,10 @@ class ProfileView(UserPassesTestMixin, generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProfileView, self).get_context_data(**kwargs)
         if self.request.user.is_authenticated():
-            context['created_actions'] = self.object.profile.get_most_recent_actions_created(self.request.user)
-            context['tracked_actions'] = self.object.profile.get_most_recent_actions_tracked(self.request.user)
+            context['created_actions'] = filter_list_for_privacy_annotated(
+                self.object.profile.get_most_recent_actions_created(), self.request.user)
+            context['tracked_actions'] = filter_list_for_privacy_annotated(
+                self.object.profile.get_most_recent_actions_tracked(), self.request.user)
         return context
 
 class ProfileEditView(UserPassesTestMixin, generic.UpdateView):
@@ -79,6 +80,11 @@ class ProfileSuggestedView(UserPassesTestMixin, generic.DetailView):
 class ProfileSearchView(LoginRequiredMixin, generic.ListView):
     template_name = 'profiles/profiles.html'
     model = User
+
+    def get_context_data(self, **kwargs):
+        context = super(ProfileSearchView, self).get_context_data(**kwargs)
+        context['object_list'] = [profile.user for profile in Profile.objects.filter(current_privacy__in=["pub", "sit"])]
+        return context
 
 class FeedView(UserPassesTestMixin, generic.DetailView):
     template_name = 'profiles/feed.html'

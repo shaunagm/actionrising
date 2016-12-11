@@ -65,15 +65,31 @@ def get_global_privacy_default(object, shortname=True):
 def check_privacy(object, user):
     if check_for_ownership(object, user):
         return True
-    if object.privacy == "inh":
-        privacy_setting = get_global_privacy_default(object)
-    else:
-        privacy_setting = object.privacy
+    if object.get_cname() == "ProfileActionRelationship":
+        return check_privacy(object.profile, user) and check_privacy(object.action, user)
+    if object.get_cname() == "SlateActionRelationship":
+        return check_privacy(object.slate, user) and check_privacy(object.action, user)
+    privacy_setting = get_global_privacy_default(object) if object.privacy == "inh" else object.privacy
     if privacy_setting == "pub":
         return True
     if privacy_setting == "sit" and user.is_authenticated():
         return True
     return False
+
+def filter_list_for_privacy(object_list, user):
+    return [obj for obj in object_list if check_privacy(obj, user)]
+
+def filter_list_for_privacy_annotated(object_list, user):
+    anonymous_count = 0
+    public_list = []
+    for obj in object_list:
+        if check_privacy(obj, user):
+            public_list.append(obj)
+        else:
+            anonymous_count += 1
+    return {'anonymous_count': anonymous_count,
+            'total_count': anonymous_count + len(public_list),
+            'public_list': public_list }
 
 def get_global_privacy_string(obj):
     privacy = get_global_privacy_default(obj, shortname=False)
