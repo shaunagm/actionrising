@@ -69,6 +69,10 @@ $(document).ready(function() {
                 "visible": manager_column_visible,
                 "name":  "manage"
             }
+        ],
+        "searchCols": [
+          null, null, null, null, null, null, { "search": "True" }, null,
+           null, null, null
         ]
     });
 
@@ -86,6 +90,9 @@ $(document).ready(function() {
                 "visible": false,
                 "name":  "creator"
             }
+        ],
+        "searchCols": [
+          null, null, null, { "search": "True" }, null
         ]
     });
 
@@ -127,7 +134,10 @@ $(document).ready(function() {
     });
 
     // Event listener to the two range filtering inputs to redraw on input
-    $('#filter-active, #filter-friends, #filter-local').on('change',function () {
+    $('#filter-active').on('change',function () {
+        chosenTable.columns().search('').draw();
+    });
+    $('#filter-friends, #filter-local').on('change',function () {
         chosenTable.draw();
     });
     $('.filter-priority').on('click',function () {

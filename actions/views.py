@@ -37,7 +37,7 @@ class ActionView(UserPassesTestMixin, generic.DetailView):
 class ActionListView(LoginRequiredMixin, generic.ListView):
     template_name = "actions/actions.html"
     model = Action
-    queryset = Action.objects.filter(status="rea").filter(current_privacy__in=["pub", "sit"])
+    queryset = Action.objects.filter(status__in=["rea", "fin"]).filter(current_privacy__in=["pub", "sit"])
 
 def create_action_helper(object, types, topics, user):
     object.creator = user
@@ -132,7 +132,7 @@ class SlateListView(LoginRequiredMixin, generic.ListView):
     # Note: templates can likely be refactored to use same template as TopicListView
     template_name = "actions/slates.html"
     model = Slate
-    queryset = Slate.objects.filter(status="rea").filter(current_privacy__in=["pub", "sit"])
+    queryset = Slate.objects.filter(status__in=["rea", "fin"]).filter(current_privacy__in=["pub", "sit"])
 
 def create_slate_helper(object, actions, user):
     object.creator = user
