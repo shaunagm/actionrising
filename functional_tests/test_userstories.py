@@ -64,3 +64,47 @@ class TestAddAndFollowAction(SeleniumTestCase):
         self.todo_page.go_to_todo_page(username=default_user)
         self.todo_page.toggle_notes_button.click()
         self.assertEquals(self.todo_page.get_notes(), ["Notes: A note! Yay!"])
+
+class PlayingWithPrivacySettings(SeleniumTestCase):
+    # User creates an action, sets privacy to sitewide, adds to their actions.
+    # Checks actions list and sees it there, checks created/tracked actions and
+    # sees it there.  Changes privacy to friends only.  Checks actions list and its
+    # gone.  New user (followed by first user) logs in.  They see the action
+    # on first user's profile.  Second new user (not followed by first user) does
+    # not see the action.
+    def test_privacy_settings(self):
+        # Login, go to action edit page, create action
+        self.actions_table = BasicActionListPage(self.browser, root_uri=self.live_server_url)
+        self.actions_table.log_in(default_user, default_password)
+        self.action_edit_form = ActionEditPage(self.browser, root_uri=self.live_server_url)
+        self.action_edit_form.go_to_create_page()
+        self.action_edit_form.title = "A new action to take"
+        self.action_edit_form.submit_button.click()
+        # Go to action list
+        self.actions_table = BasicActionListPage(self.browser, root_uri=self.live_server_url)
+        self.actions_table.go_to_default_actions_page_if_necessary()
+        self.assertIn("A new action to take", self.actions_table.get_actions())
+        # Edit action to change privacy setting
+        self.action_edit_form = ActionEditPage(self.browser, root_uri=self.live_server_url)
+        self.action_edit_form.go_to_edit_page(title="A new action to take")
+        self.action_edit_form.select_privacy("Visible to Follows")
+        self.action_edit_form.submit_button.click()
+        # Back to action list
+        self.actions_table = BasicActionListPage(self.browser, root_uri=self.live_server_url)
+        self.actions_table.go_to_default_actions_page_if_necessary()
+        self.assertNotIn("A new action to take", self.actions_table.get_actions())
+        # Log in as followed user and check default user's profile, see action
+        self.actions_table.log_button.click() # log out
+        self.actions_table.log_in("giles", "apocalypse")
+        self.profile_page = ProfilePage(self.browser, root_uri=self.live_server_url)
+        self.profile_page.go_to_profile_page(username=default_user)
+        created_actions, tracked_actions = self.profile_page.get_actions()
+        self.assertIn("A new action to take", created_actions)
+        # Log in as non-followed user and check default user's profile, no action
+        # Log in as followed user and check default user's profile, see action
+        self.actions_table.log_button.click() # log out
+        self.actions_table.log_in("dru", "apocalypse")
+        self.profile_page = ProfilePage(self.browser, root_uri=self.live_server_url)
+        self.profile_page.go_to_profile_page(username=default_user)
+        created_actions, tracked_actions = self.profile_page.get_actions()
+        self.assertNotIn("A new action to take", created_actions)

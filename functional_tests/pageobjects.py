@@ -1,4 +1,5 @@
 import time, sys
+from selenium.webdriver.support.ui import Select
 from page_objects import PageObject, PageElement, MultiPageElement
 
 from django.contrib.auth.models import User
@@ -77,6 +78,7 @@ class BasicActionListPage(BaseListPage):
     first_row_tags = PageElement(css=".odd > td:nth-child(3)")
     first_row_tracker_count = PageElement(css=".odd > td:nth-child(4)")
     labels = MultiPageElement(css="span.label")
+    action_tds = MultiPageElement(css=".main-list tbody tr > td:nth-child(2)")
     # Additional Action Controls
     local_only = PageElement(id_="filter-local")
     filter_priority_dropdown = PageElement(id_="filter-priority-group")
@@ -94,6 +96,12 @@ class BasicActionListPage(BaseListPage):
         for link in self.filter_priority_links:
             if link.text == selection:
                 link.click()
+
+    def get_actions(self):
+        actions = []
+        for action in self.action_tds:
+            actions.append(action.text)
+        return actions
 
 class SlateActionsListPage(BasicActionListPage):
 
@@ -163,7 +171,6 @@ class ActionEditPage(BasePage):
     title = PageElement(id_="id_title")
     anonymize = PageElement(id_="id_anonymize")
     main_link = PageElement(id_="id_main_link")
-    privacy = PageElement(id_="id_privacy")
     priority = PageElement(id_="id_priority")
     location = PageElement(id_="id_location")
     status = PageElement(id_="id_status")
@@ -182,6 +189,10 @@ class ActionEditPage(BasePage):
             user = User.objects.get(username=username)
             self.action = user.action_set.first()
         self.w.get(self.root_uri + self.action.get_edit_url())
+
+    def select_privacy(self, selection):
+        select = Select(self.w.find_element_by_id('id_privacy'))
+        select.select_by_visible_text(selection)
 
 class ProfilePage(BasePage):
     name = PageElement(id_="profile-username")
