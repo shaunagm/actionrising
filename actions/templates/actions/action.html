@@ -36,11 +36,13 @@
           </div>
         </div>
 
+        {% if action.main_link %}
         <div class="row">
            <div class="col-sm-12">
              <h4 id="quick_link">Quick link: <a href="{{ action.main_link }}">{{ action.main_link }}</a></h4>
            </div>
         </div>
+        {% endif %}
 
         <div class="row">
            <div class="col-sm-12 extra-margin-row" id="description">

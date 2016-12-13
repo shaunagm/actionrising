@@ -9,7 +9,7 @@ class ActionForm(ModelForm):
 
     class Meta:
         model = Action
-        fields = ['title', 'anonymize', 'main_link', 'description', 'privacy', 'priority', 'location', 'status', 'deadline', 'topics', 'actiontypes']
+        fields = ['title', 'anonymize', 'description', 'privacy', 'priority', 'location', 'status', 'deadline', 'topics', 'actiontypes']
         widgets = {
             'deadline': DateTimeWidget(options={'format': 'mm/dd/yyyy HH:mm'}, bootstrap_version=3),
         }
