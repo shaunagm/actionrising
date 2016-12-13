@@ -9,11 +9,11 @@
       <li><a href="{% url 'toggle_relationships' username=object.username toggle_type='follow' %}">
           {{ info.follow_statement }}
       </a></li>
-      {% if info.is_following %}
+      <!-- {% if info.is_following %}
       <li><a href="{% url 'toggle_relationships' username=object.username toggle_type='account' %}">
           {{ info.account_statement }}
       </a></li>
-      {% endif %}
+      {% endif %} -->
       <li><a href="{% url 'toggle_relationships' username=object.username toggle_type='mute' %}">
           {{ info.mute_statement }}
       </a></li>
