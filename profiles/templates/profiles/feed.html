@@ -22,7 +22,12 @@
             {% if action.action_object %}
             <a href="{{ action.action_object.get_absolute_url }}">{{ action.action_object }}</a> to
             {% endif %}
-            <a href="{{ action.target.get_absolute_url }}">{{ action.target }}</a>
+            {% if action.target.get_absolute_url %}
+              <a href="{{ action.target.get_absolute_url }}">
+            {% else %}
+              <a href="{{ action.target.profile.get_absolute_url }}">
+            {% endif %}
+            {{ action.target }}</a>
           </div>
           <div class="actstream-action-time">
             {{ action.timestamp }}
