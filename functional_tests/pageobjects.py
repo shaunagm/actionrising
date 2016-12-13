@@ -1,6 +1,7 @@
 import time, sys
 from page_objects import PageObject, PageElement, MultiPageElement
 
+from django.contrib.auth.models import User
 from actions.models import Action, Slate
 
 # Util/Base Pages
@@ -157,3 +158,73 @@ class SlateDetailPage(BaseObjectDetailPage):
         else:
             self.slate = Slate.objects.last()
         self.w.get(self.root_uri + self.slate.get_absolute_url())
+
+class ActionEditPage(BasePage):
+    title = PageElement(id_="id_title")
+    anonymize = PageElement(id_="id_anonymize")
+    main_link = PageElement(id_="id_main_link")
+    privacy = PageElement(id_="id_privacy")
+    priority = PageElement(id_="id_priority")
+    location = PageElement(id_="id_location")
+    status = PageElement(id_="id_status")
+    deadline = PageElement(id_="id_deadline")
+    topics = PageElement(id_="id_topics")
+    types_of_action = PageElement(id_="id_actiontypes")
+    submit_button = PageElement(css=".action-submit-button")
+
+    def go_to_create_page(self):
+        self.w.get(self.root_uri + "/actions/create")
+
+    def go_to_edit_page(self, title=None, username=None):
+        if title:
+            self.action = Action.objects.get(title=title)
+        else:
+            user = User.objects.get(username=username)
+            self.action = user.action_set.first()
+        self.w.get(self.root_uri + self.action.get_edit_url())
+
+class ProfilePage(BasePage):
+    name = PageElement(id_="profile-username")
+    actions_created = MultiPageElement(css="div#created-actions-div tbody tr .actiondetails")
+    actions_tracked = MultiPageElement(css="div#tracked-actions-div tbody tr .actiondetails")
+
+    def go_to_profile_page(self, username=None):
+        user = User.objects.get(username=username)
+        self.w.get(self.root_uri + user.profile.get_absolute_url())
+
+    def get_created_actions(self):
+        action_names = []
+        for action in self.actions_created:
+            action_names.append(action.text)
+        return action_names
+
+    def get_tracked_actions(self):
+        action_names = []
+        for action in self.actions_tracked:
+            action_names.append(action.text)
+        return action_names
+
+    def get_actions(self):
+        return self.get_created_actions(),self.get_tracked_actions()
+
+class ToDoPage(BasicActionListPage):
+    suggested_actions_link = PageElement(id_="suggested_actions_button")
+    toggle_notes_button = PageElement(id_="show-notes")
+    notes_rows = MultiPageElement(css="tr.notesrow")
+    manage_button_first_row = PageElement(css="span.glyphicon-wrench")
+
+    def go_to_todo_page(self, username=None):
+        self.w.get(self.root_uri + "/profiles/to-do/" + username)
+
+    def get_notes(self):
+        notes = []
+        for note in self.notes_rows:
+            notes.append(note.text)
+        return notes
+
+class ManageActionPage(BasePage):
+    notes = PageElement(id_="id_notes")
+    submit_button = PageElement(css=".manage-action-submit")
+
+    def go_to_manage_action_page(self, url):
+        self.w.get(url)

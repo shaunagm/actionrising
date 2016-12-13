@@ -64,7 +64,7 @@ class ProfileToDoView(UserPassesTestMixin, generic.DetailView):
         context = super(ProfileToDoView, self).get_context_data(**kwargs)
         context['has_notes'] = True
         context['can_edit_actions'] = True
-        context['actions'] = self.object.profile.get_open_pars(self.request.user)
+        context['actions'] = self.object.profile.get_open_pars()
         context['suggested_actions'] = self.object.profile.get_suggested_actions_count()
         return context
 
@@ -148,7 +148,6 @@ def toggle_action_for_profile(request, slug, toggle_type):
 def manage_action_helper(par, form, user):
     par.priority = form.cleaned_data['priority']
     par.status = form.cleaned_data['status']
-    par.privacy = form.cleaned_data['privacy']
     par.notes = form.cleaned_data['notes']
     par.save()
     for profile in form.cleaned_data['profiles']:
@@ -177,7 +176,7 @@ def manage_action(request, slug):
             context = {'form': form}
             render(request, 'profiles/manage_action.html', context)
     else:
-        form = ProfileActionRelationshipForm(par=par, initial={'privacy': par.privacy, 'priority': par.priority, 'status': par.status})
+        form = ProfileActionRelationshipForm(par=par, initial={'priority': par.priority, 'status': par.status})
         context = {'form': form}
         return render(request, 'profiles/manage_action.html', context)
 
