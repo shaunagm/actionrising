@@ -1,5 +1,6 @@
 <tr>
-    <td>{{ action.date_created|date:"D M d"}}</td>
+    <td data-sort="{{ action.date_created|date:"Y m d"}}">
+      {{ action.date_created|date:"D M d"}}</td>
     <td><a href="{{ action.get_robust_url }}">{{ action.title }}</a></td>
     <td>{% include "actions/action_label_include.html" with object_list=action.get_tags %}</td>
     <td>{{ action.profile_set.count }}</td>

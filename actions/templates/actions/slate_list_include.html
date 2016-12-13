@@ -26,7 +26,8 @@ Filter:
   <tbody>
       {% for object in object_list reversed %}
        <tr>
-          <td>{{ object.date_created|date:"D M d" }}</td>
+         <td data-sort="{{ object.date_created|date:"Y m d"}}">
+           {{ object.date_created|date:"D M d"}}</td>
           <td><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></td>
           <td>{{ object.creator }}</td>
           <td>{{ object.is_active }}</td>
