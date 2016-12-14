@@ -99,15 +99,15 @@ class Profile(models.Model):
             return "Unknown"
 
     def get_most_recent_actions_created(self):
-        actions = self.user.action_set.filter(status__in=["rea", "fin"])
+        actions = self.user.action_set.filter(status__in=["rea", "fin"]).order_by('-date_created')
         if len(actions) > 5:
-            return actions[-5:]
+            return actions[:5]
         return actions
 
     def get_most_recent_actions_tracked(self):
         actions = [par.action for par in self.profileactionrelationship_set.all() if par.action.status in ["rea", "fin"]]
         if len(actions) > 5:
-            return actions[-5:]
+            return actions[:5]
         return actions
 
     def get_open_actions(self):
