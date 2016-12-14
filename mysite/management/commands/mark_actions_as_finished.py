@@ -9,7 +9,7 @@ class Command(BaseCommand):
         try:
             actions = Action.objects.filter(status="rea")
             for action in actions:
-                if action.deadline < datetime.datetime.now():
+                if action.deadline and action.deadline < datetime.datetime.now():
                     action.status = 'fin'
                     action.save()
             print("Actions marked as finished")
