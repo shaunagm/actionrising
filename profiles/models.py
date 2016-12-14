@@ -280,7 +280,7 @@ class PrivacyDefaults(models.Model):
     """Stores default privacy"""
     profile = models.OneToOneField(Profile, unique=True, related_name="privacy_defaults")
     # global default privacy is sit == Visible sitewide
-    global_default = models.CharField(max_length=3, choices=PRIVACY_DEFAULT_CHOICES, default='sit')
+    global_default = models.CharField(max_length=3, choices=PRIVACY_DEFAULT_CHOICES, default='pub')
 
     def __unicode__(self):
         return u'Privacy defaults for %s' % (self.profile.user.username)
