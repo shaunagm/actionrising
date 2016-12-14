@@ -103,8 +103,8 @@ $(document).ready(function() {
     if ($.fn.dataTable.isDataTable("#slates")) {
       chosenTable = slateTable;
     }
-
-    user_location = "{{ user.profile.location }}";
+    
+    user_location = "{{ user.profile.district.state }}, {{ user.profile.district.district }}";
     today = new Date();
     status_index = chosenTable.column('status:name').index();
     creator_index = chosenTable.column('creator:name').index();
