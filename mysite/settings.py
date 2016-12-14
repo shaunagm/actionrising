@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'actions',
     'flags',
     'notifications',
+    'invites',
     'functional_tests',
     'django_comments',
     'ckeditor',
@@ -200,6 +201,6 @@ EMAIL_HOST_USER = 'SMTP_Injection'
 EMAIL_HOST_PASSWORD =  os.environ['SPARKPOST_API_KEY']
 EMAIL_USE_TLS = True
 
-PRODUCTION_DOMAIN = "http://www.actionrising.com"
+PRODUCTION_DOMAIN = "https://www.actionrising.com"
 
 NOTIFY_EMAIL = "ActionRising <notify@www.actionrising.com>"   # was django-sparkpost@sparkpostbox.com

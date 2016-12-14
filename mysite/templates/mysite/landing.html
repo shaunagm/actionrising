@@ -21,6 +21,7 @@
                <h4><a href="{% url 'create_action' %}">Add new actions for you and others to do</a></h4>
                <h4><a href="{% url 'create_slate' %}">Make a "slate" of suggested actions</a></h4>
                <h4><a href="{% url 'profiles' %}">Find and follow friends to see what they're working on</a></h4>
+               <h4><a href="{% url 'invite-friend' %}">Invite a friend to the site</a></h4>
 
                <p>This site has only been live since November 18th.  We need your help to
                  make it better.  Please tell Shauna, in person or via email, about any
@@ -34,7 +35,7 @@
 
                <p><a href="{% url 'login' %}">Log in</a> to learn more.</p>
 
-               <p>Not registered?  <a href="https://docs.google.com/forms/d/e/1FAIpQLSdvjpdigDpDfxfp7uMEFIb4LxMgVKezhF_XoiPJos-Ieph7uw/viewform">Request an account.</a></p>
+               <p>Not registered? <a href="{% url 'request-account' %}">Request an account.</a></p>
 
            </div>
 

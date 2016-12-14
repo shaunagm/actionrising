@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth.mixins import UserPassesTestMixin,  LoginRequiredMixin
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
 from mysite.utils import check_privacy, filter_list_for_privacy, filter_list_for_privacy_annotated

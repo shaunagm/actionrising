@@ -30,7 +30,7 @@ class SlateForm(ModelForm):
 
     class Meta:
         model = Slate
-        fields = fields = ['title', 'description', 'status', 'privacy', 'actions']
+        fields = ['title', 'description', 'status', 'privacy', 'actions']
 
     def __init__(self, user, *args, **kwargs):
         super(SlateForm, self).__init__(*args, **kwargs)

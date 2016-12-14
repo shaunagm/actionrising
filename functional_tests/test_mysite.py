@@ -18,7 +18,7 @@ class TestBasics(SeleniumTestCase):
         landing_page = LoggedOutLandingPage(self.browser, root_uri=self.live_server_url)
         landing_page.go_to_index_if_necessary()
         landing_page.request_account.click()
-        self.assertEquals(landing_page.w.current_url,"https://docs.google.com/forms/d/e/1FAIpQLSdvjpdigDpDfxfp7uMEFIb4LxMgVKezhF_XoiPJos-Ieph7uw/viewform")
+        self.assertEquals(landing_page.w.current_url,"http://localhost:8082/invites/request-account")
 
     def test_logged_in_landing_page(self):
         landing_page = LoggedInLandingPage(self.browser, root_uri=self.live_server_url)

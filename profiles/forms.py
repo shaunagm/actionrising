@@ -24,7 +24,7 @@ class ProfileForm(ModelForm):
         NEW_CHOICES = (PRIVACY_CHOICES[0], PRIVACY_CHOICES[1], PRIVACY_CHOICES[2], ('inh', get_global_privacy_string(user.profile)))
         self.fields['privacy'].choices = NEW_CHOICES
 
-    def save(self, commit=True):
+    def save(self, user, commit=True):
         self.instance.privacy_defaults.global_default = self.cleaned_data['privacy_default']
         self.instance.privacy_defaults.save()
         return super(ProfileForm, self).save(commit=commit)
