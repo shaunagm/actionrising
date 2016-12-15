@@ -66,6 +66,13 @@ class Profile(models.Model):
     def get_edit_url_with_domain(self):
         return PRODUCTION_DOMAIN + self.get_edit_url()
 
+    def refresh_current_privacy(self):
+        if self.privacy == "inh":
+            self.current_privacy = self.privacy_defaults.global_default
+        else:
+            self.current_privacy = self.privacy
+        self.save()
+
     def get_relationship_given_profile(self, profile):
         rel = Relationship.objects.filter(person_A=self, person_B=profile)
         if rel:

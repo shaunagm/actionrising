@@ -118,6 +118,7 @@ class Action(models.Model):
     def save(self, *args, **kwargs):
         if not self.pk:
             self.slug = slugify_helper(Action, self.title)
+            self.current_privacy = self.creator.profile.privacy_defaults.global_default
         if self.privacy != "inh" and self.privacy != self.current_privacy:
             self.current_privacy = self.privacy
         super(Action, self).save(*args, **kwargs)
@@ -147,6 +148,13 @@ class Action(models.Model):
 
     def get_tags(self):
         return list(chain(self.topics.all(), self.actiontypes.all()))
+
+    def refresh_current_privacy(self):
+        if self.privacy == "inh":
+            self.current_privacy = self.creator.profile.privacy_defaults.global_default
+        else:
+            self.current_privacy = self.privacy
+        self.save()
 
     def get_creator(self):
         if self.anonymize:
@@ -230,6 +238,7 @@ class Slate(models.Model):
     def save(self, *args, **kwargs):
         if not self.pk:
             self.slug = slugify_helper(Slate, self.title)
+            self.current_privacy = self.creator.profile.privacy_defaults.global_default
         else:
             if self.privacy != "inh" and self.privacy != self.current_privacy:
                 self.current_privacy = self.privacy
@@ -277,6 +286,13 @@ class Slate(models.Model):
                 else:
                     return flag
         return "No flags"
+
+    def refresh_current_privacy(self):
+        if self.privacy == "inh":
+            self.current_privacy = self.creator.profile.privacy_defaults.global_default
+        else:
+            self.current_privacy = self.privacy
+        self.save()
 
 @disable_for_loaddata
 def slate_handler(sender, instance, created, **kwargs):
