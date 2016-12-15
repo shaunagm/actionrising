@@ -104,8 +104,11 @@ def generate_daily_action_email(action, kind, profile):
 # Invite notification template
 
 INVITE_SUBJ = "You've been invited to join ActionRising"
-INVITE_PLAIN = "You have been invited to join ActionRising by %s. They say:\n\n%s\n\nTo get started, visit %s"
-INVITE_HTML = "You have been invited to join ActionRising by %s. They say:<br /><br />%s<br /><br /><a href='%s'>Click here</a> to get started."
+INVITE_BLURB = "ActionRising is a platform created to help individuals and communities figure out their next steps. We want you to take action - specific, meaningful, positive action - that fits the time and energy you have available.
+INVITE_PLAIN = "You have been invited to join ActionRising by %s. They say:\n\n%s\n\n" \
+    + INVITE_BLURB + "\n\nTo get started, visit %s"
+INVITE_HTML = "You have been invited to join ActionRising by %s. They say:<br /><br />%s<br /><br />" \
+    + INVITE_BLURB + "<br /><br /><a href='%s'>Click here</a> to get started."
 
 REQUEST_SUBJ = "Your request to join ActionRising has been approved"
 REQUEST_PLAIN = "Your request to join ActionRising has been approved. To get started, visit %s"
