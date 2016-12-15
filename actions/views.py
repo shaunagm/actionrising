@@ -39,6 +39,11 @@ class ActionListView(LoginRequiredMixin, generic.ListView):
     model = Action
     queryset = Action.objects.filter(status__in=["rea", "fin"]).filter(current_privacy__in=["pub", "sit"])
 
+class PublicActionListView(generic.ListView):
+    template_name = "actions/actions.html"
+    model = Action
+    queryset = Action.objects.filter(status__in=["rea", "fin"]).filter(current_privacy="pub")
+
 def create_action_helper(object, types, topics, user):
     object.creator = user
     object.save()
