@@ -3,12 +3,14 @@ import datetime, json, random, string
 
 from django.utils import timezone
 from django.core.mail import send_mail
+from django.db.models.signals import post_save
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 from django.db import models
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 from mysite.settings import NOTIFY_EMAIL, PRODUCTION_DOMAIN
+from mysite.utils import disable_for_loaddata
 from notifications.email_templates import generate_invite_notification_email
 
 # Workflow
@@ -80,3 +82,12 @@ class Invite(models.Model):
         if inviter not in inviters:
             inviters.append(inviter)
         self.set_inviters(inviters)
+
+@disable_for_loaddata
+def invite_email_handler(sender, instance, created, **kwargs):
+    if created:
+        email_subj = "There's been an invite requested on ActionRising"
+        message = "<a hef='https://www.actionrising.com/admin/invites/invite/" + str(instance.pk) + "/change'>Click here</a>"
+        sent = send_mail(email_subj, message, NOTIFY_EMAIL, ['actionrisingsite@gmail.com'],
+            fail_silently=False, html_message=message)
+post_save.connect(invite_email_handler, sender=Invite)

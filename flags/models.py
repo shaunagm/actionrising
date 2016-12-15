@@ -3,9 +3,13 @@ from __future__ import unicode_literals
 from django.utils.translation import ugettext as _
 from django.utils import timezone
 from django.db import models
+from django.core.mail import send_mail
+from django.db.models.signals import post_save
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
+from mysite.utils import disable_for_loaddata
+from mysite.settings import NOTIFY_EMAIL
 from django.contrib.auth.models import User
 
 class Flag(models.Model):
@@ -32,3 +36,12 @@ class Flag(models.Model):
 
     def __unicode__(self):
         return "%s flagged by %s as %s" % (self.content_object.title, self.flagged_by.username, self.flag_choice)
+
+@disable_for_loaddata
+def flag_email_handler(sender, instance, created, **kwargs):
+    if created:
+        email_subj = "There's been a flag on ActionRising"
+        message = "<a hef='https://www.actionrising.com/admin/flags/flag/" + str(instance.pk) + "/change'>Click here</a>"
+        sent = send_mail(email_subj, message, NOTIFY_EMAIL, ['actionrisingsite@gmail.com'],
+            fail_silently=False, html_message=message)
+post_save.connect(flag_email_handler, sender=Flag)
