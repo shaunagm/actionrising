@@ -137,15 +137,14 @@ class Profile(models.Model):
 
     def get_list_of_relationships(self):
         people = []
-        print("la")
         for person in self.get_connected_people():
-            print("AHAHAH")
-            print(person)
             rel = self.get_relationship_given_profile(person)
+            you_follow = rel.current_profile_follows_target(self)
             follows_you = rel.target_follows_current_profile(self)
             muted = rel.current_profile_mutes_target(self)
             profile = rel.get_other(self)
-            people.append({'user': profile.user, 'follows_you': follows_you, 'muted': muted})
+            people.append({'user': profile.user, 'mutual': follows_you and you_follow,
+                'follows_you': follows_you, 'you_follow': you_follow, 'muted': muted})
         return people
 
     def get_people_tracking(self):
