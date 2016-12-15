@@ -293,8 +293,10 @@ class TestManageSuggestedActionView(TestCase):
 
     def setUp(self):
         self.buffy = User.objects.create(username="buffysummers")
+        self.faith = User.objects.create(username="faithlehane")
         self.action = Action.objects.create(slug="test-action", creator=self.buffy)
-        self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action, status="sug")
+        self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile,
+            action=self.action, last_suggester=self.faith, status="sug")
 
     def test_manage_suggested_action_helper_accept(self):
         self.assertEqual(self.par.status, "sug")

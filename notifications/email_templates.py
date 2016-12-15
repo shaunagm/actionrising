@@ -35,7 +35,8 @@ def generate_take_action_email(creator, instance):
     actor = instance.actor.profile
     action = instance.target
     trackers = filter_list_for_privacy_annotated(action.profileactionrelationship_set.all(), actor.user)
-    tracker_string = "%s people tracking it" % trackers if trackers > 1 else "%s person tracking it" % trackers.total_count
+    trackers = trackers['total_count']
+    tracker_string = "%s people tracking it" % trackers if trackers > 1 else "%s person tracking it" % trackers
     email_subject = TAKE_ACTION_SUBJ % actor.get_name()
     email_message = TAKE_ACTION_PLAIN % (actor.get_name(), action, tracker_string)
     html_message = TAKE_ACTION_HTML % (actor.get_absolute_url_with_domain(),
@@ -120,4 +121,21 @@ def generate_invite_notification_email(kind, invite):
         email_subj = INVITE_SUBJ
         email_message = INVITE_PLAIN % (invite.get_inviter_string(), invite.get_confirmation_url())
         html_message = INVITE_HTML % (invite.get_inviter_string(), invite.get_confirmation_url())
+    return email_subj, email_message, html_message
+
+# Suggestion template
+
+SUGGESTION_SUBJ = "%s suggested an action for you on ActionRising"
+SUGGESTION_PLAIN = "%s suggested action %s for you.  Check it out here: %s"
+SUGGESTION_HTML = "<a href='%s'>%s</a> suggested action <a href='%s'>%s</a> to you"
+
+def generate_suggestion_email(instance):
+    suggester = instance.actor
+    email_subj = SUGGESTION_SUBJ % suggester.username
+    email_message = SUGGESTION_PLAIN % (suggester.username, instance.action_object.title,
+        instance.action_object.get_absolute_url_with_domain())
+    html_message = SUGGESTION_HTML % (suggester.profile.get_absolute_url_with_domain(),
+        suggester.username, instance.action_object.get_absolute_url_with_domain(),
+        instance.action_object.title)
+    email_message, html_message = add_footer(email_message, html_message, instance.target.profile)
     return email_subj, email_message, html_message

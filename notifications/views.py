@@ -28,4 +28,6 @@ class SettingsEditView(UserPassesTestMixin, generic.UpdateView):
             + "an action I created to their list of actions"
         form.fields['if_my_actions_added_to_slate'].label = "Let me know when someone adds "\
             + "an action I created to a slate"
+        form.fields['if_suggested_action'].label = "Let me know whens omeone suggests " \
+            + "I take an action"
         return form

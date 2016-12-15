@@ -320,6 +320,7 @@ class ProfileActionRelationship(models.Model):
     # default status is ace == accepted
     status = models.CharField(max_length=3, choices=INDIVIDUAL_STATUS_CHOICES, default='ace')
     committed = models.BooleanField(default=False)
+    last_suggester = models.ForeignKey(User, blank=True, null=True)
     suggested_by = models.CharField(max_length=500, blank=True, null=True)
     notes = models.CharField(max_length=2500, blank=True, null=True)
 
@@ -362,5 +363,8 @@ class ProfileActionRelationship(models.Model):
 @disable_for_loaddata
 def par_handler(sender, instance, created, **kwargs):
     if created:
-        action.send(instance.profile.user, verb='is taking action', target=instance.action)
+        if instance.status == "sug":
+            action.send(instance.last_suggester, verb='suggested action', action_object=instance.action, target=instance.profile.user)
+        else:
+            action.send(instance.profile.user, verb='is taking action', target=instance.action)
 post_save.connect(par_handler, sender=ProfileActionRelationship)
