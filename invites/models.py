@@ -23,7 +23,8 @@ from notifications.email_templates import generate_invite_notification_email
 class Invite(models.Model):
     username = models.CharField(max_length=50, blank=True, null=True)
     email = models.CharField(max_length=50, unique=True)
-    reasoning = RichTextField(max_length=1000, blank=True, null=True)
+    reasoning = models.CharField(max_length=1000, blank=True, null=True)
+    message = models.CharField(max_length=500, unique=True, blank=True, null=True)
     self_submitted = models.BooleanField(default=False)
     REQUEST_CHOICES = (
         ('submitted', _('Request submitted')),

@@ -104,8 +104,8 @@ def generate_daily_action_email(action, kind, profile):
 # Invite notification template
 
 INVITE_SUBJ = "You've been invited to join ActionRising"
-INVITE_PLAIN = "You have been invited to join ActionRising by %s. To get started, visit %s"
-INVITE_HTML = "You have been invited to join ActionRising by %s. <a href='%s'>Click here</a> to get started."
+INVITE_PLAIN = "You have been invited to join ActionRising by %s. They say:\n\n%s\n\nTo get started, visit %s"
+INVITE_HTML = "You have been invited to join ActionRising by %s. They say:<br /><br />%s<br /><br /><a href='%s'>Click here</a> to get started."
 
 REQUEST_SUBJ = "Your request to join ActionRising has been approved"
 REQUEST_PLAIN = "Your request to join ActionRising has been approved. To get started, visit %s"
@@ -119,8 +119,10 @@ def generate_invite_notification_email(kind, invite):
         html_message = REQUEST_HTML % invite.get_confirmation_url()
     elif kind == "invited":
         email_subj = INVITE_SUBJ
-        email_message = INVITE_PLAIN % (invite.get_inviter_string(), invite.get_confirmation_url())
-        html_message = INVITE_HTML % (invite.get_inviter_string(), invite.get_confirmation_url())
+        email_message = INVITE_PLAIN % (invite.get_inviter_string(), invite.message,
+            invite.get_confirmation_url())
+        html_message = INVITE_HTML % (invite.get_inviter_string(), invite.message,
+            invite.get_confirmation_url())
     return email_subj, email_message, html_message
 
 # Suggestion template

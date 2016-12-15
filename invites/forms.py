@@ -26,13 +26,15 @@ class InviteFriendForm(ModelForm):
 
     class Meta:
         model = Invite
-        fields = ['email', 'reasoning']
+        fields = ['email', 'reasoning', 'message']
 
     def __init__(self, *args, **kwargs):
         super(InviteFriendForm, self).__init__(*args, **kwargs)
         self.fields['email'].label = "What's your friend's email?"
         self.fields['reasoning'].label = "Tell us a bit about your friend and why they'd " \
             "like an account. We use this info to vet people and keep the site troll-free."
+        self.fields['message'].label = "Please include a brief message for your friend. " \
+            "This lets them know the invitation is not spam."
 
     def save(self, commit=True):
         user = User.objects.filter(email=self.instance.email)
