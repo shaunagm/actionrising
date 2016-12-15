@@ -41,7 +41,8 @@ class Flag(models.Model):
 def flag_email_handler(sender, instance, created, **kwargs):
     if created:
         email_subj = "There's been a flag on ActionRising"
-        message = "<a hef='https://www.actionrising.com/admin/flags/flag/" + str(instance.pk) + "/change'>Click here</a>"
+        message = "https://www.actionrising.com/admin/flags/flag/" + str(instance.pk)
+        html_message = "<a href='https://www.actionrising.com/admin/flags/flag/" + str(instance.pk) + "/change'>Click here</a>"
         sent = send_mail(email_subj, message, NOTIFY_EMAIL, ['actionrisingsite@gmail.com'],
-            fail_silently=False, html_message=message)
+            fail_silently=False, html_message=html_message)
 post_save.connect(flag_email_handler, sender=Flag)

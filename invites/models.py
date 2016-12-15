@@ -87,7 +87,8 @@ class Invite(models.Model):
 def invite_email_handler(sender, instance, created, **kwargs):
     if created:
         email_subj = "There's been an invite requested on ActionRising"
-        message = "<a hef='https://www.actionrising.com/admin/invites/invite/" + str(instance.pk) + "/change'>Click here</a>"
+        message = "https://www.actionrising.com/admin/invites/invite/" + str(instance.pk)
+        html_message = "<a href='https://www.actionrising.com/admin/invites/invite/" + str(instance.pk) + "/change'>Click here</a>"
         sent = send_mail(email_subj, message, NOTIFY_EMAIL, ['actionrisingsite@gmail.com'],
-            fail_silently=False, html_message=message)
+            fail_silently=False, html_message=html_message)
 post_save.connect(invite_email_handler, sender=Invite)
