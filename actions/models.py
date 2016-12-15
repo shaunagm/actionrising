@@ -28,7 +28,7 @@ slug_validator = [
 
 def slugify_helper(object_model, slug):
     counter = 0
-    temp_slug = slugify(slug)
+    temp_slug = slugify(slug)[:45]
     while True:
         if object_model.objects.filter(slug=temp_slug):
             temp_slug += str(counter)
