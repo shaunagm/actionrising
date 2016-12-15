@@ -79,7 +79,7 @@ def send_suggestion_notification(instance):
     target_user = instance.target
     if target_user.notificationsettings.if_suggested_action and target_user.email:
         notification = Notification.objects.create(user=target_user, event=instance)
-        email_subj, email_message, html_message = generate_suggestion_email(instance)
+        email_subj, email_message, html_message = generate_suggestion_email(instance, target_user.profile)
         sent = send_mail(email_subj, email_message, NOTIFY_EMAIL, [target_user.email],
             fail_silently=False, html_message=html_message)
         if sent:

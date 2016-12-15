@@ -66,6 +66,9 @@ class Profile(models.Model):
     def get_edit_url_with_domain(self):
         return PRODUCTION_DOMAIN + self.get_edit_url()
 
+    def get_suggestion_url_with_domain(self):
+        return PRODUCTION_DOMAIN + reverse('suggested', kwargs={'slug': self.user.username })
+
     def refresh_current_privacy(self):
         if self.privacy == "inh":
             self.current_privacy = self.privacy_defaults.global_default

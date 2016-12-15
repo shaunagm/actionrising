@@ -126,16 +126,17 @@ def generate_invite_notification_email(kind, invite):
 # Suggestion template
 
 SUGGESTION_SUBJ = "%s suggested an action for you on ActionRising"
-SUGGESTION_PLAIN = "%s suggested action %s for you.  Check it out here: %s"
-SUGGESTION_HTML = "<a href='%s'>%s</a> suggested action <a href='%s'>%s</a> to you"
+SUGGESTION_PLAIN = "%s suggested action %s for you.  Accept or reject suggested actions here: %s"
+SUGGESTION_HTML = "<a href='%s'>%s</a> suggested action <a href='%s'>%s</a> to you.  You can " \
+    + "accept or reject suggested actions <a href='%s'>here</a>."
 
-def generate_suggestion_email(instance):
+def generate_suggestion_email(instance, target_user):
     suggester = instance.actor
     email_subj = SUGGESTION_SUBJ % suggester.username
     email_message = SUGGESTION_PLAIN % (suggester.username, instance.action_object.title,
-        instance.action_object.get_absolute_url_with_domain())
+        target_user.get_suggestion_url_with_domain())
     html_message = SUGGESTION_HTML % (suggester.profile.get_absolute_url_with_domain(),
         suggester.username, instance.action_object.get_absolute_url_with_domain(),
-        instance.action_object.title)
+        instance.action_object.title, target_user.get_suggestion_url_with_domain())
     email_message, html_message = add_footer(email_message, html_message, instance.target.profile)
     return email_subj, email_message, html_message
