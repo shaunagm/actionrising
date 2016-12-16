@@ -32,7 +32,7 @@ def request_confirmation_view(request, slug):
         if invite.request_status != "emailed":
             return HttpResponseRedirect(reverse('generic_problem'))
         generated_password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
-        user = User.objects.create_user(username=invite.username, password=generated_password)
+        user = User.objects.create_user(username=invite.username, password=generated_password, email=invite.email)
         invite.request_status = "done"
         invite.save()
     except:
