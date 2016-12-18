@@ -30,18 +30,19 @@ TAKE_ACTION_PLAIN = "%s is taking your action, %s.  Your action now has %s."
 TAKE_ACTION_HTML = "<a href='%s'>%s</a> is taking your action, <a href='%s'>%s</a>.  " \
     "Your action now has %s."
 
-def generate_take_action_email(creator, instance):
+def get_tracker_string(action, user):
     from mysite.utils import filter_list_for_privacy_annotated
-    actor = instance.actor.profile
-    action = instance.target
-    trackers = filter_list_for_privacy_annotated(action.profileactionrelationship_set.all(), actor.user)
+    trackers = filter_list_for_privacy_annotated(action.profileactionrelationship_set.all(), user)
     trackers = trackers['total_count']
-    tracker_string = "%s people tracking it" % trackers if trackers > 1 else "%s person tracking it" % trackers
-    email_subject = TAKE_ACTION_SUBJ % actor.get_name()
-    email_message = TAKE_ACTION_PLAIN % (actor.get_name(), action, tracker_string)
-    html_message = TAKE_ACTION_HTML % (actor.get_absolute_url_with_domain(),
-        actor.get_name(), action.get_absolute_url_with_domain(), action, tracker_string)
-    email_message, html_message = add_footer(email_message, html_message, creator)
+    return "%s people tracking it" % trackers if trackers > 1 else "%s person tracking it" % trackers
+
+def generate_take_action_email(acting_profile, notified_profile, action, instance):
+    tracker_string = get_tracker_string(action, acting_profile.user)
+    email_subject = TAKE_ACTION_SUBJ % acting_profile.get_name()
+    email_message = TAKE_ACTION_PLAIN % (acting_profile.get_name(), action, tracker_string)
+    html_message = TAKE_ACTION_HTML % (acting_profile.get_absolute_url_with_domain(),
+        acting_profile.get_name(), action.get_absolute_url_with_domain(), action, tracker_string)
+    email_message, html_message = add_footer(email_message, html_message, notified_profile)
     return email_subject, email_message, html_message
 
 # Add action to slate templates
@@ -50,18 +51,15 @@ ADD_SLATE_PLAIN = "%s added your action %s to the slate %s.  Your action is now 
 ADD_SLATE_HTML = "<a href='%s'>%s</a> added your action <a href='%s'>%s</a> to the slate " \
     "<a href='%s'>%s</a>.  Your action is now part of %s."
 
-def generate_add_to_slate_email(creator, instance):
-    adder = instance.actor.profile
-    action = instance.action_object
-    slate = instance.target
+def generate_add_to_slate_email(acting_profile, notified_profile, action, slate):
     linked_slates = action.slate_set.count()
     slate_string = "%s slates" % linked_slates if linked_slates > 1 else "%s slate" % linked_slates
-    email_subject = ADD_SLATE_SUBJ % adder.get_name()
-    email_message = ADD_SLATE_PLAIN % (adder.get_name(), action, slate, slate_string)
-    html_message = ADD_SLATE_HTML % (adder.get_absolute_url_with_domain(),
-        adder.get_name(), action.get_absolute_url_with_domain(), action,
+    email_subject = ADD_SLATE_SUBJ % acting_profile.get_name()
+    email_message = ADD_SLATE_PLAIN % (acting_profile.get_name(), action, slate, slate_string)
+    html_message = ADD_SLATE_HTML % (acting_profile.get_absolute_url_with_domain(),
+        acting_profile.get_name(), action.get_absolute_url_with_domain(), action,
         slate.get_absolute_url_with_domain(), slate, slate_string)
-    email_message, html_message = add_footer(email_message, html_message, creator)
+    email_message, html_message = add_footer(email_message, html_message, notified_profile)
     return email_subject, email_message, html_message
 
 

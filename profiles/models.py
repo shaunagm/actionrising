@@ -76,6 +76,9 @@ class Profile(models.Model):
             self.current_privacy = self.privacy
         self.save()
 
+    def get_user_privacy(self):
+        return self.privacy_defaults.global_default
+
     def get_relationship_given_profile(self, profile):
         rel = Relationship.objects.filter(person_A=self, person_B=profile)
         if rel:
