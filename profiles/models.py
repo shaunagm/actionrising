@@ -34,7 +34,7 @@ class Profile(models.Model):
     actions = models.ManyToManyField(Action, through='ProfileActionRelationship')
     # privacy default is inh == inherit
     privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
-    current_privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='sit')
+    current_privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='fol')
 
     def __unicode__(self):
         return self.user.username
