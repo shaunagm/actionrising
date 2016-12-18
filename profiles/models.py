@@ -372,4 +372,6 @@ def par_handler(sender, instance, created, **kwargs):
             action.send(instance.last_suggester, verb='suggested action', action_object=instance.action, target=instance.profile.user)
         else:
             action.send(instance.profile.user, verb='is taking action', target=instance.action)
+    if instance.status == "don":
+        action.send(instance.profile.user, verb='completed action', target=instance.action)
 post_save.connect(par_handler, sender=ProfileActionRelationship)
