@@ -64,6 +64,7 @@ class ProfileToDoView(UserPassesTestMixin, generic.DetailView):
         context = super(ProfileToDoView, self).get_context_data(**kwargs)
         context['has_notes'] = True
         context['can_edit_actions'] = True
+        context['use_status'] = False
         context['actions'] = self.object.profile.get_open_pars()
         context['suggested_actions'] = self.object.profile.get_suggested_actions_count()
         return context
