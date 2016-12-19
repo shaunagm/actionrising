@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 
-import json
+import json, datetime
 from random import shuffle
 from itertools import chain
 
@@ -160,6 +160,29 @@ class Profile(models.Model):
             if rel.current_profile_follows_target(self) and not rel.current_profile_mutes_target(self):
                 people.append(person.user)
         return people
+
+    def get_percent_finished(self):
+        total_count = 0
+        finished_count = 0
+        for action in self.profileactionrelationship_set.all():
+            total_count += 1
+            if action.status == "don":
+                finished_count += 1
+        if total_count == 0:
+            return 0
+        return float(finished_count)/float(total_count)*100
+
+    def get_action_streak(self):
+        streak_length = 0
+        today = datetime.datetime.now().date()
+        dates = [action.date_finished.date() for action in self.profileactionrelationship_set.all() if action.date_finished]
+        while True:
+            if today in dates:
+                streak_length += 1
+                today = today - datetime.timedelta(days=1)
+            else:
+                break
+        return streak_length
 
     # Add methods to save and access links as json objects
 
@@ -328,6 +351,8 @@ class ProfileActionRelationship(models.Model):
     last_suggester = models.ForeignKey(User, blank=True, null=True)
     suggested_by = models.CharField(max_length=500, blank=True, null=True)
     notes = models.CharField(max_length=2500, blank=True, null=True)
+    date_accepted = models.DateTimeField(default=timezone.now)
+    date_finished = models.DateTimeField(blank=True, null=True)
 
     def __unicode__(self):
         return u'Relationship of profile %s and action %s' % (self.profile, self.action)

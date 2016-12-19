@@ -1,3 +1,5 @@
+import datetime
+
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -32,6 +34,10 @@ class ProfileView(UserPassesTestMixin, generic.DetailView):
                 self.object.profile.get_most_recent_actions_created(), self.request.user)
             context['tracked_actions'] = filter_list_for_privacy_annotated(
                 self.object.profile.get_most_recent_actions_tracked(), self.request.user)
+            obj = self.get_object()
+            context['total_actions'] = obj.profile.profileactionrelationship_set.count()
+            context['percent_finished'] = obj.profile.get_percent_finished()
+            context['action_streak_current'] = obj.profile.get_action_streak()
         return context
 
 class ProfileEditView(UserPassesTestMixin, generic.UpdateView):
@@ -127,6 +133,7 @@ def toggle_par_helper(toggle_type, current_profile, action):
     if toggle_type == 'add':
         par, create = ProfileActionRelationship.objects.get_or_create(profile=current_profile, action=action)
         par.status = 'ace'
+        par.date_accepted = datetime.datetime.now()
         par.save()
     if toggle_type == 'remove':
         par = ProfileActionRelationship.objects.get(profile=current_profile, action=action)
@@ -182,8 +189,10 @@ def mark_as_done_helper(profile, action, mark_as):
         action=action)
     if mark_as == 'done':
         par.status = 'don'
+        par.date_finished = datetime.datetime.now()
     else:
         par.status = 'ace'
+        par.date_accepted = datetime.datetime.now()
     par.save()
     return par
 
@@ -200,6 +209,7 @@ def mark_as_done(request, slug, mark_as):
 def manage_suggested_action_helper(par, type):
     if type == 'accept':
         par.status = "ace"
+        par.date_accepted = datetime.datetime.now()
     if type == 'reject':
         par.status = "wit"
     par.save()
