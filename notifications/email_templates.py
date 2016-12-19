@@ -83,19 +83,21 @@ DAILY_SUBJ = "Your Daily Action from ActionRising"
 DAILY_YOURS_PLAIN = "Your action for today comes from your personal list of actions:\n\n" \
     "%s\n\nReady to take action?"
 DAILY_YOURS_HTML = "Your action for today comes from your personal list of actions:<br /><br />" \
-    "<a href='%s'>%s</a><br /><br />Ready to take action?"
+    "<a href='%s'>%s</a><br /><br />Ready to take action?<br /><br />(<a href='%s'>Mark as done with one click.</a>)"
 DAILY_TOP_PLAIN = "Your action for today comes from the most popular actions on the site:\n\n" \
     "%s\n\nReady to take action?"
 DAILY_TOP_HTML = "Your action for today comes from the most popular actions on the site:<br /><br />" \
-    "<a href='%s'>%s</a><br /><br />Ready to take action?"
+    "<a href='%s'>%s</a><br /><br />Ready to take action?<br /><br />(<a href='%s'>Mark as done with one click.</a>)"
 
 def generate_daily_action_email(action, kind, profile):
     if kind == "yours":
         email_message = DAILY_YOURS_PLAIN % action
-        html_message = DAILY_YOURS_HTML % (action.get_absolute_url_with_domain(), action)
+        html_message = DAILY_YOURS_HTML % (action.get_absolute_url_with_domain(),
+            action, action.get_mark_as_done_url_with_domain())
     else:
         email_message = DAILY_TOP_PLAIN % action
-        html_message = DAILY_TOP_HTML % (action.get_absolute_url_with_domain(), action)
+        html_message = DAILY_TOP_HTML % (action.get_absolute_url_with_domain(),
+            action, action.get_mark_as_done_url_with_domain())
     email_message, html_message = add_footer(email_message, html_message, profile)
     return DAILY_SUBJ, email_message, html_message
 

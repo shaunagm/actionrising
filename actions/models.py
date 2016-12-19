@@ -135,6 +135,10 @@ class Action(models.Model):
     def get_absolute_url_with_domain(self):
         return PRODUCTION_DOMAIN + self.get_absolute_url()
 
+    def get_mark_as_done_url_with_domain(self):
+        return PRODUCTION_DOMAIN + reverse('mark_as_done',
+            kwargs={'slug': self.slug, 'mark_as': 'done'})
+
     def get_robust_url(self):
         try:
             url = reverse('action', kwargs={'slug': self.slug})

@@ -178,7 +178,8 @@ def manage_action(request, slug):
         return render(request, 'profiles/manage_action.html', context)
 
 def mark_as_done_helper(profile, action, mark_as):
-    par = ProfileActionRelationship.objects.filter(profile=profile, action=action).first()
+    par, created = ProfileActionRelationship.objects.get_or_create(profile=profile,
+        action=action)
     if mark_as == 'done':
         par.status = 'don'
     else:

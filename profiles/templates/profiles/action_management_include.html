@@ -1,7 +1,13 @@
 {% if request.user.is_authenticated %}
   <div class="btn-group" id="manage-action-button">
     {% if object in request.user.profile.actions.all %}
-        <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Manage Action <span class="caret"></span></a>
+        <a href="#" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
+          {% ifequal par.status 'don' %}
+            Action Taken
+          {% else %}
+            Manage Action
+          {% endifequal %}
+        <span class="caret"></span></a>
         <ul class="dropdown-menu">
           {% ifequal par.status 'don' %}
               <li><a class="manage-action-links" href="{% url 'mark_as_done' object.slug 'accepted' %}">
@@ -22,8 +28,10 @@
             Remove Action</a></li>
         </ul>
       {% else %}
-          <a id="manage-action-button" href="{% url 'toggle_action_for_profile' object.slug 'add' %}" class="btn btn-primary">
+          <a id="manage-action-button" href="{% url 'toggle_action_for_profile' object.slug 'add' %}" class="btn btn-primary btn-sm">
             Take Action</a>
+          <a id="already-done-button" href="{% url 'mark_as_done' object.slug 'done' %}" class="btn btn-success btn-sm">
+            Finished</a>
       {% endif %}
   </div>
   {% endif %}
