@@ -14,7 +14,7 @@ def about(request):
     return render(request, 'mysite/about.html', {'time_elapsed': time_elapsed})
 
 def change_password_redirect(request):
-    return HttpResponseRedirect(reverse('profile', kwargs={'pk': request.user.pk }))
+    return render(request, 'mysite/landing.html')
 
 def acme_challenge(request):
     return render(request, 'mysite/challenge.html')

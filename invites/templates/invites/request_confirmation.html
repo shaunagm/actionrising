@@ -10,7 +10,7 @@
     <p>You now have an account on ActionRising.  Welcome!</p>
 
     {% if username %}
-        You can <a href="{% url 'login' %}">log in</a> using the following info:</p>
+        You can <a href="{% url 'password_reset' %}">log in</a> using the following info:</p>
         <div class="row">
         <div class="col-sm-10 col-sm-offset-1">
           <p>Username: <b>{{ username }}</b></p>
@@ -18,7 +18,7 @@
         </div>
         </div>
     {% else %}
-        <p>Go ahead and <a href="{% url 'login' %}">log in</a> with the username and
+        <p>Go ahead and <a href="{% url 'password_reset' %}">log in</a> with the username and
         password you just created.</p>
     {% endif %}
 
