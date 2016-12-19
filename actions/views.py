@@ -60,6 +60,7 @@ class ActionCreateView(LoginRequiredMixin, generic.edit.CreateView):
     def get_form_kwargs(self):
         form_kws = super(ActionCreateView, self).get_form_kwargs()
         form_kws["user"] = self.request.user
+        form_kws["formtype"] = "create"
         return form_kws
 
     def form_valid(self, form):
@@ -83,6 +84,7 @@ class ActionEditView(UserPassesTestMixin, generic.edit.UpdateView):
     def get_form_kwargs(self):
         form_kws = super(ActionEditView, self).get_form_kwargs()
         form_kws["user"] = self.request.user
+        form_kws["formtype"] = "update"
         return form_kws
 
 class TopicView(LoginRequiredMixin, generic.DetailView):

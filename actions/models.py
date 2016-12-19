@@ -16,7 +16,7 @@ from ckeditor.fields import RichTextField
 from mysite.settings import PRODUCTION_DOMAIN
 
 from mysite.utils import (PRIVACY_CHOICES, PRIORITY_CHOICES, STATUS_CHOICES,
-    INDIVIDUAL_STATUS_CHOICES, disable_for_loaddata)
+    TIME_CHOICES, INDIVIDUAL_STATUS_CHOICES, disable_for_loaddata)
 
 slug_validator = [
     RegexValidator(
@@ -107,6 +107,8 @@ class Action(models.Model):
     topics = models.ManyToManyField(ActionTopic, blank=True, related_name="actions_for_topic")
     date_created = models.DateTimeField(default=timezone.now)
     flags = GenericRelation('flags.Flag')
+    # default default is H == 'Unknown or variable'
+    duration = models.CharField(max_length=2, choices=TIME_CHOICES, default='H')
 
     # TODO Add get_status field
     #      which looks at has_deadline and returns either no deadline,

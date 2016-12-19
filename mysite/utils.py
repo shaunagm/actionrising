@@ -38,6 +38,16 @@ PRIORITY_CHOICES = (
     ('eme', _('Emergency')),
 )
 
+TIME_CHOICES = (
+    ('A', _('Ten minutes or less')),
+    ('B', _('Under an hour')),
+    ('C', _('A few hours')),
+    ('E', _('A day or more, not ongoing')),
+    ('F', _('Minor ongoing commitment')),
+    ('G', _('Major ongoing commitment')),
+    ('H', _('Unknown or variable')),
+)
+
 def check_for_ownership(object, user):
     user_profile = user.profile if hasattr(user, 'profile') else "GarbageString"
     if object in [user, user_profile]:
