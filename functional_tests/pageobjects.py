@@ -225,7 +225,8 @@ class ToDoPage(BasicActionListPage):
     manage_button_first_row = PageElement(css="span.glyphicon-wrench")
 
     def go_to_todo_page(self, username=None):
-        self.w.get(self.root_uri + "/profiles/to-do/" + username)
+        user = User.objects.get(username=username)
+        self.w.get(self.root_uri + "/profiles/to-do/" + str(user.pk))
 
     def get_notes(self):
         notes = []

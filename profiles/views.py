@@ -20,7 +20,6 @@ def index(request):
 class ProfileView(UserPassesTestMixin, generic.DetailView):
     template_name = 'profiles/profile.html'
     model = User
-    slug_field = 'username'
 
     def test_func(self):
         obj = self.get_object()
@@ -54,7 +53,6 @@ class ProfileEditView(UserPassesTestMixin, generic.UpdateView):
 class ProfileToDoView(UserPassesTestMixin, generic.DetailView):
     template_name = 'profiles/todo.html'
     model = User
-    slug_field = 'username'
 
     def test_func(self):
         obj = self.get_object()
@@ -72,7 +70,6 @@ class ProfileToDoView(UserPassesTestMixin, generic.DetailView):
 class ProfileSuggestedView(UserPassesTestMixin, generic.DetailView):
     template_name = 'profiles/suggested.html'
     model = User
-    slug_field = 'username'
 
     def test_func(self):
         obj = self.get_object()
@@ -95,7 +92,6 @@ class ProfileSearchView(LoginRequiredMixin, generic.ListView):
 class FeedView(UserPassesTestMixin, generic.DetailView):
     template_name = 'profiles/feed.html'
     model = User
-    slug_field = 'username'
 
     def test_func(self):
         obj = self.get_object()
@@ -118,10 +114,10 @@ def toggle_relationships_helper(toggle_type, current_profile, target_profile):
         return relationship.toggle_mute_for_current_profile(current_profile)
 
 @login_required
-def toggle_relationships(request, username, toggle_type):
+def toggle_relationships(request, pk, toggle_type):
     current_profile = request.user.profile
     try:
-        target_user = User.objects.get(username=username)
+        target_user = User.objects.get(pk=pk)
     except ObjectDoesNotExist: # If the target username got borked
         return HttpResponseRedirect(reverse('index'))
     status = toggle_relationships_helper(toggle_type, current_profile, target_user.profile)
@@ -156,7 +152,8 @@ def manage_action_helper(par, form, user):
         # their profile-buddies already had this action suggested to them.
         new_profile = User.objects.get(username=profile.user.username).profile
         new_par, created = ProfileActionRelationship.objects.get_or_create(
-            profile=new_profile, action=par.action, status="sug", last_suggester=user)
+            profile=new_profile, action=par.action, last_suggester=user,
+            defaults={'status': 'sug'})
         new_par.add_suggester(user.username)
     for slate in form.cleaned_data['slates']:
         # TODO: Right now this is pretty inefficient.  Would be nice to show users which of
@@ -216,4 +213,4 @@ def manage_suggested_action(request, slug, type):
     except ObjectDoesNotExist: # If the action slug got borked
         return HttpResponseRedirect(reverse('index'))
     manage_suggested_action_helper(par, type)
-    return HttpResponseRedirect(reverse('suggested', kwargs={'slug':request.user}))
+    return HttpResponseRedirect(reverse('suggested', kwargs={'pk':request.user.pk}))

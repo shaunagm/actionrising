@@ -17,7 +17,7 @@
            <div id="logged-in-landing-content">
 
                <h4><a href="{% url 'actions' %}">Browse actions you can take</a></h4>
-               <h4><a href="{% url 'to_do' user.username %}">Put together your personal ToDo list</a></h4>
+               <h4><a href="{% url 'to_do' user.pk %}">Put together your personal ToDo list</a></h4>
                <h4><a href="{% url 'create_action' %}">Add new actions for you and others to do</a></h4>
                <h4><a href="{% url 'create_slate' %}">Make a "slate" of suggested actions</a></h4>
                <h4><a href="{% url 'profiles' %}">Find and follow friends to see what they're working on</a></h4>

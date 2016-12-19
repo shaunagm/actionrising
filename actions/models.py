@@ -144,7 +144,7 @@ class Action(models.Model):
         return reverse('edit_action', kwargs={'slug': self.slug})
 
     def get_action_creator_link(self):
-        return reverse('profile', kwargs={'slug': self.creator.username})
+        return reverse('profile', kwargs={'pk': self.creator.pk})
 
     def get_tags(self):
         return list(chain(self.topics.all(), self.actiontypes.all()))

@@ -34,7 +34,7 @@
        A slate is a collection of actions, typically selected to suit a particular theme, event, or political outcome.
        You can find those by searching the <a href="{% url 'slates' %}">slates</a> page.</p>
 
-     <p>You can view all of your open actions via your <a href="{% url 'to_do' user.username %}">to do list</a>.
+     <p>You can view all of your open actions via your <a href="{% url 'to_do' user.pk %}">to do list</a>.
 
      <p>That's all you really need to know.  If you're interested, you can also override an action's default
        priority, privacy or status, or you can add notes to it.  These changes don't show up for everyone,

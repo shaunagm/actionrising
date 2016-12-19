@@ -41,7 +41,7 @@ class TestActionMethods(TestCase):
 
     def test_get_creator_with_link(self):
         self.assertEqual(self.action.get_creator_with_link(),
-            "<a href='/profiles/profile/buffysummers'>buffysummers</a>")
+            "<a href='/profiles/profile/3'>buffysummers</a>")
         self.action.anonymize = True
         self.action.save()
         self.assertEqual(self.action.get_creator_with_link(), "Anonymous")

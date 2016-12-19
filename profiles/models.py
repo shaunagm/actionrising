@@ -55,19 +55,19 @@ class Profile(models.Model):
             return self.user.username
 
     def get_absolute_url(self):
-        return reverse('profile', kwargs={'slug': self.user.username })
+        return reverse('profile', kwargs={'pk': self.user.pk })
 
     def get_absolute_url_with_domain(self):
         return PRODUCTION_DOMAIN + self.get_absolute_url()
 
     def get_edit_url(self):
-        return reverse('edit_profile', kwargs={'pk': self.pk })
+        return reverse('edit_profile', kwargs={'pk': self.user.pk })
 
     def get_edit_url_with_domain(self):
         return PRODUCTION_DOMAIN + self.get_edit_url()
 
     def get_suggestion_url_with_domain(self):
-        return PRODUCTION_DOMAIN + reverse('suggested', kwargs={'slug': self.user.username })
+        return PRODUCTION_DOMAIN + reverse('suggested', kwargs={'pk': self.user.pk })
 
     def refresh_current_privacy(self):
         if self.privacy == "inh":
