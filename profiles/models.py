@@ -61,7 +61,7 @@ class Profile(models.Model):
         return PRODUCTION_DOMAIN + self.get_absolute_url()
 
     def get_edit_url(self):
-        return reverse('edit_profile', kwargs={'pk': self.user.pk })
+        return reverse('edit_profile', kwargs={'pk': self.pk })
 
     def get_edit_url_with_domain(self):
         return PRODUCTION_DOMAIN + self.get_edit_url()
