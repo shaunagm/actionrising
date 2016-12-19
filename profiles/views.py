@@ -121,7 +121,7 @@ def toggle_relationships(request, pk, toggle_type):
     except ObjectDoesNotExist: # If the target username got borked
         return HttpResponseRedirect(reverse('index'))
     status = toggle_relationships_helper(toggle_type, current_profile, target_user.profile)
-    return HttpResponseRedirect(reverse('profile', kwargs={'slug':target_user.username}))
+    return HttpResponseRedirect(reverse('profile', kwargs={'pk':target_user.pk}))
 
 def toggle_par_helper(toggle_type, current_profile, action):
     if toggle_type == 'add':
