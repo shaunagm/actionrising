@@ -1,0 +1,202 @@
+function datelogic(days_til_deadline, deadline_status) {
+  if ((deadline_status == "Today") || (deadline_status == "This Week") || (deadline_status == "This Month")) {
+        if (days_til_deadline > 0) {
+                if ((deadline_status == "Today" && days_til_deadline < 2) ||
+                (deadline_status == "This Week" && days_til_deadline < 8) ||
+                (deadline_status == "This Month" && days_til_deadline < 31)) {
+                   return true;
+                } else {
+                   return false;  // If date too far in future
+                }
+        } else {
+                return false;  // If deadline requested but action has no deadline set
+        }
+  } else {
+        return true;  // If deadline not actually requested ("All", etc)
+  }
+}
+
+function format ( d ) {
+    // `d` is the original data object for the row
+    return 'Notes: ' + d[9];
+}
+
+$(document).ready(function() {
+
+    if ($('.view_manage')[0]) {
+      var manager_column_visible = true;
+    } else {
+      var manager_column_visible = false;
+    };
+
+    var actionTable = $('#actions').DataTable({
+        "iDisplayLength": 100,
+        "aaSorting": [],
+        "columnDefs": [
+            {
+                "targets": [ 4 ],
+                "visible": false,
+                "name":  "deadline"
+            },
+            {
+                "targets": [ 5 ],
+                "visible": false,
+                "name":  "priority"
+            },
+            {
+                "targets": [ 6 ],
+                "visible": false,
+                "name":  "status"
+            },
+            {
+                "targets": [ 7 ],
+                "visible": false,
+                "name":  "creator"
+            },
+            {
+                "targets": [ 8 ],
+                "visible": false,
+                "name":  "location"
+            },
+            {
+                "targets": [ 9 ],
+                "visible": false,
+                "name":  "notes"
+            },
+            {
+                "targets": [ 10 ],
+                "visible": false,
+                "name":  "duration"
+            },
+            {
+                "targets": [ 11 ],
+                "orderable": false,
+                "visible": manager_column_visible,
+                "name":  "manage"
+            }
+        ],
+        "searchCols": [
+          null, null, null, null, null, null, { "search": "True" }, null,
+           null, null, null, null
+        ]
+    });
+
+    var slateTable = $('#slates').DataTable({
+        "iDisplayLength": 100,
+        "aaSorting": [],
+        "columnDefs": [
+            {
+                "targets": [ 3 ],
+                "visible": false,
+                "name":  "status"
+            },
+            {
+                "targets": [ 4 ],
+                "visible": false,
+                "name":  "creator"
+            }
+        ],
+        "searchCols": [
+          null, null, null, { "search": "True" }, null
+        ]
+    });
+
+    if ($.fn.dataTable.isDataTable("#actions")) {
+      chosenTable = actionTable;
+    }
+
+    if ($.fn.dataTable.isDataTable("#slates")) {
+      chosenTable = slateTable;
+    }
+    
+    user_state = "{{ user.profile.district.state }}";
+    user_district = "{{ user.profile.district.district }}";
+    
+    today = new Date();
+    status_index = chosenTable.column('status:name').index();
+    creator_index = chosenTable.column('creator:name').index();
+    location_index = chosenTable.column('location:name').index();
+    priority_index = chosenTable.column('priority:name').index();
+    deadline_index = chosenTable.column('deadline:name').index();
+    duration_index = chosenTable.column('duration:name').index();
+
+    $.fn.dataTable.ext.search.push(function( settings, data, dataIndex ) {
+            var pass_status = (($('#filter-active').is(':checked') && (data[status_index] == "True")) ||
+              (!$('#filter-active').is(':checked')));
+            var pass_creator = (($('#filter-friends').is(':checked') && (data[creator_index] == "True")) ||
+              (!$('#filter-friends').is(':checked')));
+              
+            var pass_location = false;
+            if (typeof filtered_location !== 'undefined') {
+                
+                location_data = data[location_index].split(",");
+                var state = location_data[0];
+                var district = location_data[1];
+                if(filtered_location == "My State") {
+                    pass_location = (state == user_state);
+                }
+                if(filtered_location == "My District") {
+                    pass_location = ((state == user_state) && (district == user_district));
+                }
+                pass_location = (pass_location || (filtered_location == "") || (filtered_location == "Anywhere, United States"));
+            } else {
+                pass_location = true;
+            }
+              
+            if (typeof priority !== 'undefined') {
+              var pass_priority = ((data[priority_index] == priority) || (priority == "") || (priority == "All"));
+            } else {
+              var pass_priority = true;
+            }
+            if (typeof duration !== 'undefined') {
+              var pass_duration = ((data[duration_index] == duration) || (duration == "") || (duration == "All"));
+            } else {
+              var pass_duration = true;
+            }
+            if (typeof deadline !== 'undefined') {
+              var pass_deadline = datelogic(data[deadline_index], deadline);
+            } else {
+              var pass_deadline = true;
+            }
+<<<<<<< HEAD
+            if (pass_status && pass_creator && pass_priority && pass_deadline && pass_location) {  return true; }
+=======
+            if (pass_status && pass_creator && pass_local && pass_priority && pass_deadline && pass_duration) 
+              {  return true; }
+>>>>>>> origin/master
+            return false;
+    });
+
+    // Event listener to the two range filtering inputs to redraw on input
+    $('#filter-active').on('change',function () {
+        chosenTable.columns().search('').draw();
+    });
+    $('#filter-friends').on('change',function () {
+        chosenTable.draw();
+    });
+    $('.filter-priority').on('click',function () {
+      chosenTable.draw(priority=$(this).text());
+    });
+    $('.filter-deadline').on('click',function () {
+      chosenTable.draw(deadline=$(this).text());
+    });
+<<<<<<< HEAD
+    $('.filter-location').on('click',function () {
+      chosenTable.draw(filtered_location=$(this).text());
+=======
+    $('.filter-duration').on('click',function () {
+      chosenTable.draw(duration=$(this).text());
+>>>>>>> origin/master
+    });
+    $('#show-notes').on('change', function () {
+      chosenTable.rows().every(function(){
+        if ( this.child.isShown() ) {
+            this.child.hide();
+        }
+        else {
+            this.child( format(this.data()), "notesrow").show();
+        }
+      });
+    });
+
+} );
