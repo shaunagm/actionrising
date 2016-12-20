@@ -1,4 +1,5 @@
 import datetime
+import mock
 
 from django.test import TestCase
 from django.core.exceptions import ObjectDoesNotExist
@@ -10,7 +11,9 @@ from actions.models import (Action, Slate, ActionTopic, ActionType, SlateActionR
 from profiles.models import Profile, ProfileActionRelationship
 from flags.models import Flag
 from django.contrib.contenttypes.models import ContentType
+from actions.lib import act_location
 from actions.views import create_action_helper, create_slate_helper, edit_slate_helper
+
 
 ###################
 ### Test models ###
@@ -138,3 +141,29 @@ class TestActionViews(TestCase):
         new_action = Action.objects.create(title="New action", creator=self.buffy)
         edit_slate_helper(obj, [new_action])
         self.assertEqual(list(obj.actions.all()), [new_action])
+        
+class TestLocation(TestCase):
+    
+    def setUp(self):
+        self.testing_user = User.objects.create(username="testing_user")
+        self.action = Action.objects.create(title="Test Action with Location", creator=self.testing_user)
+        
+    @mock.patch('actions.lib.act_location.geocode')
+    @mock.patch('actions.lib.act_location.find_congressional_district')
+    def test_populate_location_and_district(self, find_congressional_district, geocode):
+        
+        geocoded_location = mock.MagicMock()
+        geocoded_location.latitude = 0.0
+        geocoded_location.longitude = 0.0
+        geocode.return_value = geocoded_location
+        
+        find_congressional_district - mock.MagicMock()
+        find_congressional_district.return_value = {"state":"MA","district":5}
+        
+        act_location.populate_location_and_district(self.action)
+        self.assertEqual(self.action.lat, 0.0)
+        self.assertEqual(self.action.lon, 0.0)
+        
+        district = self.action.district
+        self.assertEqual(district.state, "MA")
+        self.assertEqual(district.district, 5)

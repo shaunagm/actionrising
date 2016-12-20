@@ -3,7 +3,7 @@ Signal listeners for Action models
 """
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from actions import location
+from actions.lib import act_location
 from actions.models import Action
 
 
@@ -11,4 +11,4 @@ from actions.models import Action
 def action_post_save(instance, update_fields, created, **dummy):
     
     if created or (update_fields and 'location' in update_fields):
-        location.populate_location_and_district(instance)
+        act_location.populate_location_and_district(instance)

@@ -1,3 +1,4 @@
+import sys
 from actions.models import Action, District
 from geopy.exc import GeopyError
 from geopy.geocoders import GoogleV3
@@ -7,6 +8,9 @@ from sunlight import config, errors
 config.API_KEY=" "
 
 def geocode(location):
+    if 'test' in sys.argv:
+        return None
+        
     try:
         geocoder = GoogleV3()
         geocoded_location = geocoder.geocode(location)
@@ -16,7 +20,10 @@ def geocode(location):
         return None
     
 def find_congressional_district(lat, lon):
-    congress_api = Congress()
+    if 'test' in sys.argv:
+        congress_api = Congress(use_https=False)
+    else:
+        congress_api = Congress()
     try:
         district = congress_api.locate_districts_by_lat_lon(
             lat,
