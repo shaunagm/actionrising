@@ -38,6 +38,16 @@ PRIORITY_CHOICES = (
     ('eme', _('Emergency')),
 )
 
+TIME_CHOICES = (
+    ('A', _('Ten minutes or less')),
+    ('B', _('Under an hour')),
+    ('C', _('A few hours')),
+    ('E', _('A day or more, not ongoing')),
+    ('F', _('Minor ongoing commitment')),
+    ('G', _('Major ongoing commitment')),
+    ('H', _('Unknown or variable')),
+)
+
 def check_for_ownership(object, user):
     user_profile = user.profile if hasattr(user, 'profile') else "GarbageString"
     if object in [user, user_profile]:
@@ -126,3 +136,12 @@ def give_old_profiles_new_settings():
     from notifications.models import NotificationSettings
     for user in User.objects.all():
         NotificationSettings.objects.create(user=user)
+
+# Prevent bad actor from flooding us with requests, but hash it so it's not trivially easy
+# to recreate TODO: set up process for periodically deleting this data (every 24 hours?)
+def get_hash_given_request(request):
+    import hashlib
+    requester_hash = hashlib.new('DSA')
+    id_string = request.META.get('HTTP_USER_AGENT', '') + request.META.get('REMOTE_ADDR')
+    requester_hash.update(id_string)
+    return requester_hash.hexdigest()

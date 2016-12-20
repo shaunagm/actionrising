@@ -18,7 +18,7 @@
 
      <h2>FAQ</h2>
 
-     <p>Do you have a question not answered by the faq?  Email actionrisingsite -at- gmail -dot- com.
+     <p>Do you have a question not answered by the faq?  Email actionrisingsite@gmail.com.
        We'll answer it, and probably add it to this FAQ.</p>
 
      <h3 class="text-info">So how do I use this thing?</h3>
@@ -34,7 +34,7 @@
        A slate is a collection of actions, typically selected to suit a particular theme, event, or political outcome.
        You can find those by searching the <a href="{% url 'slates' %}">slates</a> page.</p>
 
-     <p>You can view all of your open actions via your <a href="{% url 'to_do' user.username %}">to do list</a>.
+     <p>You can view all of your open actions via your <a href="{% url 'to_do' user.pk %}">to do list</a>.
 
      <p>That's all you really need to know.  If you're interested, you can also override an action's default
        priority, privacy or status, or you can add notes to it.  These changes don't show up for everyone,
@@ -90,11 +90,11 @@
 
      <h3 class="text-info">How do I verify my account?</h3>
 
-     <p>If you'd like to verify your account, please email actionrisingsite -at- gmail -dot- com.  Eventually
+     <p>If you'd like to verify your account, please email actionrisingsite@gmail.com.  Eventually
        we'll have a system for doing automatic verification with <a href="https://keybase.io/">Keybase</a>.</p>
 
      <h3 class="text-info">Can I contribute to the site?</h3>
 
-     <p>Yes!  Email actionrisingsite -at- gmail -dot- com if you'd like to contribute.</p>
+     <p>Yes!  Email actionrisingsite@gmail.com if you'd like to contribute.</p>
 
 {% endblock content %}

@@ -1,11 +1,16 @@
+{% load action_extras %} 
+{% get_duration_choices as duration_choices %}
+
 Filter:
 
+{% if use_status != False %}
 <span id="visibility-hack" class="first-click"></a>
 <div class="btn-group" data-toggle="buttons" id="filter-active-button">
   <label class="btn btn-primary active">
     <input type="checkbox" autocomplete="off" id="filter-active" checked> Active Only
   </label>
  </div>
+ {% endif %}
 
  <div class="btn-group" data-toggle="buttons" id="filter-friends-button">
   <label class="btn btn-primary">
@@ -49,6 +54,18 @@ Filter:
   </ul>
 </div>
 
+<div class="btn-group" id="filter-duration-group">
+  <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+    Duration<span class="caret"></span></a>
+  <ul class="dropdown-menu">
+    {% for choice in duration_choices %}
+      <li><a class="filter-duration" href="#">{{ choice }}</a></li>
+    {% endfor %}
+    <li class="divider"></li>
+    <li><a class="filter-duration" href="#">All</a></li>
+  </ul>
+</div>
+
 {% if has_notes %}
     <div class="btn-group" data-toggle="buttons">
       <label class="btn btn-info" id="show-notes">
@@ -70,6 +87,7 @@ Filter:
       <th>Friends?</th>
       <th>Location?</th>
       <th>Notes?</th>
+      <th>Duration?</th>
       <th>Manage</th>
     </tr>
   </thead>

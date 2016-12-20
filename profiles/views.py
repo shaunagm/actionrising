@@ -1,10 +1,12 @@
+import datetime
+
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth.mixins import UserPassesTestMixin,  LoginRequiredMixin
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
 from mysite.utils import check_privacy, filter_list_for_privacy, filter_list_for_privacy_annotated
@@ -20,7 +22,6 @@ def index(request):
 class ProfileView(UserPassesTestMixin, generic.DetailView):
     template_name = 'profiles/profile.html'
     model = User
-    slug_field = 'username'
 
     def test_func(self):
         obj = self.get_object()
@@ -33,6 +34,10 @@ class ProfileView(UserPassesTestMixin, generic.DetailView):
                 self.object.profile.get_most_recent_actions_created(), self.request.user)
             context['tracked_actions'] = filter_list_for_privacy_annotated(
                 self.object.profile.get_most_recent_actions_tracked(), self.request.user)
+            obj = self.get_object()
+            context['total_actions'] = obj.profile.profileactionrelationship_set.count()
+            context['percent_finished'] = obj.profile.get_percent_finished()
+            context['action_streak_current'] = obj.profile.get_action_streak()
         return context
 
 class ProfileEditView(UserPassesTestMixin, generic.UpdateView):
@@ -65,7 +70,6 @@ class ProfileEditView(UserPassesTestMixin, generic.UpdateView):
 class ProfileToDoView(UserPassesTestMixin, generic.DetailView):
     template_name = 'profiles/todo.html'
     model = User
-    slug_field = 'username'
 
     def test_func(self):
         obj = self.get_object()
@@ -75,6 +79,7 @@ class ProfileToDoView(UserPassesTestMixin, generic.DetailView):
         context = super(ProfileToDoView, self).get_context_data(**kwargs)
         context['has_notes'] = True
         context['can_edit_actions'] = True
+        context['use_status'] = False
         context['actions'] = self.object.profile.get_open_pars()
         context['suggested_actions'] = self.object.profile.get_suggested_actions_count()
         return context
@@ -82,7 +87,6 @@ class ProfileToDoView(UserPassesTestMixin, generic.DetailView):
 class ProfileSuggestedView(UserPassesTestMixin, generic.DetailView):
     template_name = 'profiles/suggested.html'
     model = User
-    slug_field = 'username'
 
     def test_func(self):
         obj = self.get_object()
@@ -105,7 +109,6 @@ class ProfileSearchView(LoginRequiredMixin, generic.ListView):
 class FeedView(UserPassesTestMixin, generic.DetailView):
     template_name = 'profiles/feed.html'
     model = User
-    slug_field = 'username'
 
     def test_func(self):
         obj = self.get_object()
@@ -128,19 +131,20 @@ def toggle_relationships_helper(toggle_type, current_profile, target_profile):
         return relationship.toggle_mute_for_current_profile(current_profile)
 
 @login_required
-def toggle_relationships(request, username, toggle_type):
+def toggle_relationships(request, pk, toggle_type):
     current_profile = request.user.profile
     try:
-        target_user = User.objects.get(username=username)
+        target_user = User.objects.get(pk=pk)
     except ObjectDoesNotExist: # If the target username got borked
         return HttpResponseRedirect(reverse('index'))
     status = toggle_relationships_helper(toggle_type, current_profile, target_user.profile)
-    return HttpResponseRedirect(reverse('profile', kwargs={'slug':target_user.username}))
+    return HttpResponseRedirect(reverse('profile', kwargs={'pk':target_user.pk}))
 
 def toggle_par_helper(toggle_type, current_profile, action):
     if toggle_type == 'add':
         par, create = ProfileActionRelationship.objects.get_or_create(profile=current_profile, action=action)
         par.status = 'ace'
+        par.date_accepted = datetime.datetime.now()
         par.save()
     if toggle_type == 'remove':
         par = ProfileActionRelationship.objects.get(profile=current_profile, action=action)
@@ -165,9 +169,9 @@ def manage_action_helper(par, form, user):
         # TODO: Right now this is pretty inefficient.  Would be nice to show users which of
         # their profile-buddies already had this action suggested to them.
         new_profile = User.objects.get(username=profile.user.username).profile
-        new_par, created = ProfileActionRelationship.objects.get_or_create(profile=new_profile, action=par.action)
-        new_par.status = 'sug'
-        new_par.save()
+        new_par, created = ProfileActionRelationship.objects.get_or_create(
+            profile=new_profile, action=par.action, last_suggester=user,
+            defaults={'status': 'sug'})
         new_par.add_suggester(user.username)
     for slate in form.cleaned_data['slates']:
         # TODO: Right now this is pretty inefficient.  Would be nice to show users which of
@@ -192,11 +196,14 @@ def manage_action(request, slug):
         return render(request, 'profiles/manage_action.html', context)
 
 def mark_as_done_helper(profile, action, mark_as):
-    par = ProfileActionRelationship.objects.filter(profile=profile, action=action).first()
+    par, created = ProfileActionRelationship.objects.get_or_create(profile=profile,
+        action=action)
     if mark_as == 'done':
         par.status = 'don'
+        par.date_finished = datetime.datetime.now()
     else:
         par.status = 'ace'
+        par.date_accepted = datetime.datetime.now()
     par.save()
     return par
 
@@ -213,6 +220,7 @@ def mark_as_done(request, slug, mark_as):
 def manage_suggested_action_helper(par, type):
     if type == 'accept':
         par.status = "ace"
+        par.date_accepted = datetime.datetime.now()
     if type == 'reject':
         par.status = "wit"
     par.save()
@@ -227,4 +235,4 @@ def manage_suggested_action(request, slug, type):
     except ObjectDoesNotExist: # If the action slug got borked
         return HttpResponseRedirect(reverse('index'))
     manage_suggested_action_helper(par, type)
-    return HttpResponseRedirect(reverse('suggested', kwargs={'slug':request.user}))
+    return HttpResponseRedirect(reverse('suggested', kwargs={'pk':request.user.pk}))

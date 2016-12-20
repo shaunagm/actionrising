@@ -16,7 +16,7 @@ from ckeditor.fields import RichTextField
 from mysite.settings import PRODUCTION_DOMAIN
 
 from mysite.utils import (PRIVACY_CHOICES, PRIORITY_CHOICES, STATUS_CHOICES,
-    INDIVIDUAL_STATUS_CHOICES, disable_for_loaddata)
+    TIME_CHOICES, INDIVIDUAL_STATUS_CHOICES, disable_for_loaddata)
 
 slug_validator = [
     RegexValidator(
@@ -28,7 +28,7 @@ slug_validator = [
 
 def slugify_helper(object_model, slug):
     counter = 0
-    temp_slug = slugify(slug)
+    temp_slug = slugify(slug)[:45]
     while True:
         if object_model.objects.filter(slug=temp_slug):
             temp_slug += str(counter)
@@ -117,6 +117,8 @@ class Action(models.Model):
     topics = models.ManyToManyField(ActionTopic, blank=True, related_name="actions_for_topic")
     date_created = models.DateTimeField(default=timezone.now)
     flags = GenericRelation('flags.Flag')
+    # default default is H == 'Unknown or variable'
+    duration = models.CharField(max_length=2, choices=TIME_CHOICES, default='H')
 
     # TODO Add get_status field
     #      which looks at has_deadline and returns either no deadline,
@@ -128,6 +130,7 @@ class Action(models.Model):
     def save(self, *args, **kwargs):
         if not self.pk:
             self.slug = slugify_helper(Action, self.title)
+            self.current_privacy = self.creator.profile.privacy_defaults.global_default
         if self.privacy != "inh" and self.privacy != self.current_privacy:
             self.current_privacy = self.privacy
         super(Action, self).save(*args, **kwargs)
@@ -142,6 +145,10 @@ class Action(models.Model):
     def get_absolute_url_with_domain(self):
         return PRODUCTION_DOMAIN + self.get_absolute_url()
 
+    def get_mark_as_done_url_with_domain(self):
+        return PRODUCTION_DOMAIN + reverse('mark_as_done',
+            kwargs={'slug': self.slug, 'mark_as': 'done'})
+
     def get_robust_url(self):
         try:
             url = reverse('action', kwargs={'slug': self.slug})
@@ -153,10 +160,17 @@ class Action(models.Model):
         return reverse('edit_action', kwargs={'slug': self.slug})
 
     def get_action_creator_link(self):
-        return reverse('profile', kwargs={'slug': self.creator.username})
+        return reverse('profile', kwargs={'pk': self.creator.pk})
 
     def get_tags(self):
         return list(chain(self.topics.all(), self.actiontypes.all()))
+
+    def refresh_current_privacy(self):
+        if self.privacy == "inh":
+            self.current_privacy = self.creator.profile.privacy_defaults.global_default
+        else:
+            self.current_privacy = self.privacy
+        self.save()
 
     def get_creator(self):
         if self.anonymize:
@@ -240,6 +254,7 @@ class Slate(models.Model):
     def save(self, *args, **kwargs):
         if not self.pk:
             self.slug = slugify_helper(Slate, self.title)
+            self.current_privacy = self.creator.profile.privacy_defaults.global_default
         else:
             if self.privacy != "inh" and self.privacy != self.current_privacy:
                 self.current_privacy = self.privacy
@@ -287,6 +302,13 @@ class Slate(models.Model):
                 else:
                     return flag
         return "No flags"
+
+    def refresh_current_privacy(self):
+        if self.privacy == "inh":
+            self.current_privacy = self.creator.profile.privacy_defaults.global_default
+        else:
+            self.current_privacy = self.privacy
+        self.save()
 
 @disable_for_loaddata
 def slate_handler(sender, instance, created, **kwargs):

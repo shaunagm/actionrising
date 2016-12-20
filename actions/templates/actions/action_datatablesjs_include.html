@@ -65,6 +65,11 @@ $(document).ready(function() {
             },
             {
                 "targets": [ 10 ],
+                "visible": false,
+                "name":  "duration"
+            },
+            {
+                "targets": [ 11 ],
                 "orderable": false,
                 "visible": manager_column_visible,
                 "name":  "manage"
@@ -72,7 +77,7 @@ $(document).ready(function() {
         ],
         "searchCols": [
           null, null, null, null, null, null, { "search": "True" }, null,
-           null, null, null
+           null, null, null, null
         ]
     });
 
@@ -113,6 +118,7 @@ $(document).ready(function() {
     location_index = chosenTable.column('location:name').index();
     priority_index = chosenTable.column('priority:name').index();
     deadline_index = chosenTable.column('deadline:name').index();
+    duration_index = chosenTable.column('duration:name').index();
 
     $.fn.dataTable.ext.search.push(function( settings, data, dataIndex ) {
             var pass_status = (($('#filter-active').is(':checked') && (data[status_index] == "True")) ||
@@ -142,12 +148,19 @@ $(document).ready(function() {
             } else {
               var pass_priority = true;
             }
+            if (typeof duration !== 'undefined') {
+              var pass_duration = ((data[duration_index] == duration) || (duration == "") || (duration == "All"));
+            } else {
+              var pass_duration = true;
+            }
             if (typeof deadline !== 'undefined') {
               var pass_deadline = datelogic(data[deadline_index], deadline);
             } else {
               var pass_deadline = true;
             }
-            if (pass_status && pass_creator && pass_priority && pass_deadline && pass_location) {  return true; }
+            if (pass_status && pass_creator && pass_priority && pass_deadline && pass_location && pass_duration) {  
+                return true; 
+            }
             return false;
     });
 
@@ -163,6 +176,9 @@ $(document).ready(function() {
     });
     $('.filter-deadline').on('click',function () {
       chosenTable.draw(deadline=$(this).text());
+    });
+    $('.filter-duration').on('click',function () {
+      chosenTable.draw(duration=$(this).text());
     });
     $('.filter-location').on('click',function () {
       chosenTable.draw(filtered_location=$(this).text());

@@ -39,6 +39,11 @@ class ActionListView(LoginRequiredMixin, generic.ListView):
     model = Action
     queryset = Action.objects.filter(status__in=["rea", "fin"]).filter(current_privacy__in=["pub", "sit"])
 
+class PublicActionListView(generic.ListView):
+    template_name = "actions/actions.html"
+    model = Action
+    queryset = Action.objects.filter(status__in=["rea", "fin"]).filter(current_privacy="pub")
+
 def create_action_helper(object, types, topics, user):
     object.creator = user
     object.save()
@@ -55,6 +60,7 @@ class ActionCreateView(LoginRequiredMixin, generic.edit.CreateView):
     def get_form_kwargs(self):
         form_kws = super(ActionCreateView, self).get_form_kwargs()
         form_kws["user"] = self.request.user
+        form_kws["formtype"] = "create"
         return form_kws
 
     def form_valid(self, form):
@@ -78,6 +84,7 @@ class ActionEditView(UserPassesTestMixin, generic.edit.UpdateView):
     def get_form_kwargs(self):
         form_kws = super(ActionEditView, self).get_form_kwargs()
         form_kws["user"] = self.request.user
+        form_kws["formtype"] = "update"
         return form_kws
         
     def form_valid(self, form):

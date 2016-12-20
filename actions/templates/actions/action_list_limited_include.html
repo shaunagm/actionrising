@@ -3,7 +3,6 @@
     <tr>
       <th>#</th>
       <th>Action</th>
-      <th>Priority</th>
       <th>Status</th>
       <th>Tags</th>
     </tr>
@@ -13,7 +12,6 @@
       <tr>
           <td>{{ forloop.counter }}</td>
           <td class="actiondetails"><a href="{{ action.get_robust_url }}">{{ action.title }}</a></td>
-          <td>{{ action.get_priority_display }}</td>
           <td>{{ action.get_status }}</td>
           <td>{% include "actions/action_label_include.html" with object_list=action.get_tags %}</td>
       </tr>

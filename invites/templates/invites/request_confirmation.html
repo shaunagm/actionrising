@@ -1,0 +1,33 @@
+{% extends "mysite/base.html" %}
+
+{% load bootstrap3 %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-sm-10 col-sm-offset-1" id="form-explanation">
+    <h2>You've got an account!</h2>
+    <p>You now have an account on ActionRising.  Welcome!</p>
+
+    {% if username %}
+        You can <a href="{% url 'password_reset' %}">log in</a> using the following info:</p>
+        <div class="row">
+        <div class="col-sm-10 col-sm-offset-1">
+          <p>Username: <b>{{ username }}</b></p>
+          <p>Password: <b>{{ generated_password }}</b></p>
+        </div>
+        </div>
+    {% else %}
+        <p>Go ahead and <a href="{% url 'password_reset' %}">log in</a> with the username and
+        password you just created.</p>
+    {% endif %}
+
+    <p>Please remember your password, as there is no way for us to
+    retrieve it.  You can change your password via your edit profile page
+    once you've logged in.</p>
+
+  </div>
+</div>
+
+
+{% endblock content %}

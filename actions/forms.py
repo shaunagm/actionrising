@@ -1,6 +1,6 @@
 from django.forms import ModelForm
-
 from datetimewidget.widgets import DateTimeWidget
+from django.forms.widgets import HiddenInput
 
 from actions.models import Action, Slate, SlateActionRelationship
 from mysite.utils import (PRIVACY_CHOICES, get_global_privacy_string)
@@ -9,7 +9,7 @@ class ActionForm(ModelForm):
 
     class Meta:
         model = Action
-        fields = ['title', 'anonymize', 'description', 'privacy', 'priority', 'location', 'status', 'deadline', 'topics', 'actiontypes']
+        fields = ['title', 'anonymize', 'description', 'privacy', 'priority', 'duration', 'location', 'status', 'deadline', 'topics', 'actiontypes']
         widgets = {
             'deadline': DateTimeWidget(options={'format': 'mm/dd/yyyy HH:mm'}, bootstrap_version=3),
         }
@@ -19,18 +19,20 @@ class ActionForm(ModelForm):
             'actiontypes': "Don't see the type of action you need?  Request a new action type <a href='https://goo.gl/forms/g5AT4GdTXqcNi62q1'>here</a>.",
         }
 
-    def __init__(self, user, *args, **kwargs):
+    def __init__(self, user, formtype, *args, **kwargs):
         super(ActionForm, self).__init__(*args, **kwargs)
         self.fields['deadline'].widget.attrs['placeholder'] = 'MM/DD/YYYY HH:MM:SS (hours, minutes and seconds optional, defaults to midnight)'
         NEW_CHOICES = (PRIVACY_CHOICES[0], PRIVACY_CHOICES[1], PRIVACY_CHOICES[2], ('inh', get_global_privacy_string(user.profile)))
         self.fields['privacy'].choices = NEW_CHOICES
         self.fields['actiontypes'].label = "Types of action"
+        if formtype == "create":
+            self.fields['status'].widget = HiddenInput()
 
 class SlateForm(ModelForm):
 
     class Meta:
         model = Slate
-        fields = fields = ['title', 'description', 'status', 'privacy', 'actions']
+        fields = ['title', 'description', 'status', 'privacy', 'actions']
 
     def __init__(self, user, *args, **kwargs):
         super(SlateForm, self).__init__(*args, **kwargs)

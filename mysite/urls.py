@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^flags/', include('flags.urls')),
     url(r'^notifications/', include('notifications.urls')),
     url(r'^comments/', include('django_comments.urls')),
+    url(r'^invites/', include('invites.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^about/?$', views.about, name='about'),
     url(r'^.well-known/acme-challenge/MdzRdJXytZiBN7PYPMUbU6HjvFP2aUDEN8saHRXGBCY', views.acme_challenge),

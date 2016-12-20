@@ -10,7 +10,15 @@
           <td><a href="{{ info.user.profile.get_absolute_url }}">{{ info.user.username }}</a>
           {% if info.user.profile.location %} {{ info.user.profile.location }} {% endif %}
           <br />
-          {% if info.follows_you %} <span class="label label-success">Follows you back</span> {% endif %}
+          {% if info.mutual %}
+              <span class="label label-success">Mutual follow</span>
+          {% else %}
+              {% if info.follows_you %}
+                  <span class="label label-info">Follows you</span>
+              {% elif info.you_follow %}
+                  <span class="label label-warning">You follow</span>
+              {% endif %}
+          {% endif %}
           {% if info.muted %} <span class="label label-info">Muted</span> {% endif %}
         </td>
       </tr>

@@ -10,7 +10,7 @@ $("#id_topics, #id_actiontypes").chosen()
 
 <div class="row">
   <div class="col-sm-10 col-sm-offset-1" id="form-explanation">
-    <h2>Create/edit action</h2>
+    <h2>{% if object %} Edit {% else %} Create {% endif %}action</h2>
     <p>An action is any kind of task a user can do, from attending a protest to
     calling a representative to reading a resource to volunteering in their neighborhood.</p>
   </div>

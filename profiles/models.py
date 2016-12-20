@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 
-import json
+import json, datetime
 from random import shuffle
 from itertools import chain
 
@@ -37,7 +37,7 @@ class Profile(models.Model):
     actions = models.ManyToManyField(Action, through='ProfileActionRelationship')
     # privacy default is inh == inherit
     privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
-    current_privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='sit')
+    current_privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='fol')
 
     def __unicode__(self):
         return self.user.username
@@ -58,7 +58,7 @@ class Profile(models.Model):
             return self.user.username
 
     def get_absolute_url(self):
-        return reverse('profile', kwargs={'slug': self.user.username })
+        return reverse('profile', kwargs={'pk': self.user.pk })
 
     def get_absolute_url_with_domain(self):
         return PRODUCTION_DOMAIN + self.get_absolute_url()
@@ -68,6 +68,19 @@ class Profile(models.Model):
 
     def get_edit_url_with_domain(self):
         return PRODUCTION_DOMAIN + self.get_edit_url()
+
+    def get_suggestion_url_with_domain(self):
+        return PRODUCTION_DOMAIN + reverse('suggested', kwargs={'pk': self.user.pk })
+
+    def refresh_current_privacy(self):
+        if self.privacy == "inh":
+            self.current_privacy = self.privacy_defaults.global_default
+        else:
+            self.current_privacy = self.privacy
+        self.save()
+
+    def get_user_privacy(self):
+        return self.privacy_defaults.global_default
 
     def get_relationship_given_profile(self, profile):
         rel = Relationship.objects.filter(person_A=self, person_B=profile)
@@ -102,15 +115,15 @@ class Profile(models.Model):
             return "Unknown"
 
     def get_most_recent_actions_created(self):
-        actions = self.user.action_set.filter(status__in=["rea", "fin"])
+        actions = self.user.action_set.filter(status__in=["rea", "fin"]).order_by('-date_created')
         if len(actions) > 5:
-            return actions[-5:]
+            return actions[:5]
         return actions
 
     def get_most_recent_actions_tracked(self):
         actions = [par.action for par in self.profileactionrelationship_set.all() if par.action.status in ["rea", "fin"]]
         if len(actions) > 5:
-            return actions[-5:]
+            return actions[:5]
         return actions
 
     def get_open_actions(self):
@@ -133,15 +146,14 @@ class Profile(models.Model):
 
     def get_list_of_relationships(self):
         people = []
-        print("la")
         for person in self.get_connected_people():
-            print("AHAHAH")
-            print(person)
             rel = self.get_relationship_given_profile(person)
+            you_follow = rel.current_profile_follows_target(self)
             follows_you = rel.target_follows_current_profile(self)
             muted = rel.current_profile_mutes_target(self)
             profile = rel.get_other(self)
-            people.append({'user': profile.user, 'follows_you': follows_you, 'muted': muted})
+            people.append({'user': profile.user, 'mutual': follows_you and you_follow,
+                'follows_you': follows_you, 'you_follow': you_follow, 'muted': muted})
         return people
 
     def get_people_tracking(self):
@@ -151,6 +163,29 @@ class Profile(models.Model):
             if rel.current_profile_follows_target(self) and not rel.current_profile_mutes_target(self):
                 people.append(person.user)
         return people
+
+    def get_percent_finished(self):
+        total_count = 0
+        finished_count = 0
+        for action in self.profileactionrelationship_set.all():
+            total_count += 1
+            if action.status == "don":
+                finished_count += 1
+        if total_count == 0:
+            return 0
+        return float(finished_count)/float(total_count)*100
+
+    def get_action_streak(self):
+        streak_length = 0
+        today = datetime.datetime.now().date()
+        dates = [action.date_finished.date() for action in self.profileactionrelationship_set.all() if action.date_finished]
+        while True:
+            if today in dates:
+                streak_length += 1
+                today = today - datetime.timedelta(days=1)
+            else:
+                break
+        return streak_length
 
     # Add methods to save and access links as json objects
 
@@ -283,7 +318,7 @@ class PrivacyDefaults(models.Model):
     """Stores default privacy"""
     profile = models.OneToOneField(Profile, unique=True, related_name="privacy_defaults")
     # global default privacy is sit == Visible sitewide
-    global_default = models.CharField(max_length=3, choices=PRIVACY_DEFAULT_CHOICES, default='sit')
+    global_default = models.CharField(max_length=3, choices=PRIVACY_DEFAULT_CHOICES, default='pub')
 
     def __unicode__(self):
         return u'Privacy defaults for %s' % (self.profile.user.username)
@@ -316,8 +351,11 @@ class ProfileActionRelationship(models.Model):
     # default status is ace == accepted
     status = models.CharField(max_length=3, choices=INDIVIDUAL_STATUS_CHOICES, default='ace')
     committed = models.BooleanField(default=False)
+    last_suggester = models.ForeignKey(User, blank=True, null=True)
     suggested_by = models.CharField(max_length=500, blank=True, null=True)
     notes = models.CharField(max_length=2500, blank=True, null=True)
+    date_accepted = models.DateTimeField(default=timezone.now)
+    date_finished = models.DateTimeField(blank=True, null=True)
 
     def __unicode__(self):
         return u'Relationship of profile %s and action %s' % (self.profile, self.action)
@@ -358,5 +396,10 @@ class ProfileActionRelationship(models.Model):
 @disable_for_loaddata
 def par_handler(sender, instance, created, **kwargs):
     if created:
-        action.send(instance.profile.user, verb='is taking action', target=instance.action)
+        if instance.status == "sug":
+            action.send(instance.last_suggester, verb='suggested action', action_object=instance.action, target=instance.profile.user)
+        else:
+            action.send(instance.profile.user, verb='is taking action', target=instance.action)
+    if instance.status == "don":
+        action.send(instance.profile.user, verb='completed action', target=instance.action)
 post_save.connect(par_handler, sender=ProfileActionRelationship)
