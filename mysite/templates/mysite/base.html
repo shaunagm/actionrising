@@ -45,7 +45,6 @@
        <div class="navbar-collapse collapse" id="navbar-main">
          <ul class="nav navbar-nav">
            {% if request.user.is_authenticated %}
-           {{ request.user }}
                <li><a href="{% url 'about' %}">About</a></li>
                <li><a href="{{ request.user.profile.get_absolute_url }}">Your Profile</a></li>
                <li><a href="{% url 'to_do' request.user.pk %}">Your ToDos</a></li>
