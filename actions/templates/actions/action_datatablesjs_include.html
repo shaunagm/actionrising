@@ -138,7 +138,7 @@ $(document).ready(function() {
                 if(filtered_location == "My District") {
                     pass_location = ((state == user_state) && (district == user_district));
                 }
-                pass_location = (pass_location || (filtered_location == "") || (filtered_location == "Anywhere, United States"));
+                pass_location = (pass_location || (filtered_location == "") || (filtered_location == "Anywhere"));
             } else {
                 pass_location = true;
             }

@@ -91,6 +91,10 @@ class District(models.Model):
     """
     state = models.CharField(max_length=2)
     district = models.IntegerField()
+    
+    def __unicode__(self):
+        return "%i, %s" % (self.district, self.state)
+        
 
 class Action(models.Model):
     """ Stores a single action """
@@ -195,7 +199,13 @@ class Action(models.Model):
             return self.location
         else:
             return "Unknown"
-
+            
+    def get_district(self):
+        if self.district:
+            return "%s,%i" % (self.district.state, self.district.district)
+        else:
+            return None
+        
     def get_status(self):
         # Added for conveniences' sake in vet_actions function
         return self.get_status_display()

@@ -20,7 +20,7 @@ def geocode(location):
         return None
     
 def find_congressional_district(lat, lon):
-    if 'test' in sys.argv:
+    if 'test' in sys.argv or (len(sys.argv) > 1 and sys.argv[1] == 'runserver'):
         congress_api = Congress(use_https=False)
     else:
         congress_api = Congress()
