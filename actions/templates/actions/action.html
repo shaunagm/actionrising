@@ -2,6 +2,15 @@
 
 {% block title %} {{ action.title }} | ActionRising{% endblock %}
 
+{% block page_specific_meta %}
+
+<meta property="og:title" content="{{ action.title }}">
+<meta property="og:description" content="Take action with us on ActionRising!">
+<meta property="og:url" content="{{ action.get_absolute_url_with_domain }}">
+<!-- <meta property="og:image" content=""> -->
+
+{% endblock page_specific_meta %}
+
 {% block content %}
 
 
@@ -74,6 +83,10 @@
     </div> <!-- End left side-->
 
     <div class="col-sm-3">
+
+      {% ifequal object.current_privacy 'pub' %}
+          {% include "actions/share_include.html" %}
+      {% endifequal %}
 
         <div class="row">
       		 <div class="col-sm-12" id="comment-sidebar">

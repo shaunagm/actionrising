@@ -5,7 +5,11 @@
 <head>
 <title>{% block title %}ActionRising{% endblock %}</title>
 
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    {% block page_specific_meta %}
+    {% endblock page_specific_meta %}
 
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
@@ -19,12 +23,11 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.6.2/chosen.css">
 
-
     {% include "mysite/css_include.html" %}
+
     {% block page_specific_css %}
     {% endblock page_specific_css%}
 
-<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
 </head>
 <body>
 
