@@ -86,6 +86,16 @@ class ActionEditView(UserPassesTestMixin, generic.edit.UpdateView):
         form_kws["user"] = self.request.user
         form_kws["formtype"] = "update"
         return form_kws
+        
+    def form_valid(self, form):
+        object = form.save(commit=False)
+        uf = []
+        
+        if self.get_object().location != self.object.location:
+            uf = ['location']
+        
+        self.object = object.save(update_fields=uf)
+        return super(ActionEditView, self).form_valid(form)
 
 class TopicView(LoginRequiredMixin, generic.DetailView):
     template_name = 'actions/type_or_topic.html'

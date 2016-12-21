@@ -85,6 +85,17 @@ class ActionType(models.Model):
     def action_count(self):
         return self.actions_for_type.count()
 
+class District(models.Model):
+    """
+    Represents a congressional District
+    """
+    state = models.CharField(max_length=2)
+    district = models.IntegerField()
+    
+    def __unicode__(self):
+        return "%i, %s" % (self.district, self.state)
+        
+
 class Action(models.Model):
     """ Stores a single action """
     slug = models.CharField(max_length=50, unique=True, validators=slug_validator)
@@ -97,6 +108,9 @@ class Action(models.Model):
     privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
     current_privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='sit')
     location = models.CharField(max_length=140, blank=True, null=True)
+    lat = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    lon = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    district = models.ForeignKey(District, blank=True, null=True)
     # status default is rea == open for action
     status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='rea')
     has_deadline = models.BooleanField(default=False)
@@ -185,7 +199,13 @@ class Action(models.Model):
             return self.location
         else:
             return "Unknown"
-
+            
+    def get_district(self):
+        if self.district:
+            return "%s,%i" % (self.district.state, self.district.district)
+        else:
+            return None
+        
     def get_status(self):
         # Added for conveniences' sake in vet_actions function
         return self.get_status_display()

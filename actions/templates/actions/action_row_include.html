@@ -8,7 +8,7 @@
     <td>{{ action.get_priority_display }}</td>
     <td>{{ action.is_active }}</td>
     <td>{% if action.get_creator in friendlist %} True {% endif %} </td>
-    <td>{{ action.location }}</td>
+    <td>{{ action.get_district }}</td>
     <td>{{ rel.notes }}</td>
     <td>{{ action.get_duration_display }}</td>
     <td class="manage">

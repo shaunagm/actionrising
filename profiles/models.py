@@ -14,7 +14,7 @@ from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 from mysite.settings import PRODUCTION_DOMAIN
 from actstream.actions import follow, unfollow
-from actions.models import Action, Slate
+from actions.models import Action, District, Slate
 from notifications.models import NotificationSettings
 from mysite.utils import (PRIVACY_CHOICES, PRIORITY_CHOICES, INDIVIDUAL_STATUS_CHOICES,
     PRIVACY_DEFAULT_CHOICES, disable_for_loaddata)
@@ -25,6 +25,9 @@ class Profile(models.Model):
     verified = models.BooleanField(default=False)
     description = RichTextField(max_length=2500, blank=True, null=True)  # TODO Rich text?
     location = models.CharField(max_length=140, blank=True, null=True)
+    lat = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    lon = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    district = models.ForeignKey(District, blank=True, null=True)
     links = models.CharField(max_length=400, blank=True, null=True)
     date_joined = models.DateTimeField(default=timezone.now)
     connections = models.ManyToManyField('self',

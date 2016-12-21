@@ -8,6 +8,7 @@ class ProfilesConfig(AppConfig):
 
     def ready(self):
         from actstream import registry
+        import profiles.signals
         registry.register(self.get_model('Profile'))
         registry.register(self.get_model('ProfileActionRelationship'))
         registry.register(self.get_model('Relationship'))

@@ -18,10 +18,15 @@ Filter:
   </label>
 </div>
 
-<div class="btn-group" data-toggle="buttons" id="filter-local-button">
- <label class="btn btn-primary">
-   <input type="checkbox" autocomplete="off" id="filter-local"> Local Only
- </label>
+<div class="btn-group" id="filter-location-group">
+  <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+    Location <span class="caret"></span></a>
+  <ul class="dropdown-menu">
+    <li><a class="filter-location" href="#">My State</a></li>
+    <li><a class="filter-location" href="#">My District</a></li>
+    <li class="divider"></li>
+    <li><a class="filter-location" href="#">Anywhere</a></li>
+  </ul>
 </div>
 
 <div class="btn-group" id="filter-priority-group">

@@ -108,8 +108,10 @@ $(document).ready(function() {
     if ($.fn.dataTable.isDataTable("#slates")) {
       chosenTable = slateTable;
     }
-
-    user_location = "{{ user.profile.location }}";
+    
+    user_state = "{{ user.profile.district.state }}";
+    user_district = "{{ user.profile.district.district }}";
+    
     today = new Date();
     status_index = chosenTable.column('status:name').index();
     creator_index = chosenTable.column('creator:name').index();
@@ -123,8 +125,24 @@ $(document).ready(function() {
               (!$('#filter-active').is(':checked')));
             var pass_creator = (($('#filter-friends').is(':checked') && (data[creator_index] == "True")) ||
               (!$('#filter-friends').is(':checked')));
-            var pass_local = (($('#filter-local').is(':checked') && (data[location_index] == user_location)) ||
-              (!$('#filter-local').is(':checked')));
+              
+            var pass_location = false;
+            if (typeof filtered_location !== 'undefined') {
+                
+                location_data = data[location_index].split(",");
+                var state = location_data[0];
+                var district = location_data[1];
+                if(filtered_location == "My State") {
+                    pass_location = (state == user_state);
+                }
+                if(filtered_location == "My District") {
+                    pass_location = ((state == user_state) && (district == user_district));
+                }
+                pass_location = (pass_location || (filtered_location == "") || (filtered_location == "Anywhere"));
+            } else {
+                pass_location = true;
+            }
+              
             if (typeof priority !== 'undefined') {
               var pass_priority = ((data[priority_index] == priority) || (priority == "") || (priority == "All"));
             } else {
@@ -140,8 +158,9 @@ $(document).ready(function() {
             } else {
               var pass_deadline = true;
             }
-            if (pass_status && pass_creator && pass_local && pass_priority && pass_deadline && pass_duration) 
-              {  return true; }
+            if (pass_status && pass_creator && pass_priority && pass_deadline && pass_location && pass_duration) {  
+                return true; 
+            }
             return false;
     });
 
@@ -149,7 +168,7 @@ $(document).ready(function() {
     $('#filter-active').on('change',function () {
         chosenTable.columns().search('').draw();
     });
-    $('#filter-friends, #filter-local').on('change',function () {
+    $('#filter-friends').on('change',function () {
         chosenTable.draw();
     });
     $('.filter-priority').on('click',function () {
@@ -160,6 +179,9 @@ $(document).ready(function() {
     });
     $('.filter-duration').on('click',function () {
       chosenTable.draw(duration=$(this).text());
+    });
+    $('.filter-location').on('click',function () {
+      chosenTable.draw(filtered_location=$(this).text());
     });
     $('#show-notes').on('change', function () {
       chosenTable.rows().every(function(){
