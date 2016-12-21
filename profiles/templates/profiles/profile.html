@@ -2,7 +2,6 @@
 
 {% block title %} {{ object.username }} | ActionRising{% endblock %}
 
-
 {% block content %}
 
   <div class="row">
@@ -39,11 +38,13 @@
      </div>
    </div>
 
+   {% if total_actions %}
    <div class="row">
       <div class="col-sm-5 col-sm-offset-1">
         {% include "profiles/gamify_include.html" %}
       </div>
     </div>
+   {% endif %}
 
   <div class="row">
      <div class="col-sm-5 col-sm-offset-1" id="created-actions-div">
