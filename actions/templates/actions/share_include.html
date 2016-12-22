@@ -14,6 +14,9 @@
          <img alt="Pin it" src="{% static 'images/flat_web_icon_set/color/Pinterest.png' %}"></a></li>
        <li><a href="https://pinboard.in/popup_login/?url=http%3A%2F%2Fwww.actionrising.com&title=&description=" target="_blank" title="Save to Pinboard" onclick="window.open('https://pinboard.in/popup_login/?url=' + encodeURIComponent(document.URL) + '&title=' +  encodeURIComponent(document.title)); return false;">
          <img alt="Pin it" src="{% static 'images/flat_web_icon_set/color/Pinboard.png' %}"></a></li>
+       {% if user.is_authenticated %}
+           {% include 'notifications/email_nonusers.html' %}
+       {% endif %}
      </ul>
    </div>
 </div>

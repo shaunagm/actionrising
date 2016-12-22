@@ -15,7 +15,7 @@ from mysite.lib.privacy import check_privacy, check_privacy_given_setting
 from actions.models import Action as ActionRisingAction # TODO: Fix name collision
 from notifications.lib.email_templates import (generate_follow_email, generate_add_to_slate_email,
     generate_take_action_email, generate_comment_email, generate_daily_action_email,
-    generate_suggestion_email)
+    generate_suggestion_email, generate_non_user_email)
 from notifications.models import Notification
 
 ### EVENT-DRIVEN NOTIFICATIONS
@@ -128,3 +128,11 @@ def send_daily_actions():
 
 # TODO: Weekly summary: chron job sometime on weekend, calculates your activity and sitewide activity,
 # sends.
+
+### NON USER NOTIFICATIONS
+
+def send_non_user_notifications(notifier, emails, message, instance):
+    for email in emails:
+        email_subj, email_message, html_message = generate_non_user_email(notifier, message, instance)
+        sent = send_mail(email_subj, email_message, NOTIFY_EMAIL, [email],
+            fail_silently=False, html_message=html_message)

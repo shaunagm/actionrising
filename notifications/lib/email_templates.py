@@ -81,13 +81,13 @@ def generate_comment_email(instance):
 # Daily action template
 DAILY_SUBJ = "Your Daily Action from ActionRising"
 DAILY_YOURS_PLAIN = "Your action for today comes from your personal list of actions:\n\n" \
-    "%s\n\nReady to take action?"
+    "<blockquote>%s</blockquote>\n\nReady to take action?"
 DAILY_YOURS_HTML = "Your action for today comes from your personal list of actions:<br /><br />" \
-    "<a href='%s'>%s</a><br /><br />Ready to take action?<br /><br />(<a href='%s'>Mark as done with one click.</a>)"
+    "<blockquote><a href='%s'>%s</a></blockquote><br /><br />Ready to take action?<br /><br />(<a href='%s'>Mark as done with one click.</a>)"
 DAILY_TOP_PLAIN = "Your action for today comes from the most popular actions on the site:\n\n" \
-    "%s\n\nReady to take action?"
+    "<blockquote>%s</blockquote>\n\nReady to take action?"
 DAILY_TOP_HTML = "Your action for today comes from the most popular actions on the site:<br /><br />" \
-    "<a href='%s'>%s</a><br /><br />Ready to take action?<br /><br />(<a href='%s'>Mark as done with one click.</a>)"
+    "<blockquote><a href='%s'>%s</a></blockquote><br /><br />Ready to take action?<br /><br />(<a href='%s'>Mark as done with one click.</a>)"
 
 def generate_daily_action_email(action, kind, profile):
     if kind == "yours":
@@ -107,7 +107,8 @@ INVITE_SUBJ = "You've been invited to join ActionRising"
 INVITE_BLURB = "ActionRising is a platform created to help individuals and communities figure out their next steps. We want you to take action - specific, meaningful, positive action - that fits the time and energy you have available."
 INVITE_PLAIN = "You have been invited to join ActionRising by %s. They say:\n\n%s\n\n" \
     + INVITE_BLURB + "\n\nTo get started, visit %s"
-INVITE_HTML = "You have been invited to join ActionRising by %s. They say:<br /><br />%s<br /><br />" \
+INVITE_HTML = "You have been invited to join ActionRising by %s. They say:<br /><br />" \
+    + "<blockquote>%s</blockquote><br /><br />" \
     + INVITE_BLURB + "<br /><br /><a href='%s'>Click here</a> to get started."
 
 REQUEST_SUBJ = "Your request to join ActionRising has been approved"
@@ -144,4 +145,25 @@ def generate_suggestion_email(instance, target_user):
         suggester.username, instance.action_object.get_absolute_url_with_domain(),
         instance.action_object.title, target_user.get_suggestion_url_with_domain())
     email_message, html_message = add_footer(email_message, html_message, instance.target.profile)
+    return email_subj, email_message, html_message
+
+NONUSER_SUBJ = "%s wants you to take action on ActionRising"
+NONUSER_PLAIN = "%s wants to let you know about an action they're taking on ActionRising!\n\n" \
+    "%s \n\n %s adds: \n\n %s \n\n " + INVITE_BLURB + " You don't have to be a member of ActionRising to take action," \
+    " but you're welcome to join us. You can request an account here: %s"
+NONUSER_HTML = "<a href='%s'>%s</a> wants to let you know about an action they're taking on" \
+    " <a href='https://www.actionrising.com'>ActionRising</a>:" \
+    "<blockquote><a href='%s'>%s</a></blockquote>" \
+    "%s adds: <blockquote> %s </blockquote>" \
+    + INVITE_BLURB + " You don't have to be a member of Action Rising to take action, " \
+    "but you're welcome to join us. You can request an account <a href='%s'>here</a>."
+
+# Non user email template
+def generate_non_user_email(notifier, message, instance):
+    email_subj = NONUSER_SUBJ % notifier.username
+    email_message = NONUSER_PLAIN % (notifier.username, instance.title, notifier.username,
+        message, 'https://www.actionrising.com/invites/request-account')
+    html_message = NONUSER_HTML % (notifier.profile.get_absolute_url_with_domain(),
+        notifier.username, instance.get_absolute_url_with_domain(), instance.title,
+        notifier.username, message, 'https://www.actionrising.com/invites/request-account')
     return email_subj, email_message, html_message

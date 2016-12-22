@@ -1,7 +1,13 @@
 from django.views import generic
 from django.contrib.auth.mixins import UserPassesTestMixin,  LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
+from django.core.urlresolvers import reverse
 
+from actions.models import Action, Slate
 from notifications.models import NotificationSettings
+from notifications.lib.notification_handlers import send_non_user_notifications
 
 class SettingsEditView(UserPassesTestMixin, generic.UpdateView):
     model = NotificationSettings
@@ -31,3 +37,32 @@ class SettingsEditView(UserPassesTestMixin, generic.UpdateView):
         form.fields['if_suggested_action'].label = "Let me know whens someone suggests " \
             + "I take an action"
         return form
+
+@login_required
+def nonuser_notification(request):
+    if request.method == 'POST':
+
+        pk = request.POST.get('pk');
+        model = request.POST.get('model');
+        message = request.POST.get('message');
+
+        emails = []
+        for i in range(0,6):
+            email = request.POST.get('email' + str(i))
+            if email and email != "":
+                emails.append(email)
+
+        if model == "Action":
+            obj = Action.objects.get(pk=pk)
+        elif model == "Slate":
+            obj = Slate.objects.get(pk=pk)
+
+        if obj:
+            send_non_user_notifications(request.user, emails, message, obj)
+
+    if model == "Action":
+        return HttpResponseRedirect(reverse('action', kwargs={'slug':obj.slug}))
+    elif model == "Slate":
+        return HttpResponseRedirect(reverse('slate', kwargs={'slug':obj.slug}))
+    else:
+        return render(request, 'mysite/landing.html')

@@ -1,0 +1,42 @@
+{% load static %}
+
+<li>
+  <img alt="Pin it" data-toggle="modal" data-target="#emailNonusersModal"
+    src="{% static 'images/flat_web_icon_set/color/Email.png' %}">
+  <span class="hidden" id="hidden_pk">{{ object.pk }}</span>
+</li>
+
+<!-- Modal -->
+<div class="modal fade" id="emailNonusersModal" tabindex="-1" role="dialog" aria-labelledby="emailLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="emailLabel">Email To Friends</h4>
+      </div>
+      <form action="/notifications/nonuseremail/" method="post">
+          {% csrf_token %}
+          <input type='hidden' name="model" value="{{ object.get_cname }}">
+          <input type='hidden' name="pk" value="{{ object.pk }}">
+          <div class="modal-body">
+            Want to share this {{ object.get_cname }} with friends who don't use ActionRising?
+            <br /><br />
+            First, write an (optional) message so your friends don't think we're spammers:
+            <textarea name="message" rows="3" cols="40"></textarea>
+            <br /><br />
+            Then, add up to six friends' addresses:<br>
+                <input type="email" name="email1" class="email">
+                <input type="email" name="email2" class="email">
+                <input type="email" name="email3" class="email">
+                <input type="email" name="email4" class="email">
+                <input type="email" name="email5" class="email">
+                <input type="email" name="email6" class="email">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" >Send</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>

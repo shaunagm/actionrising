@@ -178,6 +178,7 @@ class DailyActionTests(TestCase):
         self.assertEqual(mail.outbox[2].body[:69], "Your action for today comes from the most popular actions on the site")
         for index, item in enumerate(mail.outbox):
             action_title = item.body.split("\n\n")[1]
+            action_title = action_title.replace("<blockquote>", "").replace("</blockquote>","")
             if index == 0:
                 self.assertTrue(action_title in ["Action 0", "Action 1", "Action 2", "Action 3", "Action 4"])
             else:
