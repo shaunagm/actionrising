@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 
-from notifications.models import send_daily_actions
+from notifications.lib.notification_handlers import send_daily_actions
 
 class Command(BaseCommand):
 

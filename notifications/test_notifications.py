@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django_comments.models import Comment
 from actions.models import Action, Slate, SlateActionRelationship
 from profiles.models import Relationship, ProfileActionRelationship
-from notifications.models import send_daily_actions
+from notifications.lib.notification_handlers import send_daily_actions
 
 ###################
 ### Test models ###
