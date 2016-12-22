@@ -4,7 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from django.contrib.auth.models import User
 from actions.models import Action, Slate, SlateActionRelationship
-from mysite.utils import INDIVIDUAL_STATUS_CHOICES
+from mysite.lib.choices import INDIVIDUAL_STATUS_CHOICES
 from profiles.models import Profile, Relationship, ProfileActionRelationship
 from profiles.templatetags.profile_extras import (
     get_friendslist,

@@ -2,8 +2,8 @@ from django.forms import ModelForm, ModelMultipleChoiceField, ModelChoiceField, 
 from django.forms import inlineformset_factory
 from django.forms.widgets import HiddenInput
 
-from mysite.utils import (PRIVACY_DEFAULT_CHOICES, PRIVACY_CHOICES,
-    get_global_privacy_default, get_global_privacy_string)
+from mysite.lib.choices import PRIVACY_DEFAULT_CHOICES, PRIVACY_CHOICES
+from mysite.lib.privacy import get_global_privacy_default, get_global_privacy_string
 from profiles.models import Profile, ProfileActionRelationship, PrivacyDefaults
 from actions.models import Slate
 

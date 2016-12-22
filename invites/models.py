@@ -10,8 +10,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 from mysite.settings import NOTIFY_EMAIL, PRODUCTION_DOMAIN
-from mysite.utils import disable_for_loaddata
-from notifications.email_templates import generate_invite_notification_email
+from mysite.lib.utils import disable_for_loaddata
+from notifications.lib.email_templates import generate_invite_notification_email
 
 # Workflow
 

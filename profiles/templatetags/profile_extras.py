@@ -1,6 +1,7 @@
 from django import template
 from django.contrib.auth.models import User
-from mysite.utils import INDIVIDUAL_STATUS_CHOICES, check_privacy
+from mysite.lib.choices import INDIVIDUAL_STATUS_CHOICES
+from mysite.lib.privacy import check_privacy
 from profiles.models import ProfileActionRelationship, Profile, Relationship
 
 register = template.Library()

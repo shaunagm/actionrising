@@ -9,7 +9,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
-from mysite.utils import check_privacy, filter_list_for_privacy, filter_list_for_privacy_annotated
+from mysite.lib.privacy import check_privacy, filter_list_for_privacy, filter_list_for_privacy_annotated
 from django.contrib.auth.models import User
 from profiles.models import Profile, Relationship, ProfileActionRelationship
 from actions.models import Action, Slate, SlateActionRelationship
@@ -55,7 +55,7 @@ class ProfileEditView(UserPassesTestMixin, generic.UpdateView):
 
     def get_success_url(self, **kwargs):
         return self.object.get_absolute_url()
-        
+
     def form_valid(self, form):
         object = form.save(commit=False)
         uf = []

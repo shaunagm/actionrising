@@ -7,7 +7,8 @@ from django.views import generic
 from django.contrib.auth.mixins import UserPassesTestMixin,  LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
-from mysite.utils import check_privacy, filter_list_for_privacy, filter_list_for_privacy_annotated
+from mysite.lib.privacy import (check_privacy, filter_list_for_privacy,
+    filter_list_for_privacy_annotated)
 from django.contrib.auth.models import User
 from actions.models import Action, ActionTopic, ActionType, Slate, SlateActionRelationship
 from actions.forms import ActionForm, SlateForm, SlateActionRelationshipForm
@@ -86,14 +87,14 @@ class ActionEditView(UserPassesTestMixin, generic.edit.UpdateView):
         form_kws["user"] = self.request.user
         form_kws["formtype"] = "update"
         return form_kws
-        
+
     def form_valid(self, form):
         object = form.save(commit=False)
         uf = []
-        
+
         if self.get_object().location != self.object.location:
             uf = ['location']
-        
+
         self.object = object.save(update_fields=uf)
         return super(ActionEditView, self).form_valid(form)
 

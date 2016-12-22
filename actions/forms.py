@@ -3,7 +3,8 @@ from datetimewidget.widgets import DateTimeWidget
 from django.forms.widgets import HiddenInput
 
 from actions.models import Action, Slate, SlateActionRelationship
-from mysite.utils import (PRIVACY_CHOICES, get_global_privacy_string)
+from mysite.lib.choices import PRIVACY_CHOICES
+from mysite.lib.privacy import get_global_privacy_string
 
 class ActionForm(ModelForm):
 

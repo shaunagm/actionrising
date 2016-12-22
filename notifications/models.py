@@ -14,9 +14,10 @@ from actstream.models import following, followers
 from actstream.models import Action
 from actions.models import Action as ActionRisingAction # TODO: Fix name collision
 from django.contrib.auth.models import User
-from mysite.utils import disable_for_loaddata, check_privacy, check_privacy_given_setting
+from mysite.lib.utils import disable_for_loaddata
+from mysite.lib.privacy import check_privacy, check_privacy_given_setting
 from mysite.settings import NOTIFY_EMAIL
-from email_templates import (generate_follow_email, generate_add_to_slate_email,
+from notifications.lib.email_templates import (generate_follow_email, generate_add_to_slate_email,
     generate_take_action_email, generate_comment_email, generate_daily_action_email,
     generate_suggestion_email)
 

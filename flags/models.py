@@ -8,7 +8,7 @@ from django.db.models.signals import post_save
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
-from mysite.utils import disable_for_loaddata
+from mysite.lib.utils import disable_for_loaddata
 from mysite.settings import NOTIFY_EMAIL
 from django.contrib.auth.models import User
 

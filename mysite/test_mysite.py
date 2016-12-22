@@ -4,7 +4,8 @@ from django.contrib.auth.models import User, AnonymousUser
 from actions.models import Action, Slate, SlateActionRelationship
 from profiles.models import Profile, ProfileActionRelationship
 
-from mysite.utils import check_for_ownership, get_global_privacy_default, check_privacy
+from mysite.lib.privacy import (check_for_ownership, get_global_privacy_default,
+    check_privacy)
 
 ##################
 ### Test utils ###

@@ -1,5 +1,5 @@
 from django import template
-from mysite.utils import TIME_CHOICES
+from mysite.lib.choices import TIME_CHOICES
 
 register = template.Library()
 

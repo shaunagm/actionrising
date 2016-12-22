@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 
-from mysite.utils import get_hash_given_request
+from mysite.lib.utils import get_hash_given_request
 from invites.models import Invite
 from invites.forms import InviteForm, InviteFriendForm, CreateUserFromInviteForm
 

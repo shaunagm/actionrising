@@ -14,9 +14,9 @@ from django.contrib.contenttypes.fields import GenericRelation
 
 from ckeditor.fields import RichTextField
 from mysite.settings import PRODUCTION_DOMAIN
-
-from mysite.utils import (PRIVACY_CHOICES, PRIORITY_CHOICES, STATUS_CHOICES,
-    TIME_CHOICES, INDIVIDUAL_STATUS_CHOICES, disable_for_loaddata)
+from mysite.lib.choices import (PRIVACY_CHOICES, PRIORITY_CHOICES, STATUS_CHOICES,
+    TIME_CHOICES, INDIVIDUAL_STATUS_CHOICES)
+from mysite.lib.utils import disable_for_loaddata
 
 slug_validator = [
     RegexValidator(
@@ -91,10 +91,10 @@ class District(models.Model):
     """
     state = models.CharField(max_length=2)
     district = models.IntegerField()
-    
+
     def __unicode__(self):
         return "%i, %s" % (self.district, self.state)
-        
+
 
 class Action(models.Model):
     """ Stores a single action """
@@ -199,13 +199,13 @@ class Action(models.Model):
             return self.location
         else:
             return "Unknown"
-            
+
     def get_district(self):
         if self.district:
             return "%s,%i" % (self.district.state, self.district.district)
         else:
             return None
-        
+
     def get_status(self):
         # Added for conveniences' sake in vet_actions function
         return self.get_status_display()

@@ -31,7 +31,7 @@ TAKE_ACTION_HTML = "<a href='%s'>%s</a> is taking your action, <a href='%s'>%s</
     "Your action now has %s."
 
 def get_tracker_string(action, user):
-    from mysite.utils import filter_list_for_privacy_annotated
+    from mysite.lib.privacy import filter_list_for_privacy_annotated
     trackers = filter_list_for_privacy_annotated(action.profileactionrelationship_set.all(), user)
     trackers = trackers['total_count']
     return "%s people tracking it" % trackers if trackers > 1 else "%s person tracking it" % trackers

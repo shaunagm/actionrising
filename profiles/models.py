@@ -16,8 +16,9 @@ from mysite.settings import PRODUCTION_DOMAIN
 from actstream.actions import follow, unfollow
 from actions.models import Action, District, Slate
 from notifications.models import NotificationSettings
-from mysite.utils import (PRIVACY_CHOICES, PRIORITY_CHOICES, INDIVIDUAL_STATUS_CHOICES,
-    PRIVACY_DEFAULT_CHOICES, disable_for_loaddata)
+from mysite.lib.choices import (PRIVACY_CHOICES, PRIORITY_CHOICES, INDIVIDUAL_STATUS_CHOICES,
+    PRIVACY_DEFAULT_CHOICES)
+from mysite.lib.utils import disable_for_loaddata
 
 class Profile(models.Model):
     """Stores a single user profile"""
