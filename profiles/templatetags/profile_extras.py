@@ -1,5 +1,6 @@
 from django import template
 from django.contrib.auth.models import User
+from django_comments.models import Comment
 from mysite.lib.choices import INDIVIDUAL_STATUS_CHOICES
 from mysite.lib.privacy import check_privacy
 from profiles.models import ProfileActionRelationship, Profile, Relationship
@@ -60,6 +61,6 @@ def filtered_feed(context, action):
         else:
             if not check_privacy(action.target, user):
                 return []
-    if action.action_object is not None and not check_privacy(action.action_object, user):
+    if type(action.action_object) is not Comment and action.action_object is not None and not check_privacy(action.action_object, user):
         return []
     return action
