@@ -1,0 +1,12 @@
+{{ notifier }} wants to let you know about {{ notification_string }} on ActionRising:
+
+{{ instance.title }}
+{% if message %}
+{{ notifier }} adds:
+
+{{ message }}
+{% endif %}
+
+{% include 'notifications/email_templates/plain/site_summary_blurb.html' %}
+
+You don't have to be a member of ActionRising to take action, but you're welcome to join us. You can request an account here: {{ request_invite_url }}

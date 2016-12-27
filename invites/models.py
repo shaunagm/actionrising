@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 from mysite.settings import NOTIFY_EMAIL, PRODUCTION_DOMAIN
 from mysite.lib.utils import disable_for_loaddata
-from notifications.lib.email_templates import generate_invite_notification_email
+from notifications.lib.email_handlers import invite_notification_email
 
 # Workflow
 
@@ -46,10 +46,7 @@ class Invite(models.Model):
         if self.pk:
             orig = Invite.objects.get(pk=self.pk)
             if orig.request_status == "submitted" and self.request_status == "approved":
-                if orig.self_submitted:
-                    self.send_invite_email("self")
-                else:
-                    self.send_invite_email("invited")
+                invite_notification_email(self)
                 self.request_status = "emailed"
         if not self.confirmation_url_string:
             self.confirmation_url_string = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(30))
@@ -60,11 +57,6 @@ class Invite(models.Model):
             return PRODUCTION_DOMAIN + reverse('request-confirmation', kwargs={'slug': self.confirmation_url_string })
         else:
             return PRODUCTION_DOMAIN + reverse('invite-confirmation', kwargs={'slug': self.confirmation_url_string })
-
-    def send_invite_email(self, kind):
-        email_subj, email_message, html_message = generate_invite_notification_email(kind, self)
-        sent = send_mail(email_subj, email_message, NOTIFY_EMAIL, [self.email],
-            fail_silently=False, html_message=html_message)
 
     def get_inviters(self):
         if self.invited_by is not None:

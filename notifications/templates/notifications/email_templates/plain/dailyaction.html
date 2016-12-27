@@ -1,0 +1,7 @@
+Your action for today comes from {{ action_source }}:
+
+{{ action.title }}
+
+Ready to take action?  Click here: {{ action.get_absolute_url_with_domain }}
+
+{% include 'notifications/email_templates/plain/notification_footer.html' %}

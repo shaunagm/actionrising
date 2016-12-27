@@ -14,3 +14,5 @@ class ProfilesConfig(AppConfig):
         registry.register(self.get_model('Relationship'))
         from django.contrib.auth.models import User
         registry.register(User)
+        from django_comments.models import Comment
+        registry.register(Comment)

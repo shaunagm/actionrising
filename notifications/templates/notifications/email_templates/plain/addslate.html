@@ -1,0 +1,5 @@
+{{ actor }} added your action {{ action }} to the slate {{ slate }}.  Your action is now part of {{ slate_string }}.
+
+You can view the slate here: {{ slate.get_absolute_url_with_domain }}
+
+{% include 'notifications/email_templates/plain/notification_footer.html' %}
