@@ -1,16 +1,9 @@
 {% extends "mysite/base.html" %}
 
-{% load static %}
-
 {% block title %} {{ action.title }} | ActionRising{% endblock %}
 
 {% block page_specific_meta %}
-
-<meta property="og:title" content="{{ action.title }}">
-<meta property="og:description" content="Take action with us on ActionRising!">
-<meta property="og:url" content="{{ action.get_absolute_url_with_domain }}">
-<meta property="og:image" content="https://www.actionrising.com{% static 'images/logo_for_mediashare.png' %}">
-
+    {% include "mysite/share_meta_include.html" with object=action %}
 {% endblock page_specific_meta %}
 
 {% block content %}
