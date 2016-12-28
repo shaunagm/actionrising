@@ -1,0 +1,21 @@
+{% if request.user.is_authenticated %}
+    {% if object in request.user.profile.slates.all %}
+      {% if psr.notify_of_additions %}
+
+          <div class="action-item">
+              <a href="{% url 'toggle_slate_for_profile' object.slug 'stop_notify' %}">
+                  <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                  Turn off notifications</a>
+          </div>
+
+      {% else %}
+
+          <div class="action-item">
+              <a href="{% url 'toggle_slate_for_profile' object.slug 'notify' %}">
+                  <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                  Get notifications</a>
+          </div>
+
+      {% endif %}
+    {% endif %}
+{% endif %}

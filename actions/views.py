@@ -140,6 +140,8 @@ class SlateView(UserPassesTestMixin, generic.DetailView):
             self.request.user)
         context['actions'] = annotated_list['public_list']
         context['hidden_actions'] = annotated_list['anonymous_count']
+        if self.request.user.is_authenticated():
+            context['psr'] = self.request.user.profile.get_psr_given_slate(self.object)
         return context
 
     def test_func(self):

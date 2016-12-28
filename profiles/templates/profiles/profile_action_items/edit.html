@@ -1,0 +1,9 @@
+{% ifequal object.username request.user.username %}
+
+    <div class="action-item">
+      <a href="{{ object.profile.get_edit_url }}" title="Edit">
+        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>Edit your profile
+      </a>
+    </div>
+
+{% endifequal %}

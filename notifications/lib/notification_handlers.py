@@ -13,6 +13,7 @@ from mysite.lib.utils import disable_for_loaddata
 from mysite.lib.privacy import check_privacy, check_privacy_given_setting
 from notifications.models import Notification
 from actions.models import Action as ActionRisingAction # TODO: Fix name collision
+from actions.models import Slate
 from notifications.lib import email_handlers
 
 ##################################
@@ -22,6 +23,8 @@ from notifications.lib import email_handlers
 def send_follow_notification(instance):
     follower = instance.actor
     recipient = instance.target
+    if type(recipient) == Slate:
+        return
     if recipient.notificationsettings.if_followed and recipient.email:
         notification = Notification.objects.create(user=recipient, event=instance)
         sent = email_handlers.follow_notification_email(recipient.profile, follower.profile)

@@ -15,24 +15,6 @@ def get_friendslist(context):
     return []
 
 @register.assignment_tag(takes_context=True)
-def get_relationship(context, target_user):
-    current_profile = context['request'].user.profile
-    relationship = current_profile.get_relationship_given_profile(target_user.profile)
-    # defaults
-    info = {'is_following': False, 'follow_statement': "Follow this user",
-        'account_statement': 'Make this user an accountability buddy', 'mute_statement': 'Mute this user'}
-    if not relationship:
-        return info
-    if relationship.current_profile_follows_target(current_profile):
-        info['is_following'] = True
-        info['follow_statement'] = "Unfollow this user"
-    if relationship.current_profile_accountable_to_target(current_profile):
-        info['account_statement'] = "Remove user as accountability buddy"
-    if relationship.current_profile_mutes_target(current_profile):
-        info['mute_statement'] = "Unmute this user"
-    return info
-
-@register.assignment_tag(takes_context=True)
 def get_action_status(context, public_list):
     action=context['action']
     action_status = {}

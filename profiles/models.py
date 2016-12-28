@@ -36,6 +36,7 @@ class Profile(models.Model):
                                         symmetrical=False,
                                         related_name='connected_to')
     actions = models.ManyToManyField(Action, through='ProfileActionRelationship')
+    slates = models.ManyToManyField(Slate, through='ProfileSlateRelationship')
     # privacy default is inh == inherit
     privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
     current_privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='fol')
@@ -96,6 +97,12 @@ class Profile(models.Model):
         try:
             par = ProfileActionRelationship.objects.get(profile=self, action=action)
             return par
+        except:
+            return None
+
+    def get_psr_given_slate(self, slate):
+        try:
+            return ProfileSlateRelationship.objects.get(profile=self, slate=slate)
         except:
             return None
 
@@ -211,6 +218,8 @@ class Relationship(models.Model):
     B_accountable_A = models.BooleanField(default=False)
     A_mutes_B = models.BooleanField(default=False)
     B_mutes_A = models.BooleanField(default=False)
+    A_notified_of_B = models.BooleanField(default=False)
+    B_notified_of_A = models.BooleanField(default=False)
 
     def __unicode__(self):
         return u'Relationship of : %s and %s' % (self.person_A, self.person_B)
@@ -315,6 +324,35 @@ class Relationship(models.Model):
         self.save()
         return result
 
+    def target_notified_of_current_profile(self, current_profile):
+        if current_profile == self.person_A:
+            return self.B_notified_of_A
+        elif current_profile == self.person_B:
+            return self.A_notified_of_B
+
+    def current_profile_notified_of_target(self, current_profile):
+        if current_profile == self.person_A:
+            return self.A_notified_of_B
+        elif current_profile == self.person_B:
+            return self.B_notified_of_A
+
+    def toggle_notified_of_for_current_profile(self, current_profile):
+        result = None  # Falsy default value inappropriate here?  Should we raise error?
+        if current_profile == self.person_A:
+            if self.A_notified_of_B == True:
+                self.A_notified_of_B = False
+            else:
+                self.A_notified_of_B = True
+            result = self.A_notified_of_B
+        elif current_profile == self.person_B:
+            if self.B_notified_of_A == True:
+                self.B_notified_of_A = False
+            else:
+                self.B_notified_of_A = True
+            result = self.B_notified_of_A
+        self.save()
+        return result
+
 class PrivacyDefaults(models.Model):
     """Stores default privacy"""
     profile = models.OneToOneField(Profile, unique=True, related_name="privacy_defaults")
@@ -393,7 +431,7 @@ class ProfileActionRelationship(models.Model):
             suggesters.append(suggester)
         self.set_suggesters(suggesters)
 
-# I think we just want to track PAR for now.
+# I think we just want to track PAR & PSR for now.
 @disable_for_loaddata
 def par_handler(sender, instance, created, **kwargs):
     if created:
@@ -404,3 +442,9 @@ def par_handler(sender, instance, created, **kwargs):
     if instance.status == "don":
         action.send(instance.profile.user, verb='completed action', target=instance.action)
 post_save.connect(par_handler, sender=ProfileActionRelationship)
+
+class ProfileSlateRelationship(models.Model):
+    """Stores relationship between a profile and a slate"""
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    slate = models.ForeignKey(Slate, on_delete=models.CASCADE)
+    notify_of_additions = models.BooleanField(default=True)

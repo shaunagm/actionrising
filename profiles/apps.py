@@ -11,6 +11,7 @@ class ProfilesConfig(AppConfig):
         import profiles.signals
         registry.register(self.get_model('Profile'))
         registry.register(self.get_model('ProfileActionRelationship'))
+        registry.register(self.get_model('ProfileSlateRelationship'))
         registry.register(self.get_model('Relationship'))
         from django.contrib.auth.models import User
         registry.register(User)

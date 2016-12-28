@@ -25,6 +25,8 @@
   <div class="row">
      <div class="col-sm-10 col-sm-offset-1 slate-action-items">
         {% include "actions/action_items/edit_object.html" %}
+        {% include "actions/action_items/follow_slate.html" %}
+        {% include "actions/action_items/slate_notifications.html" %}
         {% include "actions/action_items/share.html" %}
         {% include "actions/action_items/flag.html" %}
      </div>
@@ -50,7 +52,6 @@
              <div class="col-sm-10 col-sm-offset-1">
                <p>Created by <a href="{{ object.creator.profile.get_absolute_url }}">
                  {{ object.creator }}</a></p>
-                {% include "mysite/basic_info_include.html" %}
             </div>
           </div>
 
@@ -63,6 +64,13 @@
              </div>
           </div>
           {% endif %}
+
+          <div class="row">
+             <div class="col-sm-10 col-sm-offset-1">
+                {% include "mysite/basic_info_include.html" %}
+            </div>
+          </div>
+          
     </div>
 
     <div class="tab-pane fade active in" id="actionlist">

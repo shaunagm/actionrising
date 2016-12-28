@@ -9,9 +9,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
+from actstream.actions import follow, unfollow
 from mysite.lib.privacy import check_privacy, filter_list_for_privacy, filter_list_for_privacy_annotated
 from django.contrib.auth.models import User
-from profiles.models import Profile, Relationship, ProfileActionRelationship
+from profiles.models import (Profile, Relationship, ProfileActionRelationship,
+    ProfileSlateRelationship)
 from actions.models import Action, Slate, SlateActionRelationship
 from profiles.forms import ProfileForm, ProfileActionRelationshipForm
 
@@ -38,6 +40,12 @@ class ProfileView(UserPassesTestMixin, generic.DetailView):
             context['total_actions'] = obj.profile.profileactionrelationship_set.count()
             context['percent_finished'] = obj.profile.get_percent_finished()
             context['action_streak_current'] = obj.profile.get_action_streak()
+            current_profile = self.request.user.profile
+            relationship = current_profile.get_relationship_given_profile(obj.profile)
+            if relationship:
+                context['follows'] = relationship.current_profile_follows_target(current_profile)
+                context['mutes'] = relationship.current_profile_mutes_target(current_profile)
+                context['notified_of'] = relationship.current_profile_notified_of_target(current_profile)
         return context
 
 class ProfileEditView(UserPassesTestMixin, generic.UpdateView):
@@ -129,6 +137,8 @@ def toggle_relationships_helper(toggle_type, current_profile, target_profile):
         return relationship.toggle_accountability_for_current_profile(current_profile)
     elif toggle_type == 'mute':
         return relationship.toggle_mute_for_current_profile(current_profile)
+    elif toggle_type == 'notify':
+        return relationship.toggle_notified_of_for_current_profile(current_profile)
 
 @login_required
 def toggle_relationships(request, pk, toggle_type):
@@ -159,6 +169,35 @@ def toggle_action_for_profile(request, slug, toggle_type):
         return HttpResponseRedirect(reverse('index'))
     toggle_par_helper(toggle_type, current_profile, action)
     return HttpResponseRedirect(reverse('action', kwargs={'slug':action.slug}))
+
+def toggle_psr_helper(toggle_type, current_profile, slate):
+    psr, create = ProfileSlateRelationship.objects.get_or_create(profile=current_profile,
+        slate=slate)
+    if toggle_type == 'add':
+        psr.save()
+        follow(current_profile.user, slate, actor_only=False)
+        return
+    if toggle_type == 'remove':
+        psr.delete()
+        unfollow(current_profile.user, slate)
+        return
+    if toggle_type == 'notify':
+        psr.notify_of_additions = True
+        psr.save()
+        return
+    if toggle_type == 'stop_notify':
+        psr.notify_of_additions = False
+        psr.save()
+
+@login_required
+def toggle_slate_for_profile(request, slug, toggle_type):
+    current_profile = request.user.profile
+    try:
+        slate = Slate.objects.get(slug=slug)
+    except ObjectDoesNotExist: # If the action slug got borked
+        return HttpResponseRedirect(reverse('index'))
+    toggle_psr_helper(toggle_type, current_profile, slate)
+    return HttpResponseRedirect(reverse('slate', kwargs={'slug':slate.slug}))
 
 def manage_action_helper(par, form, user):
     par.priority = form.cleaned_data['priority']
