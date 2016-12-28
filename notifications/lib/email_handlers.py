@@ -39,6 +39,20 @@ def follow_notification_email(recipient, follower):
     html_message = render_to_string('notifications/email_templates/html/follow.html', ctx)
     return send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
 
+def follow_slate_notification_email(recipient, follower, slate):
+    subject = "%s is following your slate on ActionRising" % follower
+    ctx = {
+        # Required fields
+        'preheader_text': "%s is following your slate %s on ActionRising" % (follower, slate),
+        'manage_notifications_url': get_notificationsettings_url(recipient),
+        # Email-specific fields
+        'follower': follower,
+        'slate': slate
+    }
+    plain_message = render_to_string('notifications/email_templates/plain/follow_slate.html', ctx)
+    html_message = render_to_string('notifications/email_templates/html/follow_slate.html', ctx)
+    return send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+
 def action_taken_email(recipient, actor, action):
 
     subject = "%s is taking one of your actions on ActionRising" % actor

@@ -14,6 +14,7 @@ class NotificationSettings(models.Model):
     weekly_summary = models.BooleanField(default=False)
     # Notification Mode 3: Event Driven
     if_followed = models.BooleanField(default=True)
+    if_slate_followed = models.BooleanField(default=True)
     if_actions_followed = models.BooleanField(default=True)
     if_comments_on_my_actions = models.BooleanField(default=True)
     if_my_actions_added_to_slate = models.BooleanField(default=True)

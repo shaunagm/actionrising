@@ -2,10 +2,10 @@
   <div class="action-item">
     <a href="{% url 'toggle_relationships' pk=object.pk toggle_type='notify' %}">
       {% if notified_of %}
-          <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+          <i class="fa fa-times" aria-hidden="true"></i>
           Turn off notifications
       {% else %}
-          <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+          <i class="fa fa-envelope" aria-hidden="true"></i>
           Get notifications
       {% endif %}
     </a>

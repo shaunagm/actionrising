@@ -29,6 +29,7 @@ class SettingsEditView(UserPassesTestMixin, generic.UpdateView):
             + " from my open actions (default is an action from the top open actions "\
             + "on the site)"
         form.fields['if_followed'].label = "Let me know when someone follows me"
+        form.fields['if_slate_followed'].label = "Let me know when someone follows one of my slates"
         form.fields['if_comments_on_my_actions'].label = "Let me know when someone comments on my action"
         form.fields['if_actions_followed'].label = "Let me know when someone adds "\
             + "an action I created to their list of actions"

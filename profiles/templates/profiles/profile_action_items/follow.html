@@ -1,9 +1,10 @@
 <div class="action-item">
   <a href="{% url 'toggle_relationships' pk=object.pk toggle_type='follow' %}">
-    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
     {% if follows %}
+        <i class="fa fa-times" aria-hidden="true"></i>
         Unfollow user
     {% else %}
+        <i class="fa fa-user-plus" aria-hidden="true"></i>
         Follow user
     {% endif %}
   </a>

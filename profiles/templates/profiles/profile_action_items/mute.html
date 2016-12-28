@@ -2,10 +2,10 @@
   <div class="action-item">
     <a href="{% url 'toggle_relationships' pk=object.pk toggle_type='mute' %}">
       {% if mutes %}
-          <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+          <i class="fa fa-volume-up" aria-hidden="true"></i>
           Unmute user
       {% else %}
-          <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+          <i class="fa fa-volume-off" aria-hidden="true"></i>
           Mute user
       {% endif %}
     </a>

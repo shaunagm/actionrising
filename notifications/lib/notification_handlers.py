@@ -20,17 +20,31 @@ from notifications.lib import email_handlers
 ### EVENT-DRIVEN NOTIFICATIONS ###
 ##################################
 
-def send_follow_notification(instance):
-    follower = instance.actor
-    recipient = instance.target
-    if type(recipient) == Slate:
-        return
+def send_follow_user_notification(instance, follower, recipient):
     if recipient.notificationsettings.if_followed and recipient.email:
         notification = Notification.objects.create(user=recipient, event=instance)
         sent = email_handlers.follow_notification_email(recipient.profile, follower.profile)
         if sent:
             notification.sent = True
             notification.save()
+
+def send_follow_slate_notification(instance, follower, recipient, slate):
+    if recipient.notificationsettings.if_slate_followed and recipient.email:
+        notification = Notification.objects.create(user=recipient, event=instance)
+        sent = email_handlers.follow_slate_notification_email(recipient.profile,
+            follower.profile, slate)
+        if sent:
+            notification.sent = True
+            notification.save()
+
+def send_follow_notification(instance):
+    follower = instance.actor
+    recipient = instance.target
+    if type(recipient) == Slate:
+        send_follow_slate_notification(instance, follower, recipient=recipient.creator,
+            slate=recipient)
+    else:
+        send_follow_user_notification(instance, follower, recipient)
 
 def send_take_action_notification(instance):
     actor = instance.actor
