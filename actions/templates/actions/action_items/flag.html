@@ -1,0 +1,7 @@
+{% if request.user.is_authenticated %}
+    {% ifnotequal object.creator.username request.user.username %}
+       <div class="action-item">
+           {% include 'flags/flag_include.html' with flag=flag %}
+        </div>
+    {% endifnotequal %}
+{% endif %}

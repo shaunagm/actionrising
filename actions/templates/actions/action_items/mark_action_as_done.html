@@ -1,0 +1,19 @@
+{% if request.user.is_authenticated %}
+    {% ifnotequal par.status 'don' %}
+        <div class="action-item">
+           <a class="manage-action-links" href="{% url 'mark_as_done' object.slug 'done' %}" title="Mark as done">
+             <i class="fa fa-check-circle-o" aria-hidden="true"></i>
+             Mark as done
+           </a>
+        </div>
+
+    {% else %}
+
+        <div class="action-item">
+             <i class="fa fa-check-circle-o" aria-hidden="true"></i>
+             Action completed
+           </a>
+        </div>
+
+    {% endifnotequal %}
+{% endif %}

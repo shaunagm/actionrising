@@ -1,0 +1,33 @@
+{% if request.user.is_authenticated %}
+    {% if object in request.user.profile.actions.all %}
+
+       <div class="action-item">
+            <span class="manage-action-popover">
+              <i class="fa fa-cog" data-toggle="popover"></i>
+              Manage action
+            </span>
+       </div>
+
+       <div id="manage_action_popover_content" class="hide">
+         <ul id="manage-action-list">
+           <a class="manage-action-links" href="{% url 'manage_action_for_profile' object.slug %}">
+             Add to slates</a>
+           <a class="manage-action-links" href="{% url 'manage_action_for_profile' object.slug %}">
+             Suggest to friends</a>
+           <a class="manage-action-links" href="{% url 'manage_action_for_profile' object.slug %}">
+             Edit notes, priority</a>
+           <a class="manage-action-links" href="{% url 'toggle_action_for_profile' object.slug 'remove' %}">
+             Remove from todos</a>
+         </ul>
+       </div>
+
+    {% else %}
+
+       <div class="action-item">
+           <a id="manage-action-button" href="{% url 'toggle_action_for_profile' object.slug 'add' %}">
+               <i class="fa fa-plus" aria-hidden="true"></i>
+               Add to your todo list</a>
+       </div>
+
+    {% endif %}
+{% endif %}

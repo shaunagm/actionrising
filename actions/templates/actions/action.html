@@ -8,38 +8,19 @@
 
 {% block content %}
 
-
-<div class="row">
-  <div class="col-sm-11 col-sm-offset-1">
-    <h2>{{ action.title }}
-      {% ifequal object.creator.username request.user.username %}
-          <a href="{{ object.get_edit_url }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-      {% endifequal %}
-    </h2>
+  <div class="row">
+    <div class="col-sm-11 col-sm-offset-1">
+      <h2>{{ action.title }}</h2>
+    </div>
   </div>
-</div>
 
   <div class="row">
     <div class="col-sm-7 col-sm-offset-1">
+
         <div class="row">
            <div class="col-sm-12">
-             <h4 id="created_by">Created by {{ action.get_creator_with_link|safe }}</h4>
+              {% include "actions/action_label_include.html" with object_list=topic_or_type_list %}
            </div>
-        </div>
-
-        <div class="row">
-           <div class="col-sm-12">
-              {% include "profiles/action_management_include.html" %}
-              {% if user.is_authenticated %}
-                  {% include 'flags/flag_include.html' with flag=flag %}
-              {% endif %}
-          </div>
-        </div>
-
-        <div class="row">
-           <div class="col-sm-12">
-              {% include "mysite/basic_info_include.html" %}
-          </div>
         </div>
 
         {% if action.main_link %}
@@ -52,14 +33,16 @@
 
         <div class="row">
            <div class="col-sm-12 extra-margin-row" id="description">
-             {{ action.description|safe }}
+             <div class="well">
+                {{ action.description|safe }}
+             </div>
+             {% include "mysite/basic_info_include.html" %}
            </div>
         </div>
 
         <div class="row">
            <div class="col-sm-12">
-              <p></p>  <!-- hack! -->
-              {% include "actions/action_label_include.html" with object_list=topic_or_type_list %}
+              Created by: {{ action.get_creator_with_link|safe }}
            </div>
         </div>
 
@@ -79,15 +62,24 @@
 
     </div> <!-- End left side-->
 
-    <div class="col-sm-3">
-
-      {% ifequal object.current_privacy 'pub' %}
-          {% include "actions/share_include.html" %}
-      {% endifequal %}
+    <div class="col-sm-3" id="comment-sidebar">
 
         <div class="row">
-      		 <div class="col-sm-12" id="comment-sidebar">
-      				{% include "actions/comments_include.html" with object=action %}
+      		 <div class="col-sm-12">
+                {% include "actions/action_items/edit_object.html" %}
+                {% include "actions/action_items/manage_action.html" %}
+                {% include "actions/action_items/mark_action_as_done.html" %}
+                {% include "actions/action_items/share.html" %}
+                {% include "actions/action_items/flag.html" %}
+           </div>
+        </div>
+
+        <div class="row">
+      		 <div class="col-sm-12">
+             {% if user.is_authenticated %}
+                <h4>Comments</h4>
+             {% endif %}
+             {% include "comments/comments_include.html" with object=action %}
       		 </div>
       	</div>
 

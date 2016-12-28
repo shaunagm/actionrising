@@ -1,26 +1,21 @@
+<div style="display:none" id="flag_popover_content">
+  <ul id="flag-list">
+    <a href="{% url 'flag' model=object.get_cname pk=object.pk reason='spam' %}">I believe that this is spam</a><br />
+    <a href="{% url 'flag' model=object.get_cname pk=object.pk reason='abuse' %}">I believe that this is abusive</a><br />
+    <a href="{% url 'flag' model=object.get_cname pk=object.pk reason='wrong' %}">I believe that this is inaccurate</a><br />
+    <a href="{% url 'flag' model=object.get_cname pk=object.pk reason='other' %}">I am flagging this for other reasons</a><br />
+  </ul>
+</div>
+
 {% if flag == 'No flags' %}
-    <script>
-    $(function () {
-        $('#flag-button').popover({content: $('#flag-list').html(), html:true});
-    });
-    </script>
 
-    <div style="display:none">
-          <button class="btn btn-primary" type="button" id="flag-list" aria-haspopup="true"
-            aria-expanded="false">
-                <a href="{% url 'flag' model=object.get_cname pk=object.pk reason='spam' %}">I believe that this is spam</a><br />
-                <a href="{% url 'flag' model=object.get_cname pk=object.pk reason='abuse' %}">I believe that this is abusive</a><br />
-                <a href="{% url 'flag' model=object.get_cname pk=object.pk reason='wrong' %}">I believe that this is inaccurate</a><br />
-                <a href="{% url 'flag' model=object.get_cname pk=object.pk reason='other' %}">I am flagging this for other reasons</a><br />
-          </button>
-    </div>
+    <span class="flag-popover">
+      <i class="fa fa-flag" data-toggle="popover"></i> Flag
+    </span>
 
-    <button type="button" id="flag-button" class="btn btn-sm flag-content" data-toggle="popover" title="Select reason for flagging">
-        <span class="glyphicon glyphicon-flag" aria-hidden="true"></span>
-    </button>
 {% elif flag %}
-    <button type="button" class="btn btn-sm flag-content">
-        <span id="flag-button" class="glyphicon glyphicon-flag" aria-hidden="true"></span>
-        Flagged as {{ flag.flag_choice }}
-    </button>
+
+    <i class="fa fa-flag"></i>
+    Flagged as {{ flag.flag_choice }}
+
 {% endif %}
