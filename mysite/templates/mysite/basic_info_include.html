@@ -11,6 +11,9 @@
     {% if object.get_status_display %}
         <i id="status-info" class="fa fa-space-shuttle" aria-hidden="true"> {{ object.get_status_display }} </i>
     {% endif %}
+    {% if object.duration %}
+        <i id="duration-info" class="fa fa-clock-o" aria-hidden="true"> {{ object.get_duration_display }} </i>
+    {% endif %}
     {% if object.deadline %}
         <i id="deadline-info" class="fa fa-calendar" aria-hidden="true"> Deadline {{ object.deadline }} </i>
     {% endif%}
