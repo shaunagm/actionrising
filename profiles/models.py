@@ -116,6 +116,14 @@ class Profile(models.Model):
                 followers.append(person.pk)
         return Profile.objects.filter(pk__in=followers)
 
+    def get_people_user_follows(self):
+        people_followed = []
+        for person in self.get_connected_people():
+            rel = self.get_relationship_given_profile(person)
+            if rel.current_profile_follows_target(self):
+                people_followed.append(person.pk)
+        return Profile.objects.filter(pk__in=people_followed)
+
     def get_people_to_notify(self):
         notify = []
         for person in self.get_connected_people():
@@ -202,6 +210,20 @@ class Profile(models.Model):
             else:
                 break
         return streak_length
+
+    def get_friends_actions(self):
+        actions = []
+        # Get actions made by people you follow
+        people = self.get_people_user_follows()
+        for person in people:
+            for action in person.user.action_set.filter(status="rea"):
+                actions.append(action)
+        # Get actions in slates you follow
+        for slate in self.slates.all():
+            for sar in slate.slateactionrelationship_set.all():
+                if sar.action.status == "rea":
+                    actions.append(sar.action)
+        return actions
 
     # Add methods to save and access links as json objects
 

@@ -14,7 +14,7 @@ from mysite.lib.privacy import check_privacy, check_privacy_given_setting
 from notifications.models import Notification
 from actions.models import Action as ActionRisingAction # TODO: Fix name collision
 from actions.models import Slate
-from notifications.lib import email_handlers
+from notifications.lib import email_handlers, dailyaction
 
 ##################################
 ### EVENT-DRIVEN NOTIFICATIONS ###
@@ -150,18 +150,13 @@ post_save.connect(comment_handler, sender=Comment)
 ##################################
 
 def send_daily_actions():
-    popular_actions = ActionRisingAction.objects.filter(status="rea").annotate(tracker_count=Count('profileactionrelationship')).order_by('-tracker_count')
-    top_five_actions = popular_actions[:5] if len(popular_actions) > 5 else popular_actions
+    most_popular_actions = dailyaction.most_popular_actions(10) # Only needs to be generated once
     for user in User.objects.all():
         if not user.notificationsettings.daily_action or not user.email:
             continue
-        if user.notificationsettings.use_own_actions_if_exist and user.profile.get_open_actions():
-            action = random.choice(user.profile.get_open_actions())
-            source = "your open actions"
-        else:
-            action = random.choice(top_five_actions)
-            source = "the most popular actions on the site"
-        email_handlers.daily_action_email(user.profile, action, source)
+        action = dailyaction.generate_daily_action(user, most_popular_actions)
+        if action:
+            email_handlers.daily_action_email(user.profile, action)
 
 ##############################
 ### NON USER NOTIFICATIONS ###

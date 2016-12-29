@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+import json, ast
+
 from django.db import models
 from mysite.lib.choices import DAILY_ACTION_SOURCE_CHOICES
 from actstream.models import Action
@@ -56,3 +58,32 @@ class DailyActionSettings(models.Model):
 
     def __unicode__(self):
         return u'Daily Action Settings for %s' % (self.user.username)
+
+    def get_recently_seen_pks(self):
+        if self.recently_seen:
+            return json.loads(self.recently_seen)
+        return []
+
+    def set_recently_seen_pks(self, pks):
+        self.recently_seen = json.dumps(pks)
+        self.save()
+
+    def add_recently_seen_action(self, action):
+        pks = self.get_recently_seen_pks()
+        if len(pks) > 10 or action is None:
+            # If our filters/sources are giving us few actions, pop a pk regardless
+            pks.pop(0)
+        if action:
+            pks.append(action.pk)
+        self.set_recently_seen_pks(pks)
+
+    def get_duration_filter_shortnames(self):
+        return ast.literal_eval(self.duration_filter)
+
+    def get_topic_filter_pks(self):
+        pks = ast.literal_eval(self.action_topic_filter)
+        return [int(pk) for pk in pks]
+
+    def get_type_filter_pks(self):
+        pks = ast.literal_eval(self.action_type_filter)
+        return [int(pk) for pk in pks]

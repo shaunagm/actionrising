@@ -182,7 +182,7 @@ def followed_slate_updated_email(recipient, action, slate):
 ### DAILY ACTION EMAILS ###
 ###########################
 
-def daily_action_email(recipient, action, source):
+def daily_action_email(recipient, action):
 
     subject = "Your Daily Action from ActionRising"
 
@@ -191,7 +191,6 @@ def daily_action_email(recipient, action, source):
         'preheader_text': "Your daily action today is '" + action.title + "'",
         'manage_notifications_url': get_notificationsettings_url(recipient),
         # Email-specific fields
-        'action_source': source,
         'action': action
     }
 
