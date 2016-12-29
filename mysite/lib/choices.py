@@ -47,3 +47,9 @@ TIME_CHOICES = (
     ('G', _('Major ongoing commitment')),
     ('H', _('Unknown or variable')),
 )
+
+DAILY_ACTION_SOURCE_CHOICES = (
+    ('many', _('A lot')),
+    ('few', _('A little')),
+    ('none', _('None')),
+)

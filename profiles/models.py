@@ -15,7 +15,7 @@ from ckeditor.fields import RichTextField
 from mysite.settings import PRODUCTION_DOMAIN
 from actstream.actions import follow, unfollow
 from actions.models import Action, District, Slate
-from notifications.models import NotificationSettings
+from notifications.models import NotificationSettings, DailyActionSettings
 from mysite.lib.choices import (PRIVACY_CHOICES, PRIORITY_CHOICES, INDIVIDUAL_STATUS_CHOICES,
     PRIVACY_DEFAULT_CHOICES)
 from mysite.lib.utils import disable_for_loaddata
@@ -214,6 +214,7 @@ def create_user_profile(sender, instance, created, **kwargs):
         profile = Profile.objects.create(user=instance)
         PrivacyDefaults.objects.create(profile=profile)
         NotificationSettings.objects.create(user=instance)
+        DailyActionSettings.objects.create(user=instance)
 post_save.connect(create_user_profile, sender=User)
 
 class Relationship(models.Model):

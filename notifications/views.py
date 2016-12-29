@@ -6,7 +6,8 @@ from django.shortcuts import render
 from django.core.urlresolvers import reverse
 
 from actions.models import Action, Slate
-from notifications.models import NotificationSettings
+from notifications.forms import DailyActionForm
+from notifications.models import NotificationSettings, DailyActionSettings
 from notifications.lib.notification_handlers import send_non_user_notifications
 
 class SettingsEditView(UserPassesTestMixin, generic.UpdateView):
@@ -21,7 +22,7 @@ class SettingsEditView(UserPassesTestMixin, generic.UpdateView):
         return obj.user == self.request.user
 
     def get_success_url(self, **kwargs):
-        return self.request.user.profile.get_absolute_url()
+        return self.request.user.profile.get_edit_url()
 
     def get_form(self):
         form = super(SettingsEditView, self).get_form()
@@ -43,6 +44,19 @@ class SettingsEditView(UserPassesTestMixin, generic.UpdateView):
         form.fields['if_followed_slates_updated'].label = "Let me know when a slate I follow " \
             + "gets a new action added to it"
         return form
+
+class DailyActionView(UserPassesTestMixin, generic.UpdateView):
+    model = DailyActionSettings
+    form_class = DailyActionForm
+    template_name = "notifications/dailyaction_settings_form.html"
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj.user == self.request.user
+
+    def get_success_url(self, **kwargs):
+        return self.request.user.profile.get_edit_url()
+
 
 @login_required
 def nonuser_notification(request):

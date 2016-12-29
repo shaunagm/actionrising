@@ -1,0 +1,57 @@
+{% extends "mysite/base.html" %}
+
+{% load bootstrap3 %}
+
+{% block page_specific_javascript %}
+    $("#id_duration_filter, #id_action_type_filter, #id_action_topic_filter").chosen({width: "50%"})
+{% endblock page_specific_javascript %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-sm-10 col-sm-offset-1" id="form-explanation">
+    <h2>Daily Action settings for {{ object.user.username }}</h2>
+    Customize your daily actions!</p>
+    <form id="settings_form" class="form-horizontal" action="" method="post">
+      {% csrf_token %}
+
+      <h3>Sources</h3>
+      <p>Where should we draw your daily actions from?  Tell us how many actions
+        should come from each source.</p>
+      <div class="daily_action_choices">
+        From your own open actions? {{ form.my_own_actions }}<br />
+        From actions people you follow have made? {{ form.my_friends_actions }}<br />
+        From the most popular actions on the site? {{ form.popular_actions }}
+      </div>
+
+      <h3>Filters</h3>
+      <p>You may not want to recieve certain actions, like phone campaigns or actions
+        that take longer than an hour.  To filter out those actions, turn the filter on
+        and then select which types of actions to filter out.</p>
+
+      <div class="daily_action_choices">
+        Duration filter on: {{ form.duration_filter_on }}<br />
+        Durations to filter out: {{ form.duration_filter }}<br /><br />
+        {{ form.duration_filter.errors }}
+        Topic filter on: {{ form.action_topic_filter_on }}<br />
+        Topics to filter out: {{ form.action_topic_filter }}<br /><br />
+        {{ form.action_topic_filter.errors }}
+        Type filter on: {{ form.action_type_filter_on }}<br />
+        Types of actions to filter out: {{ form.action_type_filter }}<br /><br />
+        {{ form.action_type_filter.errors }}
+      </div>
+
+
+
+
+    {% buttons %}
+      <div class="col-md-10">
+        {% bootstrap_button "Save" button_type="submit" button_class="btn-primary" icon="star" %}
+      </div>
+    {% endbuttons %}
+
+      </form>
+
+  </div>
+</div>
+{% endblock content %}
