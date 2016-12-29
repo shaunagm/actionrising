@@ -21,6 +21,7 @@ Filter:
       <th>Status?</th>
       <th>Friends?</th>
       <th># of Actions</th>
+      <th>People Tracking</th>
     </tr>
   </thead>
   <tbody>
@@ -33,6 +34,7 @@ Filter:
           <td>{{ object.is_active }}</td>
           <td>{% if object.creator in friendlist %} True {% endif %} </td>
           <td>{{ object.actions.count }}</td>
+          <td>{{ object.profile_set.count }}</td>
         </tr>
       {% endfor %}
   </tbody>
