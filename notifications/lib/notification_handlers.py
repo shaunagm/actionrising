@@ -70,7 +70,20 @@ def send_suggestion_notification(instance):
             notification.sent = True
             notification.save()
 
-def send_added_to_slate_notification(instance):
+def send_notifications_to_users_who_follow_slate(instance):
+    slate = instance.target
+    recipients = slate.get_people_to_notify()
+    action = instance.action_object
+    action_creator = instance.action_object.creator
+    for recipient in recipients:
+        if (recipient != action_creator and recipient.email and recipient.notificationsettings.if_followed_slates_updated):
+            notification = Notification.objects.create(user=recipient, event=instance)
+            sent = email_handlers.followed_slate_updated_email(recipient.profile, action, slate)
+            if sent:
+                notification.sent = True
+                notification.save()
+
+def send_notification_to_action_creator(instance):
     recipient = instance.action_object.creator
     actor = instance.actor
     action = instance.action_object
@@ -96,6 +109,17 @@ def send_comment_notification(instance):
             notification.sent = True
             notification.save()
 
+def send_creation_notification(instance):
+    actor = instance.actor
+    recipients = actor.profile.get_people_to_notify()
+    for recipient in recipients:
+        if (recipient.email and recipient.notificationsettings.if_followed_users_create):
+            notification = Notification.objects.create(user=recipient, event=instance)
+            sent = email_handlers.followed_user_creates_email(recipient.profile, actor.profile, instance.target)
+            if sent:
+                notification.sent = True
+                notification.save()
+
 @disable_for_loaddata
 def create_event_driven_notification(sender, instance, created, **kwargs):
     if created:
@@ -106,9 +130,12 @@ def create_event_driven_notification(sender, instance, created, **kwargs):
         if instance.verb == "suggested action":
             send_suggestion_notification(instance)
         if instance.verb == "added" and instance.target.get_cname() == "Slate":
-            send_added_to_slate_notification(instance)
+            send_notification_to_action_creator(instance)
+            send_notifications_to_users_who_follow_slate(instance)
         if instance.verb == "left comment":
             send_comment_notification(instance)
+        if instance.verb == "created":
+            send_creation_notification(instance)
 post_save.connect(create_event_driven_notification, sender=Action)
 
 @disable_for_loaddata

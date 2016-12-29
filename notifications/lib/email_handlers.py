@@ -9,6 +9,14 @@ def get_notificationsettings_url(recipient):
     url_path = reverse('manage_notifications', kwargs={'pk': recipient.user.notificationsettings.pk})
     return 'https://www.actionrising.com' + url_path
 
+def get_toggle_notify_url(target):
+    url_path = reverse('toggle_relationships', kwargs={'pk': target.pk, 'toggle_type': 'notify'})
+    return 'https://www.actionrising.com' + url_path
+
+def get_toggle_notify_for_slate_url(target):
+    url_path = reverse('toggle_slate_for_profile', kwargs={'slug': target.slug, 'toggle_type': 'stop_notify'})
+    return 'https://www.actionrising.com' + url_path
+
 ###########################
 ### EVENT-DRIVEN EMAILS ###
 ###########################
@@ -135,7 +143,40 @@ def comment_email(recipient, actor, action, comment):
 
     plain_message = render_to_string('notifications/email_templates/plain/comment.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/comment.html', ctx)
-    return send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email])
+    return send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+
+def followed_user_creates_email(recipient, actor, created_object):
+    subject = "%s created a new %s on ActionRising" % (actor, created_object.get_cname())
+    ctx = {
+        # Required fields
+        'preheader_text': "%s created a new %s '%s' on ActionRising" % (actor,
+            created_object.get_cname(), created_object),
+        'manage_notifications_url': get_notificationsettings_url(recipient),
+        # Email-specific fields
+        'actor': actor,
+        'created_object': created_object,
+        'toggle_notify_url': get_toggle_notify_url(actor.user)
+    }
+    plain_message = render_to_string('notifications/email_templates/plain/followed_user_created.html', ctx)
+    html_message = render_to_string('notifications/email_templates/html/followed_user_created.html', ctx)
+    return send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+
+def followed_slate_updated_email(recipient, action, slate):
+    subject = "A slate you follow has a new action!"
+    ctx = {
+        # Required fields
+        'preheader_text': "Slate %s has a new action, %s, on ActionRising" % (slate,
+            action),
+        'manage_notifications_url': get_notificationsettings_url(recipient),
+        # Email-specific fields
+        'slate': slate,
+        'action': action,
+        'toggle_notify_url': get_toggle_notify_url(slate)
+    }
+    plain_message = render_to_string('notifications/email_templates/plain/followed_slate_updated.html', ctx)
+    html_message = render_to_string('notifications/email_templates/html/followed_slate_updated.html', ctx)
+    return send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+
 
 ###########################
 ### DAILY ACTION EMAILS ###

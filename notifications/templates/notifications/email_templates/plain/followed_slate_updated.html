@@ -1,0 +1,8 @@
+{{ slate.creator }} has added a new action to their slate {{ slate }}:
+
+{{ action.title }}
+
+You've got notifications for this slate turned on.  To turn off notifications
+for this specific slate, go here: {{ toggle_notify_url }}
+
+{% include 'notifications/email_templates/plain/notification_footer.html' %}

@@ -320,6 +320,13 @@ class Slate(models.Model):
             self.current_privacy = self.privacy
         self.save()
 
+    def get_people_to_notify(self):
+        people = []
+        for psr in self.profileslaterelationship_set.all():
+            if psr.notify_of_additions:
+                people.append(psr.profile.user)
+        return people
+
 @disable_for_loaddata
 def slate_handler(sender, instance, created, **kwargs):
     if not created and (timezone.now() - instance.date_created).seconds < 600:

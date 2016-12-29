@@ -19,6 +19,9 @@ class NotificationSettings(models.Model):
     if_comments_on_my_actions = models.BooleanField(default=True)
     if_my_actions_added_to_slate = models.BooleanField(default=True)
     if_suggested_action = models.BooleanField(default=True)
+    # Notification Mode 4: Followed users & slates
+    if_followed_users_create = models.BooleanField(default=True)
+    if_followed_slates_updated =  models.BooleanField(default=True)
 
     def __unicode__(self):
         return u'Notification Settings for %s' % (self.user.username)

@@ -23,6 +23,12 @@
            </div>
         </div>
 
+        <div class="row">
+           <div class="col-sm-12">
+              Created by: {{ action.get_creator_with_link|safe }}
+           </div>
+        </div>
+
         {% if action.main_link %}
         <div class="row">
            <div class="col-sm-12">
@@ -37,12 +43,6 @@
                 {{ action.description|safe }}
              </div>
              {% include "mysite/basic_info_include.html" %}
-           </div>
-        </div>
-
-        <div class="row">
-           <div class="col-sm-12">
-              Created by: {{ action.get_creator_with_link|safe }}
            </div>
         </div>
 

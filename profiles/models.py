@@ -116,6 +116,14 @@ class Profile(models.Model):
                 followers.append(person.pk)
         return Profile.objects.filter(pk__in=followers)
 
+    def get_people_to_notify(self):
+        notify = []
+        for person in self.get_connected_people():
+            rel = self.get_relationship_given_profile(person)
+            if rel.target_notified_of_current_profile(self):
+                notify.append(person.pk)
+        return [profile.user for profile in Profile.objects.filter(pk__in=notify)]
+
     def get_location(self):
         if self.location:
             return self.location

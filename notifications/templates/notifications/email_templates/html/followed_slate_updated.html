@@ -1,0 +1,25 @@
+{% extends "notifications/email_templates/html/base.html" %}
+
+{% block email_content %}
+<table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;width:100%;">
+  <tr>
+    <td style="font-family:sans-serif;font-size:14px;vertical-align:top;">
+
+      <p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">
+        Hi there,</p>
+      <p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">
+        <a href='{{ slate.creator.profile.get_absolute_url_with_domain }}'>{{ slate.creator.profile }}</a>
+        has added a new action to their slate, <a href="{{ slate.get_absolute_url_with_domain }}">{{ slate.title }}</a>:
+
+        <p style="font-family:sans-serif;font-size:18px;font-weight:bold;margin:0;Margin-left:25px;Margin-bottom:15px;">
+          <a href="{{ action.get_absolute_url_with_domain }}">{{ action.title }}</a>
+        </p>
+
+        <p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">
+          You've got notifications for this slate turned on.  To turn off notifications
+          for this specific slate, <a href='{{ toggle_notify_url }}'>click here</a>.  To
+          adjust your notifications settings further, see the link in the footer of this email.</p>
+    </td>
+  </tr>
+</table>
+{% endblock email_content %}
