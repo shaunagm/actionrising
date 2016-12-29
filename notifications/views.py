@@ -12,8 +12,9 @@ from notifications.lib.notification_handlers import send_non_user_notifications
 class SettingsEditView(UserPassesTestMixin, generic.UpdateView):
     model = NotificationSettings
     template_name = "notifications/settings_form.html"
-    fields = ['daily_action', 'use_own_actions_if_exist', 'if_followed', 'if_comments_on_my_actions',
-        'if_actions_followed', 'if_my_actions_added_to_slate', 'if_suggested_action']
+    fields = ['daily_action', 'use_own_actions_if_exist', 'if_followed', 'if_slate_followed',
+        'if_comments_on_my_actions', 'if_actions_followed', 'if_my_actions_added_to_slate',
+        'if_suggested_action', 'if_followed_users_create', 'if_followed_slates_updated']
 
     def test_func(self):
         obj = self.get_object()
@@ -30,13 +31,17 @@ class SettingsEditView(UserPassesTestMixin, generic.UpdateView):
             + "on the site)"
         form.fields['if_followed'].label = "Let me know when someone follows me"
         form.fields['if_slate_followed'].label = "Let me know when someone follows one of my slates"
+        form.fields['if_actions_followed'].label = "Let me know when someone is taking " \
+            + "one of my actions"
         form.fields['if_comments_on_my_actions'].label = "Let me know when someone comments on my action"
-        form.fields['if_actions_followed'].label = "Let me know when someone adds "\
-            + "an action I created to their list of actions"
         form.fields['if_my_actions_added_to_slate'].label = "Let me know when someone adds "\
             + "an action I created to a slate"
-        form.fields['if_suggested_action'].label = "Let me know whens someone suggests " \
+        form.fields['if_suggested_action'].label = "Let me know when someone suggests " \
             + "I take an action"
+        form.fields['if_followed_users_create'].label = "Let me know when a user I follow " \
+            + "creates an action or slate"
+        form.fields['if_followed_slates_updated'].label = "Let me know when a slate I follow " \
+            + "gets a new action added to it"
         return form
 
 @login_required

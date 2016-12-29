@@ -7,24 +7,70 @@
 <div class="row">
   <div class="col-sm-10 col-sm-offset-1" id="form-explanation">
     <h2>Notifications settings for {{ object.user.username }}</h2>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-sm-10">
-    <div class="col-sm-offset-1">
-        <p class="form-prompt">Please select when you would like to receive email notifications.</p>
-    </div>
+    Please select when you would like to receive email notifications.</p>
     <form id="settings_form" class="form-horizontal" action="" method="post">
       {% csrf_token %}
-      {% bootstrap_form form layout='horizontal' %}
-      {% buttons %}
-        <div class="col-md-10 col-md-offset-2">
-          {% bootstrap_button "Submit" button_type="submit" button_class="btn-primary" icon="star" %}
+
+    <div class="row">
+      <div class="col-sm-6">
+
+        <div class="list-group">
+          <p class="list-group-item list-header pink">Daily Actions</p>
+          <p class="list-group-item">
+            {{ form.daily_action.label }}{{ form.daily_action }}
+          </p>
+          <p class="list-group-item">
+            {{ form.use_own_actions_if_exist.label }}{{ form.use_own_actions_if_exist }}
+          </p>
         </div>
-      {% endbuttons %}
-    </form>
+
+        <div class="list-group">
+          <p class="list-group-item list-header blue">Stuff I Follow</p>
+          <p class="list-group-item">
+            {{ form.if_followed_users_create.label }}{{ form.if_followed_users_create }}
+          </p>
+          <p class="list-group-item">
+            {{ form.if_followed_slates_updated.label }}{{ form.if_followed_slates_updated }}
+          </p>
+        </div>
+
+      </div>
+      <div class="col-sm-6">
+
+        <div class="list-group">
+          <p class="list-group-item list-header green">Me & Mine</p>
+          <p class="list-group-item">
+            {{ form.if_followed.label }}{{ form.if_followed }}
+          </p>
+          <p class="list-group-item">
+            {{ form.if_slate_followed.label }}{{ form.if_slate_followed }}
+          </p>
+          <p class="list-group-item">
+            {{ form.if_actions_followed.label }}{{ form.if_actions_followed }}
+          </p>
+          <p class="list-group-item">
+            {{ form.if_comments_on_my_actions.label }}{{ form.if_comments_on_my_actions }}
+          </p>
+          <p class="list-group-item">
+            {{ form.if_my_actions_added_to_slate.label }}{{ form.if_my_actions_added_to_slate }}
+          </p>
+          <p class="list-group-item">
+            {{ form.if_suggested_action.label }}{{ form.if_suggested_action }}
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+
+    {% buttons %}
+      <div class="col-md-10">
+        {% bootstrap_button "Submit" button_type="submit" button_class="btn-primary" icon="star" %}
+      </div>
+    {% endbuttons %}
+
+      </form>
+
   </div>
 </div>
-
 {% endblock content %}
