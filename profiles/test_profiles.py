@@ -6,11 +6,7 @@ from django.contrib.auth.models import User
 from actions.models import Action, Slate, SlateActionRelationship
 from mysite.lib.choices import INDIVIDUAL_STATUS_CHOICES
 from profiles.models import Profile, Relationship, ProfileActionRelationship
-from profiles.templatetags.profile_extras import (
-    get_friendslist,
-    get_relationship,
-    get_action_status,
-)
+from profiles.templatetags.profile_extras import get_friendslist, get_action_status
 from profiles.views import (toggle_relationships_helper, toggle_par_helper,
     manage_action_helper, mark_as_done_helper, manage_suggested_action_helper)
 
@@ -330,23 +326,6 @@ class TestProfileExtras(TestCase):
         self.assertEqual(get_friendslist(self.context), [self.faith])
         self.relationship.delete()
         self.assertEqual(get_friendslist(self.context), [])
-
-    def test_get_default_relationship(self):
-        info = get_relationship(self.context, self.faith)
-        self.assertFalse(info["is_following"])
-        self.assertEqual(info["follow_statement"], "Follow this user")
-        self.assertEqual(info["account_statement"], "Make this user an accountability buddy")
-        self.assertEqual(info["mute_statement"], "Mute this user")
-
-    def test_get_opposite_of_default_relationship(self):
-        self.relationship.toggle_following_for_current_profile(self.buffy.profile)
-        self.relationship.toggle_accountability_for_current_profile(self.buffy.profile)
-        self.relationship.toggle_mute_for_current_profile(self.buffy.profile)
-        info = get_relationship(self.context, self.faith)
-        self.assertTrue(info["is_following"])
-        self.assertEqual(info["follow_statement"], "Unfollow this user")
-        self.assertEqual(info["account_statement"], "Remove user as accountability buddy")
-        self.assertEqual(info["mute_statement"], "Unmute this user")
 
     def test_get_action_status(self):
         action_status = get_action_status(self.context, [self.buffy.profile])
