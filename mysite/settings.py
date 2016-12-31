@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'functional_tests',
     'django_comments',
     'ckeditor',
-    'django_nose',
     'actstream',
 ]
 
