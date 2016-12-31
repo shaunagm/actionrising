@@ -85,26 +85,28 @@ class TestActionDetail(SeleniumTestCase):
         self.assertEqual(self.action_page.done_trackers[0].text, "Rupert Giles")
 
     def test_take_action(self):
-        self.action_page.take_action_button.click()
+        self.wait_helper()
+        self.action_page.manage_action_button.click()
         # Logged in user should now appear in accepted trackers
         self.assertEquals(len(self.action_page.accepted_trackers), 2)
         self.assertEqual(self.action_page.accepted_trackers[0].text, "Buffy Summers")
         # Now test remove action
-        self.action_page.select_manage_action_option("Remove Action")
-        time.sleep(3) # Seems to be an issue updating accepted_trackers?
+        self.action_page.select_manage_action_option("Remove from todos")
+        self.wait_helper()
         self.assertEquals(len(self.action_page.accepted_trackers), 1)
         self.assertEqual(self.action_page.accepted_trackers[0].text, "Willow")
 
     def test_mark_action_as_done(self):
-        self.action_page.take_action_button.click()
+        self.wait_helper()
+        self.action_page.manage_action_button.click()
         # Logged in user should now appear in accepted trackers but not done trackers
         self.assertEquals(len(self.action_page.accepted_trackers), 2)
         self.assertEqual(self.action_page.accepted_trackers[0].text, "Buffy Summers")
         self.assertEquals(len(self.action_page.done_trackers), 1)
         self.assertEqual(self.action_page.done_trackers[0].text, "Rupert Giles")
         # Now mark action as done
-        self.action_page.select_manage_action_option("Mark as Done")
-        time.sleep(3) # Seems to be an issue updating accepted_trackers?
+        self.action_page.mark_action_as_done_button.click()
+        self.wait_helper()
         # Logged in user should now appear in done trackers but not accepted trackers
         self.assertEquals(len(self.action_page.accepted_trackers), 1)
         self.assertEqual(self.action_page.accepted_trackers[0].text, "Willow")
@@ -118,10 +120,11 @@ class TestSlateList(SeleniumTestCase):
         self.slates_table = SlateListPage(self.browser, root_uri=self.live_server_url)
         self.slates_table.log_in(default_user, default_password)
         self.slates_table.go_to_default_slates_page_if_necessary()
+        self.wait_helper()
 
     def test_display_slates(self):
         self.assertTrue(self.slates_table.datatables_js_is_enabled())
-        self.assertEquals(len(self.slates_table.columns), 4)
+        self.assertEquals(len(self.slates_table.columns), 5)
         self.assertEquals(len(self.slates_table.rows), 3)
         self.assertEquals(self.slates_table.first_row_date.text, "Fri Dec 02")
         self.assertEquals(self.slates_table.first_row_slate.text, "High stakes slate of actions")
@@ -142,9 +145,13 @@ class TestSlateDetail(SeleniumTestCase):
 
     def test_slate_detail_info(self):
         self.slate_info = SlateDetailPage(self.browser, root_uri=self.live_server_url)
+        self.wait_helper()
         self.slate_info.log_in(default_user, default_password)
         self.slate_info.go_to_detail_page(title="Things to do on the Hellmouth")
-        self.assertEquals(self.slate_info.creator.text, "created by buffysummers")
+        self.wait_helper()
+        self.slate_info.info_tab.click()
+        self.wait_helper("info")
+        self.assertEquals(self.slate_info.creator.text, "Created by buffysummers")
         self.assertEquals(self.slate_info.description.text, "Indescribable.")
         self.assertEquals(self.slate_info.privacy.text, "Visible Sitewide")
         self.assertEquals(self.slate_info.status.text, "Open for action")
@@ -155,7 +162,9 @@ class TestSlateActionList(SeleniumTestCase):
         super(TestSlateActionList, self).setUp()
         self.actions_table = SlateActionsListPage(self.browser, root_uri=self.live_server_url)
         self.actions_table.log_in(default_user, default_password)
+        self.wait_helper()
         self.actions_table.go_to_detail_page(title="High stakes slate of actions")
+        self.wait_helper()
 
     def test_slate_actions_display(self):
         self.assertTrue(self.actions_table.datatables_js_is_enabled())
@@ -182,15 +191,19 @@ class TestSlateActionList(SeleniumTestCase):
     def test_slate_actions_dropdown_filter(self):
         # Check filter by priority
         self.actions_table.select_priority("Medium")
+        self.wait_helper()
         self.assertEquals(len(self.actions_table.rows), 1)
         self.assertEquals(self.actions_table.first_row_action.text, "Donate to Planned Parenthood")
         self.actions_table.select_priority("High")
+        self.wait_helper()
         self.assertEquals(len(self.actions_table.rows), 1)
         self.assertEquals(self.actions_table.first_row_action.text, "Sign petition to make Boston a sanctuary city")
         self.actions_table.select_priority("Low")
+        self.wait_helper()
         self.assertEquals(len(self.actions_table.rows), 1)
         self.assertEquals(self.actions_table.first_row_action.text, "Join the site")
         self.actions_table.select_priority("All")
+        self.wait_helper()
         self.assertEquals(len(self.actions_table.rows), 3)
         self.assertEquals(self.actions_table.first_row_action.text, "Join the site")
 

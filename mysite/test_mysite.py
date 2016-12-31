@@ -38,15 +38,15 @@ class TestPrivacyUtils(TestCase):
         self.assertFalse(check_for_ownership(self.slate, self.anon))
 
     def test_check_for_ownership_par(self):
-        # No one "owns" a PAR
+        # The owner of the profile in the PAR 'owns' the PAR
         self.assertFalse(check_for_ownership(self.par, self.buffy))
-        self.assertFalse(check_for_ownership(self.par, self.faith))
+        self.assertTrue(check_for_ownership(self.par, self.faith))
         self.assertFalse(check_for_ownership(self.par, self.anon))
 
     def test_check_for_ownership_sar(self):
-        # No one "owns" an SAR
+        # The creator of the slate 'owns' the SAR
         self.assertFalse(check_for_ownership(self.sar, self.buffy))
-        self.assertFalse(check_for_ownership(self.sar, self.faith))
+        self.assertTrue(check_for_ownership(self.sar, self.faith))
         self.assertFalse(check_for_ownership(self.sar, self.anon))
 
     def test_get_global_privacy_default_when_unchanged(self):

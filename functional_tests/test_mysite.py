@@ -22,7 +22,9 @@ class TestBasics(SeleniumTestCase):
 
     def test_logged_in_landing_page(self):
         landing_page = LoggedInLandingPage(self.browser, root_uri=self.live_server_url)
+        self.wait_helper()
         landing_page.log_in(default_user, default_password)
+        self.wait_helper()
         self.assertEquals(len(landing_page.open_actions_items), 0)
         landing_page.search_actions_link.click()
         self.assertEquals(landing_page.w.current_url, self.live_server_url + "/actions/actions")

@@ -1,18 +1,18 @@
-import datetime
-import mock
+import datetime, mock
 
 from django.test import TestCase
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
-
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
-from actions.models import (Action, Slate, ActionTopic, ActionType, SlateActionRelationship,
-    slugify_helper)
 from profiles.models import Profile, ProfileActionRelationship
 from flags.models import Flag
-from django.contrib.contenttypes.models import ContentType
+
+from actions.models import (Action, Slate, ActionTopic, ActionType, SlateActionRelationship,
+    slugify_helper)
 from actions.lib import act_location
 from actions.views import create_action_helper, create_slate_helper, edit_slate_helper
+from actions.forms import ActionForm, SlateForm
 
 
 ###################
@@ -41,13 +41,6 @@ class TestActionMethods(TestCase):
         self.action.anonymize = True
         self.action.save()
         self.assertEqual(self.action.get_creator(), "Anonymous")
-
-    def test_get_creator_with_link(self):
-        self.assertEqual(self.action.get_creator_with_link(),
-            "<a href='/profiles/profile/3'>buffysummers</a>")
-        self.action.anonymize = True
-        self.action.save()
-        self.assertEqual(self.action.get_creator_with_link(), "Anonymous")
 
     def test_get_robust_url(self):
         self.assertEqual(self.action.get_robust_url(), '/actions/action/test-action')
@@ -141,29 +134,62 @@ class TestActionViews(TestCase):
         new_action = Action.objects.create(title="New action", creator=self.buffy)
         edit_slate_helper(obj, [new_action])
         self.assertEqual(list(obj.actions.all()), [new_action])
-        
+
+class TestActionForms(TestCase):
+
+    def setUp(self):
+        self.buffy = User.objects.create(username="buffysummers")
+        # self.action = Action.objects.create(title="Test Action", creator=self.buffy)
+        # self.topic = ActionTopic.objects.create(name="Test Topic")
+        # self.actiontype = ActionType.objects.create(name="Test ActionType")
+
+    def test_action_form_privacy_choices(self):
+        initial_form = ActionForm(user=self.buffy, formtype="create")
+        form_inherited_privacy = initial_form.fields['privacy'].choices[0][1]
+        user_privacy = self.buffy.profile.privacy_defaults.get_global_default_display()
+        self.assertEqual(form_inherited_privacy, user_privacy)
+
+    def test_action_form_privacy_choices_when_not_default(self):
+        self.buffy.profile.privacy_defaults.global_default = "sit"
+        self.buffy.profile.privacy_defaults.save()
+        initial_form = ActionForm(user=self.buffy, formtype="create")
+        form_inherited_privacy = initial_form.fields['privacy'].choices[3][1]
+        # This is an issue with the privacy utils
+        self.assertEqual(form_inherited_privacy, "Your Default (Currently 'Visible Sitewide')")
+
+    def test_action_status_is_hidden_on_create(self):
+        from django.forms.widgets import HiddenInput
+        initial_form = ActionForm(user=self.buffy, formtype="create")
+        self.assertEqual(type(initial_form.fields['status'].widget), HiddenInput)
+
+    def test_slate_form_privacy_choices(self):
+        initial_form = SlateForm(user=self.buffy)
+        form_inherited_privacy = initial_form.fields['privacy'].choices[0][1]
+        user_privacy = self.buffy.profile.privacy_defaults.get_global_default_display()
+        self.assertEqual(form_inherited_privacy, user_privacy)
+
 class TestLocation(TestCase):
-    
+
     def setUp(self):
         self.testing_user = User.objects.create(username="testing_user")
         self.action = Action.objects.create(title="Test Action with Location", creator=self.testing_user)
-        
+
     @mock.patch('actions.lib.act_location.geocode')
     @mock.patch('actions.lib.act_location.find_congressional_district')
     def test_populate_location_and_district(self, find_congressional_district, geocode):
-        
+
         geocoded_location = mock.MagicMock()
         geocoded_location.latitude = 0.0
         geocoded_location.longitude = 0.0
         geocode.return_value = geocoded_location
-        
+
         find_congressional_district - mock.MagicMock()
         find_congressional_district.return_value = {"state":"MA","district":5}
-        
+
         act_location.populate_location_and_district(self.action)
         self.assertEqual(self.action.lat, 0.0)
         self.assertEqual(self.action.lon, 0.0)
-        
+
         district = self.action.district
         self.assertEqual(district.state, "MA")
         self.assertEqual(district.district, 5)

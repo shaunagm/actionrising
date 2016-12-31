@@ -155,6 +155,10 @@ class TestRelationshipMethods(TestCase):
         self.assertTrue(self.relationship.toggle_mute_for_current_profile(self.buffy.profile))
         self.assertIsNone(self.relationship.toggle_mute_for_current_profile(self.lorne.profile))
 
+    def test_get_people_user_follows(self):
+        self.relationship.toggle_following_for_current_profile(self.buffy.profile)
+        self.assertEquals(list(self.buffy.profile.get_people_user_follows()), [self.faith.profile])
+
 class TestParMethods(TestCase):
 
     def setUp(self):

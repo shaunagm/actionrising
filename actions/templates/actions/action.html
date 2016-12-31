@@ -25,7 +25,8 @@
 
         <div class="row">
            <div class="col-sm-12">
-              Created by: {{ action.get_creator_with_link|safe }}
+              <span id="created_by">Created by <a href='action.creator.profile.get_absolute_url'>
+                {{ action.creator.profile }}</a></span>
            </div>
         </div>
 
@@ -38,8 +39,8 @@
         {% endif %}
 
         <div class="row">
-           <div class="col-sm-12 extra-margin-row" id="description">
-             <div class="well">
+           <div class="col-sm-12 extra-margin-row">
+             <div class="well" id="description">
                 {{ action.description|safe }}
              </div>
              {% include "mysite/basic_info_include.html" %}

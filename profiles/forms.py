@@ -3,7 +3,7 @@ from django.forms import inlineformset_factory
 from django.forms.widgets import HiddenInput
 
 from mysite.lib.choices import PRIVACY_DEFAULT_CHOICES, PRIVACY_CHOICES
-from mysite.lib.privacy import get_global_privacy_default, get_global_privacy_string
+from mysite.lib.privacy import get_global_privacy_default
 from profiles.models import Profile, ProfileActionRelationship, PrivacyDefaults
 from actions.models import Slate
 
@@ -21,7 +21,7 @@ class ProfileForm(ModelForm):
         super(ProfileForm, self).__init__(*args, **kwargs)
         self.fields['privacy_default'].help_text = 'This setting will apply to all actions and slates you create unless you override them individually.'
         self.fields['privacy_default'].initial = self.instance.privacy_defaults.global_default
-        NEW_CHOICES = (PRIVACY_CHOICES[0], PRIVACY_CHOICES[1], PRIVACY_CHOICES[2], ('inh', get_global_privacy_string(user.profile)))
+        NEW_CHOICES = (PRIVACY_CHOICES[0], PRIVACY_CHOICES[1], PRIVACY_CHOICES[2], ('inh', get_global_privacy_default(user.profile, "decorated")))
         self.fields['privacy'].choices = NEW_CHOICES
 
     def save(self, commit=True):

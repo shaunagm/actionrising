@@ -163,9 +163,6 @@ class Action(models.Model):
     def get_edit_url(self):
         return reverse('edit_action', kwargs={'slug': self.slug})
 
-    def get_action_creator_link(self):
-        return reverse('profile', kwargs={'pk': self.creator.pk})
-
     def get_tags(self):
         return list(chain(self.topics.all(), self.actiontypes.all()))
 
@@ -181,12 +178,6 @@ class Action(models.Model):
             return "Anonymous"
         else:
             return self.creator
-
-    def get_creator_with_link(self):
-        if self.anonymize:
-            return "Anonymous"
-        else:
-            return "<a href='" + self.get_action_creator_link() + "'>" + self.creator.username + "</a>"
 
     def is_active(self):
         if self.status == "rea":  # Arguably we should add 'in creation' too

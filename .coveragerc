@@ -1,2 +1,2 @@
 [run]
-omit = *migrations*, *functional_tests*, *test*
+omit = *migrations*, *functional_tests*

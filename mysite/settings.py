@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'functional_tests',
     'django_comments',
     'ckeditor',
+    'django_nose',
     'actstream',
 ]
 
@@ -176,6 +177,7 @@ LOCALE_PATHS = (
     PROJECT_ROOT + '/website/locale',
 )
 
+SKIP_FUNCTIONAL_TESTS = False
 
 # Actstream
 ACTSTREAM_SETTINGS = {

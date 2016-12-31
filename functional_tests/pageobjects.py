@@ -141,7 +141,8 @@ class BasicActionDetailPage(BaseObjectDetailPage):
     suggested_trackers = MultiPageElement(css="#sug a")
     accepted_trackers = MultiPageElement(css="#ace a")
     done_trackers = MultiPageElement(css="#don a")
-    take_action_button = PageElement(id_="manage-action-button")
+    manage_action_button = PageElement(id_="manage-action-button")
+    mark_action_as_done_button = PageElement(id_="mark_as_done")
     manage_action_links = MultiPageElement(css=".manage-action-links")
 
     def go_to_detail_page(self, title=None):
@@ -152,13 +153,16 @@ class BasicActionDetailPage(BaseObjectDetailPage):
         self.w.get(self.root_uri + self.action.get_absolute_url())
 
     def select_manage_action_option(self, selection):
-        self.take_action_button.click()
+        self.manage_action_button.click()
         for link in self.manage_action_links:
             if link.text == selection:
                 link.click()
                 break
 
 class SlateDetailPage(BaseObjectDetailPage):
+    actions_tab = PageElement(id_="#actionslink")
+    info_tab = PageElement(id_="infolink")
+    comments_tab = PageElement(id_="commentslink")
 
     def go_to_detail_page(self, title=None):
         if title:

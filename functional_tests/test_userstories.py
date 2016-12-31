@@ -20,6 +20,7 @@ class TestAddAndFollowAction(SeleniumTestCase):
         # Login, go to action edit page, create action
         self.actions_table = BasicActionListPage(self.browser, root_uri=self.live_server_url)
         self.actions_table.log_in(default_user, default_password)
+        self.wait_helper()
         self.action_edit_form = ActionEditPage(self.browser, root_uri=self.live_server_url)
         self.action_edit_form.go_to_create_page()
         self.action_edit_form.title = "A new action to take"
@@ -38,7 +39,7 @@ class TestAddAndFollowAction(SeleniumTestCase):
         # Go to action page and add it
         self.action_page = BasicActionDetailPage(self.browser, root_uri=self.live_server_url)
         self.action_page.go_to_detail_page(title="A new action to take")
-        self.action_page.take_action_button.click()
+        self.action_page.manage_action_button.click()
         # Check profile page again
         self.profile_page = ProfilePage(self.browser, root_uri=self.live_server_url)
         self.profile_page.go_to_profile_page(username=default_user)
