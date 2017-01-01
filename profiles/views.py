@@ -209,8 +209,8 @@ def manage_action_helper(par, form, user):
         # their profile-buddies already had this action suggested to them.
         new_profile = User.objects.get(username=profile.user.username).profile
         new_par, created = ProfileActionRelationship.objects.get_or_create(
-            profile=new_profile, action=par.action, last_suggester=user,
-            defaults={'status': 'sug'})
+            profile=new_profile, action=par.action,
+            defaults={'status': 'sug', 'last_suggester': user })
         new_par.add_suggester(user.username)
     for slate in form.cleaned_data['slates']:
         # TODO: Right now this is pretty inefficient.  Would be nice to show users which of
