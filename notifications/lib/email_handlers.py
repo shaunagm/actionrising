@@ -101,7 +101,7 @@ def suggested_action_email(recipient, suggester, action):
 
     plain_message = render_to_string('notifications/email_templates/plain/suggestedaction.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/suggestedaction.html', ctx)
-    return send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_messages)
+    return send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
 
 def add_slate_email(recipient, actor, action, slate):
     subject = "%s added your action to a slate on ActionRising" % actor
