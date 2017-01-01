@@ -15,6 +15,10 @@
           <a href="{{ action.get_absolute_url_with_domain }}">{{ action.title }}</a>
         </p>
 
+        <div style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Padding-left:25px;Margin-bottom:15px;">
+          {{ action.description|safe }}</a>
+        </div>
+
         <p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">
           You've got notifications for this slate turned on.  To turn off notifications
           for this specific slate, <a href='{{ toggle_notify_url }}'>click here</a>.  To

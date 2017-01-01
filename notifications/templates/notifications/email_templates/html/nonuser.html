@@ -15,6 +15,10 @@
           <a href="{{ instance.get_absolute_url_with_domain }}">{{ instance.title }}</a>
         </p>
 
+        <div style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Padding-left:25px;Margin-bottom:15px;">
+          {{ instance.description|safe }}</a>
+        </div>
+
         {% if message %}
           <p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">
             They add:</p>
