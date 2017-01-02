@@ -76,7 +76,9 @@ class PlayingWithPrivacySettings(SeleniumTestCase):
     def test_privacy_settings(self):
         # Login, go to action edit page, create action
         self.actions_table = BasicActionListPage(self.browser, root_uri=self.live_server_url)
+        self.wait_helper()
         self.actions_table.log_in(default_user, default_password)
+        self.wait_helper()        
         self.action_edit_form = ActionEditPage(self.browser, root_uri=self.live_server_url)
         self.action_edit_form.go_to_create_page()
         self.action_edit_form.title = "A new action to take"

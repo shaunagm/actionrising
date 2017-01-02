@@ -1,9 +1,18 @@
 import time, sys
-from selenium.webdriver.support.ui import Select
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait, Select
+from selenium.webdriver.support import expected_conditions as EC
 from page_objects import PageObject, PageElement, MultiPageElement
 
 from django.contrib.auth.models import User
 from actions.models import Action, Slate
+
+def wait_helper(browser, id="actionrisingbody"):
+    element = WebDriverWait(browser, 15).until(
+        EC.presence_of_element_located((By.ID, id))
+    )
+    if not element:
+        raise Exception("Page didn't load after 15 seconds")
 
 # Util/Base Pages
 
@@ -16,13 +25,16 @@ class LoginPage(PageObject):
 
     def go_to_login(self):
         self.w.get(self.root_uri)
+        wait_helper(self.w) # Wait until the page is loaded to click "login"
         self.log_button.click()
 
     def log_in(self, username, password):
         self.go_to_login()
+        wait_helper(self.w, "id_password") # Wait until the form is loaded to begin filling it out
         self.username = username
         self.password = password
         self.login.click()
+        wait_helper(self.w) # Wait until the page is loaded to proceed
 
 class BasePage(PageObject):
     navbar_links = MultiPageElement(css=".navbar a")

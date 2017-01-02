@@ -87,6 +87,7 @@ class TestActionDetail(SeleniumTestCase):
     def test_take_action(self):
         self.wait_helper()
         self.action_page.manage_action_button.click()
+        self.wait_helper("manage-action-list")
         # Logged in user should now appear in accepted trackers
         self.assertEquals(len(self.action_page.accepted_trackers), 2)
         self.assertEqual(self.action_page.accepted_trackers[0].text, "Buffy Summers")
@@ -161,6 +162,7 @@ class TestSlateActionList(SeleniumTestCase):
     def setUp(self):
         super(TestSlateActionList, self).setUp()
         self.actions_table = SlateActionsListPage(self.browser, root_uri=self.live_server_url)
+        self.wait_helper()
         self.actions_table.log_in(default_user, default_password)
         self.wait_helper()
         self.actions_table.go_to_detail_page(title="High stakes slate of actions")
