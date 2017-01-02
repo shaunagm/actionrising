@@ -245,6 +245,14 @@ class DailyActionTests(TestCase):
         self.buffy.dailyactionsettings.add_recently_seen_action(action)
         self.assertFalse(dailyaction.recent_action_filter(self.buffy, action))
 
+    def test_finished_action_filter(self):
+        action = Action.objects.first() # Action0 through Action3 are Buffy par objects
+        self.assertTrue(dailyaction.finished_action_filter(self.buffy, action))
+        par = ProfileActionRelationship.objects.get(profile=self.buffy.profile, action=action)
+        par.status = "don"
+        par.save()
+        self.assertFalse(dailyaction.finished_action_filter(self.buffy, action))
+
     def test_duration_filter(self):
         action = Action.objects.first()
         self.assertTrue(dailyaction.duration_filter(self.buffy, action))
@@ -298,6 +306,14 @@ class DailyActionTests(TestCase):
         self.buffy.dailyactionsettings.add_recently_seen_action(action)
         self.assertFalse(dailyaction.filter_action(self.buffy, action))
 
+    def test_filter_action_when_par_status_set_to_done(self):
+        action = Action.objects.first() # Action0 through Action3 are Buffy par objects
+        self.assertTrue(dailyaction.filter_action(self.buffy, action))
+        par = ProfileActionRelationship.objects.get(profile=self.buffy.profile, action=action)
+        par.status = "don"
+        par.save()
+        self.assertFalse(dailyaction.filter_action(self.buffy, action))
+
     def test_filter_action_when_duration_filter(self):
         action = Action.objects.first()
         self.assertTrue(dailyaction.filter_action(self.buffy, action))
@@ -342,3 +358,11 @@ class DailyActionTests(TestCase):
         result = dailyaction.generate_daily_action(self.buffy, popular_actions)
         self.assertEqual(type(result), Action)
         self.assertIn(result.pk, self.buffy.dailyactionsettings.get_recently_seen_pks())
+
+    def test_actions_filtered_when_action_status_set_to_done(self):
+        for action in Action.objects.all():
+            action.status = "don"
+            action.save()
+        popular_actions = dailyaction.most_popular_actions(n=10)
+        result = dailyaction.generate_daily_action(self.buffy, popular_actions)
+        self.assertFalse(result)

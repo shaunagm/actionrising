@@ -1,6 +1,7 @@
 import random
 from django.db.models import Count
 from actions.models import Action
+from profiles.models import ProfileActionRelationship
 
 def most_popular_actions(n=10):
     return Action.objects.filter(status="rea").filter(current_privacy__in=["pub", "sit"]) \
@@ -43,6 +44,13 @@ def recent_action_filter(user, action):
             return
     return action
 
+def finished_action_filter(user, action):
+    par = ProfileActionRelationship.objects.filter(profile=user.profile, action=action)
+    if par:
+        if par[0].status in ["wit", "don"]:
+            return
+    return action
+
 def duration_filter(user, action):
     if user.dailyactionsettings.duration_filter_on:
         if action.duration in user.dailyactionsettings.get_duration_filter_shortnames():
@@ -66,6 +74,8 @@ def action_topic_filter(user, action):
 def filter_action(user, action):
     action = recent_action_filter(user, action)
     if action is None: return None
+    action = finished_action_filter(user, action)
+    if action is None: return None
     action = duration_filter(user, action)
     if action is None: return None
     action = action_type_filter(user, action)
@@ -73,14 +83,15 @@ def filter_action(user, action):
     return action_topic_filter(user, action)
 
 def get_action_after_filters(user, actions):
-    tries = 0
-    while tries < 50:
-        action_to_try = random.choice(actions)
-        action = filter_action(user, action_to_try)
-        if action:
-            return action
-        else:
-            tries += 1
+    if actions:
+        tries = 0
+        while tries < 50:
+            action_to_try = random.choice(actions)
+            action = filter_action(user, action_to_try)
+            if action:
+                return action
+            else:
+                tries += 1
     return None
 
 def generate_daily_action(user, popular_actions):
