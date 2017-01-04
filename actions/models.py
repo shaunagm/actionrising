@@ -17,6 +17,7 @@ from mysite.settings import PRODUCTION_DOMAIN
 from mysite.lib.choices import (PRIVACY_CHOICES, PRIORITY_CHOICES, STATUS_CHOICES,
     TIME_CHOICES, INDIVIDUAL_STATUS_CHOICES)
 from mysite.lib.utils import disable_for_loaddata
+from profiles.lib.status_helpers import open_pars_when_action_reopens, close_pars_when_action_closes
 
 slug_validator = [
     RegexValidator(
@@ -124,19 +125,22 @@ class Action(models.Model):
     # default default is H == 'Unknown or variable'
     duration = models.CharField(max_length=2, choices=TIME_CHOICES, default='H')
 
-    # TODO Add get_status field
-    #      which looks at has_deadline and returns either no deadline,
-    #      deadline not yet passed, or deadline passed.
-
     def __unicode__(self):
         return self.title
 
     def save(self, *args, **kwargs):
+        # If action is being created
         if not self.pk:
             self.slug = slugify_helper(Action, self.title)
             self.current_privacy = self.creator.profile.privacy_defaults.global_default
         if self.privacy != "inh" and self.privacy != self.current_privacy:
             self.current_privacy = self.privacy
+        if self.pk:
+            orig = Action.objects.get(pk=self.pk)
+            if orig.status == "rea" and self.status != "rea":
+                close_pars_when_action_closes(self)
+            if orig.status != "rea" and self.status == "rea":
+                open_pars_when_action_reopens(self)
         super(Action, self).save(*args, **kwargs)
 
     def get_cname(self):
@@ -232,7 +236,6 @@ def action_handler(sender, instance, created, **kwargs):
     else:
         action.send(instance.creator, verb=verb_to_use, target=instance)
 post_save.connect(action_handler, sender=Action)
-
 
 class Slate(models.Model):
     """Stores a single slate."""

@@ -1,0 +1,23 @@
+Hi there,
+
+{{ requester }} is taking an action on ActionRising and they'd like you to hold them accountable.
+Please reach out to them - send a text, ping them on social media, give a shout
+down the hall - and see what their plans are for accomplishing this action.
+
+Here's the action they've committed to taking:
+
+{{ action.title }}
+{{ action.get_absolute_url_with_domain }}
+{{ action.description|safe }}
+
+{% if message %}
+And here's a message they've added for you:
+
+{{ message }}
+{% endif %}
+
+Thank you for helping {{ requester }} take action!
+
+{% include 'notifications/email_templates/plain/site_summary_blurb.html' %}
+
+You don't have to be a member of ActionRising to take action, but you're welcome to join us. You can request an account here: {{ request_invite_url }}

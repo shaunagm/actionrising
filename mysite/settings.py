@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'flags',
     'notifications',
     'invites',
+    'commitments',
     'functional_tests',
     'django_comments',
     'ckeditor',

@@ -19,6 +19,7 @@ from notifications.models import NotificationSettings, DailyActionSettings
 from mysite.lib.choices import (PRIVACY_CHOICES, PRIORITY_CHOICES, INDIVIDUAL_STATUS_CHOICES,
     PRIVACY_DEFAULT_CHOICES)
 from mysite.lib.utils import disable_for_loaddata
+from profiles.lib.status_helpers import close_commitment_when_PAR_is_closed, reopen_commitment_when_par_is_reopened
 
 class Profile(models.Model):
     """Stores a single user profile"""
@@ -429,6 +430,15 @@ class ProfileActionRelationship(models.Model):
 
     def __unicode__(self):
         return u'Relationship of profile %s and action %s' % (self.profile, self.action)
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            orig = ProfileActionRelationship.objects.get(pk=self.pk)
+            if orig.status != "clo" and self.status == "clo":
+                close_commitment_when_PAR_is_closed(self)
+            if orig.status == "rea" and self.status != "rea":
+                reopen_commitment_when_par_is_reopened(self)
+        super(ProfileActionRelationship, self).save(*args, **kwargs)
 
     def get_cname(self):
         class_name = 'ProfileActionRelationship'

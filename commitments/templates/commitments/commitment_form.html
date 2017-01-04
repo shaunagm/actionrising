@@ -1,0 +1,66 @@
+{% extends "mysite/base.html" %}
+
+{% load bootstrap3 %}
+
+{% block page_specific_javascript %}
+
+    $("#commitment-form").keypress(function(e){
+      if (e.which == 13) {
+          e.preventDefault(); // prevent accidental form submission
+      }
+    });
+
+    $("#id_buddies").chosen();
+
+    $(function() {
+        $('#id_offsite_buddies').selectize({
+          plugins: ['restore_on_backspace', 'remove_button'],
+          create: true,
+          maxItems: 5,
+          createFilter: function(input) {
+                  var re = /\S+@\S+\.\S+/;
+                  return re.test(input);
+                },
+        });
+    });
+{% endblock page_specific_javascript %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-sm-10 col-sm-offset-1" id="form-explanation">
+    <h2> {% if form.instance %} Make a commitment to
+         {% else %} Edit your commitment to {% endif %}
+         <a href="{{ form.action.get_absolute_url }}"> {{ form.action.title }}</a>
+    </h2>
+    <p>One of the best ways to stay active is to ask your friends to hold you accountable.
+      Make a commitment to take this action, and add some friends below.  They'll get an email,
+      with you CC'd, asking them to hold you accountable for an action you said you'd do.</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-10">
+    <form class="form-horizontal" action="" method="post" id="commitment-form">
+      {% csrf_token %}
+      {% bootstrap_form form layout='horizontal' %}
+      {% buttons %}
+        <div class="col-md-10 col-md-offset-2">
+          {% if form.instance %}
+              {% bootstrap_button "Cancel" button_type="link" button_class="btn-default" %}
+              {% bootstrap_button "Commit" button_type="submit" button_class="btn-primary action-submit-button" icon="star" %}
+          {% else %}
+              <a class="btn btn-primary" href="{% url 'delete_commitment' pk=form.instance.pk %}">Delete</a>
+              {% bootstrap_button "Save" button_type="submit" button_class="btn-primary action-submit-button" icon="star" %}
+          {% endif %}
+        </div>
+      {% endbuttons %}
+    </form>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block page_specific_css %}
+  {{ form.media }}
+{% endblock page_specific_css %}

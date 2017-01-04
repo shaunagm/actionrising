@@ -198,6 +198,54 @@ def daily_action_email(recipient, action):
     html_message = render_to_string('notifications/email_templates/html/dailyaction.html', ctx)
     return send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
 
+#############################
+### ACCOUNTABILITY EMAILS ###
+#############################
+
+def hold_accountable_email(recipient, commitment):
+    requester = commitment.profile
+    action = commitment.action
+
+    subject = "%s wants you to hold them accountable for a commitment they made " \
+        "on ActionRising" % (requester)
+
+    ctx = {
+        # Required fields
+        'preheader_text': "%s wants you to hold them accountable for a commitment " \
+            "they made to do action %s" % (requester, action.title),
+        'manage_notifications_url': get_notificationsettings_url(recipient),
+        # Email-specific fields
+        'action': action,
+        'requester': requester,
+        'message': commitment.message
+    }
+
+    plain_message = render_to_string('notifications/email_templates/plain/hold_accountable.html', ctx)
+    html_message = render_to_string('notifications/email_templates/html/hold_accountable.html', ctx)
+    return send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+
+def hold_accountable_email_nonuser(recipient_email, commitment):
+    requester = commitment.profile
+    action = commitment.action
+
+    subject = "%s wants you to hold them accountable for a commitment they made " \
+        "on ActionRising" % requester
+
+    ctx = {
+        # Required fields
+        'preheader_text': "%s wants you to hold them accountable for a commitment " \
+            "they made to do action %s" % (requester, action.title),
+        # Email-specific fields
+        'action': action,
+        'requester': requester,
+        'message': commitment.message
+    }
+
+    plain_message = render_to_string('notifications/email_templates/plain/hold_accountable_nonuser.html', ctx)
+    html_message = render_to_string('notifications/email_templates/html/hold_accountable_nonuser.html', ctx)
+    return send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient_email], html_message=html_message)
+
+
 ###########################
 ### EMAILS TO NON-USERS ###
 ###########################

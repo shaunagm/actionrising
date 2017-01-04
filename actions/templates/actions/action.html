@@ -68,8 +68,13 @@
         <div class="row">
       		 <div class="col-sm-12">
                 {% include "actions/action_items/edit_object.html" %}
-                {% include "actions/action_items/manage_action.html" %}
-                {% include "actions/action_items/mark_action_as_done.html" %}
+                {% if action.status == "rea" %}
+                    {% include "actions/action_items/manage_action.html" %}
+                    {% include "actions/action_items/mark_action_as_done.html" %}
+                    {% include "actions/action_items/make_commitment.html" %}
+                {% else %}
+                    {% include "actions/action_items/closed_action.html" %}
+                {% endif %}
                 {% include "actions/action_items/share.html" %}
                 {% include "actions/action_items/flag.html" %}
            </div>

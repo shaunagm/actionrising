@@ -29,6 +29,7 @@ INDIVIDUAL_STATUS_CHOICES = (
     ('ace', _('Accepted')),
     ('don', _('Done')),
     ('wit', _('Rejected')),
+    ('clo', _('Action was closed or withdrawn')),
 )
 
 PRIORITY_CHOICES = (
@@ -52,4 +53,12 @@ DAILY_ACTION_SOURCE_CHOICES = (
     ('many', _('A lot')),
     ('few', _('A little')),
     ('none', _('None')),
+)
+
+COMMITMENT_STATUS_CHOICES = (
+    ('waiting', _('Commitment made, not yet at deadline')),
+    ('active', _('Commitment made, past deadline')),
+    ('completed', _('Commitment carried out')),
+    ('expired', _('Commitment expired, user took too long')),
+    ('removed', _('Par was closed or deleted')),
 )

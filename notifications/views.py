@@ -62,9 +62,9 @@ class DailyActionView(UserPassesTestMixin, generic.UpdateView):
 def nonuser_notification(request):
     if request.method == 'POST':
 
-        pk = request.POST.get('pk');
-        model = request.POST.get('model');
-        message = request.POST.get('message');
+        pk = request.POST.get('pk')
+        model = request.POST.get('model')
+        message = request.POST.get('message')
 
         emails = []
         for i in range(0,6):

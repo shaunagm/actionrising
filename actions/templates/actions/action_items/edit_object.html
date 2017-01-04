@@ -1,11 +1,11 @@
 {% if request.user.is_authenticated %}
   {% ifequal object.creator.username request.user.username %}
 
-    <div class="action-item">
-      <a href="{{ object.get_edit_url }}" title="Edit">
-        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>Edit your {{ object.get_cname }}
-      </a>
-    </div>
+      <div class="action-item">
+        <a href="{{ object.get_edit_url }}" title="Edit">
+          <i class="fa fa-pencil-square-o" aria-hidden="true"></i>Edit your {{ object.get_cname }}
+        </a>
+      </div>
 
    {% endifequal %}
 {% endif %}
