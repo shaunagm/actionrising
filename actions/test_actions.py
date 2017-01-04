@@ -139,10 +139,7 @@ class TestActionForms(TestCase):
 
     def setUp(self):
         self.buffy = User.objects.create(username="buffysummers")
-        # self.action = Action.objects.create(title="Test Action", creator=self.buffy)
-        # self.topic = ActionTopic.objects.create(name="Test Topic")
-        # self.actiontype = ActionType.objects.create(name="Test ActionType")
-
+        
     def test_action_form_privacy_choices(self):
         initial_form = ActionForm(user=self.buffy, formtype="create")
         form_inherited_privacy = initial_form.fields['privacy'].choices[0][1]

@@ -4,11 +4,13 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from django.contrib.auth.models import User
 from actions.models import Action, Slate, SlateActionRelationship
+from commitments.models import Commitment
 from mysite.lib.choices import INDIVIDUAL_STATUS_CHOICES
 from profiles.models import Profile, Relationship, ProfileActionRelationship
 from profiles.templatetags.profile_extras import get_friendslist, get_action_status
 from profiles.views import (toggle_relationships_helper, toggle_par_helper,
     manage_action_helper, mark_as_done_helper, manage_suggested_action_helper)
+from profiles.lib import status_helpers
 
 ###################
 ### Test models ###
@@ -374,3 +376,81 @@ class TestProfileExtras(TestCase):
         self.assertEqual(len(accepted_pars), 2)
         self.assertEqual(len(done_pars), 0)
         self.assertEqual(len(rejected_pars), 0)
+
+################
+### Test lib ###
+################
+
+class TestStatusHelper(TestCase):
+
+    def setUp(self):
+        self.buffy = User.objects.create(username="buffysummers")
+        self.faith = User.objects.create(username="faithlehane")
+        self.action = Action.objects.create(slug="test-action", title="Test Action", creator=self.faith)
+        ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action)
+        Commitment.objects.create(profile=self.buffy.profile, action=self.action)
+
+    def test_close_accepted_pars_when_action_closes(self):
+        self.action.status = "fin"
+        self.action.save()
+        par = ProfileActionRelationship.objects.get(profile=self.buffy.profile, action=self.action)
+        self.assertEqual(par.status, "clo")
+
+    def test_delete_suggested_pars_when_action_closes(self):
+        par = ProfileActionRelationship.objects.get(profile=self.buffy.profile, action=self.action)
+        par.status = "sug"
+        par.save()
+        self.action.status = "wit"
+        self.action.save()
+        par = ProfileActionRelationship.objects.filter(profile=self.buffy.profile, action=self.action)
+        self.assertFalse(par)
+
+    def test_open_pars_when_action_reopens(self):
+        # Close action
+        self.action.status = "fin"
+        self.action.save()
+        par = ProfileActionRelationship.objects.get(profile=self.buffy.profile, action=self.action)
+        self.assertEqual(par.status, "clo")
+        # Reopen action
+        self.action.status = "rea"
+        self.action.save()
+        par = ProfileActionRelationship.objects.get(profile=self.buffy.profile, action=self.action)
+        self.assertEqual(par.status, "ace")
+
+    def test_close_commitment_when_PAR_is_closed(self):
+        par = ProfileActionRelationship.objects.get(profile=self.buffy.profile, action=self.action)
+        par.status = "clo"
+        par.save()
+        com = Commitment.objects.get(profile=self.buffy.profile, action=self.action)
+        self.assertEqual(com.status, "removed")
+
+    def test_open_commitment_when_PAR_is_reopened(self):
+        par = ProfileActionRelationship.objects.get(profile=self.buffy.profile, action=self.action)
+        par.status = "clo"
+        par.save()
+        com = Commitment.objects.get(profile=self.buffy.profile, action=self.action)
+        self.assertEqual(com.status, "removed")
+        par.status = "ace"
+        par.save()
+        com = Commitment.objects.get(profile=self.buffy.profile, action=self.action)
+        self.assertEqual(com.status, "active")
+
+    def test_close_commitment_when_action_is_closed(self):
+        '''Ties the helpers together'''
+        # Close action
+        self.action.status = "fin"
+        self.action.save()
+        com = Commitment.objects.get(profile=self.buffy.profile, action=self.action)
+        self.assertEqual(com.status, "removed")
+
+    def test_reopen_commitment_when_action_is_reopened(self):
+        '''Ties the helpers together'''
+        # Close action
+        self.action.status = "fin"
+        self.action.save()
+        # Reopen action
+        self.action.status = "rea"
+        self.action.save()
+        # Test
+        com = Commitment.objects.get(profile=self.buffy.profile, action=self.action)
+        self.assertEqual(com.status, "active")

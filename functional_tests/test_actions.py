@@ -152,6 +152,7 @@ class TestSlateDetail(SeleniumTestCase):
         self.wait_helper()
         self.slate_info.info_tab.click()
         self.wait_helper("info")
+        # TODO: No idea why creator.text is returning none here
         self.assertEquals(self.slate_info.creator.text, "Created by buffysummers")
         self.assertEquals(self.slate_info.description.text, "Indescribable.")
         self.assertEquals(self.slate_info.privacy.text, "Visible Sitewide")
@@ -169,6 +170,7 @@ class TestSlateActionList(SeleniumTestCase):
         self.wait_helper()
 
     def test_slate_actions_display(self):
+        # TODO: This breaks when run as a whole but not when run individually
         self.assertTrue(self.actions_table.datatables_js_is_enabled())
         self.assertEquals(len(self.actions_table.columns), 4)
         self.assertEquals(len(self.actions_table.rows), 3)
@@ -179,18 +181,13 @@ class TestSlateActionList(SeleniumTestCase):
         # TODO: Add test of toggle notes
 
     def test_slate_actions_button_filter(self):
-        # Check active only
-        # self.actions_table.active_only.click()
-        # self.assertEquals(len(self.actions_table.rows), 2)
-        # self.assertEquals(self.actions_table.first_row_action.text, "Sign petition to make Boston a sanctuary city")
-        # self.actions_table.active_only.click()
-        # Check filter only
         self.actions_table.friends_only.click()
         self.assertEquals(len(self.actions_table.rows), 1)
         self.assertEquals(self.actions_table.first_row_action.text, "Donate to Planned Parenthood")
         self.actions_table.friends_only.click()
 
     def test_slate_actions_dropdown_filter(self):
+        # TODO: This breaks when run as a whole but not when run individually
         # Check filter by priority
         self.actions_table.select_priority("Medium")
         self.wait_helper()

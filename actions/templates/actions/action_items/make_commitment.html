@@ -9,14 +9,16 @@
 
         {% if commitment %}
             {% ifnotequal commitment 'Closed' %}
-            <a href="{% url 'edit_commitment' pk=commitment.pk %}" title="Edit commitment">
+            <a id="commitment_btn" href="{% url 'edit_commitment' pk=commitment.pk %}"
+              title="Edit commitment">
               <i class="fa fa-handshake-o" aria-hidden="true"></i>Edit your commitment
             </a>
             {% endifnotequal %}
         {% else %}
-          <a href="{% url 'new_commitment' slug=object.slug %}" title="Make commitment">
-            <i class="fa fa-handshake-o" aria-hidden="true"></i>Commit to action
-          </a>
+            <a id="commitment_btn" href="{% url 'new_commitment' slug=object.slug %}"
+              title="Make commitment">
+              <i class="fa fa-handshake-o" aria-hidden="true"></i>Commit to action
+            </a>
         {% endif %}
 
       </div>

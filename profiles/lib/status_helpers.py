@@ -21,13 +21,15 @@ def open_pars_when_action_reopens(action):
 def close_commitment_when_PAR_is_closed(par):
     '''If commitment active or waiting, close when par is closed.  If completed,
      expired or already set to removed, don't change anything.'''
-    c = Commitment.objects.filter(action=instance.action, profile=instance.profile).first()
-    if c.status in ["waiting", "active"]:
+    from commitments.models import Commitment
+    c = Commitment.objects.filter(action=par.action, profile=par.profile).first()
+    if c and c.status in ["waiting", "active"]:
         c.status = "removed"
         c.save()
 
 def reopen_commitment_when_par_is_reopened(par):
     '''If commitment was removed, reopen it and decide if it's active/waiting/expired.'''
-    c = Commitment.objects.filter(action=instance.action, profile=instance.profile).first()
-    if c.status == "removed":
+    from commitments.models import Commitment
+    c = Commitment.objects.filter(action=par.action, profile=par.profile).first()
+    if c and c.status == "removed":
         c.reopen()

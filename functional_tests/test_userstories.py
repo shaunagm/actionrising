@@ -2,7 +2,7 @@ import time
 
 from .base import SeleniumTestCase
 from .pageobjects import (BasicActionListPage, ActionEditPage, ProfilePage, ToDoPage,
-    BasicActionDetailPage, ManageActionPage)
+    BasicActionDetailPage, ManageActionPage, CommitmentPage)
 from profiles.models import Profile, ProfileActionRelationship
 
 default_user = "buffysummers"
@@ -78,7 +78,7 @@ class PlayingWithPrivacySettings(SeleniumTestCase):
         self.actions_table = BasicActionListPage(self.browser, root_uri=self.live_server_url)
         self.wait_helper()
         self.actions_table.log_in(default_user, default_password)
-        self.wait_helper()        
+        self.wait_helper()
         self.action_edit_form = ActionEditPage(self.browser, root_uri=self.live_server_url)
         self.action_edit_form.go_to_create_page()
         self.action_edit_form.title = "A new action to take"
@@ -111,3 +111,41 @@ class PlayingWithPrivacySettings(SeleniumTestCase):
         self.profile_page.go_to_profile_page(username=default_user)
         created_actions, tracked_actions = self.profile_page.get_actions()
         self.assertNotIn("A new action to take", created_actions)
+
+class MakeAndEditCommitment(SeleniumTestCase):
+    # User tries to find an action to commit to.  Can't commit to a closed action.
+    # Can't commit to an action they haven't added.  Add an action, make a commitment.
+    # Go back to action page, see they can now edit it.  Edit it.  Edit it again and
+    # delete it.
+    def test_commitment(self):
+        # Log in and go to action detail page.  Use "petition-boston-sanctuary-city" because
+        # that's our user's action, so she can manipulate its status.
+        self.action_page = BasicActionDetailPage(self.browser, root_uri=self.live_server_url)
+        self.action_page.log_in(default_user, default_password)
+        self.action_page.go_to_detail_page(title="Sign petition to make Boston a sanctuary city")
+        self.assertEquals(self.action_page.commitment_button, None)
+        # Add action so you can see make commitment option
+        self.action_page.manage_action_button.click()
+        self.assertEquals(self.action_page.commitment_button.text, "Commit to action")
+        # Close action
+        self.action_edit_form = ActionEditPage(self.browser, root_uri=self.live_server_url)
+        self.action_edit_form.go_to_edit_page(title="Sign petition to make Boston a sanctuary city")
+        self.action_edit_form.select_status("Finished")
+        self.action_edit_form.submit_button.click()
+        # Go back, link is gone
+        self.action_page.go_to_detail_page(title="Sign petition to make Boston a sanctuary city")
+        self.assertEquals(self.action_page.commitment_button, None)
+        # Reopen action, link is there
+        self.action_edit_form = ActionEditPage(self.browser, root_uri=self.live_server_url)
+        self.action_edit_form.go_to_edit_page(title="Sign petition to make Boston a sanctuary city")
+        self.action_edit_form.select_status("Open for action")
+        self.action_edit_form.submit_button.click()
+        # Go back, link is there, click it
+        self.action_page.go_to_detail_page(title="Sign petition to make Boston a sanctuary city")
+        self.assertEquals(self.action_page.commitment_button.text, "Commit to action")
+        self.action_page.commitment_button.click()
+        # TODO: Finish this (need to look up returning/chainings page objects -- this is getting silly)
+        # Add a message to the commitment form
+        # Save and go back to action page, link now says to edit
+        # Go to edit page, click delete link
+        # Back to action page, link now says to make a commitment

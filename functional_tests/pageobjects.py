@@ -155,6 +155,7 @@ class BasicActionDetailPage(BaseObjectDetailPage):
     done_trackers = MultiPageElement(css="#don a")
     manage_action_button = PageElement(id_="manage-action-button")
     mark_action_as_done_button = PageElement(id_="mark_as_done")
+    commitment_button = PageElement(id_="commitment_btn")
     manage_action_links = MultiPageElement(css=".manage-action-links")
 
     def go_to_detail_page(self, title=None):
@@ -210,6 +211,10 @@ class ActionEditPage(BasePage):
         select = Select(self.w.find_element_by_id('id_privacy'))
         select.select_by_visible_text(selection)
 
+    def select_status(self, selection):
+        select = Select(self.w.find_element_by_id('id_status'))
+        select.select_by_visible_text(selection)
+
 class ProfilePage(BasePage):
     name = PageElement(id_="profile-username")
     actions_created = MultiPageElement(css="div#created-actions-div tbody tr .actiondetails")
@@ -255,4 +260,17 @@ class ManageActionPage(BasePage):
     submit_button = PageElement(css=".manage-action-submit")
 
     def go_to_manage_action_page(self, url):
+        self.w.get(url)
+
+class CommitmentPage(BasePage):
+    form_header = PageElement(css="div#form-explanation h2")
+    buddies = PageElement(id_="id_buddies")
+    offsite_buddies = PageElement(id_="id_offsite_buddies")
+    tries = PageElement(id_="id_tries")
+    message = PageElement(id_="id_message")
+    days_before_emailing = PageElement(id_="id_days_before_emailing")
+    submit_button = PageElement(css=".comm-submit-button")
+    delete_link = PageElement(css=".comm-delete")
+
+    def go_to_commitment_page(self, url):
         self.w.get(url)

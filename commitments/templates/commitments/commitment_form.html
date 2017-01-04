@@ -48,10 +48,10 @@
         <div class="col-md-10 col-md-offset-2">
           {% if form.instance %}
               {% bootstrap_button "Cancel" button_type="link" button_class="btn-default" %}
-              {% bootstrap_button "Commit" button_type="submit" button_class="btn-primary action-submit-button" icon="star" %}
+              {% bootstrap_button "Commit" button_type="submit" button_class="btn-primary comm-submit-button" icon="star" %}
           {% else %}
-              <a class="btn btn-primary" href="{% url 'delete_commitment' pk=form.instance.pk %}">Delete</a>
-              {% bootstrap_button "Save" button_type="submit" button_class="btn-primary action-submit-button" icon="star" %}
+              <a class="btn btn-primary comm-delete" href="{% url 'delete_commitment' pk=form.instance.pk %}">Delete</a>
+              {% bootstrap_button "Save" button_type="submit" button_class="btn-primary comm-submit-button" icon="star" %}
           {% endif %}
         </div>
       {% endbuttons %}

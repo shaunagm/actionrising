@@ -31,7 +31,6 @@ class CommitmentForm(forms.ModelForm):
         instance = super(CommitmentForm, self).save(commit=False)
         instance.profile = self.profile
         instance.action = self.action
-        # TODO: Make sure buddies is saved appropriately
         days_wait = self.cleaned_data.get('days_before_emailing', 14)
         instance.start_emails = datetime.datetime.now(timezone.utc) + datetime.timedelta(days=days_wait)
         instance.save()
