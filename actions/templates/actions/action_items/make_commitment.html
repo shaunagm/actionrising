@@ -1,9 +1,8 @@
-{% load commitment_extras %}
-{% get_commitment as commitment %}
-
 {% if request.user.is_authenticated %}
     {% if object in request.user.profile.actions.all %}
 
+    {% load commitment_extras %}
+    {% get_commitment as commitment %}
 
       <div class="action-item">
 
