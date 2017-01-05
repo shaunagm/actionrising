@@ -1,0 +1,20 @@
+{% if object.list.total_count > 0 %}
+
+        <b> {{ object.status_display }} </b>:
+
+        {% for tracker in object.list.public_list %}
+            <span class="tracker_span">
+                <a href="{{ tracker.slate.get_absolute_url }}">{{ tracker.slate.title }}</a>
+            </span>
+        {% endfor %}
+
+        {% if object.list.anonymous_count > 0 %}
+            <span class="tracker_span">
+              {% ifnotequal object.list.anonymous_count object.list.total_count %}
+                and
+              {% endifnotequal %}
+              {{ object.list.anonymous_count }} private slate{{ object.list.anonymous_count|pluralize }}
+            </span>
+        {% endif %}
+
+{% endif %}

@@ -15,23 +15,6 @@ def get_friendslist(context):
     return []
 
 @register.assignment_tag(takes_context=True)
-def get_action_status(context, public_list):
-    action=context['action']
-    action_status = {}
-
-    for status in INDIVIDUAL_STATUS_CHOICES:
-        action_status[status[0]] = []
-
-    all_pars = ProfileActionRelationship.objects.filter(
-            action=action
-        ).filter(profile__in=public_list)
-
-    for par in all_pars:
-        action_status[par.status].append(par)
-
-    return action_status
-
-@register.assignment_tag(takes_context=True)
 def filtered_feed(context, action):
     user = context['request'].user
     if not check_privacy(action.actor.profile, user):

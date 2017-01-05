@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 
 from mysite.lib.privacy import (check_privacy, filter_list_for_privacy,
     filter_list_for_privacy_annotated)
+from profiles.lib.trackers import get_tracker_data_for_action, get_tracker_data_for_slate
 from django.contrib.auth.models import User
 from actions.models import Action, ActionTopic, ActionType, Slate, SlateActionRelationship
 from actions.forms import ActionForm, SlateForm, SlateActionRelationshipForm
@@ -24,8 +25,7 @@ class ActionView(UserPassesTestMixin, generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(ActionView, self).get_context_data(**kwargs)
         context['topic_or_type_list'] = self.object.get_tags()
-        context['trackers'] = filter_list_for_privacy_annotated(self.object.profile_set.all(), self.request.user)
-        context['slates'] = filter_list_for_privacy_annotated(self.object.slate_set.all(), self.request.user)
+        context['tracker_data'] = get_tracker_data_for_action(self.object, self.request.user)
         if self.request.user.is_authenticated():
             context['par'] = self.request.user.profile.get_par_given_action(self.object)
         context['flag'] = self.object.is_flagged_by_user(self.request.user, new_only=False)
@@ -142,6 +142,7 @@ class SlateView(UserPassesTestMixin, generic.DetailView):
         context['hidden_actions'] = annotated_list['anonymous_count']
         if self.request.user.is_authenticated():
             context['psr'] = self.request.user.profile.get_psr_given_slate(self.object)
+        context['tracker_data'] = get_tracker_data_for_slate(self.object, self.request.user)
         return context
 
     def test_func(self):

@@ -10,6 +10,8 @@ def get_global_default_given_object(object):
         return object.creator.profile.privacy_defaults
     if object.get_cname() == "ProfileActionRelationship":
         return object.profile.privacy_defaults
+    if object.get_cname() == "ProfileSlateRelationship":
+        return object.profile.privacy_defaults
     if object.get_cname() == "SlateActionRelationship":
         return object.slate.creator.profile.privacy_defaults
 
@@ -31,6 +33,8 @@ def get_owner_given_object(object):
     if object.get_cname() in ["Action", "Slate"]:
         return object.creator
     if object.get_cname() == "ProfileActionRelationship":
+        return object.profile.user
+    if object.get_cname() == "ProfileSlateRelationship":
         return object.profile.user
     if object.get_cname() == "SlateActionRelationship":
         return object.slate.creator
@@ -76,10 +80,13 @@ def check_privacy(object, user):
     '''Checks privacy given object and user'''
     if check_for_ownership(object, user):
         return True
-    if object.get_cname() == "ProfileActionRelationship":
-        return check_privacy(object.profile, user) and check_privacy(object.action, user)
-    if object.get_cname() == "SlateActionRelationship":
-        return check_privacy(object.slate, user) and check_privacy(object.action, user)
+    if type(object) != User:
+        if object.get_cname() == "ProfileActionRelationship":
+            return check_privacy(object.profile.user, user) and check_privacy(object.action, user)
+        if object.get_cname() == "ProfileSlateRelationship":
+            return check_privacy(object.profile.user, user) and check_privacy(object.slate, user)
+        if object.get_cname() == "SlateActionRelationship":
+            return check_privacy(object.slate, user) and check_privacy(object.action, user)
     privacy_setting = get_privacy_setting(object)
     return check_privacy_given_setting(privacy_setting, object, user)
 

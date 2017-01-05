@@ -177,7 +177,7 @@ LOCALE_PATHS = (
     PROJECT_ROOT + '/website/locale',
 )
 
-SKIP_FUNCTIONAL_TESTS = False
+SKIP_FUNCTIONAL_TESTS = True
 
 # Actstream
 ACTSTREAM_SETTINGS = {

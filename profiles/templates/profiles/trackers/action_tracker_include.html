@@ -1,0 +1,27 @@
+{% include 'profiles/trackers/tracker_summary_include.html' %}
+
+{% if tracker_data.has_people %}
+    <div class="row collapse" id="PeopleTrackerList">
+       <div class="col-sm-12">
+          <h4>People</h4>
+          {% for status_key, status_value in tracker_data.people_tracker_list.items %}
+              <span class="status_span" id="profile_{{ status_key }}">
+                  {% include 'profiles/trackers/profile_by_status_include.html' with object=status_value %}
+              </span>
+          {% endfor %}
+       </div>
+    </div>
+{% endif %}
+
+{% if tracker_data.has_slates %}
+    <div class="row collapse" id="SlateTrackerList">
+       <div class="col-sm-12">
+         <h4>Slates</h4>
+         {% for status_key, status_value in tracker_data.slate_tracker_list.items %}
+            <span class="status_span" id="slate_{{ status_key }}">
+                {% include 'profiles/trackers/slate_by_status_include.html' with object=status_value %}
+            </span>
+         {% endfor %}
+       </div>
+    </div>
+{% endif %}

@@ -6,11 +6,12 @@ from django.contrib.auth.models import User
 from actions.models import Action, Slate, SlateActionRelationship
 from commitments.models import Commitment
 from mysite.lib.choices import INDIVIDUAL_STATUS_CHOICES
-from profiles.models import Profile, Relationship, ProfileActionRelationship
-from profiles.templatetags.profile_extras import get_friendslist, get_action_status
+from profiles.models import (Profile, Relationship, ProfileActionRelationship,
+    ProfileSlateRelationship)
+from profiles.templatetags.profile_extras import get_friendslist
 from profiles.views import (toggle_relationships_helper, toggle_par_helper,
     manage_action_helper, mark_as_done_helper, manage_suggested_action_helper)
-from profiles.lib import status_helpers
+from profiles.lib import status_helpers, trackers
 
 ###################
 ### Test models ###
@@ -333,50 +334,6 @@ class TestProfileExtras(TestCase):
         self.relationship.delete()
         self.assertEqual(get_friendslist(self.context), [])
 
-    def test_get_action_status(self):
-        action_status = get_action_status(self.context, [self.buffy.profile])
-        accepted_pars = action_status["ace"]
-        self.assertEqual(accepted_pars[0], self.par)
-
-        self.par.status = "don"
-        self.par.save()
-        action_status = get_action_status(self.context, [self.buffy.profile])
-        accepted_pars = action_status["ace"]
-        done_pars = action_status["don"]
-        self.assertEqual(len(accepted_pars), 0)
-        self.assertEqual(done_pars[0], self.par)
-
-    def test_get_action_status_filtering(self):
-        action_status = get_action_status(self.context, [])
-        for status in INDIVIDUAL_STATUS_CHOICES:
-            pars = action_status[status[0]]
-            self.assertEqual(len(pars), 0)
-
-        action_status = get_action_status(self.context, [self.faith.profile])
-        suggested_pars = action_status["sug"]
-        accepted_pars = action_status["ace"]
-        done_pars = action_status["don"]
-        rejected_pars = action_status["wit"]
-
-        self.assertEqual(len(suggested_pars), 0)
-        self.assertEqual(accepted_pars[0], self.faith_par)
-        self.assertEqual(len(done_pars), 0)
-        self.assertEqual(len(rejected_pars), 0)
-
-        action_status = get_action_status(self.context, [
-            self.faith.profile,
-            self.buffy.profile
-        ])
-        suggested_pars = action_status["sug"]
-        accepted_pars = action_status["ace"]
-        done_pars = action_status["don"]
-        rejected_pars = action_status["wit"]
-
-        self.assertEqual(len(suggested_pars), 0)
-        self.assertEqual(len(accepted_pars), 2)
-        self.assertEqual(len(done_pars), 0)
-        self.assertEqual(len(rejected_pars), 0)
-
 ################
 ### Test lib ###
 ################
@@ -454,3 +411,80 @@ class TestStatusHelper(TestCase):
         # Test
         com = Commitment.objects.get(profile=self.buffy.profile, action=self.action)
         self.assertEqual(com.status, "active")
+
+class TestTrackers(TestCase):
+
+    def setUp(self):
+        self.buffy = User.objects.create(username="buffysummers")
+        self.faith = User.objects.create(username="faithlehane")
+        self.action = Action.objects.create(slug="test-action", title="Test Action", creator=self.faith)
+        self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action)
+        self.slate = Slate.objects.create(slug="test-slate", creator=self.faith, title="Test Slate")
+        self.sar = SlateActionRelationship.objects.create(slate=self.slate, action=self.action)
+        self.psr = ProfileSlateRelationship.objects.create(profile=self.faith.profile, slate=self.slate)
+
+    def test_get_people_tracking(self):
+        result = trackers.get_people_tracking(self.action)
+        self.assertEqual(list(result), [self.par])
+        result = trackers.get_people_tracking(self.slate)
+        self.assertEqual(list(result), [self.psr])
+        # Nothing for an action or slate with no connections
+        new_action = Action.objects.create(title="New Action", creator=self.buffy)
+        result = trackers.get_people_tracking(new_action)
+        self.assertEqual(list(result), [])
+        new_slate = Slate.objects.create(title="New Slate", creator=self.buffy)
+        result = trackers.get_people_tracking(new_slate)
+        self.assertEqual(list(result), [])
+
+    def test_get_slate_tracking(self):
+        result = trackers.get_slate_tracking(self.action)
+        self.assertEqual(list(result), [self.sar])
+        # Nothing for an action with no connections
+        new_action = Action.objects.create(title="New Action", creator=self.buffy)
+        result = trackers.get_slate_tracking(new_action)
+        self.assertEqual(list(result), [])
+
+    def test_get_people_phrase(self):
+        result = trackers.get_people_tracking(self.action)
+        phrase = trackers.get_people_phrase(result)
+        self.assertEqual(phrase, "1 person")
+        # Add a connection, change the phrase
+        ProfileActionRelationship.objects.create(profile=self.faith.profile, action=self.action)
+        result = trackers.get_people_tracking(self.action)
+        phrase = trackers.get_people_phrase(result)
+        self.assertEqual(phrase, "2 people")
+        # Nothing for an action with no people following it
+        new_action = Action.objects.create(title="New Action", creator=self.buffy)
+        result = trackers.get_people_tracking(new_action)
+        phrase = trackers.get_people_phrase(result)
+        self.assertEqual(phrase, "0 people")
+
+    def test_get_slate_phrase(self):
+        result = trackers.get_slate_tracking(self.action)
+        phrase = trackers.get_slate_phrase(result)
+        self.assertEqual(phrase, "1 slate")
+        # Add a connection, change the phrase
+        new_slate = Slate.objects.create(title="New Slate", creator=self.buffy)
+        SlateActionRelationship.objects.create(slate=new_slate, action=self.action)
+        result = trackers.get_slate_tracking(self.action)
+        phrase = trackers.get_slate_phrase(result)
+        self.assertEqual(phrase, "2 slates")
+        # Nothing for an action with no slates
+        new_action = Action.objects.create(title="New Action", creator=self.buffy)
+        result = trackers.get_slate_tracking(new_action)
+        phrase = trackers.get_slate_phrase(result)
+        self.assertEqual(phrase, "0 slates")
+
+    def test_get_tracker_list_for_action(self):
+        result = trackers.get_slate_tracking(self.action)
+        new_dict = trackers.get_tracker_list_for_action(result, self.buffy)
+        self.assertEqual(len(new_dict), 5)
+        suggested_dict = new_dict['sug']
+        self.assertEqual(suggested_dict['status_display'], "Suggested to them")
+
+    def test_get_tracker_list_for_slate(self):
+        result = trackers.get_people_tracking(self.action)
+        new_dict = trackers.get_tracker_list_for_slate(result, self.buffy)
+        self.assertEqual(len(new_dict), 3)
+        self.assertIn("public_list", new_dict.keys())
+        self.assertIn("anonymous_count", new_dict.keys())

@@ -77,6 +77,9 @@ class TestActionDetail(SeleniumTestCase):
         self.assertEquals(self.action_page.status.text, "Open for action")
 
     def test_action_tracking_display(self):
+        self.action_page.display_tracker_link.click()
+        self.wait_helper("profile_ace")
+        time.sleep(4)
         self.assertEquals(len(self.action_page.suggested_trackers), 1)
         self.assertEqual(self.action_page.suggested_trackers[0].text, "Faith Lehane")
         self.assertEquals(len(self.action_page.accepted_trackers), 1)
@@ -89,19 +92,29 @@ class TestActionDetail(SeleniumTestCase):
         self.action_page.manage_action_button.click()
         self.wait_helper("manage-action-list")
         # Logged in user should now appear in accepted trackers
+        self.action_page.display_tracker_link.click()
+        self.wait_helper("profile_ace")
+        time.sleep(4)
         self.assertEquals(len(self.action_page.accepted_trackers), 2)
         self.assertEqual(self.action_page.accepted_trackers[0].text, "Buffy Summers")
         # Now test remove action
         self.action_page.select_manage_action_option("Remove from todos")
         self.wait_helper()
+        self.action_page.display_tracker_link.click()
+        self.wait_helper("profile_ace")
+        time.sleep(4)
         self.assertEquals(len(self.action_page.accepted_trackers), 1)
         self.assertEqual(self.action_page.accepted_trackers[0].text, "Willow")
 
     def test_mark_action_as_done(self):
         self.wait_helper()
         self.action_page.manage_action_button.click()
-        # Logged in user should now appear in accepted trackers but not done trackers
+        self.wait_helper()
+        self.action_page.display_tracker_link.click()
+        self.wait_helper("profile_ace")
+        time.sleep(4)
         self.assertEquals(len(self.action_page.accepted_trackers), 2)
+        # Logged in user should now appear in accepted trackers but not done trackers
         self.assertEqual(self.action_page.accepted_trackers[0].text, "Buffy Summers")
         self.assertEquals(len(self.action_page.done_trackers), 1)
         self.assertEqual(self.action_page.done_trackers[0].text, "Rupert Giles")
@@ -109,6 +122,9 @@ class TestActionDetail(SeleniumTestCase):
         self.action_page.mark_action_as_done_button.click()
         self.wait_helper()
         # Logged in user should now appear in done trackers but not accepted trackers
+        self.action_page.display_tracker_link.click()
+        self.wait_helper("profile_ace")
+        time.sleep(4)
         self.assertEquals(len(self.action_page.accepted_trackers), 1)
         self.assertEqual(self.action_page.accepted_trackers[0].text, "Willow")
         self.assertEquals(len(self.action_page.done_trackers), 2)
@@ -152,6 +168,7 @@ class TestSlateDetail(SeleniumTestCase):
         self.wait_helper()
         self.slate_info.info_tab.click()
         self.wait_helper("info")
+        time.sleep(4)
         # TODO: No idea why creator.text is returning none here
         self.assertEquals(self.slate_info.creator.text, "Created by buffysummers")
         self.assertEquals(self.slate_info.description.text, "Indescribable.")
@@ -203,6 +220,7 @@ class TestSlateActionList(SeleniumTestCase):
         self.assertEquals(self.actions_table.first_row_action.text, "Join the site")
         self.actions_table.select_priority("All")
         self.wait_helper()
+        time.sleep(4)
         self.assertEquals(len(self.actions_table.rows), 3)
         self.assertEquals(self.actions_table.first_row_action.text, "Join the site")
 

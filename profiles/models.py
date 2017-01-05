@@ -410,6 +410,10 @@ class PrivacyDefaults(models.Model):
             self.save_dependencies()
         super(PrivacyDefaults, self).save(*args, **kwargs)
 
+    def get_cname(self):
+        class_name = 'PrivacyDefaults'
+        return class_name
+
     def save_dependencies(self):
         self.profile.current_privacy = self.global_default
         self.profile.save()
@@ -496,3 +500,7 @@ class ProfileSlateRelationship(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     slate = models.ForeignKey(Slate, on_delete=models.CASCADE)
     notify_of_additions = models.BooleanField(default=True)
+
+    def get_cname(self):
+        class_name = 'ProfileSlateRelationship'
+        return class_name
