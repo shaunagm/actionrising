@@ -1,4 +1,4 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, MultipleChoiceField
 from datetimewidget.widgets import DateTimeWidget
 from django.forms.widgets import HiddenInput
 
@@ -30,6 +30,7 @@ class ActionForm(ModelForm):
             self.fields['status'].widget = HiddenInput()
 
 class SlateForm(ModelForm):
+    actions = MultipleChoiceField(required=False)
 
     class Meta:
         model = Slate
