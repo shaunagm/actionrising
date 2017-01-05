@@ -1,4 +1,6 @@
-from django.forms import ModelForm, ModelMultipleChoiceField, ModelChoiceField, ChoiceField, Select
+from collections import OrderedDict
+from django.forms import (ModelForm, ModelMultipleChoiceField, ModelChoiceField,
+    ChoiceField, Select, CharField)
 from django.forms import inlineformset_factory
 from django.forms.widgets import HiddenInput
 
@@ -8,6 +10,8 @@ from profiles.models import Profile, ProfileActionRelationship, PrivacyDefaults
 from actions.models import Slate
 
 class ProfileForm(ModelForm):
+    first_name = CharField(max_length=30, required=False, label="First name")
+    last_name = CharField(max_length=30, required=False, label="Last name")
     privacy_default = ChoiceField(label='Default privacy setting',
                                 widget=Select(),
                                 choices=PRIVACY_DEFAULT_CHOICES,
@@ -23,8 +27,17 @@ class ProfileForm(ModelForm):
         self.fields['privacy_default'].initial = self.instance.privacy_defaults.global_default
         NEW_CHOICES = (PRIVACY_CHOICES[0], PRIVACY_CHOICES[1], PRIVACY_CHOICES[2], ('inh', get_global_privacy_default(user.profile, "decorated")))
         self.fields['privacy'].choices = NEW_CHOICES
+        fields_keyOrder = ['first_name', 'last_name', 'location', 'description', 'privacy', 'privacy_default']
+        if (self.fields.has_key('keyOrder')):
+            self.fields.keyOrder = fields_keyOrder
+        else:
+            self.fields = OrderedDict((k, self.fields[k]) for k in fields_keyOrder)
 
     def save(self, commit=True):
+        if self.cleaned_data['first_name'] or self.cleaned_data['last_name']:
+            self.instance.user.first_name = self.cleaned_data['first_name']
+            self.instance.user.last_name = self.cleaned_data['last_name']
+            self.instance.user.save()
         self.instance.privacy_defaults.global_default = self.cleaned_data['privacy_default']
         self.instance.privacy_defaults.save()
         return super(ProfileForm, self).save(commit=commit)

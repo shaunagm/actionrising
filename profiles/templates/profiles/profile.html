@@ -6,7 +6,13 @@
 
     <div class="row">
        <div class="col-sm-10 col-sm-offset-1">
-         <h2 id="profile-username">{{ object.username }}</h2>
+         <h2 id="profile-username">
+           {% if object.profile.get_full_name %}
+              {{ object.profile.get_full_name }} ({{ object.username }})
+           {% else %}
+              {{ object.username }}
+           {% endif %}
+         </h2>
        </div>
     </div>
 

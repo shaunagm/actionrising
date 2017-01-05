@@ -54,11 +54,18 @@ class Profile(models.Model):
         class_name = 'Profile'
         return class_name
 
-    def get_name(self):
+    def get_full_name(self):
+        names = []
         if self.user.first_name not in [None, ""]:
-            return self.user.first_name + " " + self.user.last_name
-        else:
-            return self.user.username
+            names.append(self.user.first_name)
+        if self.user.last_name not in [None, ""]:
+            names.append(self.user.last_name)
+        return " ".join(names)
+
+    def get_name(self):
+        if self.get_full_name():
+            return self.get_full_name()
+        return self.user.username
 
     def get_absolute_url(self):
         return reverse('profile', kwargs={'pk': self.user.pk })
