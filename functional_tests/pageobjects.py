@@ -92,11 +92,15 @@ class BasicActionListPage(BaseListPage):
     labels = MultiPageElement(css="span.label")
     action_tds = MultiPageElement(css=".main-list tbody tr > td:nth-child(2)")
     # Additional Action Controls
-    local_only = PageElement(id_="filter-local")
+    filter_location_dropdown = PageElement(id_="filter-location-group")
+    filter_location_links = MultiPageElement(css=".filter-location, .nested-link")
     filter_priority_dropdown = PageElement(id_="filter-priority-group")
     filter_priority_links = MultiPageElement(css=".filter-priority")
     filter_deadline_dropdown = PageElement(id_="filter-deadline-group")
     filter_deadline_links = MultiPageElement(css=".filter-deadline")
+
+    def return_to_default_actions_page(self):
+        self.w.get(self.root_uri + "/actions/actions")
 
     def go_to_default_actions_page_if_necessary(self):
         if not self.action_table:
@@ -106,6 +110,12 @@ class BasicActionListPage(BaseListPage):
     def select_priority(self, selection):
         self.filter_priority_dropdown.click()
         for link in self.filter_priority_links:
+            if link.text == selection:
+                link.click()
+
+    def select_location(self, selection):
+        self.filter_location_dropdown.click()
+        for link in self.filter_location_links:
             if link.text == selection:
                 link.click()
 

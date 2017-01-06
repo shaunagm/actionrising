@@ -1,4 +1,4 @@
-import datetime
+import datetime, pytz
 
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
@@ -67,13 +67,10 @@ class ProfileEditView(UserPassesTestMixin, generic.UpdateView):
     def form_valid(self, form):
         object = form.save(commit=False)
         uf = []
-
         if self.get_object().location != self.object.location:
             uf = ['location']
-
         self.object = object.save(update_fields=uf)
         return super(ProfileEditView, self).form_valid(form)
-
 
 class ProfileToDoView(UserPassesTestMixin, generic.DetailView):
     template_name = 'profiles/todo.html'
@@ -154,7 +151,7 @@ def toggle_par_helper(toggle_type, current_profile, action):
     if toggle_type == 'add':
         par, create = ProfileActionRelationship.objects.get_or_create(profile=current_profile, action=action)
         par.status = 'ace'
-        par.date_accepted = datetime.datetime.now()
+        par.date_accepted = datetime.datetime.now(tz=pytz.utc)
         par.save()
     if toggle_type == 'remove':
         par = ProfileActionRelationship.objects.get(profile=current_profile, action=action)
@@ -239,10 +236,10 @@ def mark_as_done_helper(profile, action, mark_as):
         action=action)
     if mark_as == 'done':
         par.status = 'don'
-        par.date_finished = datetime.datetime.now()
+        par.date_finished = datetime.datetime.now(tz=pytz.utc)
     else:
         par.status = 'ace'
-        par.date_accepted = datetime.datetime.now()
+        par.date_accepted = datetime.datetime.now(tz=pytz.utc)
     par.save()
     return par
 
@@ -259,7 +256,7 @@ def mark_as_done(request, slug, mark_as):
 def manage_suggested_action_helper(par, type):
     if type == 'accept':
         par.status = "ace"
-        par.date_accepted = datetime.datetime.now()
+        par.date_accepted = datetime.datetime.now(tz=pytz.utc)
     if type == 'reject':
         par.status = "wit"
     par.save()

@@ -126,6 +126,7 @@ class MakeAndEditCommitment(SeleniumTestCase):
         self.assertEquals(self.action_page.commitment_button, None)
         # Add action so you can see make commitment option
         self.action_page.manage_action_button.click()
+        self.wait_helper("commitment_btn")
         self.assertEquals(self.action_page.commitment_button.text, "Commit to action")
         # Close action
         self.action_edit_form = ActionEditPage(self.browser, root_uri=self.live_server_url)
@@ -142,6 +143,7 @@ class MakeAndEditCommitment(SeleniumTestCase):
         self.action_edit_form.submit_button.click()
         # Go back, link is there, click it
         self.action_page.go_to_detail_page(title="Sign petition to make Boston a sanctuary city")
+        self.wait_helper("commitment_btn")
         self.assertEquals(self.action_page.commitment_button.text, "Commit to action")
         self.action_page.commitment_button.click()
         # TODO: Finish this (need to look up returning/chainings page objects -- this is getting silly)

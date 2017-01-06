@@ -187,9 +187,16 @@ class Action(models.Model):
 
     def get_district(self):
         if self.district:
-            return "%s,%i" % (self.district.state, self.district.district)
-        else:
-            return None
+            return self.district
+        return None
+
+    def get_state(self):
+        if self.state:
+            return self.state
+        return None
+
+    def get_district_and_state(self):
+        return "%s, %s" % (self.district, self.state)
 
     def get_status(self):
         # Added for conveniences' sake in vet_actions function

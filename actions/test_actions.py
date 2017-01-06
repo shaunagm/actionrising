@@ -139,7 +139,7 @@ class TestActionForms(TestCase):
 
     def setUp(self):
         self.buffy = User.objects.create(username="buffysummers")
-        
+
     def test_action_form_privacy_choices(self):
         initial_form = ActionForm(user=self.buffy, formtype="create")
         form_inherited_privacy = initial_form.fields['privacy'].choices[0][1]
@@ -184,9 +184,8 @@ class TestLocation(TestCase):
         find_congressional_district.return_value = {"state":"MA","district":5}
 
         act_location.populate_location_and_district(self.action)
+
         self.assertEqual(self.action.lat, 0.0)
         self.assertEqual(self.action.lon, 0.0)
-
-        district = self.action.district
-        self.assertEqual(district.state, "MA")
-        self.assertEqual(district.district, 5)
+        self.assertEqual(self.action.state, "MA")
+        self.assertEqual(self.action.district, "MA-5")

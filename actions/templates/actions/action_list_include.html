@@ -1,4 +1,4 @@
-{% load action_extras %} 
+{% load action_extras %}
 {% get_duration_choices as duration_choices %}
 
 Filter:
@@ -18,16 +18,7 @@ Filter:
   </label>
 </div>
 
-<div class="btn-group" id="filter-location-group">
-  <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-    Location <span class="caret"></span></a>
-  <ul class="dropdown-menu">
-    <li><a class="filter-location" href="#">My State</a></li>
-    <li><a class="filter-location" href="#">My District</a></li>
-    <li class="divider"></li>
-    <li><a class="filter-location" href="#">Anywhere</a></li>
-  </ul>
-</div>
+{% include "actions/location_dropdown_include.html" %}
 
 <div class="btn-group" id="filter-priority-group">
   <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -85,7 +76,8 @@ Filter:
       <th>Priority?</th>
       <th>Status?</th>
       <th>Friends?</th>
-      <th>Location?</th>
+      <th>District?</th>
+      <th>State?</th>
       <th>Notes?</th>
       <th>Duration?</th>
       <th>Manage</th>

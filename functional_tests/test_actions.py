@@ -19,9 +19,9 @@ class TestActionList(SeleniumTestCase):
     def test_display_actions(self):
         self.assertTrue(self.actions_table.datatables_js_is_enabled())
         self.assertEquals(len(self.actions_table.columns), 4)
-        self.assertEquals(len(self.actions_table.rows), 4)
-        self.assertEquals(self.actions_table.first_row_date.text, "Fri Dec 02")
-        self.assertEquals(self.actions_table.first_row_action.text, "Join the site")
+        self.assertEquals(len(self.actions_table.rows), 5)
+        self.assertEquals(self.actions_table.first_row_date.text, "Fri Jan 06")
+        self.assertEquals(self.actions_table.first_row_action.text, "An Action In Sacramento")
         self.assertEquals(self.actions_table.first_row_tracker_count.text, "0")
         self.assertEquals(len(self.actions_table.labels), 4)
 
@@ -43,16 +43,34 @@ class TestActionList(SeleniumTestCase):
         self.assertEquals(len(self.actions_table.rows), 1)
         self.assertEquals(self.actions_table.first_row_action.text, "Sign petition to make Boston a sanctuary city")
         self.actions_table.select_priority("Medium")
-        self.assertEquals(len(self.actions_table.rows), 1)
-        self.assertEquals(self.actions_table.first_row_action.text, "Donate to Planned Parenthood")
+        self.assertEquals(len(self.actions_table.rows), 2)
+        self.assertEquals(self.actions_table.first_row_action.text, "An Action In Sacramento")
         self.actions_table.select_priority("Low")
         self.assertEquals(len(self.actions_table.rows), 1)
         self.assertEquals(self.actions_table.first_row_action.text, "Join the site")
         self.actions_table.select_priority("All")
-        self.assertEquals(len(self.actions_table.rows), 4)
-        self.assertEquals(self.actions_table.first_row_action.text, "Join the site")
+        self.assertEquals(len(self.actions_table.rows), 5)
+        self.assertEquals(self.actions_table.first_row_action.text, "An Action In Sacramento")
 
-    # TODO add test for filter by location once it's actually implemented
+    def test_filter_actions_by_location_for_user_with_state_and_district(self):
+        self.assertEquals(len(self.actions_table.rows), 5)
+        self.assertEquals(self.actions_table.first_row_action.text, "An Action In Sacramento")
+        # Sort by district
+        self.actions_table.select_location("My District")
+        self.assertEquals(len(self.actions_table.rows), 1)
+        self.assertEquals(self.actions_table.first_row_action.text, "Sign petition to make Boston a sanctuary city")
+        # Sort by state
+        self.actions_table.select_location("My State")
+        self.assertEquals(len(self.actions_table.rows), 2)
+        self.assertEquals(self.actions_table.first_row_action.text, "Sign petition to make Boston a sanctuary city")
+        # Sort by national/global
+        self.actions_table.select_location("National or Global")
+        self.assertEquals(len(self.actions_table.rows), 2)
+        self.assertEquals(self.actions_table.first_row_action.text, "Join the site")
+        # Back to all
+        self.actions_table.select_location("Anywhere")
+        self.assertEquals(len(self.actions_table.rows), 5)
+        self.assertEquals(self.actions_table.first_row_action.text, "An Action In Sacramento")
 
     # TODO add test for filter by deadline (will need a factory or something to generate
     # the right deadline data, the fixtures will quickly go out of date)

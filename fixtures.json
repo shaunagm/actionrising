@@ -4,7 +4,7 @@
     "pk": 8,
     "fields": {
         "password": "pbkdf2_sha256$30000$06Pt4s6XgY5h$pKAC05XglBrOj4rgJ+U1rESRqLnaRjclzVS7o1wJssA=",
-        "last_login": "2016-12-03T02:15:25.231Z",
+        "last_login": "2017-01-06T19:02:29.923Z",
         "is_superuser": false,
         "username": "buffysummers",
         "first_name": "Buffy",
@@ -21,8 +21,8 @@
     "model": "auth.user",
     "pk": 9,
     "fields": {
-        "password": "pbkdf2_sha256$30000$0L7jsffzAcIy$TWVyJYug4SYXDqPjvHXYjapY3k4TPMBK8OqHarhlf4E=",
-        "last_login": "2016-11-26T21:27:56.537Z",
+        "password": "pbkdf2_sha256$30000$4l5lZ7OLprxY$cZsjrXEWDJ4X5Smk9Elewk6+ko+WKhcCzdQZglX+CEs=",
+        "last_login": "2017-01-06T17:19:17.218Z",
         "is_superuser": false,
         "username": "thewitch",
         "first_name": "Willow",
@@ -94,7 +94,7 @@
     "pk": 13,
     "fields": {
         "password": "pbkdf2_sha256$30000$9UKJjBtRpGx0$RW2H5bRgTGt4dWJBSkkEMD/GnnxVXptnUHfvdLz0+f0=",
-        "last_login": null,
+        "last_login": "2017-01-06T17:20:58.419Z",
         "is_superuser": false,
         "username": "dru",
         "first_name": "Drusilla",
@@ -112,7 +112,7 @@
     "pk": 14,
     "fields": {
         "password": "pbkdf2_sha256$30000$PRORrfnS2lz8$YQSVwqnLDtihtxFWOMTdcdyHgMv0S1XWjuT1rQzkTyY=",
-        "last_login": "2016-12-07T23:55:05.329Z",
+        "last_login": "2017-01-06T17:18:07.455Z",
         "is_superuser": true,
         "username": "admin",
         "first_name": "",
@@ -143,6 +143,14 @@
 },
 {
     "model": "sessions.session",
+    "pk": "5t9loc0d756ddhwk481gkhwnuwe6815e",
+    "fields": {
+        "session_data": "NjhjYzMzZWNjZjgxZWIzOTFmYTZjYzBiNWUyOTFlOTM0NGJlN2RjODp7Il9hdXRoX3VzZXJfaGFzaCI6ImI2NGJjNjI1MTM1ODBjNmEyODMyYjA5Y2IwMDNiZDcxMzBjMWQzYmYiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiI4In0=",
+        "expire_date": "2017-01-20T19:02:29.931Z"
+    }
+},
+{
+    "model": "sessions.session",
     "pk": "6tt9nokqx0rpp24vy2lynn12duj2a23w",
     "fields": {
         "session_data": "Y2I4MGI3YmE4MDA3MTdiNzkxMTcxOGIxZjE5NzhjNDgxYTY5ODFhOTp7Il9hdXRoX3VzZXJfaGFzaCI6IjY4MjgzMmVhYTljNzAyOGQ2ZjY1MzJlYThiMGI2YjkyOThiYzZkNmQiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiI4In0=",
@@ -167,6 +175,14 @@
 },
 {
     "model": "sessions.session",
+    "pk": "bdj8uu1e0wv67kibh6it3o4mreo7mhcz",
+    "fields": {
+        "session_data": "ZjlkYjc0ZjM2MmU1ZTEwMjYwOGFhMzI2NmFjM2M4OTBkOTk0YzZiNDp7Il9hdXRoX3VzZXJfaGFzaCI6IjVjZDFiY2ZhN2Q3NDJlYzE4NDEzOWExNzg1YWY5MTk0YmE5YTdjMTAiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIxNCJ9",
+        "expire_date": "2017-01-20T17:13:28.870Z"
+    }
+},
+{
+    "model": "sessions.session",
     "pk": "bmwbyzwy2nc7osdqavs7ffyeypt9dgvy",
     "fields": {
         "session_data": "Y2I4MGI3YmE4MDA3MTdiNzkxMTcxOGIxZjE5NzhjNDgxYTY5ODFhOTp7Il9hdXRoX3VzZXJfaGFzaCI6IjY4MjgzMmVhYTljNzAyOGQ2ZjY1MzJlYThiMGI2YjkyOThiYzZkNmQiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiI4In0=",
@@ -179,6 +195,14 @@
     "fields": {
         "session_data": "MGFjOTJmYTAyZmVjNWExZjZhNmMwMWU3NjA2ZjcwNjBkMzlmNjdjNzp7Il9hdXRoX3VzZXJfaGFzaCI6IjliMTIwMjk2Zjg1NzE4ZTllYzhiYWI2ZWQyNThmNGJjZTY2ZGU4NzkiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIxNCJ9",
         "expire_date": "2016-12-17T04:41:13.121Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "ey5ghxz2qt4klbb4whzljlannthriy8n",
+    "fields": {
+        "session_data": "ZjlkYjc0ZjM2MmU1ZTEwMjYwOGFhMzI2NmFjM2M4OTBkOTk0YzZiNDp7Il9hdXRoX3VzZXJfaGFzaCI6IjVjZDFiY2ZhN2Q3NDJlYzE4NDEzOWExNzg1YWY5MTk0YmE5YTdjMTAiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIxNCJ9",
+        "expire_date": "2017-01-20T17:18:07.464Z"
     }
 },
 {
@@ -253,11 +277,17 @@
             "buffysummers"
         ],
         "verified": false,
-        "description": null,
-        "location": null,
+        "description": "",
+        "location": "Boston, MA",
+        "hide_location": false,
+        "lat": "42.360082",
+        "lon": "-71.058880",
+        "district": "MA-8",
+        "state": "MA",
         "links": null,
         "date_joined": "2016-11-22T04:14:02.912Z",
-        "privacy": "inh"
+        "privacy": "inh",
+        "current_privacy": "fol"
     }
 },
 {
@@ -270,9 +300,15 @@
         "verified": false,
         "description": "",
         "location": "Sunnydale, CA",
+        "hide_location": false,
+        "lat": "37.368830",
+        "lon": "-122.036350",
+        "district": "CA-17",
+        "state": "CA",
         "links": "",
         "date_joined": "2016-11-22T04:14:02Z",
-        "privacy": "inh"
+        "privacy": "inh",
+        "current_privacy": "fol"
     }
 },
 {
@@ -285,9 +321,15 @@
         "verified": false,
         "description": null,
         "location": null,
+        "hide_location": false,
+        "lat": "44.933493",
+        "lon": "7.540749",
+        "district": null,
+        "state": null,
         "links": null,
         "date_joined": "2016-11-22T04:14:02.912Z",
-        "privacy": "inh"
+        "privacy": "inh",
+        "current_privacy": "fol"
     }
 },
 {
@@ -300,9 +342,15 @@
         "verified": false,
         "description": null,
         "location": null,
+        "hide_location": false,
+        "lat": "44.933493",
+        "lon": "7.540749",
+        "district": null,
+        "state": null,
         "links": null,
         "date_joined": "2016-11-28T22:22:33.956Z",
-        "privacy": "inh"
+        "privacy": "inh",
+        "current_privacy": "fol"
     }
 },
 {
@@ -315,9 +363,15 @@
         "verified": false,
         "description": null,
         "location": null,
+        "hide_location": false,
+        "lat": "44.933493",
+        "lon": "7.540749",
+        "district": null,
+        "state": null,
         "links": null,
         "date_joined": "2016-11-28T22:23:30.382Z",
-        "privacy": "inh"
+        "privacy": "inh",
+        "current_privacy": "fol"
     }
 },
 {
@@ -328,11 +382,17 @@
             "dru"
         ],
         "verified": false,
-        "description": null,
-        "location": null,
-        "links": null,
-        "date_joined": "2016-12-02T14:58:39.472Z",
-        "privacy": "inh"
+        "description": "",
+        "location": "MA",
+        "hide_location": false,
+        "lat": "42.407211",
+        "lon": "-71.382437",
+        "district": "",
+        "state": "MA",
+        "links": "",
+        "date_joined": "2016-12-02T14:58:39Z",
+        "privacy": "inh",
+        "current_privacy": "fol"
     }
 },
 {
@@ -345,9 +405,15 @@
         "verified": false,
         "description": null,
         "location": null,
+        "hide_location": false,
+        "lat": "44.933493",
+        "lon": "7.540749",
+        "district": null,
+        "state": null,
         "links": null,
         "date_joined": "2016-12-02T15:01:21.108Z",
-        "privacy": "inh"
+        "privacy": "inh",
+        "current_privacy": "fol"
     }
 },
 {
@@ -361,7 +427,9 @@
         "A_accountable_B": false,
         "B_accountable_A": false,
         "A_mutes_B": true,
-        "B_mutes_A": false
+        "B_mutes_A": false,
+        "A_notified_of_B": false,
+        "B_notified_of_A": false
     }
 },
 {
@@ -375,7 +443,9 @@
         "A_accountable_B": false,
         "B_accountable_A": false,
         "A_mutes_B": false,
-        "B_mutes_A": false
+        "B_mutes_A": false,
+        "A_notified_of_B": false,
+        "B_notified_of_A": false
     }
 },
 {
@@ -389,7 +459,9 @@
         "A_accountable_B": false,
         "B_accountable_A": false,
         "A_mutes_B": false,
-        "B_mutes_A": false
+        "B_mutes_A": false,
+        "A_notified_of_B": false,
+        "B_notified_of_A": false
     }
 },
 {
@@ -403,7 +475,9 @@
         "A_accountable_B": false,
         "B_accountable_A": false,
         "A_mutes_B": false,
-        "B_mutes_A": false
+        "B_mutes_A": false,
+        "A_notified_of_B": false,
+        "B_notified_of_A": false
     }
 },
 {
@@ -471,8 +545,11 @@
         "priority": "med",
         "status": "ace",
         "committed": false,
+        "last_suggester": null,
         "suggested_by": "[\"shauna\"]",
-        "notes": null
+        "notes": null,
+        "date_accepted": "2017-01-06T17:13:19.395Z",
+        "date_finished": null
     }
 },
 {
@@ -484,8 +561,11 @@
         "priority": "med",
         "status": "ace",
         "committed": false,
+        "last_suggester": null,
         "suggested_by": "",
-        "notes": ""
+        "notes": "",
+        "date_accepted": "2017-01-06T17:13:19.397Z",
+        "date_finished": null
     }
 },
 {
@@ -497,8 +577,11 @@
         "priority": "med",
         "status": "don",
         "committed": false,
+        "last_suggester": null,
         "suggested_by": "",
-        "notes": ""
+        "notes": "",
+        "date_accepted": "2017-01-06T17:13:19.398Z",
+        "date_finished": null
     }
 },
 {
@@ -510,8 +593,11 @@
         "priority": "med",
         "status": "sug",
         "committed": false,
+        "last_suggester": null,
         "suggested_by": "",
-        "notes": ""
+        "notes": "",
+        "date_accepted": "2017-01-06T17:13:19.400Z",
+        "date_finished": null
     }
 },
 {
@@ -588,14 +674,20 @@
         ],
         "anonymize": false,
         "main_link": "www.fakelinktomoreinfo.com",
-        "description": "Here's some instructions!",
+        "description": "<p>Here&#39;s some instructions!</p>",
         "privacy": "inh",
-        "location": "",
+        "current_privacy": "sit",
+        "location": "Amherst, MA",
+        "lat": "42.373222",
+        "lon": "-72.519854",
+        "district": "MA-2",
+        "state": "MA",
         "status": "rea",
         "has_deadline": false,
         "deadline": null,
         "priority": "eme",
         "date_created": "2016-11-22T04:14:02Z",
+        "duration": "H",
         "actiontypes": [
             4
         ],
@@ -615,12 +707,18 @@
         "main_link": "",
         "description": "",
         "privacy": "pub",
-        "location": "",
+        "current_privacy": "pub",
+        "location": "Boston, MA",
+        "lat": "42.360082",
+        "lon": "-71.058880",
+        "district": "MA-8",
+        "state": "MA",
         "status": "rea",
         "has_deadline": false,
         "deadline": null,
         "priority": "hig",
         "date_created": "2016-11-25T04:14:02Z",
+        "duration": "H",
         "actiontypes": [
             4
         ],
@@ -642,12 +740,18 @@
         "main_link": "",
         "description": "",
         "privacy": "sit",
+        "current_privacy": "sit",
         "location": "",
+        "lat": null,
+        "lon": null,
+        "district": null,
+        "state": null,
         "status": "rea",
         "has_deadline": false,
         "deadline": null,
         "priority": "med",
         "date_created": "2016-11-23T04:14:02Z",
+        "duration": "H",
         "actiontypes": [
             7
         ],
@@ -667,12 +771,18 @@
         "main_link": "",
         "description": "Do a thing!  Edited to say: actually we should probably not do this thing.",
         "privacy": "inh",
+        "current_privacy": "sit",
         "location": "",
+        "lat": null,
+        "lon": null,
+        "district": null,
+        "state": null,
         "status": "wit",
         "has_deadline": false,
         "deadline": null,
         "priority": "med",
         "date_created": "2016-12-02T14:52:20Z",
+        "duration": "H",
         "actiontypes": [
             7
         ],
@@ -694,12 +804,47 @@
         "main_link": "",
         "description": "Let's see if this makes an activitystream update!?!?!!",
         "privacy": "inh",
+        "current_privacy": "sit",
         "location": "",
+        "lat": null,
+        "lon": null,
+        "district": null,
+        "state": null,
         "status": "rea",
         "has_deadline": false,
         "deadline": null,
         "priority": "low",
         "date_created": "2016-12-02T15:04:48Z",
+        "duration": "H",
+        "actiontypes": [],
+        "topics": []
+    }
+},
+{
+    "model": "actions.action",
+    "pk": 26,
+    "fields": {
+        "slug": "an-action-in-sacramento",
+        "title": "An Action In Sacramento",
+        "creator": [
+            "dru"
+        ],
+        "anonymize": false,
+        "main_link": "",
+        "description": "",
+        "privacy": "inh",
+        "current_privacy": "sit",
+        "location": "Sacramento, CA",
+        "lat": "38.581572",
+        "lon": "-121.494400",
+        "district": "CA-6",
+        "state": "CA",
+        "status": "rea",
+        "has_deadline": false,
+        "deadline": null,
+        "priority": "med",
+        "date_created": "2017-01-06T17:21:26Z",
+        "duration": "H",
         "actiontypes": [],
         "topics": []
     }
@@ -716,6 +861,7 @@
         "description": "Indescribable.",
         "status": "rea",
         "privacy": "inh",
+        "current_privacy": "sit",
         "date_created": "2016-11-28T22:26:42Z"
     }
 },
@@ -731,6 +877,7 @@
         "description": "",
         "status": "rea",
         "privacy": "inh",
+        "current_privacy": "sit",
         "date_created": "2016-12-02T21:42:10Z"
     }
 },
@@ -746,6 +893,7 @@
         "description": "",
         "status": "rea",
         "privacy": "pub",
+        "current_privacy": "sit",
         "date_created": "2016-12-02T21:43:05Z"
     }
 },
@@ -815,9 +963,13 @@
         "use_own_actions_if_exist": true,
         "weekly_summary": false,
         "if_followed": true,
+        "if_slate_followed": true,
         "if_actions_followed": true,
         "if_comments_on_my_actions": true,
-        "if_my_actions_added_to_slate": true
+        "if_my_actions_added_to_slate": true,
+        "if_suggested_action": true,
+        "if_followed_users_create": true,
+        "if_followed_slates_updated": true
     }
 },
 {
@@ -831,9 +983,13 @@
         "use_own_actions_if_exist": true,
         "weekly_summary": false,
         "if_followed": true,
+        "if_slate_followed": true,
         "if_actions_followed": true,
         "if_comments_on_my_actions": true,
-        "if_my_actions_added_to_slate": true
+        "if_my_actions_added_to_slate": true,
+        "if_suggested_action": true,
+        "if_followed_users_create": true,
+        "if_followed_slates_updated": true
     }
 },
 {
@@ -847,9 +1003,13 @@
         "use_own_actions_if_exist": true,
         "weekly_summary": true,
         "if_followed": true,
+        "if_slate_followed": true,
         "if_actions_followed": true,
         "if_comments_on_my_actions": true,
-        "if_my_actions_added_to_slate": true
+        "if_my_actions_added_to_slate": true,
+        "if_suggested_action": true,
+        "if_followed_users_create": true,
+        "if_followed_slates_updated": true
     }
 },
 {
@@ -863,9 +1023,13 @@
         "use_own_actions_if_exist": true,
         "weekly_summary": false,
         "if_followed": true,
+        "if_slate_followed": true,
         "if_actions_followed": true,
         "if_comments_on_my_actions": true,
-        "if_my_actions_added_to_slate": true
+        "if_my_actions_added_to_slate": true,
+        "if_suggested_action": true,
+        "if_followed_users_create": true,
+        "if_followed_slates_updated": true
     }
 },
 {
@@ -879,9 +1043,13 @@
         "use_own_actions_if_exist": true,
         "weekly_summary": false,
         "if_followed": true,
+        "if_slate_followed": true,
         "if_actions_followed": true,
         "if_comments_on_my_actions": true,
-        "if_my_actions_added_to_slate": true
+        "if_my_actions_added_to_slate": true,
+        "if_suggested_action": true,
+        "if_followed_users_create": true,
+        "if_followed_slates_updated": true
     }
 },
 {
@@ -895,9 +1063,13 @@
         "use_own_actions_if_exist": true,
         "weekly_summary": false,
         "if_followed": true,
+        "if_slate_followed": true,
         "if_actions_followed": true,
         "if_comments_on_my_actions": true,
-        "if_my_actions_added_to_slate": true
+        "if_my_actions_added_to_slate": true,
+        "if_suggested_action": true,
+        "if_followed_users_create": true,
+        "if_followed_slates_updated": true
     }
 },
 {
@@ -911,9 +1083,13 @@
         "use_own_actions_if_exist": true,
         "weekly_summary": false,
         "if_followed": true,
+        "if_slate_followed": true,
         "if_actions_followed": true,
         "if_comments_on_my_actions": true,
-        "if_my_actions_added_to_slate": true
+        "if_my_actions_added_to_slate": true,
+        "if_suggested_action": true,
+        "if_followed_users_create": true,
+        "if_followed_slates_updated": true
     }
 },
 {
@@ -1045,7 +1221,7 @@
         ],
         "object_id": "10",
         "actor_only": false,
-        "started": "2016-12-03T05:09:25.000Z"
+        "started": "2016-12-03T05:09:25Z"
     }
 },
 {
@@ -1208,6 +1384,113 @@
         "action_object_content_type": null,
         "action_object_object_id": null,
         "timestamp": "2016-12-03T03:00:17.419Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 2,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "8",
+        "verb": "updated",
+        "description": null,
+        "target_content_type": [
+            "actions",
+            "action"
+        ],
+        "target_object_id": "10",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-06T17:13:19.439Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 3,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "10",
+        "verb": "updated",
+        "description": null,
+        "target_content_type": [
+            "actions",
+            "action"
+        ],
+        "target_object_id": "11",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-06T17:13:19.449Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 4,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "9",
+        "verb": "updated",
+        "description": null,
+        "target_content_type": [
+            "actions",
+            "action"
+        ],
+        "target_object_id": "24",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-06T17:13:19.462Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 5,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "25",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-06T17:13:19.476Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 6,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "13",
+        "verb": "updated",
+        "description": null,
+        "target_content_type": [
+            "actions",
+            "action"
+        ],
+        "target_object_id": "26",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-06T18:53:13.389Z",
         "public": true
     }
 },
@@ -1796,6 +2079,204 @@
         "action_object_content_type": null,
         "action_object_object_id": null,
         "timestamp": "2016-12-08T01:02:37.103Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 94,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "8",
+        "verb": "updated",
+        "description": null,
+        "target_content_type": [
+            "actions",
+            "action"
+        ],
+        "target_object_id": "10",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-06T17:17:06.412Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 95,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "8",
+        "verb": "updated",
+        "description": null,
+        "target_content_type": [
+            "actions",
+            "action"
+        ],
+        "target_object_id": "10",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-06T17:17:16.460Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 96,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "8",
+        "verb": "updated",
+        "description": null,
+        "target_content_type": [
+            "actions",
+            "action"
+        ],
+        "target_object_id": "10",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-06T17:17:52.917Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 97,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "8",
+        "verb": "updated",
+        "description": null,
+        "target_content_type": [
+            "actions",
+            "action"
+        ],
+        "target_object_id": "10",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-06T17:17:53.396Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 98,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "8",
+        "verb": "updated",
+        "description": null,
+        "target_content_type": [
+            "actions",
+            "action"
+        ],
+        "target_object_id": "10",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-06T17:17:53.406Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 99,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "9",
+        "verb": "updated",
+        "description": null,
+        "target_content_type": [
+            "actions",
+            "action"
+        ],
+        "target_object_id": "9",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-06T17:19:36.063Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 100,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "9",
+        "verb": "updated",
+        "description": null,
+        "target_content_type": [
+            "actions",
+            "action"
+        ],
+        "target_object_id": "9",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-06T17:19:36.850Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 101,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "9",
+        "verb": "updated",
+        "description": null,
+        "target_content_type": [
+            "actions",
+            "action"
+        ],
+        "target_object_id": "9",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-06T17:19:36.859Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 102,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "13",
+        "verb": "created",
+        "description": null,
+        "target_content_type": [
+            "actions",
+            "action"
+        ],
+        "target_object_id": "26",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-06T17:21:26.203Z",
         "public": true
     }
 },
@@ -3597,6 +4078,132 @@
         "object_repr": "Relationship of : admin and thewitch",
         "action_flag": 3,
         "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 194,
+    "fields": {
+        "action_time": "2017-01-06T17:17:06.420Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "10",
+        "object_repr": "Sign petition to make Boston a sanctuary city",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"location\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 195,
+    "fields": {
+        "action_time": "2017-01-06T17:17:16.468Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "10",
+        "object_repr": "Sign petition to make Boston a sanctuary city",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"location\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 196,
+    "fields": {
+        "action_time": "2017-01-06T17:19:11.945Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "9",
+        "object_repr": "thewitch",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"password\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 197,
+    "fields": {
+        "action_time": "2017-01-06T17:22:06.917Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "26",
+        "object_repr": "An Action In Sacramento",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"date_created\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 198,
+    "fields": {
+        "action_time": "2017-01-06T17:24:15.278Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "26",
+        "object_repr": "An Action In Sacramento",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"date_created\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 199,
+    "fields": {
+        "action_time": "2017-01-06T17:24:28.256Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "26",
+        "object_repr": "An Action In Sacramento",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"date_created\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 200,
+    "fields": {
+        "action_time": "2017-01-06T18:55:12.692Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "profiles",
+            "profile"
+        ],
+        "object_id": "10",
+        "object_repr": "dru",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"district\"]}}]"
     }
 }
 ]

@@ -16,9 +16,37 @@ function datelogic(days_til_deadline, deadline_status) {
   }
 }
 
+function locationlogic(filtered_location, data) {
+
+      user_state = "{{ user.profile.state }}";
+      user_district = "{{ user.profile.district }}";
+      var state = data[state_index];
+      var district = data[district_index];
+
+      if (filtered_location == "My State") {
+          return (state == user_state);
+      }
+
+      if (filtered_location == "My District") {
+          return (district == user_district);
+      }
+
+      if (filtered_location == "National or Global") {
+         if (state == "None" && district == "None" ) {
+            return true;
+         } else {
+            return false;
+         }
+      }
+
+      if (filtered_location == "Anywhere") {
+        return true;
+      }
+}
+
 function format ( d ) {
     // `d` is the original data object for the row
-    return 'Notes: ' + d[9];
+    return 'Notes: ' + d[10];
 }
 
 $(document).ready(function() {
@@ -56,20 +84,25 @@ $(document).ready(function() {
             {
                 "targets": [ 8 ],
                 "visible": false,
-                "name":  "location"
+                "name":  "district"
             },
             {
                 "targets": [ 9 ],
                 "visible": false,
-                "name":  "notes"
+                "name":  "state"
             },
             {
                 "targets": [ 10 ],
                 "visible": false,
-                "name":  "duration"
+                "name":  "notes"
             },
             {
                 "targets": [ 11 ],
+                "visible": false,
+                "name":  "duration"
+            },
+            {
+                "targets": [ 12 ],
                 "orderable": false,
                 "visible": manager_column_visible,
                 "name":  "manage"
@@ -77,7 +110,7 @@ $(document).ready(function() {
         ],
         "searchCols": [
           null, null, null, null, null, null, { "search": "True" }, null,
-           null, null, null, null
+           null, null, null, null, null
         ]
     });
 
@@ -109,13 +142,11 @@ $(document).ready(function() {
       chosenTable = slateTable;
     }
 
-    user_state = "{{ user.profile.district.state }}";
-    user_district = "{{ user.profile.district.district }}";
-
     today = new Date();
     status_index = chosenTable.column('status:name').index();
     creator_index = chosenTable.column('creator:name').index();
-    location_index = chosenTable.column('location:name').index();
+    district_index = chosenTable.column('district:name').index();
+    state_index = chosenTable.column('state:name').index();
     priority_index = chosenTable.column('priority:name').index();
     deadline_index = chosenTable.column('deadline:name').index();
     duration_index = chosenTable.column('duration:name').index();
@@ -125,24 +156,11 @@ $(document).ready(function() {
               (!$('#filter-active').is(':checked')));
             var pass_creator = (($('#filter-friends').is(':checked') && (data[creator_index] == "True")) ||
               (!$('#filter-friends').is(':checked')));
-
-            var pass_location = false;
             if (typeof filtered_location !== 'undefined') {
-
-                location_data = data[location_index].split(",");
-                var state = location_data[0];
-                var district = location_data[1];
-                if(filtered_location == "My State") {
-                    pass_location = (state == user_state);
-                }
-                if(filtered_location == "My District") {
-                    pass_location = ((state == user_state) && (district == user_district));
-                }
-                pass_location = (pass_location || (filtered_location == "") || (filtered_location == "Anywhere"));
+                var pass_location = locationlogic(filtered_location, data);
             } else {
-                pass_location = true;
+                var pass_location = true;
             }
-
             if (typeof priority !== 'undefined') {
               var pass_priority = ((data[priority_index] == priority) || (priority == "") || (priority == "All"));
             } else {

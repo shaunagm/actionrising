@@ -1,5 +1,5 @@
 import sys
-from actions.models import Action, District
+from actions.models import Action
 from geopy.exc import GeopyError
 from geopy.geocoders import GoogleV3
 from sunlight.services.congress import Congress
@@ -26,7 +26,7 @@ def geocode(location):
         return None
 
 def find_congressional_district(lat, lon):
-    if 'test' in sys.argv or (len(sys.argv) > 1 and sys.argv[1] == 'runserver'):
+    if 'test' in sys.argv or (len(sys.argv) > 1 and sys.argv[1] in ['runserver', 'loaddata']):
         congress_api = Congress(use_https=False)
     else:
         congress_api = Congress()
@@ -36,12 +36,18 @@ def find_congressional_district(lat, lon):
             lon
         )
         if district:
-            return district
+            return district[0]
     except errors.SunlightException:
         print("Failure to fetch congressional district")
         return None
 
 def populate_location_and_district(instance):
+
+    if instance.location == "":  # User is likely deleting their location
+        instance.lat, instance.lon, instance.state, instance.district = None, None, None, None
+        instance.save()
+        return
+
     loc = geocode(instance.location)
 
     if loc:
@@ -53,8 +59,8 @@ def populate_location_and_district(instance):
 
         # if district exists
         if district:
-            instance.state = district[0]
-            instance.district = district[0] + "-" + district[1]
+            instance.state = district['state']
+            instance.district = district['state'] + "-" + str(district['district'])
         else:
             # Try grabbing the state from the loc
             try:
