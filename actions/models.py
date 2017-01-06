@@ -86,17 +86,6 @@ class ActionType(models.Model):
     def action_count(self):
         return self.actions_for_type.count()
 
-class District(models.Model):
-    """
-    Represents a congressional District
-    """
-    state = models.CharField(max_length=2)
-    district = models.IntegerField()
-
-    def __unicode__(self):
-        return "%i, %s" % (self.district, self.state)
-
-
 class Action(models.Model):
     """ Stores a single action """
     slug = models.CharField(max_length=50, unique=True, validators=slug_validator)
@@ -111,7 +100,8 @@ class Action(models.Model):
     location = models.CharField(max_length=140, blank=True, null=True)
     lat = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
     lon = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
-    district = models.ForeignKey(District, blank=True, null=True)
+    district = models.CharField(max_length=10, blank=True, null=True)
+    state = models.CharField(max_length=2, blank=True, null=True)
     # status default is rea == open for action
     status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='rea')
     has_deadline = models.BooleanField(default=False)
