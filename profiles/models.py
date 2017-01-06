@@ -27,6 +27,7 @@ class Profile(models.Model):
     verified = models.BooleanField(default=False)
     description = RichTextField(max_length=2500, blank=True, null=True)  # TODO Rich text?
     location = models.CharField(max_length=140, blank=True, null=True)
+    hide_location = models.BooleanField(default=False)
     lat = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
     lon = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
     district = models.ForeignKey(District, blank=True, null=True)

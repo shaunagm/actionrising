@@ -3,7 +3,10 @@
         <i id="priority-info" class="fa fa-exclamation-circle" aria-hidden="true"> {{ object.get_priority_display }} priority</i>
     {% endif %}
     {% if object.location %}
-        <i id="location-info" class="fa fa-globe" aria-hidden="true"> {{ object.get_location }}</i>
+        {% if object.hide_location == True %}
+        {% else %}
+            <i id="location-info" class="fa fa-globe" aria-hidden="true"> {{ object.get_location }}</i>
+        {% endif %}
     {% endif %}
     {% if object.current_privacy %}
         <i id="privacy-info" class="fa fa-eye" aria-hidden="true"> {{ object.get_current_privacy_display }} </i>

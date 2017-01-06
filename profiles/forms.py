@@ -19,7 +19,7 @@ class ProfileForm(ModelForm):
 
     class Meta:
         model = Profile
-        fields = ['description', 'privacy', 'location']
+        fields = ['description', 'privacy', 'location', 'hide_location']
 
     def __init__(self, user, *args, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)
@@ -27,7 +27,8 @@ class ProfileForm(ModelForm):
         self.fields['privacy_default'].initial = self.instance.privacy_defaults.global_default
         NEW_CHOICES = (PRIVACY_CHOICES[0], PRIVACY_CHOICES[1], PRIVACY_CHOICES[2], ('inh', get_global_privacy_default(user.profile, "decorated")))
         self.fields['privacy'].choices = NEW_CHOICES
-        fields_keyOrder = ['first_name', 'last_name', 'location', 'description', 'privacy', 'privacy_default']
+        self.fields['hide_location'].label = 'Keep your location private, but use it to filter actions'
+        fields_keyOrder = ['first_name', 'last_name', 'location', 'hide_location', 'description', 'privacy', 'privacy_default']
         if (self.fields.has_key('keyOrder')):
             self.fields.keyOrder = fields_keyOrder
         else:
