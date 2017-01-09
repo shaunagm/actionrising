@@ -3,23 +3,25 @@
     Location <span class="caret"></span></a>
   <ul class="dropdown-menu">
 
-    <li>
-      {% if request.user.profile.district %}
-          <a class="filter-location" href="#">My District</a>
-      {% else %}
-          <a class="nested-link" href="{% url 'edit_profile' pk=request.user.profile.pk %}">
-              Add your district</a>
-      {% endif %}
-    </li>
+    {% if request.user.is_authenticated %}
+        <li>
+          {% if request.user.profile.district %}
+              <a class="filter-location" href="#">My District</a>
+          {% else %}
+              <a class="nested-link" href="{% url 'edit_profile' pk=request.user.profile.pk %}">
+                  Add your district</a>
+          {% endif %}
+        </li>
 
-    <li>
-    {% if request.user.profile.state %}
-        <a class="filter-location" href="#">My State</a>
-    {% else %}
-        <a class="nested-link" href="{% url 'edit_profile' pk=request.user.profile.pk %}">
-            Add your state</a>
+        <li>
+        {% if request.user.profile.state %}
+            <a class="filter-location" href="#">My State</a>
+        {% else %}
+            <a class="nested-link" href="{% url 'edit_profile' pk=request.user.profile.pk %}">
+                Add your state</a>
+        {% endif %}
+        </li>
     {% endif %}
-    </li>
 
     <li><a class="filter-location" href="#">National or Global</a></li>
     <li class="divider"></li>
