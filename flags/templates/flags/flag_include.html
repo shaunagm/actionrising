@@ -1,21 +1,33 @@
-<div style="display:none" id="flag_popover_content">
-  <ul id="flag-list">
-    <a href="{% url 'flag' model=object.get_cname pk=object.pk reason='spam' %}">I believe that this is spam</a><br />
-    <a href="{% url 'flag' model=object.get_cname pk=object.pk reason='abuse' %}">I believe that this is abusive</a><br />
-    <a href="{% url 'flag' model=object.get_cname pk=object.pk reason='wrong' %}">I believe that this is inaccurate</a><br />
-    <a href="{% url 'flag' model=object.get_cname pk=object.pk reason='other' %}">I am flagging this for other reasons</a><br />
-  </ul>
-</div>
+{% if request.user.is_authenticated %}
+    {% ifnotequal object.creator.username request.user.username %}
+        <div class="action-item">
 
-{% if flag == 'No flags' %}
+            <div style="display:none" id="flag_popover_content">
+              <ul id="flag-list">
+                <a href="{% url 'flag' model=object.get_cname pk=object.pk reason='spam' %}">
+                  I believe that this is spam</a><br />
+                <a href="{% url 'flag' model=object.get_cname pk=object.pk reason='abuse' %}">
+                  I believe that this is abusive</a><br />
+                <a href="{% url 'flag' model=object.get_cname pk=object.pk reason='wrong' %}">
+                  I believe that this is inaccurate</a><br />
+                <a href="{% url 'flag' model=object.get_cname pk=object.pk reason='other' %}">
+                  I am flagging this for other reasons</a><br />
+              </ul>
+            </div>
 
-    <span class="flag-popover">
-      <i class="fa fa-flag" data-toggle="popover"></i> Flag
-    </span>
+            {% if flag == 'No flags' %}
 
-{% elif flag %}
+                <span class="flag-popover">
+                  <i class="fa fa-flag" data-toggle="popover"></i> Flag
+                </span>
 
-    <i class="fa fa-flag"></i>
-    Flagged as {{ flag.flag_choice }}
+            {% elif flag %}
 
+                <i class="fa fa-flag"></i>
+                Flagged as {{ flag.flag_choice }}
+
+            {% endif %}
+
+        </div>
+    {% endifnotequal %}
 {% endif %}

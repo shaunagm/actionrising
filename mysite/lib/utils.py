@@ -35,3 +35,17 @@ def give_old_profiles_new_settings():
     from notifications.models import NotificationSettings
     for user in User.objects.all():
         NotificationSettings.objects.create(user=user)
+
+########################
+### Model name logic ###
+########################
+
+from django.contrib.contenttypes.models import ContentType
+def get_content_object(model, pk):
+    '''Returns a content object given model name as string and pk'''
+    if model.lower() in ["action", "slate"]:
+        app_label = "actions"
+    else:
+        app_label = "profiles"
+    ct = ContentType.objects.get(app_label=app_label, model=model.lower())
+    return ct.get_object_for_this_type(pk=pk)

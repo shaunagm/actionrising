@@ -212,15 +212,6 @@ class Action(models.Model):
                 return float((self.deadline - now).seconds)/float(86400)
         return -1
 
-    def is_flagged_by_user(self, user, new_only=False):
-        for flag in self.flags.all():
-            if flag.flagged_by == user:
-                if new_only:
-                    return flag if flag.flag_status == "new" else "No flags"
-                else:
-                    return flag
-        return "No flags"
-
 @disable_for_loaddata
 def action_handler(sender, instance, created, **kwargs):
     if not created and (timezone.now() - instance.date_created).seconds < 600:
