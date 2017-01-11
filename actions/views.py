@@ -125,3 +125,9 @@ class TypeView(LoginRequiredMixin, generic.DetailView):
 class TypeListView(LoginRequiredMixin, generic.ListView):
     template_name = "actions/types.html"
     model = ActionType
+
+class SlateRedirectView(generic.base.RedirectView):
+
+    permanent = False
+    query_string = True
+    pattern_name = 'slate'
