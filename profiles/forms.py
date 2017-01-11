@@ -7,7 +7,7 @@ from django.forms.widgets import HiddenInput
 from mysite.lib.choices import PRIVACY_DEFAULT_CHOICES, PRIVACY_CHOICES
 from mysite.lib.privacy import get_global_privacy_default
 from profiles.models import Profile, ProfileActionRelationship, PrivacyDefaults
-from actions.models import Slate
+from slates.models import Slate
 
 class ProfileForm(ModelForm):
     first_name = CharField(max_length=30, required=False, label="First name")

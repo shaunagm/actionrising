@@ -3,7 +3,8 @@ from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 
 from django.contrib.auth.models import User
-from actions.models import Action, Slate, SlateActionRelationship
+from actions.models import Action
+from slates.models import Slate, SlateActionRelationship
 from commitments.models import Commitment
 from mysite.lib.choices import INDIVIDUAL_STATUS_CHOICES
 from profiles.models import (Profile, Relationship, ProfileActionRelationship,

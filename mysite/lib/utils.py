@@ -43,9 +43,11 @@ def give_old_profiles_new_settings():
 from django.contrib.contenttypes.models import ContentType
 def get_content_object(model, pk):
     '''Returns a content object given model name as string and pk'''
-    if model.lower() in ["action", "slate"]:
+    if model.lower() == "action":
         app_label = "actions"
-    else:
+    if model.lower() == "slate":
+        app_label = "slates"
+    if model.lower() == "profile":
         app_label = "profiles"
     ct = ContentType.objects.get(app_label=app_label, model=model.lower())
     return ct.get_object_for_this_type(pk=pk)
@@ -53,6 +55,7 @@ def get_content_object(model, pk):
 ##############
 ### Slugs! ###
 ##############
+import re
 from django.core.validators import RegexValidator
 from django.template.defaultfilters import slugify
 

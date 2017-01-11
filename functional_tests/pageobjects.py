@@ -5,7 +5,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from page_objects import PageObject, PageElement, MultiPageElement
 
 from django.contrib.auth.models import User
-from actions.models import Action, Slate
+from actions.models import Action
+from slates.models import Slate
 
 def wait_helper(browser, id="actionrisingbody"):
     element = WebDriverWait(browser, 15).until(
@@ -144,7 +145,7 @@ class SlateListPage(BaseListPage):
     def go_to_default_slates_page_if_necessary(self):
         if not self.slates_table:
             # This is a decent guess at where we want to be
-            self.w.get(self.root_uri + "/actions/slates")
+            self.w.get(self.root_uri + "/slates/slates")
 
 class BaseObjectDetailPage(BasePage):
     creator = PageElement(id_="created_by")

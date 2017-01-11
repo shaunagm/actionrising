@@ -1,7 +1,7 @@
 from mysite.lib.choices import INDIVIDUAL_STATUS_CHOICES
 from mysite.lib.privacy import filter_list_for_privacy_annotated, filter_list_for_privacy
 from profiles.models import ProfileActionRelationship, ProfileSlateRelationship
-from actions.models import SlateActionRelationship
+from slates.models import SlateActionRelationship
 
 STATUS_DISPLAY_DICT = {
     'sug': 'Suggested to them',

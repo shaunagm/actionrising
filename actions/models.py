@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 from itertools import chain
-import re, datetime
+import datetime
 
 from actstream import action
 from django.db.models.signals import post_save

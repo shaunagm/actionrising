@@ -3,7 +3,8 @@ from django.core import mail
 
 from django.contrib.auth.models import User
 from django_comments.models import Comment
-from actions.models import Action, Slate, SlateActionRelationship, ActionType, ActionTopic
+from actions.models import Action, ActionType, ActionTopic
+from slates.models import Slate, SlateActionRelationship
 from profiles.models import Relationship, ProfileActionRelationship
 from notifications.lib.notification_handlers import send_daily_actions
 from notifications.lib import dailyaction

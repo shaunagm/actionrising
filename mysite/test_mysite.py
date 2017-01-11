@@ -1,7 +1,8 @@
 from django.test import TestCase
 
 from django.contrib.auth.models import User, AnonymousUser
-from actions.models import Action, Slate, SlateActionRelationship
+from actions.models import Action
+from slates.models import Slate, SlateActionRelationship
 from profiles.models import Profile, ProfileActionRelationship
 
 from mysite.lib.privacy import (check_for_ownership, get_global_privacy_default,

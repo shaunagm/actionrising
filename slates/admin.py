@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from slates.models import Slate, SlateActionRelationship
+
+admin.site.register(Slate)
+admin.site.register(SlateActionRelationship)

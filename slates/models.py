@@ -10,6 +10,8 @@ from django.contrib.contenttypes.fields import GenericRelation
 from actstream import action
 from ckeditor.fields import RichTextField
 
+from mysite.lib.choices import (PRIVACY_CHOICES, PRIORITY_CHOICES, STATUS_CHOICES,
+    TIME_CHOICES, INDIVIDUAL_STATUS_CHOICES)
 from actions.models import Action
 from mysite.settings import PRODUCTION_DOMAIN
 from mysite.lib import choices

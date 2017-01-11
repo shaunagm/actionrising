@@ -14,7 +14,8 @@ from mysite.lib.privacy import check_privacy, filter_list_for_privacy, filter_li
 from django.contrib.auth.models import User
 from profiles.models import (Profile, Relationship, ProfileActionRelationship,
     ProfileSlateRelationship)
-from actions.models import Action, Slate, SlateActionRelationship
+from actions.models import Action
+from slates.models import Slate, SlateActionRelationship
 from profiles.forms import ProfileForm, ProfileActionRelationshipForm
 
 @login_required

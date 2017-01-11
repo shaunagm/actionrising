@@ -5,7 +5,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
 
-from actions.models import Action, Slate
+from actions.models import Action
+from slates.models import Slate
 from notifications.forms import DailyActionForm
 from notifications.models import NotificationSettings, DailyActionSettings
 from notifications.lib.notification_handlers import send_non_user_notifications

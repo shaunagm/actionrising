@@ -10,6 +10,3 @@ class ActionsConfig(AppConfig):
         from actstream import registry
         import actions.signals
         registry.register(self.get_model('Action'))
-        registry.register(self.get_model('Slate'))
-        registry.register(self.get_model('SlateActionRelationship'))
-

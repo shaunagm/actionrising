@@ -14,7 +14,8 @@ from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 from mysite.settings import PRODUCTION_DOMAIN
 from actstream.actions import follow, unfollow
-from actions.models import Action, Slate
+from actions.models import Action
+from slates.models import Slate
 from notifications.models import NotificationSettings, DailyActionSettings
 from mysite.lib.choices import (PRIVACY_CHOICES, PRIORITY_CHOICES, INDIVIDUAL_STATUS_CHOICES,
     PRIVACY_DEFAULT_CHOICES)

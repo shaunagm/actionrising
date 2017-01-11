@@ -1,7 +1,8 @@
 from django.test import TestCase
 
 from django.contrib.auth.models import User
-from actions.models import Action, Slate
+from actions.models import Action
+from slates.models import Slate
 from mysite.lib.utils import get_content_object
 
 from flags.models import Flag

@@ -112,7 +112,7 @@
     "pk": 14,
     "fields": {
         "password": "pbkdf2_sha256$30000$PRORrfnS2lz8$YQSVwqnLDtihtxFWOMTdcdyHgMv0S1XWjuT1rQzkTyY=",
-        "last_login": "2017-01-06T17:18:07.455Z",
+        "last_login": "2017-01-11T18:09:28.725Z",
         "is_superuser": true,
         "username": "admin",
         "first_name": "",
@@ -187,6 +187,14 @@
     "fields": {
         "session_data": "Y2I4MGI3YmE4MDA3MTdiNzkxMTcxOGIxZjE5NzhjNDgxYTY5ODFhOTp7Il9hdXRoX3VzZXJfaGFzaCI6IjY4MjgzMmVhYTljNzAyOGQ2ZjY1MzJlYThiMGI2YjkyOThiYzZkNmQiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiI4In0=",
         "expire_date": "2016-12-12T22:03:58.997Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "btl2iy4p9708s5s7bp17lxkw5pqughqg",
+    "fields": {
+        "session_data": "ZjlkYjc0ZjM2MmU1ZTEwMjYwOGFhMzI2NmFjM2M4OTBkOTk0YzZiNDp7Il9hdXRoX3VzZXJfaGFzaCI6IjVjZDFiY2ZhN2Q3NDJlYzE4NDEzOWExNzg1YWY5MTk0YmE5YTdjMTAiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIxNCJ9",
+        "expire_date": "2017-01-25T18:09:28.730Z"
     }
 },
 {
@@ -601,6 +609,33 @@
     }
 },
 {
+    "model": "profiles.profileslaterelationship",
+    "pk": 1,
+    "fields": {
+        "profile": 11,
+        "slate": 12,
+        "notify_of_additions": true
+    }
+},
+{
+    "model": "profiles.profileslaterelationship",
+    "pk": 2,
+    "fields": {
+        "profile": 11,
+        "slate": 11,
+        "notify_of_additions": true
+    }
+},
+{
+    "model": "profiles.profileslaterelationship",
+    "pk": 3,
+    "fields": {
+        "profile": 11,
+        "slate": 10,
+        "notify_of_additions": true
+    }
+},
+{
     "model": "actions.actiontopic",
     "pk": 5,
     "fields": {
@@ -850,7 +885,7 @@
     }
 },
 {
-    "model": "actions.slate",
+    "model": "slates.slate",
     "pk": 10,
     "fields": {
         "slug": "things-to-do-on-the-hellmouth",
@@ -866,7 +901,7 @@
     }
 },
 {
-    "model": "actions.slate",
+    "model": "slates.slate",
     "pk": 11,
     "fields": {
         "slug": "how-to-prevent-an-apocalypse",
@@ -882,7 +917,7 @@
     }
 },
 {
-    "model": "actions.slate",
+    "model": "slates.slate",
     "pk": 12,
     "fields": {
         "slug": "high-stakes-slate-of-actions",
@@ -898,7 +933,7 @@
     }
 },
 {
-    "model": "actions.slateactionrelationship",
+    "model": "slates.slateactionrelationship",
     "pk": 31,
     "fields": {
         "slate": 10,
@@ -909,7 +944,7 @@
     }
 },
 {
-    "model": "actions.slateactionrelationship",
+    "model": "slates.slateactionrelationship",
     "pk": 32,
     "fields": {
         "slate": 10,
@@ -920,7 +955,7 @@
     }
 },
 {
-    "model": "actions.slateactionrelationship",
+    "model": "slates.slateactionrelationship",
     "pk": 33,
     "fields": {
         "slate": 12,
@@ -931,7 +966,7 @@
     }
 },
 {
-    "model": "actions.slateactionrelationship",
+    "model": "slates.slateactionrelationship",
     "pk": 34,
     "fields": {
         "slate": 12,
@@ -942,7 +977,7 @@
     }
 },
 {
-    "model": "actions.slateactionrelationship",
+    "model": "slates.slateactionrelationship",
     "pk": 35,
     "fields": {
         "slate": 12,
@@ -1090,6 +1125,17 @@
         "if_suggested_action": true,
         "if_followed_users_create": true,
         "if_followed_slates_updated": true
+    }
+},
+{
+    "model": "notifications.notification",
+    "pk": 1,
+    "fields": {
+        "user": [
+            "buffysummers"
+        ],
+        "event": 104,
+        "sent": true
     }
 },
 {
@@ -1366,6 +1412,22 @@
         "object_id": "14",
         "actor_only": false,
         "started": "2016-12-03T05:09:25.301Z"
+    }
+},
+{
+    "model": "actstream.follow",
+    "pk": 24,
+    "fields": {
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "slates",
+            "slate"
+        ],
+        "object_id": "10",
+        "actor_only": false,
+        "started": "2017-01-11T18:23:54.396Z"
     }
 },
 {
@@ -2040,28 +2102,6 @@
 },
 {
     "model": "actstream.action",
-    "pk": 68,
-    "fields": {
-        "actor_content_type": [
-            "auth",
-            "user"
-        ],
-        "actor_object_id": "13",
-        "verb": "updated",
-        "description": null,
-        "target_content_type": [
-            "actions",
-            "slate"
-        ],
-        "target_object_id": "12",
-        "action_object_content_type": null,
-        "action_object_object_id": null,
-        "timestamp": "2016-12-03T22:29:13.464Z",
-        "public": true
-    }
-},
-{
-    "model": "actstream.action",
     "pk": 93,
     "fields": {
         "actor_content_type": [
@@ -2277,6 +2317,50 @@
         "action_object_content_type": null,
         "action_object_object_id": null,
         "timestamp": "2017-01-06T17:21:26.203Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 103,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "14",
+        "verb": "is taking action",
+        "description": null,
+        "target_content_type": [
+            "actions",
+            "action"
+        ],
+        "target_object_id": "26",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-11T18:19:45.078Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 104,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "14",
+        "verb": "started following",
+        "description": null,
+        "target_content_type": [
+            "slates",
+            "slate"
+        ],
+        "target_object_id": "10",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-11T18:23:54.406Z",
         "public": true
     }
 },
@@ -2594,10 +2678,7 @@
         "user": [
             "buffysummers"
         ],
-        "content_type": [
-            "actions",
-            "slate"
-        ],
+        "content_type": null,
         "object_id": "4",
         "object_repr": "november-saturday",
         "action_flag": 1,
@@ -2612,10 +2693,7 @@
         "user": [
             "buffysummers"
         ],
-        "content_type": [
-            "actions",
-            "slateactionrelationship"
-        ],
+        "content_type": null,
         "object_id": "16",
         "object_repr": "SlateActionRelationship object",
         "action_flag": 1,
@@ -2630,10 +2708,7 @@
         "user": [
             "buffysummers"
         ],
-        "content_type": [
-            "actions",
-            "slateactionrelationship"
-        ],
+        "content_type": null,
         "object_id": "17",
         "object_repr": "SlateActionRelationship object",
         "action_flag": 1,
@@ -2648,10 +2723,7 @@
         "user": [
             "buffysummers"
         ],
-        "content_type": [
-            "actions",
-            "slateactionrelationship"
-        ],
+        "content_type": null,
         "object_id": "18",
         "object_repr": "SlateActionRelationship object",
         "action_flag": 1,
@@ -2900,10 +2972,7 @@
         "user": [
             "buffysummers"
         ],
-        "content_type": [
-            "actions",
-            "slate"
-        ],
+        "content_type": null,
         "object_id": "4",
         "object_repr": "november-saturday",
         "action_flag": 3,
@@ -2918,10 +2987,7 @@
         "user": [
             "buffysummers"
         ],
-        "content_type": [
-            "actions",
-            "slate"
-        ],
+        "content_type": null,
         "object_id": "10",
         "object_repr": "things-to-do-on-the-hellmouth",
         "action_flag": 1,
@@ -2936,10 +3002,7 @@
         "user": [
             "buffysummers"
         ],
-        "content_type": [
-            "actions",
-            "slateactionrelationship"
-        ],
+        "content_type": null,
         "object_id": "31",
         "object_repr": "Relationship of slate: things-to-do-on-the-hellmouth and action: Denounce Trump's proposed appointment of Steve Bannon ",
         "action_flag": 1,
@@ -2954,10 +3017,7 @@
         "user": [
             "buffysummers"
         ],
-        "content_type": [
-            "actions",
-            "slateactionrelationship"
-        ],
+        "content_type": null,
         "object_id": "32",
         "object_repr": "Relationship of slate: things-to-do-on-the-hellmouth and action: Donate to Planned Parenthood ",
         "action_flag": 1,
@@ -3404,10 +3464,7 @@
         "user": [
             "admin"
         ],
-        "content_type": [
-            "actions",
-            "slate"
-        ],
+        "content_type": null,
         "object_id": "11",
         "object_repr": "how-to-prevent-an-apocalypse",
         "action_flag": 1,
@@ -3422,10 +3479,7 @@
         "user": [
             "admin"
         ],
-        "content_type": [
-            "actions",
-            "slate"
-        ],
+        "content_type": null,
         "object_id": "12",
         "object_repr": "high-stakes-slate-of-actions",
         "action_flag": 1,
@@ -3476,10 +3530,7 @@
         "user": [
             "admin"
         ],
-        "content_type": [
-            "actions",
-            "slate"
-        ],
+        "content_type": null,
         "object_id": "10",
         "object_repr": "things-to-do-on-the-hellmouth",
         "action_flag": 2,
@@ -3494,10 +3545,7 @@
         "user": [
             "admin"
         ],
-        "content_type": [
-            "actions",
-            "slateactionrelationship"
-        ],
+        "content_type": null,
         "object_id": "33",
         "object_repr": "Relationship of slate: high-stakes-slate-of-actions and action: Join the site ",
         "action_flag": 1,
@@ -3512,10 +3560,7 @@
         "user": [
             "admin"
         ],
-        "content_type": [
-            "actions",
-            "slateactionrelationship"
-        ],
+        "content_type": null,
         "object_id": "34",
         "object_repr": "Relationship of slate: high-stakes-slate-of-actions and action: Sign petition to make Boston a sanctuary city ",
         "action_flag": 1,
@@ -3530,10 +3575,7 @@
         "user": [
             "admin"
         ],
-        "content_type": [
-            "actions",
-            "slateactionrelationship"
-        ],
+        "content_type": null,
         "object_id": "35",
         "object_repr": "Relationship of slate: high-stakes-slate-of-actions and action: Donate to Planned Parenthood ",
         "action_flag": 1,
@@ -3548,10 +3590,7 @@
         "user": [
             "admin"
         ],
-        "content_type": [
-            "actions",
-            "slate"
-        ],
+        "content_type": null,
         "object_id": "12",
         "object_repr": "High stakes slate of actions",
         "action_flag": 2,
@@ -3800,10 +3839,7 @@
         "user": [
             "admin"
         ],
-        "content_type": [
-            "actions",
-            "slate"
-        ],
+        "content_type": null,
         "object_id": "15",
         "object_repr": "I love slates",
         "action_flag": 3,
@@ -3818,10 +3854,7 @@
         "user": [
             "admin"
         ],
-        "content_type": [
-            "actions",
-            "slate"
-        ],
+        "content_type": null,
         "object_id": "14",
         "object_repr": "So much to delete!",
         "action_flag": 3,
@@ -3836,10 +3869,7 @@
         "user": [
             "admin"
         ],
-        "content_type": [
-            "actions",
-            "slate"
-        ],
+        "content_type": null,
         "object_id": "13",
         "object_repr": "Boring administrative things",
         "action_flag": 3,
