@@ -49,3 +49,28 @@ def get_content_object(model, pk):
         app_label = "profiles"
     ct = ContentType.objects.get(app_label=app_label, model=model.lower())
     return ct.get_object_for_this_type(pk=pk)
+
+##############
+### Slugs! ###
+##############
+from django.core.validators import RegexValidator
+from django.template.defaultfilters import slugify
+
+slug_validator = [
+    RegexValidator(
+        regex=re.compile(r"^[a-z0-9-]+$"),
+        message="Enter a slug, using only lowercase letters, numbers, and dashes.",
+        code="invalid"
+    )
+]
+
+def slugify_helper(object_model, slug):
+    counter = 0
+    temp_slug = slugify(slug)[:45]
+    while True:
+        if object_model.objects.filter(slug=temp_slug):
+            temp_slug += str(counter)
+            counter += 1
+            continue
+        break
+    return temp_slug

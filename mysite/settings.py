@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'mysite',
     'profiles',
     'actions',
+    'slates',
     'flags',
     'notifications',
     'invites',
