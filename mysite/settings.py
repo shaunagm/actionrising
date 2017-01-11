@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'profiles',
     'actions',
     'slates',
+    'tags',
     'flags',
     'notifications',
     'invites',
