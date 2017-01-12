@@ -62,6 +62,7 @@ class BasePage(PageObject):
 
 class LoggedOutLandingPage(BasePage):
     request_account = PageElement(link_text="Request an account.")
+    public_actions = PageElement(link_text="list of public actions")
 
 class LoggedInLandingPage(BasePage):
     search_actions_link = PageElement(partial_link_text="actions you can take")
@@ -102,6 +103,9 @@ class BasicActionListPage(BaseListPage):
 
     def return_to_default_actions_page(self):
         self.w.get(self.root_uri + "/actions/actions")
+
+    def go_to_public_actions_page(self):
+        self.w.get(self.root_uri + "/actions/public-actions")
 
     def go_to_default_actions_page_if_necessary(self):
         if not self.action_table:
@@ -192,6 +196,7 @@ class SlateDetailPage(BaseObjectDetailPage):
     actions_tab = PageElement(id_="#actionslink")
     info_tab = PageElement(id_="infolink")
     comments_tab = PageElement(id_="commentslink")
+    hidden_actions = PageElement(css=".hidden-actions")
 
     def go_to_detail_page(self, title=None):
         if title:

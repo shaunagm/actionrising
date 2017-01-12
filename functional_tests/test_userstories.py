@@ -2,7 +2,8 @@ import time
 
 from .base import SeleniumTestCase
 from .pageobjects import (BasicActionListPage, ActionEditPage, ProfilePage, ToDoPage,
-    BasicActionDetailPage, ManageActionPage, CommitmentPage)
+    BasicActionDetailPage, ManageActionPage, CommitmentPage, LoggedOutLandingPage,
+    SlateDetailPage)
 from profiles.models import Profile, ProfileActionRelationship
 
 default_user = "buffysummers"
@@ -159,8 +160,24 @@ class LoggedOutUser(SeleniumTestCase):
     # page and follow it.  They see it in "tracked" actions as well.  They go to their todo
     # list and see it there as well. Finally, they add a note.
 
-    def test_add_and_follow_action(self):
+    def test_logged_out_user(self):
         # Login, go to action edit page, create action
         self.landing_page = LoggedOutLandingPage(self.browser, root_uri=self.live_server_url)
-        landing_page.go_to_index_if_necessary()
-        
+        self.landing_page.go_to_index_if_necessary()
+        self.assertEquals(self.landing_page.request_account.text, "Request an account.")
+        self.landing_page.public_actions.click()
+        self.actions_table = BasicActionListPage(self.browser, root_uri=self.live_server_url)
+        self.actions_table.go_to_public_actions_page()
+        self.wait_helper()
+        self.actions_table.first_row_action.click()
+        self.action_page = BasicActionDetailPage(self.browser, root_uri=self.live_server_url)
+        self.action_page.go_to_detail_page(title="Sign petition to make Boston a sanctuary city")
+        self.action_page.display_slate_tracker_link.click()
+        self.wait_helper("slate_ace")
+        time.sleep(3)
+        self.assertEquals(self.action_page.accepted_slate_trackers[0].text, "High stakes slate of actions")
+        self.assertEquals(len(self.action_page.accepted_slate_trackers), 1)
+        self.slate_info = SlateDetailPage(self.browser, root_uri=self.live_server_url)
+        self.slate_info.go_to_detail_page(title="High stakes slate of actions")
+        self.wait_helper()
+        self.assertEquals(self.slate_info.hidden_actions.text, "This slate has 2 private actions. Try logging in to access them.")
