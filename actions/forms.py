@@ -7,14 +7,13 @@ from tags.models import Tag
 from mysite.lib.choices import PRIVACY_CHOICES
 from mysite.lib.privacy import get_global_privacy_default
 
-TOPIC_TAG_CHOICES = [(i.pk, i.name) for i in Tag.objects.filter(kind="topic")]
-TYPE_TAG_CHOICES = [(i.pk, i.name) for i in Tag.objects.filter(kind="type")]
-GOAL_TAG_CHOICES = [(i.pk, i.name) for i in Tag.objects.filter(kind="goal")]
-
 class ActionForm(ModelForm):
-    topic_tags = MultipleChoiceField(choices=TOPIC_TAG_CHOICES, required=False)
-    type_tags = MultipleChoiceField(choices=TYPE_TAG_CHOICES, required=False)
-    goal_tags = MultipleChoiceField(choices=GOAL_TAG_CHOICES, required=False)
+    topic_tags = MultipleChoiceField(choices=[(i.pk, i.name) for i in Tag.objects.filter(kind="topic")],
+        required=False)
+    type_tags = MultipleChoiceField(choices=[(i.pk, i.name) for i in Tag.objects.filter(kind="type")],
+        required=False)
+    goal_tags = MultipleChoiceField(choices=[(i.pk, i.name) for i in Tag.objects.filter(kind="goal")],
+        required=False)
 
     class Meta:
         model = Action
