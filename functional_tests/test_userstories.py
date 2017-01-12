@@ -131,6 +131,7 @@ class MakeAndEditCommitment(SeleniumTestCase):
         # Close action
         self.action_edit_form = ActionEditPage(self.browser, root_uri=self.live_server_url)
         self.action_edit_form.go_to_edit_page(title="Sign petition to make Boston a sanctuary city")
+        time.sleep(20)
         self.action_edit_form.select_status("Finished")
         self.action_edit_form.submit_button.click()
         # Go back, link is gone

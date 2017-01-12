@@ -21,9 +21,9 @@ class Tag(models.Model):
     description = models.CharField(max_length=200, blank=True, null=True)  # TODO Rich text?
     kind = models.CharField(max_length=10, choices=TAG_CHOICES, default='topic')
     # Related objects
-    actions = models.ManyToManyField(Action, blank=True, related_name="action_tags")
-    slates = models.ManyToManyField(Slate, blank=True, related_name="slate_tags")
-    profiles = models.ManyToManyField(Profile, blank=True, related_name="profile_tags")
+    actions = models.ManyToManyField(Action, blank=True, related_name="tags")
+    slates = models.ManyToManyField(Slate, blank=True, related_name="tags")
+    profiles = models.ManyToManyField(Profile, blank=True, related_name="tags")
 
     def __unicode__(self):
         return "%s (%s)" % (self.name, self.kind)

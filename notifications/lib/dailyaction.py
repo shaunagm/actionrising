@@ -59,7 +59,7 @@ def duration_filter(user, action):
 
 def tag_filter(user, action):
     if user.dailyactionsettings.tag_filter_on:
-        action_tag_pks = [i.pk for i in action.action_tags.all()]
+        action_tag_pks = [i.pk for i in action.tags.all()]
         if set(user.dailyactionsettings.get_tag_filter_pks()).intersection(set(action_tag_pks)):
             return
     return action

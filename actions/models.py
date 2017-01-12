@@ -87,7 +87,7 @@ class Action(models.Model):
         return reverse('edit_action', kwargs={'slug': self.slug})
 
     def get_tags(self):
-        return self.action_tags.all()
+        return self.tags.all()
 
     def refresh_current_privacy(self):
         if self.privacy == "inh":

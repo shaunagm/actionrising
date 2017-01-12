@@ -908,9 +908,7 @@
         "slug": "climate-change",
         "description": "",
         "kind": "topic",
-        "actions": [
-            25
-        ],
+        "actions": [],
         "slates": [],
         "profiles": []
     }
@@ -969,9 +967,7 @@
         "slug": "boycott",
         "description": "",
         "kind": "type",
-        "actions": [
-            25
-        ],
+        "actions": [],
         "slates": [],
         "profiles": []
     }
@@ -984,9 +980,7 @@
         "slug": "art",
         "description": "",
         "kind": "type",
-        "actions": [
-            25
-        ],
+        "actions": [],
         "slates": [],
         "profiles": []
     }
@@ -2576,6 +2570,310 @@
         "action_object_content_type": null,
         "action_object_object_id": null,
         "timestamp": "2017-01-12T17:39:38.367Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 119,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "25",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-12T18:01:21.492Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 120,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "25",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-12T18:01:21.508Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 121,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "25",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-12T18:01:38.198Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 122,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "25",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-12T18:01:38.211Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 123,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "25",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-12T18:13:56.456Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 124,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "25",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-12T18:13:56.470Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 125,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "25",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-12T18:29:46.507Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 126,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "25",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-12T18:30:16.140Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 127,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "25",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-12T18:30:36.376Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 128,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "25",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-12T18:30:36.405Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 129,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "25",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-12T18:30:46.495Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 130,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "25",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-12T18:30:46.517Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 131,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "25",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-12T18:34:14.655Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 132,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "25",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-12T18:34:14.675Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 133,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "25",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-12T18:34:21.625Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 134,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "25",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-12T18:34:21.642Z",
         "public": true
     }
 },

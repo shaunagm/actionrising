@@ -30,8 +30,8 @@ class TestActionMethods(TestCase):
         self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action)
 
     def test_get_tags(self):
-        self.action.action_tags.add(self.tag_one)
-        self.action.action_tags.add(self.tag_two)
+        self.action.tags.add(self.tag_one)
+        self.action.tags.add(self.tag_two)
         self.assertEqual(list(self.action.get_tags()), [self.tag_one, self.tag_two])
 
     def test_get_creator(self):

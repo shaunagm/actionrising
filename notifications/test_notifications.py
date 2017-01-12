@@ -275,7 +275,7 @@ class DailyActionTests(TestCase):
         self.assertTrue(dailyaction.tag_filter(self.buffy, action))
         # Create tag and add it to action, then add it to filter
         t = Tag.objects.create(name="Example Tag")
-        action.action_tags.add(t)
+        action.tags.add(t)
         save_string = "[u'" + str(t.pk) + "']"
         self.buffy.dailyactionsettings.tag_filter = save_string # This is how the db saves from the form
         self.buffy.dailyactionsettings.save()
@@ -316,7 +316,7 @@ class DailyActionTests(TestCase):
         self.assertTrue(dailyaction.filter_action(self.buffy, action))
         # Trigger tag filter
         t = Tag.objects.create(name="Example Tag")
-        action.action_tags.add(t)
+        action.tags.add(t)
         save_string = "[u'" + str(t.pk) + "']"
         self.buffy.dailyactionsettings.tag_filter = save_string # This is how the db saves from the form
         self.buffy.dailyactionsettings.tag_filter_on = True
