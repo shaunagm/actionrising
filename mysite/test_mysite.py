@@ -4,7 +4,9 @@ from django.contrib.auth.models import User, AnonymousUser
 from actions.models import Action
 from slates.models import Slate, SlateActionRelationship
 from profiles.models import Profile, ProfileActionRelationship
+from tags.models import Tag
 
+from mysite.lib.utils import slugify_helper
 from mysite.lib.privacy import (check_for_ownership, get_global_privacy_default,
     check_privacy)
 
@@ -133,3 +135,13 @@ class TestPrivacyUtils(TestCase):
         self.sar.action.save()
         self.assertTrue(check_privacy(self.sar, self.buffy))
         self.assertFalse(check_privacy(self.sar, self.anon))
+
+class TestMiscUtils(TestCase):
+
+    def test_slugify_helper(self):
+        self.assertEqual(slugify_helper(Action, "Test Action"), "test-action")
+        self.assertEqual(slugify_helper(Action, "Test Different Action"), "test-different-action")
+        self.assertEqual(slugify_helper(Slate, "Test Slate"), "test-slate")
+        self.assertEqual(slugify_helper(Slate, "Test Different Slate"), "test-different-slate")
+        self.assertEqual(slugify_helper(Tag, "Test Tag"), "test-tag")
+        self.assertEqual(slugify_helper(Tag, "Test Different Tag"), "test-different-tag")

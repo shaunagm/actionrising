@@ -1,0 +1,17 @@
+{% for item in object_list %}
+
+  {% ifequal item.kind "type" %}
+    <span class="label label-info">
+  {% endifequal %}
+
+  {% ifequal item.kind "topic" %}
+    <span class="label label-danger">
+  {% endifequal %}
+
+  {% ifequal item.kind "goal" %}
+    <span class="label label-success">
+  {% endifequal %}
+
+     <a href="{{ item.get_link }}">{{ item.name }}</a>
+   </span>
+{% endfor %}

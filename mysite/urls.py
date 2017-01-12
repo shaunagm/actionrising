@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^profiles/', include('profiles.urls')),
     url(r'^actions/', include('actions.urls')),
     url(r'^slates/', include('slates.urls')),
+    url(r'^tags/', include('tags.urls')),
     url(r'^flags/', include('flags.urls')),
     url(r'^notifications/', include('notifications.urls')),
     url(r'^comments/', include('django_comments.urls')),

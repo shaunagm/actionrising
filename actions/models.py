@@ -17,54 +17,6 @@ from mysite.lib.choices import (PRIVACY_CHOICES, PRIORITY_CHOICES, STATUS_CHOICE
 from mysite.lib.utils import disable_for_loaddata, slug_validator, slugify_helper
 from profiles.lib.status_helpers import open_pars_when_action_reopens, close_pars_when_action_closes
 
-class ActionTopic(models.Model):
-    """Stores the topic (name, slug, and description) of an action"""
-    name = models.CharField(max_length=40, unique=True)
-    slug = models.CharField(max_length=50, unique=True)
-    description = models.CharField(max_length=200, blank=True, null=True)  # TODO Rich text?
-
-    def __unicode__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            self.slug = slugify_helper(ActionTopic, self.name)
-        super(ActionTopic, self).save(*args, **kwargs)
-
-    def get_cname(self):
-        class_name = 'ActionTopic'
-        return class_name
-
-    def get_link(self):
-        return reverse('topic', kwargs={'slug': self.slug})
-
-    def action_count(self):
-        return self.actions_for_topic.count()
-
-class ActionType(models.Model):
-    """Stores the type (name, slug, and description) of an action"""
-    name = models.CharField(max_length=40, unique=True)
-    slug = models.CharField(max_length=50, unique=True)
-    description = models.CharField(max_length=200, blank=True, null=True)  # TODO Rich text?
-
-    def __unicode__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            self.slug = slugify_helper(ActionType, self.name)
-        super(ActionType, self).save(*args, **kwargs)
-
-    def get_cname(self):
-        class_name = 'ActionType'
-        return class_name
-
-    def get_link(self):
-        return reverse('type', kwargs={'slug': self.slug})
-
-    def action_count(self):
-        return self.actions_for_type.count()
-
 class Action(models.Model):
     """ Stores a single action """
     slug = models.CharField(max_length=50, unique=True, validators=slug_validator)
@@ -87,8 +39,6 @@ class Action(models.Model):
     deadline = models.DateTimeField(blank=True, null=True)
     # suggested priority default is med == medium
     priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='med')
-    actiontypes = models.ManyToManyField(ActionType, blank=True, related_name="actions_for_type")
-    topics = models.ManyToManyField(ActionTopic, blank=True, related_name="actions_for_topic")
     date_created = models.DateTimeField(default=timezone.now)
     flags = GenericRelation('flags.Flag')
     # default default is H == 'Unknown or variable'
@@ -137,7 +87,7 @@ class Action(models.Model):
         return reverse('edit_action', kwargs={'slug': self.slug})
 
     def get_tags(self):
-        return list(chain(self.topics.all(), self.actiontypes.all()))
+        return self.action_tags.all()
 
     def refresh_current_privacy(self):
         if self.privacy == "inh":

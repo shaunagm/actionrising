@@ -51,10 +51,8 @@ class DailyActionSettings(models.Model):
     # Filters
     duration_filter = models.CharField(max_length=200, blank=True, null=True)
     duration_filter_on = models.BooleanField(default=False)
-    action_type_filter = models.CharField(max_length=200, blank=True, null=True)
-    action_type_filter_on = models.BooleanField(default=False)
-    action_topic_filter = models.CharField(max_length=200, blank=True, null=True)
-    action_topic_filter_on = models.BooleanField(default=False)
+    tag_filter = models.CharField(max_length=200, blank=True, null=True)
+    tag_filter_on = models.BooleanField(default=False)
 
     def __unicode__(self):
         return u'Daily Action Settings for %s' % (self.user.username)
@@ -80,10 +78,6 @@ class DailyActionSettings(models.Model):
     def get_duration_filter_shortnames(self):
         return ast.literal_eval(self.duration_filter)
 
-    def get_topic_filter_pks(self):
-        pks = ast.literal_eval(self.action_topic_filter)
-        return [int(pk) for pk in pks]
-
-    def get_type_filter_pks(self):
-        pks = ast.literal_eval(self.action_type_filter)
+    def get_tag_filter_pks(self):
+        pks = ast.literal_eval(self.tag_filter)
         return [int(pk) for pk in pks]

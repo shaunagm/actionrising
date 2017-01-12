@@ -9,9 +9,10 @@ from profiles.models import Profile, ProfileActionRelationship
 
 from mysite.lib.utils import slugify_helper
 from actions.lib import act_location
-from actions.models import Action, ActionTopic, ActionType
-from actions.views import create_action_helper
+from actions.models import Action
+from actions.views import change_action_helper
 from actions.forms import ActionForm
+from tags.models import Tag
 
 
 ###################
@@ -24,14 +25,14 @@ class TestActionMethods(TestCase):
         self.buffy = User.objects.create(username="buffysummers")
         self.faith = User.objects.create(username="faithlehane")
         self.action = Action.objects.create(title="Test Action", creator=self.buffy)
-        self.topic = ActionTopic.objects.create(name="Test Topic")
-        self.actiontype = ActionType.objects.create(name="Test ActionType")
+        self.tag_one = Tag.objects.create(name="Test Tag One", kind="topic")
+        self.tag_two = Tag.objects.create(name="Test Tag Two", kind="type")
         self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action)
 
     def test_get_tags(self):
-        self.action.topics.add(self.topic)
-        self.action.actiontypes.add(self.actiontype)
-        self.assertEqual(self.action.get_tags(), [self.topic, self.actiontype])
+        self.action.action_tags.add(self.tag_one)
+        self.action.action_tags.add(self.tag_two)
+        self.assertEqual(list(self.action.get_tags()), [self.tag_one, self.tag_two])
 
     def test_get_creator(self):
         self.assertEqual(self.action.get_creator(), self.buffy)
@@ -50,12 +51,6 @@ class TestActionMethods(TestCase):
         self.action.save()
         self.assertFalse(self.action.is_active())
 
-    def test_slugify_helper(self):
-        self.assertEqual(slugify_helper(Action, "Test Action"), "test-action0")
-        self.assertEqual(slugify_helper(Action, "Test Different Action"), "test-different-action")
-        self.assertEqual(slugify_helper(ActionType, "Test ActionType"), "test-actiontype0")
-        self.assertEqual(slugify_helper(ActionType, "Test Different ActionType"), "test-different-actiontype")
-
     def test_get_days_til_deadline(self):
         self.assertEqual(self.action.get_days_til_deadline(), -1)
         self.action.deadline = datetime.datetime.now(timezone.utc) + datetime.timedelta(days=21)
@@ -64,23 +59,6 @@ class TestActionMethods(TestCase):
         self.action.deadline = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=30)
         self.action.save()
         self.assertEqual(self.action.get_days_til_deadline(), -1)
-
-
-class TestActionViews(TestCase):
-
-    def setUp(self):
-        self.buffy = User.objects.create(username="buffysummers")
-        self.action = Action.objects.create(title="Test Action", creator=self.buffy)
-        self.topic = ActionTopic.objects.create(name="Test Topic")
-        self.actiontype = ActionType.objects.create(name="Test ActionType")
-
-    def test_create_action_helper(self):
-        with self.assertRaises(ObjectDoesNotExist):
-            Action.objects.get(title="Test title")
-        obj = Action(title="Test title")
-        obj = create_action_helper(obj, [self.actiontype], [self.topic], self.buffy)
-        self.assertEqual(obj.creator, self.buffy)
-        self.assertEqual(obj.get_tags(), [self.topic, self.actiontype])
 
 class TestActionForms(TestCase):
 

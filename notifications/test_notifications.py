@@ -3,7 +3,8 @@ from django.core import mail
 
 from django.contrib.auth.models import User
 from django_comments.models import Comment
-from actions.models import Action, ActionType, ActionTopic
+from actions.models import Action
+from tags.models import Tag
 from slates.models import Slate, SlateActionRelationship
 from profiles.models import Relationship, ProfileActionRelationship
 from notifications.lib.notification_handlers import send_daily_actions
@@ -269,37 +270,21 @@ class DailyActionTests(TestCase):
         self.buffy.dailyactionsettings.save()
         self.assertFalse(dailyaction.duration_filter(self.buffy, action))
 
-    def test_action_type_filter(self):
+    def test_tag_filter(self):
         action = Action.objects.first()
-        self.assertTrue(dailyaction.action_type_filter(self.buffy, action))
-        # Create action type and add it to action, then add it to filter
-        at = ActionType.objects.create(name="Example Action Type")
-        action.actiontypes.add(at)
-        save_string = "[u'" + str(at.pk) + "']"
-        self.buffy.dailyactionsettings.action_type_filter = save_string # This is how the db saves from the form
+        self.assertTrue(dailyaction.tag_filter(self.buffy, action))
+        # Create tag and add it to action, then add it to filter
+        t = Tag.objects.create(name="Example Tag")
+        action.action_tags.add(t)
+        save_string = "[u'" + str(t.pk) + "']"
+        self.buffy.dailyactionsettings.tag_filter = save_string # This is how the db saves from the form
         self.buffy.dailyactionsettings.save()
         # Should still pass the filter since the user hasn't turned the filter *on
-        self.assertTrue(dailyaction.action_type_filter(self.buffy, action))
+        self.assertTrue(dailyaction.tag_filter(self.buffy, action))
         # Turn filter on
-        self.buffy.dailyactionsettings.action_type_filter_on = True
+        self.buffy.dailyactionsettings.tag_filter_on = True
         self.buffy.dailyactionsettings.save()
-        self.assertFalse(dailyaction.action_type_filter(self.buffy, action))
-
-    def test_action_topic_filter(self):
-        action = Action.objects.first()
-        self.assertTrue(dailyaction.action_topic_filter(self.buffy, action))
-        # Create action type and add it to action, then add it to filter
-        at = ActionTopic.objects.create(name="Example Action Topic")
-        action.topics.add(at)
-        save_string = "[u'" + str(at.pk) + "']"
-        self.buffy.dailyactionsettings.action_topic_filter = save_string # This is how the db saves from the form
-        self.buffy.dailyactionsettings.save()
-        # Should still pass the filter since the user hasn't turned the filter *on
-        self.assertTrue(dailyaction.action_topic_filter(self.buffy, action))
-        # Turn filter on
-        self.buffy.dailyactionsettings.action_topic_filter_on = True
-        self.buffy.dailyactionsettings.save()
-        self.assertFalse(dailyaction.action_topic_filter(self.buffy, action))
+        self.assertFalse(dailyaction.tag_filter(self.buffy, action))
 
     def test_filter_action_when_recently_seen(self):
         action = Action.objects.first()
@@ -326,27 +311,15 @@ class DailyActionTests(TestCase):
         self.buffy.dailyactionsettings.save()
         self.assertFalse(dailyaction.filter_action(self.buffy, action))
 
-    def test_filter_action_when_actiontypes_filter(self):
+    def test_filter_action_when_tag_filter(self):
         action = Action.objects.first()
         self.assertTrue(dailyaction.filter_action(self.buffy, action))
-        # Trigger action type filter
-        at = ActionType.objects.create(name="Example Action Type")
-        action.actiontypes.add(at)
-        save_string = "[u'" + str(at.pk) + "']"
-        self.buffy.dailyactionsettings.action_type_filter = save_string # This is how the db saves from the form
-        self.buffy.dailyactionsettings.action_type_filter_on = True
-        self.buffy.dailyactionsettings.save()
-        self.assertFalse(dailyaction.filter_action(self.buffy, action))
-
-    def test_filter_action_when_actiontopics_filter(self):
-        action = Action.objects.first()
-        self.assertTrue(dailyaction.filter_action(self.buffy, action))
-        # Trigger action topic filter
-        at = ActionTopic.objects.create(name="Example Action Topic")
-        action.topics.add(at)
-        save_string = "[u'" + str(at.pk) + "']"
-        self.buffy.dailyactionsettings.action_topic_filter = save_string # This is how the db saves from the form
-        self.buffy.dailyactionsettings.action_topic_filter_on = True
+        # Trigger tag filter
+        t = Tag.objects.create(name="Example Tag")
+        action.action_tags.add(t)
+        save_string = "[u'" + str(t.pk) + "']"
+        self.buffy.dailyactionsettings.tag_filter = save_string # This is how the db saves from the form
+        self.buffy.dailyactionsettings.tag_filter_on = True
         self.buffy.dailyactionsettings.save()
         self.assertFalse(dailyaction.filter_action(self.buffy, action))
 

@@ -57,17 +57,10 @@ def duration_filter(user, action):
             return
     return action
 
-def action_type_filter(user, action):
-    if user.dailyactionsettings.action_type_filter_on:
-        action_type_pks = [i.pk for i in action.actiontypes.all()]
-        if set(user.dailyactionsettings.get_type_filter_pks()).intersection(set(action_type_pks)):
-            return
-    return action
-
-def action_topic_filter(user, action):
-    if user.dailyactionsettings.action_topic_filter_on:
-        action_topic_pks = [i.pk for i in action.topics.all()]
-        if set(user.dailyactionsettings.get_topic_filter_pks()).intersection(set(action_topic_pks)):
+def tag_filter(user, action):
+    if user.dailyactionsettings.tag_filter_on:
+        action_tag_pks = [i.pk for i in action.action_tags.all()]
+        if set(user.dailyactionsettings.get_tag_filter_pks()).intersection(set(action_tag_pks)):
             return
     return action
 
@@ -78,9 +71,7 @@ def filter_action(user, action):
     if action is None: return None
     action = duration_filter(user, action)
     if action is None: return None
-    action = action_type_filter(user, action)
-    if action is None: return None
-    return action_topic_filter(user, action)
+    return tag_filter(user, action)
 
 def get_action_after_filters(user, actions):
     if actions:

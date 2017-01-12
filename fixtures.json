@@ -395,7 +395,7 @@
         "hide_location": false,
         "lat": "42.407211",
         "lon": "-71.382437",
-        "district": "",
+        "district": "MA-5",
         "state": "MA",
         "links": "",
         "date_joined": "2016-12-02T14:58:39Z",
@@ -614,7 +614,7 @@
     "fields": {
         "profile": 11,
         "slate": 12,
-        "notify_of_additions": true
+        "notify_of_additions": false
     }
 },
 {
@@ -633,69 +633,6 @@
         "profile": 11,
         "slate": 10,
         "notify_of_additions": true
-    }
-},
-{
-    "model": "actions.actiontopic",
-    "pk": 5,
-    "fields": {
-        "name": "Climate Change",
-        "slug": "climate-change",
-        "description": ""
-    }
-},
-{
-    "model": "actions.actiontopic",
-    "pk": 6,
-    "fields": {
-        "name": "Supreme Court",
-        "slug": "supreme-court",
-        "description": ""
-    }
-},
-{
-    "model": "actions.actiontopic",
-    "pk": 7,
-    "fields": {
-        "name": "Immigration",
-        "slug": "immigration",
-        "description": ""
-    }
-},
-{
-    "model": "actions.actiontype",
-    "pk": 4,
-    "fields": {
-        "name": "Phone Campaign",
-        "slug": "phone-campaign",
-        "description": ""
-    }
-},
-{
-    "model": "actions.actiontype",
-    "pk": 5,
-    "fields": {
-        "name": "Boycott",
-        "slug": "boycott",
-        "description": ""
-    }
-},
-{
-    "model": "actions.actiontype",
-    "pk": 6,
-    "fields": {
-        "name": "Making Art",
-        "slug": "art",
-        "description": ""
-    }
-},
-{
-    "model": "actions.actiontype",
-    "pk": 7,
-    "fields": {
-        "name": "Donation",
-        "slug": "donation",
-        "description": ""
     }
 },
 {
@@ -722,11 +659,7 @@
         "deadline": null,
         "priority": "eme",
         "date_created": "2016-11-22T04:14:02Z",
-        "duration": "H",
-        "actiontypes": [
-            4
-        ],
-        "topics": []
+        "duration": "H"
     }
 },
 {
@@ -753,13 +686,7 @@
         "deadline": null,
         "priority": "hig",
         "date_created": "2016-11-25T04:14:02Z",
-        "duration": "H",
-        "actiontypes": [
-            4
-        ],
-        "topics": [
-            7
-        ]
+        "duration": "H"
     }
 },
 {
@@ -786,11 +713,7 @@
         "deadline": null,
         "priority": "med",
         "date_created": "2016-11-23T04:14:02Z",
-        "duration": "H",
-        "actiontypes": [
-            7
-        ],
-        "topics": []
+        "duration": "H"
     }
 },
 {
@@ -817,13 +740,7 @@
         "deadline": null,
         "priority": "med",
         "date_created": "2016-12-02T14:52:20Z",
-        "duration": "H",
-        "actiontypes": [
-            7
-        ],
-        "topics": [
-            6
-        ]
+        "duration": "H"
     }
 },
 {
@@ -850,9 +767,7 @@
         "deadline": null,
         "priority": "low",
         "date_created": "2016-12-02T15:04:48Z",
-        "duration": "H",
-        "actiontypes": [],
-        "topics": []
+        "duration": "H"
     }
 },
 {
@@ -879,9 +794,7 @@
         "deadline": null,
         "priority": "med",
         "date_created": "2017-01-06T17:21:26Z",
-        "duration": "H",
-        "actiontypes": [],
-        "topics": []
+        "duration": "H"
     }
 },
 {
@@ -985,6 +898,107 @@
         "priority": "eme",
         "status": "ace",
         "notes": ""
+    }
+},
+{
+    "model": "tags.tag",
+    "pk": 1,
+    "fields": {
+        "name": "Climate Change",
+        "slug": "climate-change",
+        "description": "",
+        "kind": "topic",
+        "actions": [],
+        "slates": [],
+        "profiles": []
+    }
+},
+{
+    "model": "tags.tag",
+    "pk": 2,
+    "fields": {
+        "name": "Supreme Court",
+        "slug": "supreme-court",
+        "description": "",
+        "kind": "topic",
+        "actions": [
+            24
+        ],
+        "slates": [],
+        "profiles": []
+    }
+},
+{
+    "model": "tags.tag",
+    "pk": 3,
+    "fields": {
+        "name": "Immigration",
+        "slug": "immigration",
+        "description": "",
+        "kind": "topic",
+        "actions": [
+            10
+        ],
+        "slates": [],
+        "profiles": []
+    }
+},
+{
+    "model": "tags.tag",
+    "pk": 4,
+    "fields": {
+        "name": "Phone Campaign",
+        "slug": "phone-campaign",
+        "description": "",
+        "kind": "type",
+        "actions": [
+            9,
+            10
+        ],
+        "slates": [],
+        "profiles": []
+    }
+},
+{
+    "model": "tags.tag",
+    "pk": 5,
+    "fields": {
+        "name": "Boycott",
+        "slug": "boycott",
+        "description": "",
+        "kind": "type",
+        "actions": [],
+        "slates": [],
+        "profiles": []
+    }
+},
+{
+    "model": "tags.tag",
+    "pk": 6,
+    "fields": {
+        "name": "Making Art",
+        "slug": "art",
+        "description": "",
+        "kind": "type",
+        "actions": [],
+        "slates": [],
+        "profiles": []
+    }
+},
+{
+    "model": "tags.tag",
+    "pk": 7,
+    "fields": {
+        "name": "Donation",
+        "slug": "donation",
+        "description": "",
+        "kind": "type",
+        "actions": [
+            11,
+            24
+        ],
+        "slates": [],
+        "profiles": []
     }
 },
 {
@@ -2462,10 +2476,7 @@
         "user": [
             "buffysummers"
         ],
-        "content_type": [
-            "actions",
-            "actiontype"
-        ],
+        "content_type": null,
         "object_id": "4",
         "object_repr": "Phone Campaign",
         "action_flag": 1,
@@ -2480,10 +2491,7 @@
         "user": [
             "buffysummers"
         ],
-        "content_type": [
-            "actions",
-            "actiontype"
-        ],
+        "content_type": null,
         "object_id": "5",
         "object_repr": "Boycott",
         "action_flag": 1,
@@ -2498,10 +2506,7 @@
         "user": [
             "buffysummers"
         ],
-        "content_type": [
-            "actions",
-            "actiontype"
-        ],
+        "content_type": null,
         "object_id": "6",
         "object_repr": "Making Art",
         "action_flag": 1,
@@ -2516,10 +2521,7 @@
         "user": [
             "buffysummers"
         ],
-        "content_type": [
-            "actions",
-            "actiontopic"
-        ],
+        "content_type": null,
         "object_id": "5",
         "object_repr": "Climate Change",
         "action_flag": 1,
@@ -2534,10 +2536,7 @@
         "user": [
             "buffysummers"
         ],
-        "content_type": [
-            "actions",
-            "actiontopic"
-        ],
+        "content_type": null,
         "object_id": "6",
         "object_repr": "Supreme Court",
         "action_flag": 1,
@@ -2552,10 +2551,7 @@
         "user": [
             "buffysummers"
         ],
-        "content_type": [
-            "actions",
-            "actiontopic"
-        ],
+        "content_type": null,
         "object_id": "7",
         "object_repr": "Immigration",
         "action_flag": 1,
@@ -2642,10 +2638,7 @@
         "user": [
             "buffysummers"
         ],
-        "content_type": [
-            "actions",
-            "actiontype"
-        ],
+        "content_type": null,
         "object_id": "7",
         "object_repr": "Donation",
         "action_flag": 1,
@@ -4234,6 +4227,60 @@
         "object_repr": "dru",
         "action_flag": 2,
         "change_message": "[{\"changed\": {\"fields\": [\"district\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 201,
+    "fields": {
+        "action_time": "2017-01-12T01:14:04.238Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "29",
+        "object_repr": "I love actions",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 202,
+    "fields": {
+        "action_time": "2017-01-12T01:14:04.248Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "28",
+        "object_repr": "I love actions",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 203,
+    "fields": {
+        "action_time": "2017-01-12T01:14:04.253Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "27",
+        "object_repr": "I love actions",
+        "action_flag": 3,
+        "change_message": ""
     }
 }
 ]

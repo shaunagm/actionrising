@@ -2,7 +2,9 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.utils.translation import ugettext as _
+from django.core.urlresolvers import reverse
 
+from mysite.lib.utils import slug_validator, slugify_helper
 from actions.models import Action
 from slates.models import Slate
 from profiles.models import Profile
@@ -25,3 +27,11 @@ class Tag(models.Model):
 
     def __unicode__(self):
         return "%s (%s)" % (self.name, self.kind)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.slug = slugify_helper(Tag, self.name)
+        super(Tag, self).save(*args, **kwargs)
+
+    def get_link(self):
+        return reverse('tag', kwargs={'slug': self.slug})
