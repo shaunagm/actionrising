@@ -4,11 +4,9 @@ from mysite.lib.choices import TIME_CHOICES
 from tags.models import Tag
 from notifications.models import DailyActionSettings
 
-TAG_CHOICES = [(i.pk, i.name) for i in Tag.objects.all()]
-
 class DailyActionForm(ModelForm):
     duration_filter = MultipleChoiceField(choices=TIME_CHOICES, required=False)
-    action_type_filter = MultipleChoiceField(choices=TAG_CHOICES, required=False)
+    action_type_filter = MultipleChoiceField(choices=[(i.pk, i.name) for i in Tag.objects.all()], required=False)
 
     class Meta:
         model = DailyActionSettings
