@@ -6,7 +6,7 @@ from notifications.models import DailyActionSettings
 
 class DailyActionForm(ModelForm):
     duration_filter = MultipleChoiceField(choices=TIME_CHOICES, required=False)
-    action_type_filter = MultipleChoiceField(choices=[(i.pk, i.name) for i in Tag.objects.all()], required=False)
+    tag_filter = MultipleChoiceField(choices=[(0,0)], required=False)
 
     class Meta:
         model = DailyActionSettings
@@ -15,3 +15,4 @@ class DailyActionForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(DailyActionForm, self).__init__(*args, **kwargs)
+        self.fields['tag_filter'].choices = [(i.pk, i.name) for i in Tag.objects.all()]

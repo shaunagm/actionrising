@@ -3,7 +3,7 @@
 {% load bootstrap3 %}
 
 {% block page_specific_javascript %}
-    $("#id_duration_filter, #id_action_type_filter, #id_action_topic_filter").chosen({width: "50%"})
+    $("#id_duration_filter, #id_tag_filter").chosen({width: "50%"})
 {% endblock page_specific_javascript %}
 
 {% block content %}
@@ -34,12 +34,9 @@
         Duration filter on: {{ form.duration_filter_on }}<br />
         Durations to filter out: {{ form.duration_filter }}<br /><br />
         {{ form.duration_filter.errors }}
-        Topic filter on: {{ form.action_topic_filter_on }}<br />
-        Topics to filter out: {{ form.action_topic_filter }}<br /><br />
-        {{ form.action_topic_filter.errors }}
-        Type filter on: {{ form.action_type_filter_on }}<br />
-        Types of actions to filter out: {{ form.action_type_filter }}<br /><br />
-        {{ form.action_type_filter.errors }}
+        Tag filter on: {{ form.tag_filter_on }}<br />
+        Tags to filter out: {{ form.tag_filter }}<br /><br />
+        {{ form.tag_filter.errors }}
       </div>
 
 

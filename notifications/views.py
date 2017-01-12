@@ -26,6 +26,7 @@ class SettingsEditView(UserPassesTestMixin, generic.UpdateView):
         return self.request.user.profile.get_edit_url()
 
     def get_form(self):
+        print(self.request.user.dailyactionsettings.pk)
         form = super(SettingsEditView, self).get_form()
         form.fields['daily_action'].label = "Send me an action every day"
         form.fields['use_own_actions_if_exist'].label = "Choose the daily action "\

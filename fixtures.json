@@ -754,7 +754,7 @@
         ],
         "anonymize": true,
         "main_link": "",
-        "description": "Let's see if this makes an activitystream update!?!?!!",
+        "description": "<p>Let&#39;s see if this makes an activitystream update!?!?!!</p>",
         "privacy": "inh",
         "current_privacy": "sit",
         "location": "",
@@ -908,7 +908,9 @@
         "slug": "climate-change",
         "description": "",
         "kind": "topic",
-        "actions": [],
+        "actions": [
+            25
+        ],
         "slates": [],
         "profiles": []
     }
@@ -967,7 +969,9 @@
         "slug": "boycott",
         "description": "",
         "kind": "type",
-        "actions": [],
+        "actions": [
+            25
+        ],
         "slates": [],
         "profiles": []
     }
@@ -980,7 +984,9 @@
         "slug": "art",
         "description": "",
         "kind": "type",
-        "actions": [],
+        "actions": [
+            25
+        ],
         "slates": [],
         "profiles": []
     }
@@ -1150,6 +1156,125 @@
         ],
         "event": 104,
         "sent": true
+    }
+},
+{
+    "model": "notifications.dailyactionsettings",
+    "pk": 1,
+    "fields": {
+        "user": [
+            "buffysummers"
+        ],
+        "recently_seen": null,
+        "my_own_actions": "few",
+        "my_friends_actions": "few",
+        "popular_actions": "few",
+        "duration_filter": null,
+        "duration_filter_on": false,
+        "tag_filter": null,
+        "tag_filter_on": false
+    }
+},
+{
+    "model": "notifications.dailyactionsettings",
+    "pk": 2,
+    "fields": {
+        "user": [
+            "thewitch"
+        ],
+        "recently_seen": null,
+        "my_own_actions": "few",
+        "my_friends_actions": "few",
+        "popular_actions": "few",
+        "duration_filter": null,
+        "duration_filter_on": false,
+        "tag_filter": null,
+        "tag_filter_on": false
+    }
+},
+{
+    "model": "notifications.dailyactionsettings",
+    "pk": 3,
+    "fields": {
+        "user": [
+            "giles"
+        ],
+        "recently_seen": null,
+        "my_own_actions": "few",
+        "my_friends_actions": "few",
+        "popular_actions": "few",
+        "duration_filter": null,
+        "duration_filter_on": false,
+        "tag_filter": null,
+        "tag_filter_on": false
+    }
+},
+{
+    "model": "notifications.dailyactionsettings",
+    "pk": 4,
+    "fields": {
+        "user": [
+            "5by5"
+        ],
+        "recently_seen": null,
+        "my_own_actions": "few",
+        "my_friends_actions": "few",
+        "popular_actions": "few",
+        "duration_filter": null,
+        "duration_filter_on": false,
+        "tag_filter": null,
+        "tag_filter_on": false
+    }
+},
+{
+    "model": "notifications.dailyactionsettings",
+    "pk": 5,
+    "fields": {
+        "user": [
+            "tara_m"
+        ],
+        "recently_seen": null,
+        "my_own_actions": "few",
+        "my_friends_actions": "few",
+        "popular_actions": "few",
+        "duration_filter": null,
+        "duration_filter_on": false,
+        "tag_filter": null,
+        "tag_filter_on": false
+    }
+},
+{
+    "model": "notifications.dailyactionsettings",
+    "pk": 6,
+    "fields": {
+        "user": [
+            "dru"
+        ],
+        "recently_seen": null,
+        "my_own_actions": "few",
+        "my_friends_actions": "few",
+        "popular_actions": "few",
+        "duration_filter": null,
+        "duration_filter_on": false,
+        "tag_filter": null,
+        "tag_filter_on": false
+    }
+},
+{
+    "model": "notifications.dailyactionsettings",
+    "pk": 7,
+    "fields": {
+        "user": [
+            "admin"
+        ],
+        "recently_seen": null,
+        "my_own_actions": "few",
+        "my_friends_actions": "few",
+        "popular_actions": "few",
+        "duration_filter": "[]",
+        "duration_filter_on": false,
+        "tag_filter": "[u'2', u'3', u'5']",
+        "tag_filter_on": false
     }
 },
 {
@@ -2375,6 +2500,82 @@
         "action_object_content_type": null,
         "action_object_object_id": null,
         "timestamp": "2017-01-11T18:23:54.406Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 114,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "25",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-12T02:29:54.708Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 115,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "25",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-12T02:29:54.740Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 117,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "25",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-12T17:39:38.355Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 118,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "25",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-12T17:39:38.367Z",
         "public": true
     }
 },
@@ -4279,6 +4480,24 @@
         ],
         "object_id": "27",
         "object_repr": "I love actions",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 204,
+    "fields": {
+        "action_time": "2017-01-12T17:21:26.813Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "30",
+        "object_repr": "A new action",
         "action_flag": 3,
         "change_message": ""
     }
