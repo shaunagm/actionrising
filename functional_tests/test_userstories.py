@@ -152,3 +152,15 @@ class MakeAndEditCommitment(SeleniumTestCase):
         # Save and go back to action page, link now says to edit
         # Go to edit page, click delete link
         # Back to action page, link now says to make a commitment
+
+class LoggedOutUser(SeleniumTestCase):
+    # User creates an action, checks their page and sees it in "created" but not "tracked"
+    # actions.  They check their todo list and it's not there either. So they go to the action
+    # page and follow it.  They see it in "tracked" actions as well.  They go to their todo
+    # list and see it there as well. Finally, they add a note.
+
+    def test_add_and_follow_action(self):
+        # Login, go to action edit page, create action
+        self.landing_page = LoggedOutLandingPage(self.browser, root_uri=self.live_server_url)
+        landing_page.go_to_index_if_necessary()
+        

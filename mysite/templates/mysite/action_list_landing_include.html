@@ -9,7 +9,7 @@
       <tr>
           <td><a href="{{ action.get_robust_url }}">{{ action.title }}</a>
             <br />
-          {% include "actions/label_include.html" with object_list=action.get_tags %}</td>
+          {% include "tags/label_include.html" with object_list=action.get_tags %}</td>
       </tr>
       {% endfor %}
   </tbody>
