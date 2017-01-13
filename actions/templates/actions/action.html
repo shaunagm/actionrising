@@ -44,6 +44,10 @@
                 {{ action.description|safe }}
              </div>
              {% include "mysite/basic_info_include.html" %}
+
+             {% load plugin_templatetags %}
+             {% get_plugin_templates "action_instance" %}
+
            </div>
         </div>
 

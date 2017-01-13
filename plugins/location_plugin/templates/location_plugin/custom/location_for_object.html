@@ -1,0 +1,6 @@
+{% if object.location %}
+    {% if object.hide_location == True %}
+    {% else %}
+        <i id="location-info" class="fa fa-globe" aria-hidden="true"> {{ object.get_location }}</i>
+    {% endif %}
+{% endif %}
