@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'notifications',
     'invites',
     'commitments',
+    'plugins.location_plugin',
     'functional_tests',
     'django_comments',
     'ckeditor',
