@@ -27,12 +27,6 @@ class Profile(models.Model):
     user = models.OneToOneField(User, unique=True)
     verified = models.BooleanField(default=False)
     description = RichTextField(max_length=2500, blank=True, null=True)  # TODO Rich text?
-    location = models.CharField(max_length=140, blank=True, null=True)
-    hide_location = models.BooleanField(default=False)
-    lat = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
-    lon = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
-    district = models.CharField(max_length=10, blank=True, null=True)
-    state = models.CharField(max_length=2, blank=True, null=True)
     links = models.CharField(max_length=400, blank=True, null=True)
     date_joined = models.DateTimeField(default=timezone.now)
     connections = models.ManyToManyField('self',
@@ -143,12 +137,6 @@ class Profile(models.Model):
                 notify.append(person.pk)
         return [profile.user for profile in Profile.objects.filter(pk__in=notify)]
 
-    def get_location(self):
-        if self.location:
-            return self.location
-        else:
-            return "Unknown"
-
     def get_most_recent_actions_created(self):
         actions = self.user.action_set.filter(status__in=["rea", "fin"]).order_by('-date_created')
         if len(actions) > 5:
@@ -187,7 +175,7 @@ class Profile(models.Model):
             follows_you = rel.target_follows_current_profile(self)
             muted = rel.current_profile_mutes_target(self)
             profile = rel.get_other(self)
-            people.append({'user': profile.user, 'mutual': follows_you and you_follow,
+            people.append({'profile': profile, 'mutual': follows_you and you_follow,
                 'follows_you': follows_you, 'you_follow': you_follow, 'muted': muted})
         return people
 

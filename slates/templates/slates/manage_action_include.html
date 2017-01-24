@@ -1,0 +1,9 @@
+<td class="manage">
+    {% if is_slate %}
+      <a href="{% url 'manage_action_for_slate' rel.pk %}">
+    {% else %}
+      <a href="{% url 'manage_action_for_profile' action.slug %}">
+    {% endif %}
+    <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+    </a>
+</td>

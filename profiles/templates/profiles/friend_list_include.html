@@ -7,9 +7,7 @@
   <tbody>
       {% for info in object_list %}
       <tr>
-          <td><a href="{{ info.user.profile.get_absolute_url }}">{{ info.user.username }}</a>
-          {% if info.user.profile.location %} {{ info.user.profile.location }} {% endif %}
-          <br />
+          <td><a href="{{ info.user.profile.get_absolute_url }}">{{ info.profile.get_name }}</a>
           {% if info.mutual %}
               <span class="label label-success">Mutual follow</span>
           {% else %}

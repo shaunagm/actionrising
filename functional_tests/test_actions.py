@@ -13,7 +13,7 @@ class TestActionList(SeleniumTestCase):
         super(TestActionList, self).setUp()
         self.actions_table = BasicActionListPage(self.browser, root_uri=self.live_server_url)
         self.actions_table.log_in(default_user, default_password)
-        self.actions_table.go_to_default_actions_page_if_necessary()
+        self.actions_table.return_to_default_actions_page()
 
     def test_display_actions(self):
         self.assertTrue(self.actions_table.datatables_js_is_enabled())
@@ -57,6 +57,7 @@ class TestActionList(SeleniumTestCase):
         # Sort by district
         self.actions_table.select_location("My District")
         self.assertEquals(len(self.actions_table.rows), 1)
+        time.sleep(4)
         self.assertEquals(self.actions_table.first_row_action.text, "Sign petition to make Boston a sanctuary city")
         # Sort by state
         self.actions_table.select_location("My State")

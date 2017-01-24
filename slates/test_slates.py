@@ -8,10 +8,8 @@ from django.contrib.auth.models import User
 from profiles.models import Profile, ProfileActionRelationship
 
 from mysite.lib.utils import slugify_helper
-from actions.lib import act_location
 from actions.models import Action
 from slates.models import Slate, SlateActionRelationship
-from slates.views import create_slate_helper, edit_slate_helper
 from slates.forms import SlateForm
 
 class TestSlateMethods(TestCase):
@@ -45,29 +43,11 @@ class TestSlateMethods(TestCase):
 
 class TestSlateViews(TestCase):
 
+    # TODO: add some tests here
+
     def setUp(self):
         self.buffy = User.objects.create(username="buffysummers")
         self.action = Action.objects.create(title="Test Action", creator=self.buffy)
-
-    def test_create_slate_helper(self):
-        with self.assertRaises(ObjectDoesNotExist):
-            Slate.objects.get(title="Test title")
-        obj = Slate(title="Test title")
-        obj = create_slate_helper(obj, [self.action], self.buffy)
-        self.assertEqual(obj.creator, self.buffy)
-        self.assertEqual(list(obj.actions.all()), [self.action])
-
-    def test_edit_slate_helper(self):
-        # No actions when create
-        obj = Slate.objects.create(title="Test title", creator=self.buffy)
-        self.assertEqual(list(obj.actions.all()), [])
-        # Add some actions via edit_slate_helper
-        edit_slate_helper(obj, [self.action])
-        self.assertEqual(list(obj.actions.all()), [self.action])
-        # Create a new action, and then swap out the actions on the slate
-        new_action = Action.objects.create(title="New action", creator=self.buffy)
-        edit_slate_helper(obj, [new_action])
-        self.assertEqual(list(obj.actions.all()), [new_action])
 
 
 class TestSlateForms(TestCase):
@@ -76,7 +56,7 @@ class TestSlateForms(TestCase):
         self.buffy = User.objects.create(username="buffysummers")
 
     def test_slate_form_privacy_choices(self):
-        initial_form = SlateForm(user=self.buffy)
+        initial_form = SlateForm(user=self.buffy, formtype="create")
         form_inherited_privacy = initial_form.fields['privacy'].choices[0][1]
         user_privacy = self.buffy.profile.privacy_defaults.get_global_default_display()
         self.assertEqual(form_inherited_privacy, user_privacy)

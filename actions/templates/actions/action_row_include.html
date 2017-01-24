@@ -1,3 +1,5 @@
+{% load plugin_templatetags %}
+
 <tr>
     <td data-sort="{{ action.date_created|date:"Y m d"}}">
       {{ action.date_created|date:"D M d"}}</td>
@@ -8,16 +10,8 @@
     <td>{{ action.get_priority_display }}</td>
     <td>{{ action.is_active }}</td>
     <td>{% if action.get_creator in friendlist %} True {% endif %} </td>
-    <td>{{ action.get_district }}</td>
-    <td>{{ action.get_state }}</td>
     <td>{{ rel.notes }}</td>
     <td>{{ action.get_duration_display }}</td>
-    <td class="manage">
-    {% if is_slate %}
-      <a href="{% url 'manage_action_for_slate' rel.pk %}">
-    {% else %}
-      <a href="{% url 'manage_action_for_profile' action.slug %}">
-    {% endif %}
-    <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-    </a></td>
+    {% include 'slates/manage_action_include.html' %}
+    {% get_plugin_templates "action_row_hidden" %}
 </tr>

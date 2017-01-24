@@ -8,6 +8,7 @@ from mysite.lib.choices import PRIVACY_DEFAULT_CHOICES, PRIVACY_CHOICES
 from mysite.lib.privacy import get_global_privacy_default
 from profiles.models import Profile, ProfileActionRelationship, PrivacyDefaults
 from slates.models import Slate
+from plugins import plugin_helpers
 
 class ProfileForm(ModelForm):
     first_name = CharField(max_length=30, required=False, label="First name")
@@ -19,29 +20,37 @@ class ProfileForm(ModelForm):
 
     class Meta:
         model = Profile
-        fields = ['description', 'privacy', 'location', 'hide_location']
+        fields = ['description', 'privacy']
 
     def __init__(self, user, *args, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)
+
+        # Set privacy
         self.fields['privacy_default'].help_text = 'This setting will apply to all actions and slates you create unless you override them individually.'
         self.fields['privacy_default'].initial = self.instance.privacy_defaults.global_default
         NEW_CHOICES = (PRIVACY_CHOICES[0], PRIVACY_CHOICES[1], PRIVACY_CHOICES[2], ('inh', get_global_privacy_default(user.profile, "decorated")))
         self.fields['privacy'].choices = NEW_CHOICES
-        self.fields['hide_location'].label = 'Keep your location private, but use it to filter actions'
-        fields_keyOrder = ['first_name', 'last_name', 'location', 'hide_location', 'description', 'privacy', 'privacy_default']
-        if (self.fields.has_key('keyOrder')):
-            self.fields.keyOrder = fields_keyOrder
-        else:
-            self.fields = OrderedDict((k, self.fields[k]) for k in fields_keyOrder)
+
+        # Set plugin fields
+        self = plugin_helpers.add_plugin_fields(self)
 
     def save(self, commit=True):
+        instance = super(ProfileForm, self).save(commit=commit)
+
+        # Handle usernames
         if self.cleaned_data['first_name'] or self.cleaned_data['last_name']:
-            self.instance.user.first_name = self.cleaned_data['first_name']
-            self.instance.user.last_name = self.cleaned_data['last_name']
-            self.instance.user.save()
-        self.instance.privacy_defaults.global_default = self.cleaned_data['privacy_default']
-        self.instance.privacy_defaults.save()
-        return super(ProfileForm, self).save(commit=commit)
+            instance.user.first_name = self.cleaned_data['first_name']
+            instance.user.last_name = self.cleaned_data['last_name']
+            instance.user.save()
+
+        # Handle privacy
+        instance.privacy_defaults.global_default = self.cleaned_data['privacy_default']
+        instance.privacy_defaults.save()
+
+        # Handle plugins
+        plugin_helpers.process_plugin_fields(self, instance)
+
+        return instance
 
 class SlateChoiceField(ModelMultipleChoiceField):
    def label_from_instance(self, obj):

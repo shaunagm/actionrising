@@ -4,7 +4,7 @@
     "pk": 8,
     "fields": {
         "password": "pbkdf2_sha256$30000$06Pt4s6XgY5h$pKAC05XglBrOj4rgJ+U1rESRqLnaRjclzVS7o1wJssA=",
-        "last_login": "2017-01-06T19:02:29.923Z",
+        "last_login": "2017-01-24T03:18:55.765Z",
         "is_superuser": false,
         "username": "buffysummers",
         "first_name": "Buffy",
@@ -112,11 +112,11 @@
     "pk": 14,
     "fields": {
         "password": "pbkdf2_sha256$30000$PRORrfnS2lz8$YQSVwqnLDtihtxFWOMTdcdyHgMv0S1XWjuT1rQzkTyY=",
-        "last_login": "2017-01-11T18:09:28.725Z",
+        "last_login": "2017-01-24T03:19:17.606Z",
         "is_superuser": true,
         "username": "admin",
-        "first_name": "",
-        "last_name": "",
+        "first_name": "Jane",
+        "last_name": "Doe",
         "email": "shaunagm@gmail.com",
         "is_staff": true,
         "is_active": true,
@@ -207,10 +207,26 @@
 },
 {
     "model": "sessions.session",
+    "pk": "eouj94twi5slirpor33g1ba2wv7bvpx4",
+    "fields": {
+        "session_data": "NjhjYzMzZWNjZjgxZWIzOTFmYTZjYzBiNWUyOTFlOTM0NGJlN2RjODp7Il9hdXRoX3VzZXJfaGFzaCI6ImI2NGJjNjI1MTM1ODBjNmEyODMyYjA5Y2IwMDNiZDcxMzBjMWQzYmYiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiI4In0=",
+        "expire_date": "2017-02-07T03:18:55.770Z"
+    }
+},
+{
+    "model": "sessions.session",
     "pk": "ey5ghxz2qt4klbb4whzljlannthriy8n",
     "fields": {
         "session_data": "ZjlkYjc0ZjM2MmU1ZTEwMjYwOGFhMzI2NmFjM2M4OTBkOTk0YzZiNDp7Il9hdXRoX3VzZXJfaGFzaCI6IjVjZDFiY2ZhN2Q3NDJlYzE4NDEzOWExNzg1YWY5MTk0YmE5YTdjMTAiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIxNCJ9",
         "expire_date": "2017-01-20T17:18:07.464Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "iy1zqghl7ozuzmrc6uadvq36ih6cwvuk",
+    "fields": {
+        "session_data": "ZjlkYjc0ZjM2MmU1ZTEwMjYwOGFhMzI2NmFjM2M4OTBkOTk0YzZiNDp7Il9hdXRoX3VzZXJfaGFzaCI6IjVjZDFiY2ZhN2Q3NDJlYzE4NDEzOWExNzg1YWY5MTk0YmE5YTdjMTAiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIxNCJ9",
+        "expire_date": "2017-02-07T03:19:17.614Z"
     }
 },
 {
@@ -286,12 +302,6 @@
         ],
         "verified": false,
         "description": "",
-        "location": "Boston, MA",
-        "hide_location": false,
-        "lat": "42.360082",
-        "lon": "-71.058880",
-        "district": "MA-8",
-        "state": "MA",
         "links": null,
         "date_joined": "2016-11-22T04:14:02.912Z",
         "privacy": "inh",
@@ -307,12 +317,6 @@
         ],
         "verified": false,
         "description": "",
-        "location": "Sunnydale, CA",
-        "hide_location": false,
-        "lat": "37.368830",
-        "lon": "-122.036350",
-        "district": "CA-17",
-        "state": "CA",
         "links": "",
         "date_joined": "2016-11-22T04:14:02Z",
         "privacy": "inh",
@@ -328,12 +332,6 @@
         ],
         "verified": false,
         "description": null,
-        "location": null,
-        "hide_location": false,
-        "lat": "44.933493",
-        "lon": "7.540749",
-        "district": null,
-        "state": null,
         "links": null,
         "date_joined": "2016-11-22T04:14:02.912Z",
         "privacy": "inh",
@@ -349,12 +347,6 @@
         ],
         "verified": false,
         "description": null,
-        "location": null,
-        "hide_location": false,
-        "lat": "44.933493",
-        "lon": "7.540749",
-        "district": null,
-        "state": null,
         "links": null,
         "date_joined": "2016-11-28T22:22:33.956Z",
         "privacy": "inh",
@@ -370,12 +362,6 @@
         ],
         "verified": false,
         "description": null,
-        "location": null,
-        "hide_location": false,
-        "lat": "44.933493",
-        "lon": "7.540749",
-        "district": null,
-        "state": null,
         "links": null,
         "date_joined": "2016-11-28T22:23:30.382Z",
         "privacy": "inh",
@@ -391,12 +377,6 @@
         ],
         "verified": false,
         "description": "",
-        "location": "MA",
-        "hide_location": false,
-        "lat": "42.407211",
-        "lon": "-71.382437",
-        "district": "MA-5",
-        "state": "MA",
         "links": "",
         "date_joined": "2016-12-02T14:58:39Z",
         "privacy": "inh",
@@ -411,13 +391,7 @@
             "admin"
         ],
         "verified": false,
-        "description": null,
-        "location": null,
-        "hide_location": false,
-        "lat": "44.933493",
-        "lon": "7.540749",
-        "district": null,
-        "state": null,
+        "description": "",
         "links": null,
         "date_joined": "2016-12-02T15:01:21.108Z",
         "privacy": "inh",
@@ -480,6 +454,22 @@
         "person_B": 9,
         "A_follows_B": true,
         "B_follows_A": false,
+        "A_accountable_B": false,
+        "B_accountable_A": false,
+        "A_mutes_B": false,
+        "B_mutes_A": false,
+        "A_notified_of_B": false,
+        "B_notified_of_A": false
+    }
+},
+{
+    "model": "profiles.relationship",
+    "pk": 8,
+    "fields": {
+        "person_A": 11,
+        "person_B": 5,
+        "A_follows_B": true,
+        "B_follows_A": true,
         "A_accountable_B": false,
         "B_accountable_A": false,
         "A_mutes_B": false,
@@ -649,11 +639,6 @@
         "description": "<p>Here&#39;s some instructions!</p>",
         "privacy": "inh",
         "current_privacy": "sit",
-        "location": "Amherst, MA",
-        "lat": "42.373222",
-        "lon": "-72.519854",
-        "district": "MA-2",
-        "state": "MA",
         "status": "rea",
         "has_deadline": false,
         "deadline": null,
@@ -671,16 +656,11 @@
         "creator": [
             "buffysummers"
         ],
-        "anonymize": false,
+        "anonymize": true,
         "main_link": "",
         "description": "",
         "privacy": "pub",
         "current_privacy": "pub",
-        "location": "Boston, MA",
-        "lat": "42.360082",
-        "lon": "-71.058880",
-        "district": "MA-8",
-        "state": "MA",
         "status": "rea",
         "has_deadline": false,
         "deadline": null,
@@ -703,11 +683,6 @@
         "description": "",
         "privacy": "sit",
         "current_privacy": "sit",
-        "location": "",
-        "lat": null,
-        "lon": null,
-        "district": null,
-        "state": null,
         "status": "rea",
         "has_deadline": false,
         "deadline": null,
@@ -730,11 +705,6 @@
         "description": "Do a thing!  Edited to say: actually we should probably not do this thing.",
         "privacy": "inh",
         "current_privacy": "sit",
-        "location": "",
-        "lat": null,
-        "lon": null,
-        "district": null,
-        "state": null,
         "status": "wit",
         "has_deadline": false,
         "deadline": null,
@@ -757,11 +727,6 @@
         "description": "<p>Let&#39;s see if this makes an activitystream update!?!?!!</p>",
         "privacy": "inh",
         "current_privacy": "sit",
-        "location": "",
-        "lat": null,
-        "lon": null,
-        "district": null,
-        "state": null,
         "status": "rea",
         "has_deadline": false,
         "deadline": null,
@@ -784,11 +749,6 @@
         "description": "",
         "privacy": "inh",
         "current_privacy": "sit",
-        "location": "Sacramento, CA",
-        "lat": "38.581572",
-        "lon": "-121.494400",
-        "district": "CA-6",
-        "state": "CA",
         "status": "rea",
         "has_deadline": false,
         "deadline": null,
@@ -1269,6 +1229,278 @@
         "duration_filter_on": false,
         "tag_filter": "[u'2', u'3', u'5']",
         "tag_filter_on": false
+    }
+},
+{
+    "model": "location_plugin.location",
+    "pk": 1,
+    "fields": {
+        "location": "Boston, MA",
+        "lat": "42.360082",
+        "lon": "-71.058880",
+        "district": "MA-8",
+        "state": "MA",
+        "hide_location": false,
+        "content_type": [
+            "profiles",
+            "profile"
+        ],
+        "object_id": 5
+    }
+},
+{
+    "model": "location_plugin.location",
+    "pk": 2,
+    "fields": {
+        "location": "Sunnydale, CA",
+        "lat": "37.368830",
+        "lon": "-122.036350",
+        "district": "CA-17",
+        "state": "CA",
+        "hide_location": false,
+        "content_type": [
+            "profiles",
+            "profile"
+        ],
+        "object_id": 6
+    }
+},
+{
+    "model": "location_plugin.location",
+    "pk": 3,
+    "fields": {
+        "location": null,
+        "lat": "44.933493",
+        "lon": "7.540749",
+        "district": null,
+        "state": null,
+        "hide_location": false,
+        "content_type": [
+            "profiles",
+            "profile"
+        ],
+        "object_id": 7
+    }
+},
+{
+    "model": "location_plugin.location",
+    "pk": 4,
+    "fields": {
+        "location": null,
+        "lat": "44.933493",
+        "lon": "7.540749",
+        "district": null,
+        "state": null,
+        "hide_location": false,
+        "content_type": [
+            "profiles",
+            "profile"
+        ],
+        "object_id": 8
+    }
+},
+{
+    "model": "location_plugin.location",
+    "pk": 5,
+    "fields": {
+        "location": null,
+        "lat": "44.933493",
+        "lon": "7.540749",
+        "district": null,
+        "state": null,
+        "hide_location": false,
+        "content_type": [
+            "profiles",
+            "profile"
+        ],
+        "object_id": 9
+    }
+},
+{
+    "model": "location_plugin.location",
+    "pk": 6,
+    "fields": {
+        "location": "MA",
+        "lat": "42.407211",
+        "lon": "-71.382437",
+        "district": "MA-5",
+        "state": "MA",
+        "hide_location": false,
+        "content_type": [
+            "profiles",
+            "profile"
+        ],
+        "object_id": 10
+    }
+},
+{
+    "model": "location_plugin.location",
+    "pk": 7,
+    "fields": {
+        "location": "",
+        "lat": null,
+        "lon": null,
+        "district": null,
+        "state": null,
+        "hide_location": false,
+        "content_type": [
+            "profiles",
+            "profile"
+        ],
+        "object_id": 11
+    }
+},
+{
+    "model": "location_plugin.location",
+    "pk": 8,
+    "fields": {
+        "location": "Amherst, MA",
+        "lat": "42.373222",
+        "lon": "-72.519854",
+        "district": "MA-2",
+        "state": "MA",
+        "hide_location": false,
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": 9
+    }
+},
+{
+    "model": "location_plugin.location",
+    "pk": 9,
+    "fields": {
+        "location": "Boston, MA",
+        "lat": "42.360082",
+        "lon": "-71.058880",
+        "district": "MA-8",
+        "state": "MA",
+        "hide_location": false,
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": 10
+    }
+},
+{
+    "model": "location_plugin.location",
+    "pk": 10,
+    "fields": {
+        "location": "",
+        "lat": null,
+        "lon": null,
+        "district": null,
+        "state": null,
+        "hide_location": false,
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": 11
+    }
+},
+{
+    "model": "location_plugin.location",
+    "pk": 11,
+    "fields": {
+        "location": "",
+        "lat": null,
+        "lon": null,
+        "district": null,
+        "state": null,
+        "hide_location": false,
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": 24
+    }
+},
+{
+    "model": "location_plugin.location",
+    "pk": 12,
+    "fields": {
+        "location": "Sacramento, CA",
+        "lat": "38.581572",
+        "lon": "-121.494400",
+        "district": "CA-6",
+        "state": "CA",
+        "hide_location": false,
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": 26
+    }
+},
+{
+    "model": "location_plugin.location",
+    "pk": 13,
+    "fields": {
+        "location": "",
+        "lat": null,
+        "lon": null,
+        "district": null,
+        "state": null,
+        "hide_location": false,
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": 25
+    }
+},
+{
+    "model": "location_plugin.location",
+    "pk": 19,
+    "fields": {
+        "location": null,
+        "lat": null,
+        "lon": null,
+        "district": null,
+        "state": null,
+        "hide_location": false,
+        "content_type": [
+            "slates",
+            "slate"
+        ],
+        "object_id": 10
+    }
+},
+{
+    "model": "location_plugin.location",
+    "pk": 20,
+    "fields": {
+        "location": null,
+        "lat": null,
+        "lon": null,
+        "district": null,
+        "state": null,
+        "hide_location": false,
+        "content_type": [
+            "slates",
+            "slate"
+        ],
+        "object_id": 11
+    }
+},
+{
+    "model": "location_plugin.location",
+    "pk": 21,
+    "fields": {
+        "location": null,
+        "lat": null,
+        "lon": null,
+        "district": null,
+        "state": null,
+        "hide_location": false,
+        "content_type": [
+            "slates",
+            "slate"
+        ],
+        "object_id": 12
     }
 },
 {
@@ -2874,6 +3106,294 @@
         "action_object_content_type": null,
         "action_object_object_id": null,
         "timestamp": "2017-01-12T18:34:21.642Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 135,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "25",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-13T01:20:30.732Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 136,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "25",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-13T01:20:31.195Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 137,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "25",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-13T01:20:31.204Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 138,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "10",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-23T02:46:27.460Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 139,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "10",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-23T02:46:27.482Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 140,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "10",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-23T02:46:40.971Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 141,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "10",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-23T02:46:40.986Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 142,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "10",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-23T03:51:04.639Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 143,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "10",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-23T03:51:04.654Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 144,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "10",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-23T04:00:36.771Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 145,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "10",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-23T04:00:36.796Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 157,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "8",
+        "verb": "is taking action",
+        "description": null,
+        "target_content_type": [
+            "actions",
+            "action"
+        ],
+        "target_object_id": "10",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-24T02:42:34.176Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 158,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "10",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-24T03:03:09.098Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 159,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "25",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-24T03:14:46.276Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 160,
+    "fields": {
+        "actor_content_type": [
+            "actions",
+            "action"
+        ],
+        "actor_object_id": "25",
+        "verb": "was updated",
+        "description": null,
+        "target_content_type": null,
+        "target_object_id": null,
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-24T03:16:14.363Z",
         "public": true
     }
 },
@@ -4796,6 +5316,312 @@
         ],
         "object_id": "30",
         "object_repr": "A new action",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 205,
+    "fields": {
+        "action_time": "2017-01-13T01:45:10.862Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "location_plugin",
+            "location"
+        ],
+        "object_id": "13",
+        "object_repr": "Location of Join the site",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"location\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 206,
+    "fields": {
+        "action_time": "2017-01-13T02:08:21.601Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "location_plugin",
+            "location"
+        ],
+        "object_id": "7",
+        "object_repr": "Location of admin",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"location\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 207,
+    "fields": {
+        "action_time": "2017-01-13T02:09:20.845Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "location_plugin",
+            "location"
+        ],
+        "object_id": "7",
+        "object_repr": "Location of admin",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"hide_location\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 208,
+    "fields": {
+        "action_time": "2017-01-23T19:58:09.006Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "profiles",
+            "relationship"
+        ],
+        "object_id": "8",
+        "object_repr": "Relationship of : admin and buffysummers",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 209,
+    "fields": {
+        "action_time": "2017-01-23T21:05:00.962Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "35",
+        "object_repr": "Newish",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 210,
+    "fields": {
+        "action_time": "2017-01-23T21:05:00.968Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "34",
+        "object_repr": "TestMe",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 211,
+    "fields": {
+        "action_time": "2017-01-23T21:05:00.972Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "33",
+        "object_repr": "TEST3",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 212,
+    "fields": {
+        "action_time": "2017-01-23T21:05:00.977Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "32",
+        "object_repr": "Test2",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 213,
+    "fields": {
+        "action_time": "2017-01-23T21:05:00.981Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "actions",
+            "action"
+        ],
+        "object_id": "31",
+        "object_repr": "TEST",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 214,
+    "fields": {
+        "action_time": "2017-01-23T21:05:18.400Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "location_plugin",
+            "location"
+        ],
+        "object_id": "18",
+        "object_repr": "Location of None",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 215,
+    "fields": {
+        "action_time": "2017-01-23T21:05:18.407Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "location_plugin",
+            "location"
+        ],
+        "object_id": "17",
+        "object_repr": "Location of None",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 216,
+    "fields": {
+        "action_time": "2017-01-24T02:28:38.083Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "slates",
+            "slate"
+        ],
+        "object_id": "15",
+        "object_repr": "New slate new slate",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 217,
+    "fields": {
+        "action_time": "2017-01-24T02:28:38.088Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "slates",
+            "slate"
+        ],
+        "object_id": "14",
+        "object_repr": "I love a good slate",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 218,
+    "fields": {
+        "action_time": "2017-01-24T02:28:38.092Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "slates",
+            "slate"
+        ],
+        "object_id": "13",
+        "object_repr": "I love a good slate",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 219,
+    "fields": {
+        "action_time": "2017-01-24T02:28:54.558Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "location_plugin",
+            "location"
+        ],
+        "object_id": "23",
+        "object_repr": "Location of None",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 220,
+    "fields": {
+        "action_time": "2017-01-24T02:28:54.563Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "location_plugin",
+            "location"
+        ],
+        "object_id": "22",
+        "object_repr": "Location of None",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 221,
+    "fields": {
+        "action_time": "2017-01-24T03:30:10.004Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "profiles",
+            "profileactionrelationship"
+        ],
+        "object_id": "20",
+        "object_repr": "Relationship of profile buffysummers and action Sign petition to make Boston a sanctuary city",
         "action_flag": 3,
         "change_message": ""
     }

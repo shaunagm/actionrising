@@ -4,8 +4,12 @@
   <ul class="dropdown-menu">
 
     {% if request.user.is_authenticated %}
+
+        {% load location_tags %}
+        {% get_state_and_district request.user as location_dict %}
+
         <li>
-          {% if request.user.profile.district %}
+          {% if location_dict.district %}
               <a class="filter-location" href="#">My District</a>
           {% else %}
               <a class="nested-link" href="{% url 'edit_profile' pk=request.user.profile.pk %}">
@@ -14,7 +18,7 @@
         </li>
 
         <li>
-        {% if request.user.profile.state %}
+        {% if location_dict.state %}
             <a class="filter-location" href="#">My State</a>
         {% else %}
             <a class="nested-link" href="{% url 'edit_profile' pk=request.user.profile.pk %}">

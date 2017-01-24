@@ -28,11 +28,6 @@ class Action(models.Model):
     # privacy default is inh == inherit
     privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
     current_privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='sit')
-    location = models.CharField(max_length=140, blank=True, null=True)
-    lat = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
-    lon = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
-    district = models.CharField(max_length=10, blank=True, null=True)
-    state = models.CharField(max_length=2, blank=True, null=True)
     # status default is rea == open for action
     status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='rea')
     has_deadline = models.BooleanField(default=False)
@@ -107,12 +102,6 @@ class Action(models.Model):
             return True
         else:
             return False
-
-    def get_location(self):
-        if self.location:
-            return self.location
-        else:
-            return "Unknown"
 
     def get_district(self):
         if self.district:

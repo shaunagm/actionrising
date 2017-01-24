@@ -29,6 +29,7 @@ class SlateView(UserPassesTestMixin, generic.DetailView):
         if self.request.user.is_authenticated():
             context['psr'] = self.request.user.profile.get_psr_given_slate(self.object)
         context['tracker_data'] = get_tracker_data_for_slate(self.object, self.request.user)
+        context['tag_list'] = self.object.tags.all()
         return context
 
     def test_func(self):
@@ -41,13 +42,6 @@ class SlateListView(LoginRequiredMixin, generic.ListView):
     model = Slate
     queryset = Slate.objects.filter(status__in=["rea", "fin"]).filter(current_privacy__in=["pub", "sit"])
 
-def create_slate_helper(object, actions, user):
-    object.creator = user
-    object.save()
-    for action in actions:
-        SlateActionRelationship.objects.create(slate=object, action=action)
-    return object
-
 class SlateCreateView(LoginRequiredMixin, generic.edit.CreateView):
     model = Slate
     form_class = SlateForm
@@ -55,25 +49,11 @@ class SlateCreateView(LoginRequiredMixin, generic.edit.CreateView):
     def get_form_kwargs(self):
         form_kws = super(SlateCreateView, self).get_form_kwargs()
         form_kws["user"] = self.request.user
+        form_kws["formtype"] = "create"
         return form_kws
-
-    def form_valid(self, form):
-        actions = form.cleaned_data.pop('actions')
-        object = form.save(commit=False)
-        self.object = create_slate_helper(object, actions, self.request.user)
-        return super(SlateCreateView, self).form_valid(form)
 
     def get_success_url(self, **kwargs):
         return self.object.get_absolute_url()
-
-def edit_slate_helper(object, actions):
-    for action in actions:
-        if action not in object.actions.all():
-            SlateActionRelationship.objects.create(slate=object, action=action)
-    for action in object.actions.all():
-        if action not in actions:
-            sar = SlateActionRelationship.objects.get(slate=object, action=action)
-            sar.delete()
 
 class SlateEditView(UserPassesTestMixin, generic.edit.UpdateView):
     model = Slate
@@ -82,13 +62,8 @@ class SlateEditView(UserPassesTestMixin, generic.edit.UpdateView):
     def get_form_kwargs(self):
         form_kws = super(SlateEditView, self).get_form_kwargs()
         form_kws["user"] = self.request.user
+        form_kws["formtype"] = "update"
         return form_kws
-
-    def form_valid(self, form):
-        actions = form.cleaned_data.pop('actions')
-        object = form.save(commit=False)
-        self.object = edit_slate_helper(object, actions)
-        return super(SlateEditView, self).form_valid(form)
 
     def get_success_url(self, **kwargs):
         return self.object.get_absolute_url()

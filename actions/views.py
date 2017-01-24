@@ -46,18 +46,6 @@ class PublicActionListView(generic.ListView):
     model = Action
     queryset = Action.objects.filter(status__in=["rea", "fin"]).filter(current_privacy="pub")
 
-def change_action_helper(form, user, create=False, change_loc=False):
-    tags, form = tag_helpers.get_tags_from_valid_form(form)
-    object = form.save(commit=False)
-    if create:
-        object.creator = user
-    if change_loc:
-        object.save(update_fields=['location'])
-    else:
-        object.save()
-    tag_helpers.add_tags_to_object(object, tags)
-    return object
-
 class ActionCreateView(LoginRequiredMixin, generic.edit.CreateView):
     model = Action
     form_class = ActionForm
@@ -67,10 +55,6 @@ class ActionCreateView(LoginRequiredMixin, generic.edit.CreateView):
         form_kws["user"] = self.request.user
         form_kws["formtype"] = "create"
         return form_kws
-
-    def form_valid(self, form):
-        change_action_helper(form, self.request.user, create=True)
-        return super(ActionCreateView, self).form_valid(form)
 
     def get_success_url(self, **kwargs):
         return self.object.get_absolute_url()
@@ -88,11 +72,6 @@ class ActionEditView(UserPassesTestMixin, generic.edit.UpdateView):
         form_kws["user"] = self.request.user
         form_kws["formtype"] = "update"
         return form_kws
-
-    def form_valid(self, form):
-        change_loc = True if self.get_object().location != self.object.location else False
-        change_action_helper(form, self.request.user, create=False, change_loc=change_loc)
-        return super(ActionEditView, self).form_valid(form)
 
 class SlateRedirectView(generic.base.RedirectView):
     permanent = False

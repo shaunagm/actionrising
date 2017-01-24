@@ -17,7 +17,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.browser = webdriver.Firefox()
+        cls.browser = webdriver.Chrome("/usr/lib/chromium-browser/chromedriver")
         super(SeleniumTestCase, cls).setUpClass()
 
     def setUp(self):

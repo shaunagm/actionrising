@@ -1,69 +1,13 @@
-{% load action_extras %}
-{% get_duration_choices as duration_choices %}
+{% load plugin_templatetags %}
 
 Filter:
 
-{% if use_status != False %}
-<span id="visibility-hack" class="first-click"></a>
-<div class="btn-group" data-toggle="buttons" id="filter-active-button">
-  <label class="btn btn-primary active">
-    <input type="checkbox" autocomplete="off" id="filter-active" checked> Active Only
-  </label>
- </div>
- {% endif %}
-
- <div class="btn-group" data-toggle="buttons" id="filter-friends-button">
-  <label class="btn btn-primary">
-    <input type="checkbox" autocomplete="off" id="filter-friends"> Friends Only
-  </label>
-</div>
-
-{% include "actions/location_dropdown_include.html" %}
-
-<div class="btn-group" id="filter-priority-group">
-  <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-    Priority<span class="caret"></span></a>
-  <ul class="dropdown-menu">
-    <li><a class="filter-priority" href="#">Emergency</a></li>
-    <li><a class="filter-priority" href="#">High</a></li>
-    <li><a class="filter-priority" href="#">Medium</a></li>
-    <li><a class="filter-priority" href="#">Low</a></li>
-    <li class="divider"></li>
-    <li><a class="filter-priority" href="#">All</a></li>
-  </ul>
-</div>
-
-<div class="btn-group" id="filter-deadline-group">
-  <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-    Deadline <span class="caret"></span></a>
-  <ul class="dropdown-menu">
-    <li><a class="filter-deadline" href="#">Today</a></li>
-    <li><a class="filter-deadline" href="#">This Week</a></li>
-    <li><a class="filter-deadline" href="#">This Month</a></li>
-    <li class="divider"></li>
-    <li><a class="filter-deadline" href="#">All</a></li>
-  </ul>
-</div>
-
-<div class="btn-group" id="filter-duration-group">
-  <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-    Duration<span class="caret"></span></a>
-  <ul class="dropdown-menu">
-    {% for choice in duration_choices %}
-      <li><a class="filter-duration" href="#">{{ choice }}</a></li>
-    {% endfor %}
-    <li class="divider"></li>
-    <li><a class="filter-duration" href="#">All</a></li>
-  </ul>
-</div>
-
-{% if has_notes %}
-    <div class="btn-group" data-toggle="buttons">
-      <label class="btn btn-info" id="show-notes">
-        <input type="checkbox" autocomplete="off"> Toggle Notes
-      </label>
-    </div>
-{% endif %}
+{% include 'actions/action_controls/status_control.html' %}
+{% include 'actions/action_controls/friends_control.html' %}
+{% include 'actions/action_controls/priority_control.html' %}
+{% include 'actions/action_controls/deadline_control.html' %}
+{% include 'actions/action_controls/notes_control.html' %}
+{% get_plugin_templates "action_controls" %}
 
 <table class="table table-striped table-hover main-list" id="actions">
   <thead>
@@ -76,21 +20,24 @@ Filter:
       <th>Priority?</th>
       <th>Status?</th>
       <th>Friends?</th>
-      <th>District?</th>
-      <th>State?</th>
       <th>Notes?</th>
       <th>Duration?</th>
       <th>Manage</th>
+      {% get_plugin_templates "action_header_hidden" %}
     </tr>
   </thead>
   <tbody>
-      {% for object in object_list reversed %}
-          {% if has_notes %}
-              {% include "actions/action_row_include.html" with action=object.action rel=object %}
-          {% else %}
-              {% include "actions/action_row_include.html" with action=object %}
-          {% endif %}
-      {% endfor %}
+
+    {% for object in object_list reversed %}
+
+        {% if has_notes %}
+            {% include "actions/action_row_include.html" with action=object.action rel=object %}
+        {% else %}
+            {% include "actions/action_row_include.html" with action=object %}
+        {% endif %}
+
+    {% endfor %}
+
   </tbody>
 </table>
 

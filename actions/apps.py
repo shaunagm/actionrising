@@ -8,5 +8,4 @@ class ActionsConfig(AppConfig):
 
     def ready(self):
         from actstream import registry
-        import actions.signals
         registry.register(self.get_model('Action'))

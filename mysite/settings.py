@@ -100,7 +100,7 @@ DATABASES = {
         'USER': 'actnowadmin',
         'PASSWORD': os.environ['PG_DB_PASSWORD'],
         'HOST': 'localhost',
-        'PORT': '',
+        'PORT': '5432',
     }
 }
 
@@ -180,8 +180,6 @@ LOCALE_PATHS = (
     PROJECT_ROOT + '/website/locale',
 )
 
-SKIP_FUNCTIONAL_TESTS = False
-
 # Actstream
 ACTSTREAM_SETTINGS = {
     'MANAGER': 'actstream.managers.ActionManager',
@@ -209,3 +207,5 @@ EMAIL_USE_TLS = True
 PRODUCTION_DOMAIN = "https://www.actionrising.com"
 
 NOTIFY_EMAIL = "ActionRising <notify@www.actionrising.com>"   # was django-sparkpost@sparkpostbox.com
+
+SKIP_FUNCTIONAL_TESTS = False

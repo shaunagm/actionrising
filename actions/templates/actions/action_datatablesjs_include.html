@@ -18,8 +18,11 @@ function datelogic(days_til_deadline, deadline_status) {
 
 function locationlogic(filtered_location, data) {
 
-      user_state = "{{ user.profile.state }}";
-      user_district = "{{ user.profile.district }}";
+      {% load location_tags %}
+      {% get_state_and_district request.user as location_dict %}
+
+      user_state = "{{ location_dict.state }}";
+      user_district = "{{ location_dict.district }}";
       var state = data[state_index];
       var district = data[district_index];
 
@@ -46,7 +49,7 @@ function locationlogic(filtered_location, data) {
 
 function format ( d ) {
     // `d` is the original data object for the row
-    return 'Notes: ' + d[10];
+    return 'Notes: ' + d[8];
 }
 
 $(document).ready(function() {
@@ -82,27 +85,27 @@ $(document).ready(function() {
                 "name":  "creator"
             },
             {
-                "targets": [ 8 ],
+                "targets": "district",
                 "visible": false,
                 "name":  "district"
             },
             {
-                "targets": [ 9 ],
+                "targets": "state",
                 "visible": false,
                 "name":  "state"
             },
             {
-                "targets": [ 10 ],
+                "targets": [ 8 ],
                 "visible": false,
                 "name":  "notes"
             },
             {
-                "targets": [ 11 ],
+                "targets": [ 9 ],
                 "visible": false,
                 "name":  "duration"
             },
             {
-                "targets": [ 12 ],
+                "targets": [ 10 ],
                 "orderable": false,
                 "visible": manager_column_visible,
                 "name":  "manage"

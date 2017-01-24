@@ -8,9 +8,7 @@ from django.contrib.auth.models import User
 from profiles.models import Profile, ProfileActionRelationship
 
 from mysite.lib.utils import slugify_helper
-from actions.lib import act_location
 from actions.models import Action
-from actions.views import change_action_helper
 from actions.forms import ActionForm
 from tags.models import Tag
 
@@ -83,28 +81,3 @@ class TestActionForms(TestCase):
         from django.forms.widgets import HiddenInput
         initial_form = ActionForm(user=self.buffy, formtype="create")
         self.assertEqual(type(initial_form.fields['status'].widget), HiddenInput)
-
-class TestLocation(TestCase):
-
-    def setUp(self):
-        self.testing_user = User.objects.create(username="testing_user")
-        self.action = Action.objects.create(title="Test Action with Location", creator=self.testing_user)
-
-    @mock.patch('actions.lib.act_location.geocode')
-    @mock.patch('actions.lib.act_location.find_congressional_district')
-    def test_populate_location_and_district(self, find_congressional_district, geocode):
-
-        geocoded_location = mock.MagicMock()
-        geocoded_location.latitude = 0.0
-        geocoded_location.longitude = 0.0
-        geocode.return_value = geocoded_location
-
-        find_congressional_district - mock.MagicMock()
-        find_congressional_district.return_value = {"state":"MA","district":5}
-
-        act_location.populate_location_and_district(self.action)
-
-        self.assertEqual(self.action.lat, 0.0)
-        self.assertEqual(self.action.lon, 0.0)
-        self.assertEqual(self.action.state, "MA")
-        self.assertEqual(self.action.district, "MA-5")

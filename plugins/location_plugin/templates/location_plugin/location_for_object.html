@@ -1,0 +1,8 @@
+{% load location_tags %}
+{% get_location object as location %}
+
+{% if location %}
+    <i id="location-info" class="fa fa-globe" aria-hidden="true">
+        {{ location }}
+    </i>
+{% endif %}

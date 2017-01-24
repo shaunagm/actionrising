@@ -65,14 +65,6 @@ class ProfileEditView(UserPassesTestMixin, generic.UpdateView):
     def get_success_url(self, **kwargs):
         return self.object.get_absolute_url()
 
-    def form_valid(self, form):
-        object = form.save(commit=False)
-        uf = []
-        if self.get_object().location != self.object.location:
-            uf = ['location']
-        self.object = object.save(update_fields=uf)
-        return super(ProfileEditView, self).form_valid(form)
-
 class ProfileToDoView(UserPassesTestMixin, generic.DetailView):
     template_name = 'profiles/todo.html'
     model = User
@@ -228,7 +220,7 @@ def manage_action(request, slug):
             context = {'form': form}
             render(request, 'profiles/manage_action.html', context)
     else:
-        form = ProfileActionRelationshipForm(par=par, initial={'priority': par.priority, 'status': par.status})
+        form = ProfileActionRelationshipForm(par=par, initial={'priority': par.priority, 'status': par.status, 'notes': par.notes })
         context = {'form': form}
         return render(request, 'profiles/manage_action.html', context)
 
