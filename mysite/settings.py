@@ -209,5 +209,3 @@ PRODUCTION_DOMAIN = "https://www.actionrising.com"
 NOTIFY_EMAIL = "ActionRising <notify@www.actionrising.com>"   # was django-sparkpost@sparkpostbox.com
 
 SKIP_FUNCTIONAL_TESTS = False
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 
