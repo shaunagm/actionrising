@@ -9,6 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('profiles', '0034_auto_20170111_1758'),
+        ('location_plugin', '0004_auto_20170123_1815'),
     ]
 
     operations = [
