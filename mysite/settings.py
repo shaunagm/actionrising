@@ -33,6 +33,7 @@ SITE_ID = 1
 # Application definition
 
 INSTALLED_APPS = [
+    'mysite',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,7 +43,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'datetimewidget',
     'bootstrap3',
-    'mysite',
     'profiles',
     'actions',
     'slates',
@@ -209,3 +209,5 @@ PRODUCTION_DOMAIN = "https://www.actionrising.com"
 NOTIFY_EMAIL = "ActionRising <notify@www.actionrising.com>"   # was django-sparkpost@sparkpostbox.com
 
 SKIP_FUNCTIONAL_TESTS = False
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 
