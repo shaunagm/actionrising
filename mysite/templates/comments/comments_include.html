@@ -1,6 +1,6 @@
 {% load comments %}
 
-{% if user.is_authenticated %}
+{% if user.is_authenticated and user.profile.verified %}
 
     <a id="add_comment_button" href="#add_comment" class="btn btn-warning" data-toggle="collapse">
       Add a comment</a>

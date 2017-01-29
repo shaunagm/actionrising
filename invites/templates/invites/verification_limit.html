@@ -1,0 +1,21 @@
+{% extends "mysite/base.html" %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-sm-10 col-sm-offset-1">
+    <h2>We're sorry</h2>
+    <p>All unverified users are limited to
+      {% if actions %} 10 actions {% endif %} {% if slates %} 5 slates {% endif %},
+      and you've reached your limit.</p>
+    <p>We try to verify all users within 7 days of signup.  If it has been more than
+      7 days since you signed up, please contact us and we'll try to get you verified
+      as soon as possible.</p>
+    <p>Please note that 'verification' is not about proving a link to your 'real life'
+      identity or otherwise sharing private data.  We're just trying to ensure that
+      you're not a spammer, troll or harasser.  It's our way of creating a diverse and
+      healthy community.  Thanks for your patience.</p>
+  </div>
+</div>
+
+{% endblock content %}

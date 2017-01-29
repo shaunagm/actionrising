@@ -55,6 +55,12 @@ class SlateCreateView(LoginRequiredMixin, generic.edit.CreateView):
     def get_success_url(self, **kwargs):
         return self.object.get_absolute_url()
 
+    def get(self, request, *args, **kwargs):
+        if not request.user.profile.verified and len(request.user.slate_set.all()) > 5:
+            return render(request, 'invites/verification_limit.html', {'slates': True})
+        else:
+            return super(SlateCreateView, self).get(request, *args, **kwargs)
+
 class SlateEditView(UserPassesTestMixin, generic.edit.UpdateView):
     model = Slate
     form_class = SlateForm
