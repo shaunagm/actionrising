@@ -13,6 +13,9 @@ def about(request):
     time_elapsed = (date.today() - date(2016, 11, 11)).days
     return render(request, 'mysite/about.html', {'time_elapsed': time_elapsed})
 
+class PrivacyPolicyView(generic.TemplateView):
+    template_name = "mysite/privacy_policy.html"
+
 def change_password_redirect(request):
     return render(request, 'mysite/landing.html')
 

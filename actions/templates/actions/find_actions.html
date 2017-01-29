@@ -1,0 +1,33 @@
+{% extends "mysite/base.html" %}
+
+{% block content %}
+
+    <div class="row">
+       <div class="col-sm-8 col-sm-offset-2 center-text">
+           <h1>Get started taking actions</h1>
+       </div>
+    </div>
+
+    <div class="row">
+       <div class="col-sm-3 center-text">
+           <h3>Learn</h3>
+           <i class="fa fa-book fa-3x text-primary" aria-hidden="true"></i>
+           <h4><a href="{% url 'action-learn' %}">Learn about</a> how the site works
+             and the different kinds of actions you can take.</h4>
+       </div>
+       <div class="col-sm-6 center-text">
+           <h3>Search</h3>
+           <i class="fa fa-search fa-3x text-primary" aria-hidden="true"></i>
+           <h4><a href="">Answer some questions</a> about what you're looking for,
+             and we'll find actions for you.</h4>
+           <h4>Or, skip straight to the <a href=''>advanced search view</a>.</h4>
+       </div>
+       <div class="col-sm-3 center-text">
+           <h3>Follow</h3>
+           <i class="fa fa-user-circle fa-3x text-primary" aria-hidden="true"></i>
+           <h4><a href="">Follow users and slates</a> to get recommendations straight
+             from people you trust.</h4>
+       </div>
+    </div>
+
+{% endblock content %}

@@ -1,0 +1,79 @@
+{% extends "mysite/base.html" %}
+
+{% block content %}
+
+    <div class="row">
+       <div class="col-sm-8 col-sm-offset-2 center-text">
+           <h1>How actions work</h1>
+       </div>
+     </div>
+
+     <div class="row">
+        <div class="col-sm-8 col-sm-offset-2">
+
+          <h3> The basics</h3>
+
+           <p>At the heart of ActionRising are the specific actions you can take.  Every
+             action has a few things in common:</p>
+
+             <ul>
+               <li>A description which you can fill out any way you please, including
+                 adding links.</li>
+               <li>A privacy setting used to determine who can see the action.</li>
+               <li>A status indicating whether an action is active or finished.  In some
+                 cases, actions which turn out to be bad ideas may get the status 'withdrawn'.</li>
+             </ul>
+
+          <p>Users can take an action by clicking the 'Add to your todo list'
+            button.  Once they've done so, they have a number of options.  They can
+            write a note to themselves about the action, suggest it to their friends,
+            or make a commitment to take the action by asking a friend to remind them
+            of it.  They can comment on the action, flag it if there's a problem with it,
+            and, if the privacy is set to 'public', share it on social media.  And,
+            of course, they can mark it as 'done'.  This merely says that they've completed
+            the action.  It doesn't mark the action as done for anyone else -- even
+            if they created the action.</p>
+
+          <p>You can see a list of people taking a given action on that action's page.</p>
+
+          <h3> Optional features</h3>
+
+           <p>In addition, there are some optional features that an action can enable.
+             Here's the current list -- more are being added all the time!</p>
+
+             <ul>
+               <li>Tags: these indicate what type of action (phone campaign, pledge) or topic
+                 (immigration, climate change) it relates to.</li>
+               <li>Location: some actions have locations, allowing users to filter for those
+               in their state or congressional district.</li>
+               <li>Deadlines: </li>
+             </ul>
+
+            <h3>Slates, filters and follows</h3>
+
+            <p>This site has a number of tools to help you find and manage actions.</p>
+
+            <p>One way to curate a list of actions is to create a slate.  Slates are
+              lists of actions which can be shared with others, and are often used for
+              events.  If you like a given slate, you can choose to follow it, and you'll
+              be notified when new actions are added.</p>
+
+            <p>Filters are used to narrow down search results and help you find relevant
+              actions.  They're basically a series of search terms which you can save
+              to use later.  You can also take the results of a filtered search and
+              save them as a slate to share with others.</p>
+
+            <p>In addition to following slates, you can also follow users.  By default,
+              this puts their activity in your feed *and* sends you email notifications
+              whenever the user or slate adds a new action, but you can turn off email
+              notifications for this if you find it annoying.</p>
+
+            <h3>Questions?</h3>
+
+            <p>It's a lot to take in, we know!  If you still have questions, contact
+              us for help.</p>
+
+       </div>
+    </div>
+
+{% endblock content %}

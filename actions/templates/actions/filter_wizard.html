@@ -1,0 +1,42 @@
+{% extends "mysite/base.html" %}
+
+{% block content %}
+
+<div class="row">
+   <div class="col-sm-8 col-sm-offset-2 center-text">
+
+       <h2>{{ form.question }}</h2>
+       <h2>Question {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</h2>
+       {% if action_count %}
+          <h5>Results filtered down to {{ action_count }} action{{ action_count|pluralize }}</h5>
+       {% endif %}
+
+       <form id="filterform" action="" method="post">{% csrf_token %}
+
+       <div class="form_field_wizard">
+           {{ wizard.management_form }}
+           {% if wizard.form.forms %}
+               {{ wizard.form.management_form }}
+               {% for form in wizard.form.forms %}
+                   {{ form }}
+               {% endfor %}
+           {% else %}
+               {{ wizard.form }}
+           {% endif %}
+       </div>
+
+       <input type="submit" name="next_question" value="Next Question"/>
+       <button onClick=setEndEarly()>Get Results</a>
+
+       </form>
+
+   </div>
+</div>
+
+{% endblock content %}
+
+{% block page_specific_javascript %}
+    function setEndEarly() {
+      document.getElementById("end_early_field").value = "True";
+    }
+{% endblock %}

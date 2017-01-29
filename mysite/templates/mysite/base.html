@@ -36,55 +36,23 @@
     {% endblock page_specific_css%}
 
 </head>
+
 <body id="actionrisingbody">
 
-  <div class="navbar navbar-default navbar-fixed-top">
-     <div class="container">
-       <div class="navbar-header">
-         <a href="{% url 'index' %}" class="navbar-brand">ActionRising</a>
-         <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
-           <span class="icon-bar"></span>
-           <span class="icon-bar"></span>
-           <span class="icon-bar"></span>
-         </button>
-       </div>
-       <div class="navbar-collapse collapse" id="navbar-main">
-         <ul class="nav navbar-nav">
-           {% if request.user.is_authenticated %}
-               <li><a href="{% url 'about' %}">About</a></li>
-               <li><a href="{{ request.user.profile.get_absolute_url }}">Your Profile</a></li>
-               <li><a href="{% url 'to_do' request.user.pk %}">Your ToDos</a></li>
-               <li><a href="{% url 'feed' request.user.pk %}">Your Feed</a></li>
-               <li><a href="{% url 'logout' %}" class="log_button">Log Out</a></li>
-           {% else %}
-               <li><a href="{% url 'login' %}" class="log_button">Log In</a></li>
-           {% endif %}
-         </ul>
-         <ul class="nav navbar-nav navbar-right">
-           {% if request.user.is_authenticated %}
-               <li><a href="{% url 'actions' %}">Actions</a></li>
-               <li><a href="{% url 'create_action' %}">Create Action</a></li>
-               <li><a href="{% url 'slates' %}">Slates</a></li>
-               <li><a href="{% url 'create_slate' %}">Create Slate</a></li>
-               <li><a href="{% url 'profiles' %}">Profiles</a></li>
-           {% endif %}
-         </ul>
-       </div>
-     </div>
-   </div>
-
+   {% include 'mysite/header.html' %}
 
    <div class="container-fluid">
       {% block content %}
       {% endblock content %}
    </div>
 
+   {% include 'mysite/footer.html' %}
+
 </body>
 
 <script>
-{% block page_specific_javascript %}
-{% endblock page_specific_javascript %}
-
+    {% block page_specific_javascript %}
+    {% endblock page_specific_javascript %}
 </script>
 
 </html>
