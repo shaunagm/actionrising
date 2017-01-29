@@ -25,7 +25,7 @@ from profiles.lib.status_helpers import close_commitment_when_PAR_is_closed, reo
 class Profile(models.Model):
     """Stores a single user profile"""
     user = models.OneToOneField(User, unique=True)
-    verified = models.BooleanField(default=False)
+    unverified = models.BooleanField(default=True)
     description = RichTextField(max_length=2500, blank=True, null=True)  # TODO Rich text?
     links = models.CharField(max_length=400, blank=True, null=True)
     date_joined = models.DateTimeField(default=timezone.now)
