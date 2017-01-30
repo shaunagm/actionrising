@@ -1,0 +1,36 @@
+{% load static %}
+
+<footer class="navbar navbar-fixed-bottom ar-footer">
+  <div class="container">
+    <div class="row">
+
+      <div class="col-sm-2 copyright">
+        <img src="{% static 'images/logo_notext_bright.png' %}">
+        © 2017 ActionRising
+      </div>
+
+     <div class="col-sm-5">
+       <ul>
+         <li><a href="{% url 'about' %}">About</a></li>
+         <li><a href="{% url 'privacy-policy' %}">Privacy Policy</a></li>
+         <li><a href="{% url 'about' %}">Contact & Support</a></li>
+       </ul>
+       <ul>
+         <li><a href="{% url 'to_do' request.user.pk %}">Give Feedback</a></li>
+         <li><a href="{% url 'feed' request.user.pk %}">Donate</a></li>
+         <li><a href="{% url 'feed' request.user.pk %}">Contribute</a></li>
+       </ul>
+       <ul>
+         <li><a href="{% url 'about' %}">Urgent Actions</a></li>
+         <li><a href="{% url 'about' %}">Popular Actions</a></li>
+         <li><a href="{% url 'about' %}">Popular Slates</a></li>
+       </ul>
+     </div>
+
+     <div class="col-sm-5 testimonial">
+       "This site is great!  It helps me find actions!  A+ would recommend joining." ~ Woo
+     </div>
+
+    </div>
+  </div>
+</footer>

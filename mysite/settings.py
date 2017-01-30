@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'plugins.location_plugin',
     'functional_tests',
     'django_comments',
+    'formtools',
     'ckeditor',
     'actstream',
 ]

@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.views import generic
 from django.contrib.auth.mixins import UserPassesTestMixin,  LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from formtools.wizard.views import SessionWizardView
 
 from flags.lib.flag_helpers import get_user_flag_if_exists
 from mysite.lib.privacy import (check_privacy, filter_list_for_privacy,
@@ -13,7 +14,7 @@ from mysite.lib.privacy import (check_privacy, filter_list_for_privacy,
 from profiles.lib.trackers import get_tracker_data_for_action
 from tags.lib import tag_helpers
 from actions.models import Action
-from actions.forms import ActionForm
+from actions import forms
 
 @login_required
 def index(request):
@@ -48,7 +49,7 @@ class PublicActionListView(generic.ListView):
 
 class ActionCreateView(LoginRequiredMixin, generic.edit.CreateView):
     model = Action
-    form_class = ActionForm
+    form_class = forms.ActionForm
 
     def get_form_kwargs(self):
         form_kws = super(ActionCreateView, self).get_form_kwargs()
@@ -67,7 +68,7 @@ class ActionCreateView(LoginRequiredMixin, generic.edit.CreateView):
 
 class ActionEditView(UserPassesTestMixin, generic.edit.UpdateView):
     model = Action
-    form_class = ActionForm
+    form_class = forms.ActionForm
 
     def test_func(self):
         obj = self.get_object()
@@ -78,6 +79,35 @@ class ActionEditView(UserPassesTestMixin, generic.edit.UpdateView):
         form_kws["user"] = self.request.user
         form_kws["formtype"] = "update"
         return form_kws
+
+class FindActionsLandingView(LoginRequiredMixin, generic.TemplateView):
+    template_name = "actions/find_actions.html"
+
+class CreateActionsLandingView(LoginRequiredMixin, generic.TemplateView):
+    template_name = "actions/create_actions.html"
+
+class ActionLearnView(LoginRequiredMixin, generic.TemplateView):
+    template_name = "actions/learn.html"
+
+def stop_early(wizard):
+    # Bit of a hack, since you have to set the 'skip' condition for each step.
+    for step in range(0,6):
+        cleaned_data = wizard.get_cleaned_data_for_step(str(step))
+        print(cleaned_data)
+        # If thing return false
+    return True
+
+class FilterWizard(SessionWizardView):
+    template_name = "actions/filter_wizard.html"
+    form_list = [forms.FilterWizard_Kind, forms.FilterWizard_Topic, forms.FilterWizard_Time,
+        forms.FilterWizard_Deadline, forms.FilterWizard_Location, forms.FilterWizard_Friends]
+    condition_dict = dict.fromkeys([str(i) for i in range(0,6)], stop_early)
+
+    def done(self, form_list, **kwargs):
+        results = []
+        for form in form_list:
+            results = form.filter_results(self, results)
+        return render(self.request, 'actions/wizard_results.html', { 'results': results })
 
 class SlateRedirectView(generic.base.RedirectView):
     permanent = False
