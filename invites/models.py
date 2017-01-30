@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-import datetime, json, random, string
+import datetime, json, random, string, re
 
 from django.utils import timezone
 from django.core.mail import send_mail
@@ -12,7 +12,7 @@ from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 from mysite.settings import NOTIFY_EMAIL, PRODUCTION_DOMAIN
 from mysite.lib.utils import disable_for_loaddata
-from notifications.lib.email_handlers import request_email
+from notifications.lib.email_handlers import request_email, generic_admin_email
 
 # Workflow
 
@@ -27,9 +27,13 @@ def validate_email(email):
         raise ValidationError("This email is already being used.")
 
 def validate_username(username):
-    user_name = User.objects.filter(username=username)
+    user_name = User.objects.filter(username__iexact=username)
     if user_name:
         raise ValidationError("This username is already taken.")
+    match = re.match(r'^[\w.@+-]+$', username)
+    if not match:
+        raise ValidationError("Enter a valid username. This value may contain only " \
+            + "letters, numbers, and @/./+/-/_ characters.")
 
 class Invite(models.Model):
     username = models.CharField(max_length=50, blank=True, null=True, validators=[validate_username])
@@ -58,6 +62,9 @@ class Invite(models.Model):
             self.confirmation_url_string = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(30))
         if self.request_status == "submitted" and self.self_submitted:
             request_email(self)
+            message = "Name: %s, Email: %s, Reasoning: %s " % ( self.username, self.email,
+                str(self.reasoning))
+            generic_admin_email("New user on Actionising", message)
             self.request_status = "emailed"
         super(Invite, self).save(*args, **kwargs)
 
