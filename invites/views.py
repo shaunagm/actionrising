@@ -9,69 +9,40 @@ from django.core.urlresolvers import reverse
 
 from mysite.lib.utils import get_hash_given_request
 from invites.models import Invite
-from invites.forms import InviteForm, InviteFriendForm, CreateUserFromInviteForm
+from invites.forms import SignUpForm
+from notifications.lib.email_handlers import generic_admin_email
 
-class RequestAccountView(generic.edit.CreateView):
+class SignUpView(generic.edit.CreateView):
     model = Invite
-    form_class = InviteForm
+    form_class = SignUpForm
+    template_name = "invites/signup_form.html"
     success_url = "/invites/sent"
 
     def form_valid(self, form):
         hashstring = get_hash_given_request(self.request)
-        date_from = datetime.datetime.now() - datetime.timedelta(days=1)
-        if Invite.objects.filter(requester_hash=hashstring).filter(initial_request_date__gte=date_from):
-            return HttpResponseRedirect(reverse('sent-invite'))
-        else:
-            form.instance.requester_hash = hashstring
-            form.instance.add_inviter(self.request.user.username)
-            return super(RequestAccountView, self).form_valid(form)
+        date_from = datetime.datetime.now() - datetime.timedelta(hours=1)
+        invites = Invite.objects.filter(requester_hash=hashstring).filter(initial_request_date__gte=date_from)
+        # if invites:
+        #     invite_strings = [invite.string_representation() for invite in invites]
+        #     generic_admin_email("New account flagged as spam", ("---").join(invite_strings))
+        #     return HttpResponseRedirect(reverse('sent-invite'))
+        # else:
+        form.instance.requester_hash = hashstring
+        form.instance.add_inviter(self.request.user.username)
+        form.instance.self_submitted = True
+        return super(SignUpView, self).form_valid(form)
 
-def request_confirmation_view(request, slug):
+def signup_confirmation_view(request, slug):
     try:
         invite = Invite.objects.get(confirmation_url_string=slug)
         if invite.request_status != "emailed":
             return HttpResponseRedirect(reverse('generic_problem'))
-        generated_password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
-        user = User.objects.create_user(username=invite.username, password=generated_password, email=invite.email)
-        invite.request_status = "done"
-        invite.save()
+        user = User.objects.get(username=invite.username)
+        user.is_active = True
+        user.save()
     except:
         return HttpResponseRedirect(reverse('generic_problem'))
-    return render(request, 'invites/request_confirmation.html', {
-        'generated_password': generated_password,
-        'username': user.username
-    })
-
-class InviteFriendView(LoginRequiredMixin, generic.edit.CreateView):
-    model = Invite
-    form_class = InviteFriendForm
-    success_url = "/invites/sent"
-
-    def form_valid(self, form):
-        form.instance.add_inviter(self.request.user.username)
-        return super(InviteFriendView, self).form_valid(form)
-
-def invite_confirmation_view(request, slug):
-    try:
-        invite = Invite.objects.get(confirmation_url_string=slug)
-        if request.method == 'POST':
-            form = CreateUserFromInviteForm(request.POST)
-            if form.is_valid(): # Save and go to confirmation page
-                form.save(email=invite.email)
-                invite.request_status = "done"
-                invite.save()
-                return render(request, 'invites/request_confirmation.html', {})
-            else: # Return with errors
-                context = {'form': form}
-                render(request, 'invites/finish_invite_signup.html', context)
-        else:
-            if invite.request_status == "emailed":
-                form = CreateUserFromInviteForm()
-                context = {'form': form}
-                return render(request, 'invites/finish_invite_signup.html', context)
-    except:
-        return HttpResponseRedirect(reverse('generic_problem'))
-    return HttpResponseRedirect(reverse('generic_problem'))
+    return render(request, 'invites/signup_confirmation.html')
 
 class SentView(generic.TemplateView):
     template_name = "invites/sent_invite.html"

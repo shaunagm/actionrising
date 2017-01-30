@@ -61,7 +61,7 @@ class BasePage(PageObject):
         login_page.log_in(username=username, password=password)
 
 class LoggedOutLandingPage(BasePage):
-    request_account = PageElement(link_text="Request an account.")
+    signup = PageElement(link_text="Sign Up")
     public_actions = PageElement(link_text="list of public actions")
 
 class LoggedInLandingPage(BasePage):

@@ -164,7 +164,7 @@ class LoggedOutUser(SeleniumTestCase):
         # Login, go to action edit page, create action
         self.landing_page = LoggedOutLandingPage(self.browser, root_uri=self.live_server_url)
         self.landing_page.go_to_index_if_necessary()
-        self.assertEquals(self.landing_page.request_account.text, "Request an account.")
+        self.assertEquals(self.landing_page.signup.text, "Sign Up")
         self.landing_page.public_actions.click()
         self.actions_table = BasicActionListPage(self.browser, root_uri=self.live_server_url)
         self.actions_table.go_to_public_actions_page()

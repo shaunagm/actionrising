@@ -251,7 +251,7 @@ def hold_accountable_email_nonuser(recipient_email, commitment):
 ###########################
 
 def request_email(invite):
-    subject = "Your request to join ActionRising has been approved"
+    subject = "Confirm your ActionRising account"
 
     ctx = {
         # Required fields
@@ -306,3 +306,6 @@ def nonuser_email(recipient_email, notifier, message, instance):
     plain_message = render_to_string('notifications/email_templates/plain/nonuser.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/nonuser.html', ctx)
     return send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient_email], html_message=html_message)
+
+def generic_admin_email(subject, plain_message):
+    return send_mail(subject, plain_message, NOTIFY_EMAIL, ["actionrisingsite@gmail.com"], html_message=plain_message)
