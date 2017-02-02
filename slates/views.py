@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from flags.lib.flag_helpers import get_user_flag_if_exists
 from mysite.lib.privacy import (check_privacy, filter_list_for_privacy,
     filter_list_for_privacy_annotated)
+from misc.models import RecommendationTracker
 from profiles.lib.trackers import get_tracker_data_for_slate
 from slates.models import Slate, SlateActionRelationship
 from slates.forms import SlateForm, SlateActionRelationshipForm
@@ -41,6 +42,11 @@ class SlateListView(LoginRequiredMixin, generic.ListView):
     template_name = "slates/slates.html"
     model = Slate
     queryset = Slate.objects.filter(status__in=["rea", "fin"]).filter(current_privacy__in=["pub", "sit"])
+
+class PublicSlateListView(generic.ListView):
+    template_name = "slates/slates.html"
+    model = Slate
+    queryset = Slate.objects.filter(status__in=["rea", "fin"]).filter(current_privacy="pub")
 
 class SlateCreateView(LoginRequiredMixin, generic.edit.CreateView):
     model = Slate
@@ -96,3 +102,13 @@ def manage_action_for_slate(request, pk):
         form = SlateActionRelationshipForm(initial={'priority': sar.priority, 'status': sar.status, 'notes': sar.notes})
         context = {'form': form, 'sar': sar}
         return render(request, 'slates/manage_action_for_slate.html', context)
+
+class FollowUsersAndSlates(LoginRequiredMixin, generic.TemplateView):
+    template_name = "slates/follow_users_and_slates.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(FollowUsersAndSlates, self).get_context_data(**kwargs)
+        rectracker = RecommendationTracker.objects.first()
+        context['users'] = rectracker.retrieve_users()
+        context['slates'] = rectracker.retrieve_slates()
+        return context

@@ -6,18 +6,18 @@ from django.views import generic
 from django.core.urlresolvers import reverse
 
 def index(request):
-    # Redirect to about page until we've  got a better landing page
+    if request.user.is_authenticated():
+        return HttpResponseRedirect(reverse('dashboard'))
     return render(request, 'mysite/landing.html')
 
 def about(request):
-    time_elapsed = (date.today() - date(2016, 11, 11)).days
-    return render(request, 'mysite/about.html', {'time_elapsed': time_elapsed})
+    return render(request, 'mysite/about.html')
 
 class PrivacyPolicyView(generic.TemplateView):
     template_name = "mysite/privacy_policy.html"
 
 def change_password_redirect(request):
-    return render(request, 'mysite/landing.html')
+    return HttpResponseRedirect(reverse('index'))
 
 def acme_challenge(request):
     return render(request, 'mysite/challenge.html')

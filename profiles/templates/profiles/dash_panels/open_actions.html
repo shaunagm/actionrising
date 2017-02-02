@@ -1,0 +1,22 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <a data-toggle="collapse" href="#openactions">
+        Your Open Actions
+      </a>
+      <a href="{% url 'to_do' %}" title="Open in new page" class="extra-padding-left">↱</a>
+      <a data-toggle="collapse" href="#openactions" title="Collapse">
+          <div class="float-right">▲</div>
+      </a>
+    </h3>
+  </div>
+  <div id="openactions" class="panel-collapse">
+   <div class="panel-body">
+     {% for par in open_actions %}
+         <a href="{{ par.action.get_absolute_url}}">{{ par.action.title }}</a> <br />
+     {% empty %}
+         You don't have any open actions. <a href="{% url 'find-actions-landing' %}">Find some.</a>
+     {% endfor %}
+   </div>
+ </div>
+</div>

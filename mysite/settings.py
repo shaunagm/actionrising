@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'profiles',
     'actions',
+    'misc',
     'slates',
     'tags',
     'flags',
@@ -54,7 +55,6 @@ INSTALLED_APPS = [
     'plugins.location_plugin',
     'functional_tests',
     'django_comments',
-    'formtools',
     'ckeditor',
     'actstream',
 ]
@@ -139,7 +139,7 @@ USE_L10N = True
 USE_TZ = True
 
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/profiles/dashboard'
 LOGIN_URL = '/login/'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/

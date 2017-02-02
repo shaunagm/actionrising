@@ -1,6 +1,6 @@
 from itertools import chain
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views import generic
@@ -13,8 +13,9 @@ from mysite.lib.privacy import (check_privacy, filter_list_for_privacy,
     filter_list_for_privacy_annotated)
 from profiles.lib.trackers import get_tracker_data_for_action
 from tags.lib import tag_helpers
-from actions.models import Action
+from actions.models import Action, ActionFilter
 from actions import forms
+from plugins import plugin_helpers
 
 @login_required
 def index(request):
@@ -89,25 +90,52 @@ class CreateActionsLandingView(LoginRequiredMixin, generic.TemplateView):
 class ActionLearnView(LoginRequiredMixin, generic.TemplateView):
     template_name = "actions/learn.html"
 
-def stop_early(wizard):
-    # Bit of a hack, since you have to set the 'skip' condition for each step.
-    for step in range(0,6):
-        cleaned_data = wizard.get_cleaned_data_for_step(str(step))
-        print(cleaned_data)
-        # If thing return false
-    return True
+def filter_wizard_forms(request):
+    form_list = [forms.FilterWizard_Kind(), forms.FilterWizard_Topic(),
+        forms.FilterWizard_Time(), forms.FilterWizard_Friends(request)]
+    plugin_forms = plugin_helpers.get_filter_forms_for_plugins(request)
+    for index, form in enumerate(plugin_forms):
+        form_list.append(form)
+    return form_list
 
-class FilterWizard(SessionWizardView):
-    template_name = "actions/filter_wizard.html"
-    form_list = [forms.FilterWizard_Kind, forms.FilterWizard_Topic, forms.FilterWizard_Time,
-        forms.FilterWizard_Deadline, forms.FilterWizard_Location, forms.FilterWizard_Friends]
-    condition_dict = dict.fromkeys([str(i) for i in range(0,6)], stop_early)
+def process_filter_wizard_forms(request):
+    results = []
+    actionfilter = ActionFilter.objects.create(creator=request.user)
+    for form in filter_wizard_forms(request):
+        form.update_filter(actionfilter, request)
+    return actionfilter
 
-    def done(self, form_list, **kwargs):
-        results = []
-        for form in form_list:
-            results = form.filter_results(self, results)
-        return render(self.request, 'actions/wizard_results.html', { 'results': results })
+def filter_wizard_view(request):
+    if request.method == 'POST':
+        actionfilter = process_filter_wizard_forms(request)
+        return redirect('filter', pk=actionfilter.pk)
+    else:
+        forms = filter_wizard_forms(request)
+        return render(request, 'actions/filter_wizard.html', context={'forms': forms })
+
+class ActionFilterView(UserPassesTestMixin, generic.DetailView):
+    template_name = 'actions/filter_wizard_results.html'
+    model = ActionFilter
+
+    def get_context_data(self, **kwargs):
+        context = super(ActionFilterView, self).get_context_data(**kwargs)
+        context['actions'] = self.get_object().filter_actions()
+        return context
+
+    def test_func(self):
+        '''Don't display unless user owns Filter'''
+        obj = self.get_object()
+        return obj.creator == self.request.user
+
+def filter_save_status(request, pk, save_or_delete):
+    actionfilter = ActionFilter.objects.get(pk=pk)
+    if actionfilter.creator == request.user:
+        if save_or_delete == "save":
+            actionfilter.saved = True
+        if save_or_delete == "delete":
+            actionfilter.saved = False
+        actionfilter.save()
+    return redirect('filter', pk=actionfilter.pk)
 
 class SlateRedirectView(generic.base.RedirectView):
     permanent = False

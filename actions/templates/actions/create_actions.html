@@ -9,21 +9,24 @@
     </div>
 
     <div class="row">
-       <div class="col-sm-4 center-text">
-           <h3>Learn</h3>
-           <a href=""><i class="fa fa-book fa-3x text-primary" aria-hidden="true"></i></a>
-           <h4><a href="{% url 'action-learn' %}">Learn about</a> the different kinds of actions you can create.</h4>
-       </div>
-       <div class="col-sm-4 center-text">
-           <h3>Make</h3>
-           <i class="fa fa-search fa-3x text-primary" aria-hidden="true"></i>
-           <h4><a href="{% url 'create_action' %}">Create new actions</a>.</h4>
-       </div>
-       <div class="col-sm-4 center-text">
-           <h3>Collect</h3>
-           <i class="fa fa-user-circle fa-3x text-primary" aria-hidden="true"></i>
-           <h4><a href="">Create a list</a> of related actions to share with others.</h4>
-       </div>
-    </div>
-
+       <div class="col-sm-10 col-sm-offset-1 center-text">
+            <div class="row">
+               <div class="col-sm-4 center-text">
+                   <h3>Learn</h3>
+                   <a href=""><i class="fa fa-book fa-3x text-primary" aria-hidden="true"></i></a>
+                   <h4><a href="{% url 'action-learn' %}">Learn about</a> the different kinds of actions you can create.</h4>
+               </div>
+               <div class="col-sm-4 center-text">
+                   <h3>Make</h3>
+                   <i class="fa fa-plus-square-o fa-3x text-primary" aria-hidden="true"></i>
+                   <h4><a href="{% url 'create_action' %}">Create new actions</a>.</h4>
+               </div>
+               <div class="col-sm-4 center-text">
+                   <h3>Collect</h3>
+                   <i class="fa fa-list-ul fa-3x text-primary" aria-hidden="true"></i>
+                   <h4><a href="{% url 'create_slate' %}">Create a list</a> of related actions to share with others.</h4>
+               </div>
+            </div>
+        </div>
+      </div>
 {% endblock content %}

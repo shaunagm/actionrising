@@ -1,0 +1,21 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <a data-toggle="collapse" href="#slates">Slates You Follow</a>
+      <a data-toggle="collapse" href="#slates" title="Collapse">
+          <div class="float-right">▼</div>
+      </a>
+    </h3>
+  </div>
+  <div id="slates" class="panel-collapse collapse">
+   <div class="panel-body">
+     {% for sar in followed_slates %}
+         <a href="{{ sar.slate.get_absolute_url}}">{{ sar.slate.title }}</a> <br />
+
+     {% empty %}
+         You don't follow any slates.  <a href="{% url 'follow-users-and-slates' %}">
+           Find slates to follow</a>.
+     {% endfor %}
+   </div>
+ </div>
+</div>

@@ -65,21 +65,16 @@ class ProfileEditView(UserPassesTestMixin, generic.UpdateView):
     def get_success_url(self, **kwargs):
         return self.object.get_absolute_url()
 
-class ProfileToDoView(UserPassesTestMixin, generic.DetailView):
+class ToDoView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'profiles/todo.html'
-    model = User
-
-    def test_func(self):
-        obj = self.get_object()
-        return obj == self.request.user  # No access unless this is you
 
     def get_context_data(self, **kwargs):
-        context = super(ProfileToDoView, self).get_context_data(**kwargs)
+        context = super(ToDoView, self).get_context_data(**kwargs)
         context['has_notes'] = True
         context['can_edit_actions'] = True
         context['use_status'] = False
-        context['actions'] = self.object.profile.get_open_pars()
-        context['suggested_actions'] = self.object.profile.get_suggested_actions_count()
+        context['actions'] = self.request.user.profile.get_open_pars()
+        context['suggested_actions'] = self.request.user.profile.get_suggested_actions_count()
         return context
 
 class ProfileSuggestedView(UserPassesTestMixin, generic.DetailView):
@@ -104,18 +99,11 @@ class ProfileSearchView(LoginRequiredMixin, generic.ListView):
         context['object_list'] = [profile.user for profile in Profile.objects.filter(current_privacy__in=["pub", "sit"])]
         return context
 
-class FeedView(UserPassesTestMixin, generic.DetailView):
+class FeedView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'profiles/feed.html'
-    model = User
 
-    def test_func(self):
-        obj = self.get_object()
-        return obj == self.request.user  # No access unless this is you
-
-    def get_context_data(self, **kwargs):
-        context = super(FeedView, self).get_context_data(**kwargs)
-        context['profiles'] = self.object.profile.get_list_of_relationships()
-        return context
+class ActivityView(LoginRequiredMixin, generic.TemplateView):
+    template_name = 'profiles/activity.html'
 
 def toggle_relationships_helper(toggle_type, current_profile, target_profile):
     relationship = current_profile.get_relationship_given_profile(target_profile)
@@ -265,3 +253,24 @@ def manage_suggested_action(request, slug, type):
         return HttpResponseRedirect(reverse('index'))
     manage_suggested_action_helper(par, type)
     return HttpResponseRedirect(reverse('suggested', kwargs={'pk':request.user.pk}))
+
+class DashboardView(LoginRequiredMixin, generic.TemplateView):
+    template_name = "profiles/dashboard.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(DashboardView, self).get_context_data(**kwargs)
+        context['open_actions'] = self.request.user.profile.get_open_pars()
+        context['your_filters'] = self.request.user.actionfilter_set.all()
+        context['your_friends'] = self.request.user.profile.get_list_of_relationships()
+        context['followed_slates'] = self.request.user.profile.profileslaterelationship_set.all()
+        context['created_actions'] =  self.request.user.action_set.all()
+        context['created_slates'] = self.request.user.slate_set.all()
+        # If none of the above is filled out, include alert.
+        if not (context['open_actions'] or context['your_friends'] or
+            context['your_filters'] or context['followed_slates'] or
+            context['created_actions'] or context['created_slates']):
+            context['new_user'] = True
+        return context
+
+class SettingsView(LoginRequiredMixin, generic.TemplateView):
+    template_name = 'profiles/settings.html'

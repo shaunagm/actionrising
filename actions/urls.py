@@ -12,7 +12,10 @@ urlpatterns = [
     url(r'^action/(?P<slug>[-\w]+)$', views.ActionView.as_view(), name='action'),
     url(r'^create', views.ActionCreateView.as_view(), name='create_action'),
     url(r'^edit/(?P<slug>[-\w]+)$', views.ActionEditView.as_view(), name='edit_action'),
-    url(r'^filter/$', views.FilterWizard.as_view(), name='action_filter'),
+    url(r'^filter-wizard/$', views.filter_wizard_view, name='action_filter'),
+    url(r'^filters/(?P<pk>[-\w]+)$', views.ActionFilterView.as_view(), name='filter'),
+    url(r'^filter-status/(?P<pk>[-\w]+)/(?P<save_or_delete>[-\w]+)$', views.filter_save_status,
+        name='filter-status'),
     # Redirects
     url(r'^slate/(?P<slug>[-\w]+)$', views.SlateRedirectView.as_view(), name='slate_redirect'),
 ]

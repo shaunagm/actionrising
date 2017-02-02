@@ -1,0 +1,27 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <a data-toggle="collapse" href="#content">Content You've Created</a>
+      <a data-toggle="collapse" href="#content" title="Collapse">
+          <div class="float-right">▼</div>
+      </a>
+    </h3>
+  </div>
+  <div id="content" class="panel-collapse collapse">
+   <div class="panel-body">
+     <h4>Actions</h4>
+     {% for action in created_actions %}
+         <a href="{{ action.get_absolute_url }}">{{ action }}</a><br />
+     {% empty %}
+         You haven't created any actions.  <a href="{% url 'create_action' %}">Make one</a>.
+     {% endfor %}
+
+     <h4>Slates</h4>
+     {% for slate in created_slates %}
+         <a href="{{ slate.get_absolute_url }}">{{ slate }}</a><br />
+     {% empty %}
+         You haven't created any slates.  <a href="{% url 'create_slate' %}">Make one</a>.
+     {% endfor %}
+   </div>
+ </div>
+</div>

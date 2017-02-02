@@ -4,66 +4,33 @@
 
 {% block content %}
 
-    {% if user.is_authenticated %}
+{% load static %}
 
-    <div class="row">
-       <div class="col-sm-5 col-sm-offset-1">
-         <h2>Help yourself and friends take action</h2>
+  <div class="row">
+    <div class="col-sm-10 col-sm-offset-1">
+      <div id="anonymous-landing-content">
 
-         <div id="logged-in-landing-content">
+        <div class="center-text">
 
-             <h4><a href="{% url 'actions' %}">Browse actions you can take</a></h4>
-             <h4><a href="{% url 'to_do' user.pk %}">Put together your personal ToDo list</a></h4>
-             <h4><a href="{% url 'create_action' %}">Add new actions for you and others to do</a></h4>
-             <h4><a href="{% url 'create_slate' %}">Make a "slate" of suggested actions</a></h4>
-             <h4><a href="{% url 'profiles' %}">Find and follow friends to see what they're working on</a></h4>
+            <img src="{% static 'images/logo_light.png' %}">
 
-             <p>This site has only been live since November 18th.  We need your help to
-               make it better.  Please email actionrisingsite@gmail.com with any
-               problems you run into or features you'd like.</p>
+            <br />
+            <a href="{% url 'login' %}" class="btn btn-primary">Log In</a>
+            <a href="{% url 'sign-up' %}" class="btn btn-primary">Sign Up</a>
 
-         </div>
         </div>
-        <div class="col-sm-4 col-sm-offset-1" id="open-actions">
-              <h2>Your Open Actions</h2>
-              {% if user.profile.get_open_actions %}
-                  {% include "mysite/action_list_landing_include.html" with object_list=user.profile.get_open_actions %}
-              {% endif %}
-        </div>
-    </div>
 
-    {% else %}
+        <h2>Help yourself and your friends take action</h2>
 
-        {% load static %}
+        <p>ActionRising is a platform created to help individuals and communities
+          share calls to action.  We want you to take action - specific, meaningful,
+          positive action - that fits the time and energy you have available.</p>
 
-        <div class="row">
-          <div class="col-sm-10 col-sm-offset-1">
-            <div id="anonymous-landing-content">
+        <h4>Not sure about joining?  Check out our public <a href="{% url 'public-actions' %}">actions</a>
+           and <a href="{% url 'public-slates' %}">slates.</h3>
 
-              <div class="centered">
-
-                  <img src="{% static 'images/logo_light.png' %}">
-
-                  <br />
-                  <a href="{% url 'login' %}" class="btn btn-primary">Log In</a>
-                  <a href="{% url 'sign-up' %}" class="btn btn-primary">Sign Up</a>
-
-              </div>
-
-              <h2>Help yourself and your friends take action</h2>
-
-              <p>ActionRising is a platform created to help individuals and communities
-                share calls to action.  We want you to take action - specific, meaningful,
-                positive action - that fits the time and energy you have available.</p>
-
-              <p>You need to be a member to use most of our features, but you can check out
-                the <a href="{% url 'public-actions' %}">list of public actions</a>
-                without an account.</p>
-
-            </div>
-           </div>
-         </div>
-
-    {% endif %}
+      </div>
+     </div>
+   </div>
 
 {% endblock content %}

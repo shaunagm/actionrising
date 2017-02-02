@@ -6,34 +6,20 @@
 {% load profile_extras %}
 
 <div class="row">
-   <div class="col-sm-3 col-sm-offset-1">
-     <h2>Connections</h2>
-     {% include 'profiles/friend_list_include.html' with object_list=profiles %}
-   </div>
-
-   <div class="col-sm-6 col-sm-offset-1">
+   <div class="col-sm-10 col-sm-offset-1">
      <h2>Your Feed</h2>
-      {% activity_stream 'user' user with_user_activity=True %}
-      {% for action in stream %}
-        {% filtered_feed action as filtered_action %}
-        {% if filtered_action %}
-          <div class="actstream-action">
-            <a href="{{ action.actor.profile.get_absolute_url }}">{{ action.actor }}</a> {{ action.verb }}
-            {% if action.action_object %}
-            <a href="{{ action.action_object.get_absolute_url }}">{{ action.action_object }}</a> to
-            {% endif %}
-            {% if action.target.get_absolute_url %}
-              <a href="{{ action.target.get_absolute_url }}">
-            {% else %}
-              <a href="{{ action.target.profile.get_absolute_url }}">
-            {% endif %}
-            {{ action.target }}</a>
-          </div>
-          <div class="actstream-action-time">
-            {{ action.timestamp }}
-          </div>
-        {% endif %}
-      {% endfor %}
+     {% load activity_tags %}
+     {% load profile_extras %}
+     {% activity_stream 'user' user  %}
+     {% for action in stream|slice:":1000" %}
+       {% filtered_feed action as filtered_action %}
+       {% if filtered_action %}
+          {% include 'profiles/feed_include.html' %}
+       {% endif %}
+     {% empty %}
+       Your feed is empty because you do not follow enough slates or users.
+       <a href="{% url 'follow-users-and-slates' %}">Find some to follow.</a>
+     {% endfor %}
    </div>
 </div>
 

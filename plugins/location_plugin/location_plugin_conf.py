@@ -1,5 +1,6 @@
 from django.forms import CharField, BooleanField
-from plugins.location_plugin.models import Location
+from plugins.location_plugin.models import Location, filter_queryset_by_location
+from plugins.location_plugin.forms import FilterWizard_Location
 from django.contrib.contenttypes.models import ContentType
 
 location_help_text = "Enter the location to help people filter by state and congressional district."
@@ -7,6 +8,8 @@ location_help_text_profile = "Enter your location to help us filter state and co
 hide_location_help_text = "Keep your location private, but use it to filter actions."
 
 class PluginConf(object):
+
+    name = "location_plugin"
 
     templates = {
         "action_instance": "location_plugin/location_for_object.html",
@@ -25,6 +28,10 @@ class PluginConf(object):
             'hide_location': BooleanField(required=False, help_text=hide_location_help_text)
             }
         }
+
+    forms = {
+        "FilterForm": FilterWizard_Location
+    }
 
     def get_template(self, key):
         return self.templates[key]
@@ -67,3 +74,15 @@ class PluginConf(object):
         for field in self.get_fields(form):
             setattr(location_object, field, form.cleaned_data[field])
         location_object.save()
+
+    def get_filter_form(self, request):
+        form = self.forms["FilterForm"]
+        return form(request)
+
+    def filter_queryset(self, field_data, queryset, user):
+        return filter_queryset_by_location(field_data, queryset, user)
+
+    def get_filter_string(self, filter):
+        data = filter.get_plugin_field("location_plugin")
+        if data:
+            return "Locations of actions: " + ", ".join(data)

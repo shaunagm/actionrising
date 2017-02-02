@@ -1,0 +1,26 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <a data-toggle="collapse" href="#actionhistory">Your Activity Log</a>
+      <a href="{% url 'activity' %}" title="Open in new page" class="extra-padding-left">↱</a>
+      <a data-toggle="collapse" href="#actionhistory" title="Collapse">
+          <div class="float-right">▼</div>
+      </a>
+    </h3>
+  </div>
+  <div id="actionhistory" class="panel-collapse collapse">
+   <div class="panel-body">
+     {% load activity_tags %}
+     {% load profile_extras %}
+     {% activity_stream 'actor' user  %}
+     {% for action in stream|slice:":15" %}
+       {% filtered_feed action as filtered_action %}
+       {% if filtered_action %}
+          {% include 'profiles/feed_include.html' %}
+       {% endif %}
+     {% empty %}
+         You haven't done anything yet.
+     {% endfor %}
+   </div>
+ </div>
+</div>

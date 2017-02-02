@@ -4,7 +4,8 @@ from django.forms.widgets import HiddenInput
 
 from actions.models import Action
 from tags.lib import tag_helpers
-from mysite.lib.choices import PRIVACY_CHOICES
+from tags.models import Tag
+from mysite.lib.choices import PRIVACY_CHOICES, TIME_CHOICES
 from mysite.lib.privacy import get_global_privacy_default
 from plugins import plugin_helpers
 
@@ -57,47 +58,54 @@ class ActionForm(forms.ModelForm):
         return instance
 
 
-# Filter Wizard Forms
-end_early_field = forms.BooleanField(widget=HiddenInput(attrs={'id': 'end_early_field'}),
-    required=False, initial=False)
+### ALL filter results calls are given the request?
 
 class FilterWizard_Kind(forms.Form):
-    end_early = end_early_field
     question = "What kinds of actions do you want to hear about?"
-    kinds = forms.CharField(max_length=100) # Should be choice field
+    kinds = forms.ModelMultipleChoiceField(queryset=Tag.objects.filter(kind="type"),
+        required=False, label='')
 
-    def filter_results(self, wizard, results):
-        data_dict = wizard.get_form_step_data(self)
-        return Action.objects.filter(tags__in=data_dict['0-kinds'])
+    def update_filter(self, actionfilter, request):
+        if 'kinds' in request.POST and request.POST['kinds']:
+            actionfilter.set_kinds(request.POST.getlist('kinds'))
 
 class FilterWizard_Topic(forms.Form):
-    end_early = end_early_field
     question = "What topics are you most interested in?"
-    topics = forms.CharField(max_length=100) # Should be choice field
+    topics = forms.ModelMultipleChoiceField(queryset=Tag.objects.filter(kind="topic"),
+        required=False, label='')
 
-    def filter_results(self, old_data, new_data):
-        search_terms = new_data['1-topics']
-        print(old_data)
-        # Can't use filter here as is, because old_results is now a list
-        return old_data.filter(tags__in=search_terms)
+    def update_filter(self, actionfilter, request):
+        if 'topics' in request.POST and request.POST['topics']:
+            actionfilter.set_topics(request.POST.getlist('topics'))
 
 class FilterWizard_Time(forms.Form):
-    end_early = end_early_field
     question = "How much time can you spend on the action?"
-    time = forms.CharField(max_length=100) # Should be choice field
+    time = forms.MultipleChoiceField(choices=TIME_CHOICES, required=False, label='',
+        initial=(c[0] for c in TIME_CHOICES))
 
-class FilterWizard_Deadline(forms.Form):
-    end_early = end_early_field
-    question = "Should we prioritize actions that need to be done soon, or actions without a deadline?"
-    deadline = forms.CharField(max_length=100) # Should be choice field
-
-class FilterWizard_Location(forms.Form):
-    end_early = end_early_field
-    question = "Should we limit actions to local actions, state actions, or national actions?"
-    location = forms.CharField(max_length=100) # Should be choice field
-    # Should check if user has location set
+    def update_filter(self, actionfilter, request):
+        if 'time' in request.POST and request.POST['time']:
+            actionfilter.set_time(request.POST.getlist('time'))
 
 class FilterWizard_Friends(forms.Form):
-    end_early = end_early_field
-    question = "Should we prioritize actions created by or recommended by the people you follow?"
-    friends = forms.CharField(max_length=100) # Should be choice field
+    question = "Should we only include actions created by people you follow?"
+    override_template = "actions/filter_templates/friends_template.html"
+
+    def __init__(self, request, *args, **kwargs):
+        super(FilterWizard_Friends, self).__init__(*args, **kwargs)
+        friends = [(user, user) for user in request.user.profile.get_people_tracking()]
+        if len(friends) < 10:
+            if not friends: # if 0 friends
+                self.warning = """You don't follow anyone, which means choosing 'yes' will
+                    eliminate all actions. <br />Why not <a target='_blank' href='/profiles/profiles'>
+                    add some friends</a>?"""
+            else:
+                people_statement = "only 1 person" if len(friends) == 1 else "only %s people" % len(friends)
+                self.warning = """You follow %s, which means choosing 'yes' will drastically
+                    limit available actions. <br />Why not <a target='_blank' href='/profiles/profiles'>
+                    add more friends</a>?""" % people_statement
+
+    def update_filter(self, actionfilter, request):
+        if 'friends_yes' in request.POST:
+            actionfilter.friends = True
+            actionfilter.save()

@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 from itertools import chain
-import datetime
+import datetime, json
 
 from actstream import action
 from django.db.models.signals import post_save
@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericRelation
 
 from ckeditor.fields import RichTextField
+from plugins import plugin_helpers
 from mysite.settings import PRODUCTION_DOMAIN
 from mysite.lib.choices import (PRIVACY_CHOICES, PRIORITY_CHOICES, STATUS_CHOICES,
     TIME_CHOICES, INDIVIDUAL_STATUS_CHOICES)
@@ -142,3 +143,103 @@ def action_handler(sender, instance, created, **kwargs):
     else:
         action.send(instance.creator, verb=verb_to_use, target=instance)
 post_save.connect(action_handler, sender=Action)
+
+class ActionFilter(models.Model):
+    creator = models.ForeignKey(User)
+    saved = models.BooleanField(default=False) # If saved == false and created > 24 hrs old, delete
+    date_created = models.DateTimeField(default=timezone.now)
+    # Fields
+    kinds = models.CharField(max_length=300, blank=True, null=True)
+    topics = models.CharField(max_length=300, blank=True, null=True)
+    time = models.CharField(max_length=300, blank=True, null=True)
+    friends = models.BooleanField(default=False)
+    plugin_fields = models.CharField(max_length=500, blank=True, null=True)
+
+    def set_kinds(self, pks):
+        self.kinds = json.dumps(pks)
+        self.save()
+
+    def get_kinds(self):
+        if self.kinds:
+            return json.loads(self.kinds)
+
+    def get_kinds_string(self):
+        # TODO: Fix naming issue, should be types rather than kinds
+        # (See also wrong name in filterwizard_forms, but this needs a db migration)
+        from tags.models import Tag
+        kinds = Tag.objects.filter(kind="type").filter(id__in=self.get_kinds())
+        return "Types of actions: " + ", ".join([tag.get_link_string() for tag in kinds])
+
+    def set_topics(self, pks):
+        self.topics = json.dumps(pks)
+        self.save()
+
+    def get_topics(self):
+        if self.topics:
+            return json.loads(self.topics)
+
+    def get_topics_string(self):
+        from tags.models import Tag
+        topics = Tag.objects.filter(kind="topic").filter(id__in=self.get_topics())
+        return "Topics of actions: " + ", ".join([tag.get_link_string() for tag in topics])
+
+    def set_time(self, options):
+        self.time = json.dumps(options)
+        self.save()
+
+    def get_time(self):
+        if self.time:
+            return json.loads(self.time)
+
+    def get_time_string(self):
+        display_names = [dict(TIME_CHOICES).get(short) for short in self.get_time()]
+        return "Duration of actions: " +  ", ".join(display_names)
+
+    def get_plugin_fields(self):
+        if self.plugin_fields:
+            return json.loads(self.plugin_fields)
+
+    def set_plugin_fields(self, data_dict):
+        self.plugin_fields = json.dumps(data_dict)
+        self.save()
+
+    def get_plugin_field(self, fieldname):
+        data_dict = self.get_plugin_fields()
+        return data_dict[fieldname]
+
+    def update_plugin_field(self, fieldname, fielddata):
+        data_dict = self.get_plugin_fields()
+        if not data_dict:
+            data_dict = {}
+        data_dict[fieldname] = fielddata
+        self.set_plugin_fields(data_dict)
+
+    def filter_actions(self):
+        '''Runs filter and returns queryset'''
+        current_queryset = Action.objects.all()
+        if self.kinds:
+            current_queryset = current_queryset.filter(tags__in=self.get_kinds())
+        if self.topics:
+            current_queryset = current_queryset.filter(tags__in=self.get_topics())
+        if self.time:
+            current_queryset = current_queryset.filter(duration__in=self.get_time())
+        if self.friends:
+            friend_ids = [user.id for user in self.user.profile.get_people_tracking()]
+            current_queryset = current_queryset.filter(creator__in=friend_ids)
+        current_queryset = plugin_helpers.run_filters_for_plugins(self, current_queryset)
+        return current_queryset
+
+    def get_summary(self):
+        strings = []
+        if self.kinds:
+            strings.append(self.get_kinds_string())
+        if self.topics:
+            strings.append(self.get_topics_string())
+        if self.time:
+            strings.append(self.get_time_string())
+        if self.friends:
+            strings.append("created by friends only")
+        plugin_strings = plugin_helpers.get_plugin_field_strings(self)
+        if plugin_strings:
+            strings += plugin_strings
+        return strings

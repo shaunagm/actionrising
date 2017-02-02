@@ -8,93 +8,79 @@
    <div class="col-sm-10 col-sm-offset-1" id="about">
      <h2>About ActionRising</h2>
 
-     <p>ActionRising is a platform created to help individuals and communities figure
-       out their next steps. We want you to take action - specific, meaningful, positive
-       action - that fits the time and energy you have available.</p>
+     <h3>Our Mission</h3>
 
-     <p>The site is in its early stages.  (It's only been in development for {{ time_elapsed }} days!)
-       Know someone who'd like to join?  They can request an account
-       <a href="https://docs.google.com/forms/d/e/1FAIpQLSdvjpdigDpDfxfp7uMEFIb4LxMgVKezhF_XoiPJos-Ieph7uw/viewform">here</a>.</p>
+     <p>ActionRising was created to help people keep track of and promote political actions.
+       With so much going on, we need efficient ways to find out about new actions and to stay
+       updated on the actions we've committed to.</p>
 
-     <h2>FAQ</h2>
+     <p>Created in response to the 2016 election, ActionRising is dedicated to resisting
+       Donald Trump and the movement he represents, and to helping the progressive community grow.
+       We work with existing and new organizations to figure out how we can help them achieve
+       their goals, and with individuals to understand what they need to take action.</p>
 
-     <p>Do you have a question not answered by the faq?  Email actionrisingsite@gmail.com.
-       We'll answer it, and probably add it to this FAQ.</p>
+     <h3>The Basics</h3>
 
-     <h3 class="text-info">So how do I use this thing?</h3>
+     <p>At the heart of this site are actions.  Anyone can create an action, and by default
+       an action is very simple: just a title and a description.  You can enhance your
+       action by providing more details like a deadline, a location, tags and more.  When
+       you're looking for actions, you can use this additional info to narrow down your options.</p>
+     <p>There are many great individuals and organizations out there doing the hard work
+       of creating and vetting actions.  On ActionRising, you can follow a user and receive
+       updates whenever they add a new action.  Users can also create slates, which are curated
+       lists of specific actions.  You can follow a slate and get updates whenever a new
+       action is added to it. (Tip: slates are also great for pulling together a list
+       of actions to work on at an event.)</p>
+     <p>When you find an action you want to take, click the 'take action' button on the action's
+       page.  The action will now show up on your list of open actions on your dashboard.
+       You can do a number of things at this point: at the action to a slate, suggest it to a friend,
+       make a note to yourself, and more.  And, of course, you can mark it as done.  Once you
+       do this, it will no longer be seen on your list of open actions.</p>
 
-     <p>Let's start with the basics.  The heart of this site are the <a href="{% url 'actions' %}">
-       actions</a>.  You can search for posted actions by date created, by tags, by popularity, or in
-       a number of other ways.  When you see an action you want to attempt, you can add it to your actions
-       by clicking the "Take Action" button.  Once you've done that, you can also suggest the action to
-       friends or add it to one of your slates.</p>
+     <h3>Design Principles</h3>
 
-     <p>A friend is someone you follow who also follows you.  (You can't suggest actions to people who don't
-       follow you.)  You can find friends by searching our <a href="{% url 'profiles' %}">profiles</a> page.
-       A slate is a collection of actions, typically selected to suit a particular theme, event, or political outcome.
-       You can find those by searching the <a href="{% url 'slates' %}">slates</a> page.</p>
+     <p>We're a very new platform, so we're still figuring out what features will help
+       us all reach our goals.  Here are a few of the design principles that guide us
+       along the way:</p>
 
-     <p>You can view all of your open actions via your <a href="{% url 'to_do' user.pk %}">to do list</a>.
+      <h4 class="text-warning">One Action, One Source</h4>
+      <p>Many social media sites let you edit a post but won't show your changes in shares
+        and reblogs.  This is a problem for actions, which often need updates and corrections,
+        or even to be withdrawn.  On ActionRising, changes to an action show up for everyone,
+        not just people viewing the original post.  Link to an ActionRising action on Twitter,
+        Facebook, etc and people will always find the most updated version when they click through.
+      </p>
 
-     <p>That's all you really need to know.  If you're interested, you can also override an action's default
-       priority, privacy or status, or you can add notes to it.  These changes don't show up for everyone,
-       just you.  You can set these things differently for each action added to a slate, and for the actions
-       on your to do list.</p>
+      <h4 class="text-warning">Enhancing Relationships</h4>
+      <p>Technology works best when it enhances social interaction, rather than replacing it.
+       For instance, when you "commit" to an action, you can select one or more friends to
+       notify of your commitment.  They'll get periodic reminders while the action stays open,
+       asking them to poke you and see how you're progressing.  This feature requires both social
+       relationships and technology to work.  Founded by a former psychologist, ActionRising has
+       great respect for the power of human relationships.</p>
 
-     <h3 class="text-info">What if there's a problem with an action?</h3>
+      <h4 class="text-warning">Keep It Open(ish)</h4>
+      <p>We believe in transparency and open communities, but recognize that there are downsides
+        to openness. We're committed to cultivating a harassment-free community, including
+        limiting certain features to users who have a history of appropriate behavior on the site.</p>
 
-     <p>If it's a minor problem, you can leave a comment on the action and ask the creator to fix it.  If there's
-       no response, or the action has a bigger problem like spreading inaccuracies or using offensive language,
-       you can flag the action and we'll get to it as quickly as possible.</p>
+     <h3 id="gethelp">Get Help</h3>
 
-     <p>The creator of an action can always withdraw the action, if updating the content is not enough to
-       fix the problem.  If someone reports a problem with your action, moderators may withdraw the
-       action as well.</p>
+     <p>Confused about how the site works?  Have a feature you want to request or a bug you want
+       to report?  Reach out to us at actionrisingsite@gmail.com.  We'll get back to you asap.</p>
 
-     <p>Withdrawn actions are not searchable on the site, but still exist in the database.  In extreme cases,
-       such as doxxing, the action may be completely deleted.</p>
+     <h3 id="getinvolved">Get Involved</h3>
 
-     <h3 class="text-info">How does privacy work here?</h3>
+     <p>There are a few different ways to get involved.  We're actively looking for existing
+       organizations or groups that have actions they could share on the platform.  If that
+       describes you, we'd love to talk with you one-on-one and find out what kind of features
+       would best meet your needs.  Anyone who wants to can also join the <a href="https://www.actionrising.com/actions/action/join-the-actionrisingcom-user-feedback-group">
+       ActionRising User Feedback Group.</a></p>
 
-     <p>Good question!  Your privacy is very important to us, but it's also something that
-       takes time and resources to get right.  Currently we <span class="text-danger"><b><u>cannot guarantee you</u></b></span>
-       any kind of privacy.  All we can do is tell you how things are supposed to work and promise
-       a prompt response to any requests to delete data or ban bad actors.</p>
-
-     <p>There are three possible privacy settings: public, sitewide, and follows only. The first
-       is visible to anyone on the internet, the second to anyone with an account on the site,
-       and the third only to people you follow. You can pick one of these settings as your
-       <a href='{{ user.profile.get_edit_url }}'>global default</a>. Your profile page and any
-       actions or slates you create will have this default privacy setting unless you
-       specifically override it.  Because this is a site for sharing information,
-       we recommend you set your default to 'public', but it's up to you.</p>
-
-     <p>Some notes about how we implement privacy, for those who want the nitty gritty details:
-       <ul>
-         <li>If you change your default privacy setting, this will change the settings
-          of all past actions, slates, etc that were not overridden.</li>
-         <li>When multiple privacy settings are in play, we err on the side of privacy.
-          So, for instance, if we're trying to decide whether to display the fact that
-          person A is taking action B, we check both the privacy settings of person A
-          and action B.  Unless the viewer has access to both person A and action B, they
-          will not see anything displayed.</i>
-          <li>You can also choose to make an action "anonymous".  This prevents the action
-          from naming you as the creator or linking back to your profile, but it is not
-          'truly' anonymous.  You'll still be able to edit your anonymous action and see
-          it in your lists of created actions.</li>
-       </ul>
-     </p>
-
-     <p>Philosophically, our goal is to give you the greatest control over your privacy possible.  Please
-       let us know if there are ways we can improve.</p>
-
-     <h3 class="text-info">How do I verify my account?</h3>
-
-     <p>If you'd like to verify your account, please email actionrisingsite@gmail.com.  Eventually
-       we'll have a system for doing automatic verification with <a href="https://keybase.io/">Keybase</a>.</p>
-
-     <h3 class="text-info">Can I contribute to the site?</h3>
-
-     <p>Yes!  Email actionrisingsite@gmail.com if you'd like to contribute.</p>
+     <p>We're also looking for folks to contribute to developing the site itself.  We're especially
+       looking for design, documentation, and publicity help, and for developers who specialize
+       in working with Javascript and with mobile technologies, but many kinds of help are useful,
+       so please reach out even if you've got a different skillset.  Enthusiasm and ability to
+       commit are more important to us than experience, so: newcomers welcome!</p>
 
 {% endblock content %}

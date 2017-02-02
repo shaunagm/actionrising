@@ -1,5 +1,4 @@
 import sys
-from actions.models import Action
 from geopy.exc import GeopyError
 from geopy.geocoders import GoogleV3
 from sunlight.services.congress import Congress

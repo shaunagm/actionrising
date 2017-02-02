@@ -51,3 +51,44 @@ def location_post_save(instance, update_fields, created, **dummy):
     locations.populate_location_and_district(instance)
     post_save.connect(location_post_save, sender=Location) # Reconnect
 post_save.connect(location_post_save, sender=Location)
+
+def get_objects_given_location(location, include=["State", "District", "National"]):
+    if "District" in include:
+        q_object = Q(district=location.district)
+    if "State" in include:
+        try:
+            q_object.add(Q(state=location.state), Q.OR)
+        except:
+            q_object = Q(state=location.state)
+    if "National" in include:
+        try:
+            q_object.add(Q(state=None), Q.OR)
+        except:
+            q_object = Q(state=None)
+    return Location.objects.filter(q_object)
+
+def get_actions_given_location(location, include=["State", "District", "National"]):
+    from actions.models import Action
+    locations = get_objects_given_location(location, include)
+    actions = []
+    for location in locations:
+        if location.content_type.model_class() == Action:
+            actions.append(location)
+    return actions
+
+def filter_queryset_by_location(field_data, queryset, user):
+    # If none selected, no filtering to be done
+    if not field_data:
+        return queryset
+    # If "get everything" selected, no filtering to be done
+    if 'Everything' in field_data:
+        return queryset
+    # If user has no location, no filtering to be done
+    ctype = ContentType.objects.get_for_model(user.profile)
+    location = Location.objects.filter(content_type=ctype, object_id=user.profile.pk).first()
+    if not location or location.location in ["", None]:
+        return queryset
+    # Okay, filter time!
+    actions = get_actions_given_location(location, field_data)
+    action_ids = [action.id for action in actions]
+    return results.filter(id__in=action_ids)

@@ -26,7 +26,7 @@ class Tag(models.Model):
     profiles = models.ManyToManyField(Profile, blank=True, related_name="tags")
 
     def __unicode__(self):
-        return "%s (%s)" % (self.name, self.kind)
+        return self.name
 
     def save(self, *args, **kwargs):
         if not self.pk:
@@ -35,3 +35,6 @@ class Tag(models.Model):
 
     def get_link(self):
         return reverse('tag', kwargs={'slug': self.slug})
+
+    def get_link_string(self):
+        return "<a href='" + self.get_link() + "'>" + self.name + "</a>"

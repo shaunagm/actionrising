@@ -1,0 +1,45 @@
+{% extends "mysite/base.html" %}
+
+{% block content %}
+
+<div class="row">
+   <div class="col-sm-8 col-sm-offset-2">
+
+     <h3>Your Filter</h3>
+
+     <div id="savedfilter" {% if not object.saved %} class="hide" {% endif %}>
+        <h5>This filter is saved.  <a href="{% url 'filter-status' pk=object.pk save_or_delete='delete' %}">
+            Delete it?</a></h5>
+     </div>
+     <div id="deletedfilter" {% if object.saved %} class="hide" {% endif %}>
+        <h5>This filter will be deleted within 24 hours.
+          <a href="{% url 'filter-status' pk=object.pk save_or_delete='save' %}">Save it?</a></h5>
+     </div>
+
+     <div class="well">
+         {% for line in object.get_summary %}
+
+            {{line|safe }}<br />
+
+         {% endfor %}
+     </div>
+
+     {% if actions.count < 6 %}
+
+        <h4>Not enough actions?  <a href="{% url 'action_filter' %}">Try again</a>!
+          To get more results, answer fewer questions and/or select more options for
+          questions you do answer.</h3>
+
+     {% endif %}
+
+     {% include "actions/action_list_limited_include.html" with object_list=actions %}
+
+   </div>
+ </div>
+
+
+{% endblock content %}
+
+{% block page_specific_javascript %}
+
+{% endblock %}
