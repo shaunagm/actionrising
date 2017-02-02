@@ -6,7 +6,6 @@ from django.core.urlresolvers import reverse
 from django.views import generic
 from django.contrib.auth.mixins import UserPassesTestMixin,  LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from formtools.wizard.views import SessionWizardView
 
 from flags.lib.flag_helpers import get_user_flag_if_exists
 from mysite.lib.privacy import (check_privacy, filter_list_for_privacy,
