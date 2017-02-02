@@ -27,7 +27,8 @@ class LoginPage(PageObject):
     def go_to_login(self):
         self.w.get(self.root_uri)
         wait_helper(self.w) # Wait until the page is loaded to click "login"
-        self.log_button.click()
+        if self.log_button:
+            self.log_button.click()
 
     def log_in(self, username, password):
         self.go_to_login()
@@ -39,20 +40,12 @@ class LoginPage(PageObject):
 
 class BasePage(PageObject):
     navbar_links = MultiPageElement(css=".navbar a")
-    log_button = PageElement(class_name='log_button')
+    account_dropdown = PageElement(id_="account_dropdown")
+    account_dropdown_links = MultiPageElement(css="#account_dropdown_menu a")
 
     def go_to_index_if_necessary(self):
         if not self.navbar_links:
             self.w.get(self.root_uri)
-
-    def is_logged_in(self):
-        self.go_to_index_if_necessary()
-        if len(self.navbar_links) == 11 and self.log_button.text == "Log Out":
-            return True
-        if len(self.navbar_links) != 11 and self.log_button.text == "Log In":
-            return False
-        raise RuntimeError("Login/logout status is inconsistent.  Navbar links number %s " \
-            "and log button text is %s" % (str(len(self.navbar_links)), self.log_button.text))
 
     def log_in(self, username, password):
         '''Make it easy to log in from all pages'''
@@ -60,9 +53,16 @@ class BasePage(PageObject):
         login_page.go_to_login()
         login_page.log_in(username=username, password=password)
 
+    def log_out(self):
+        self.account_dropdown.click()
+        for link in self.account_dropdown_links:
+            if link.text == "Log Out":
+                link.click()
+
 class LoggedOutLandingPage(BasePage):
     signup = PageElement(link_text="Sign Up")
-    public_actions = PageElement(link_text="list of public actions")
+    public_actions = PageElement(link_text="actions")
+    public_slates = PageElement(link_text="slates")
 
 class LoggedInLandingPage(BasePage):
     search_actions_link = PageElement(partial_link_text="actions you can take")
@@ -146,10 +146,8 @@ class SlateListPage(BaseListPage):
     first_row_creator = PageElement(css=".odd > td:nth-child(3)")
     first_row_action_count = PageElement(css=".odd > td:nth-child(4)")
 
-    def go_to_default_slates_page_if_necessary(self):
-        if not self.slates_table:
-            # This is a decent guess at where we want to be
-            self.w.get(self.root_uri + "/slates/slates")
+    def go_to_default_slates_page(self):
+        self.w.get(self.root_uri + "/slates/slates")
 
 class BaseObjectDetailPage(BasePage):
     creator = PageElement(id_="created_by")
@@ -268,7 +266,7 @@ class ToDoPage(BasicActionListPage):
 
     def go_to_todo_page(self, username=None):
         user = User.objects.get(username=username)
-        self.w.get(self.root_uri + "/profiles/to-do/" + str(user.pk))
+        self.w.get(self.root_uri + "/profiles/todo/")
 
     def get_notes(self):
         notes = []

@@ -25,6 +25,7 @@ class TestAddAndFollowAction(SeleniumTestCase):
         self.action_edit_form = ActionEditPage(self.browser, root_uri=self.live_server_url)
         self.action_edit_form.go_to_create_page()
         self.action_edit_form.title = "A new action to take"
+        self.browser.execute_script("return arguments[0].scrollIntoView();", self.action_edit_form.submit_button)        
         self.action_edit_form.submit_button.click()
         # Go to profile page and see action is only listed in 'created', not 'tracked'
         self.profile_page = ProfilePage(self.browser, root_uri=self.live_server_url)
@@ -83,6 +84,7 @@ class PlayingWithPrivacySettings(SeleniumTestCase):
         self.action_edit_form = ActionEditPage(self.browser, root_uri=self.live_server_url)
         self.action_edit_form.go_to_create_page()
         self.action_edit_form.title = "A new action to take"
+        self.browser.execute_script("return arguments[0].scrollIntoView();", self.action_edit_form.submit_button)
         self.action_edit_form.submit_button.click()
         # Go to action list
         self.actions_table = BasicActionListPage(self.browser, root_uri=self.live_server_url)
@@ -92,13 +94,14 @@ class PlayingWithPrivacySettings(SeleniumTestCase):
         self.action_edit_form = ActionEditPage(self.browser, root_uri=self.live_server_url)
         self.action_edit_form.go_to_edit_page(title="A new action to take")
         self.action_edit_form.select_privacy("Visible to Follows")
+        self.browser.execute_script("return arguments[0].scrollIntoView();", self.action_edit_form.submit_button)
         self.action_edit_form.submit_button.click()
         # Back to action list
         self.actions_table = BasicActionListPage(self.browser, root_uri=self.live_server_url)
         self.actions_table.go_to_default_actions_page_if_necessary()
         self.assertNotIn("A new action to take", self.actions_table.get_actions())
         # Log in as followed user and check default user's profile, see action
-        self.actions_table.log_button.click() # log out
+        self.actions_table.log_out() # log out
         self.actions_table.log_in("giles", "apocalypse")
         self.profile_page = ProfilePage(self.browser, root_uri=self.live_server_url)
         self.profile_page.go_to_profile_page(username=default_user)
@@ -106,7 +109,7 @@ class PlayingWithPrivacySettings(SeleniumTestCase):
         self.assertIn("A new action to take", created_actions)
         # Log in as non-followed user and check default user's profile, no action
         # Log in as followed user and check default user's profile, see action
-        self.actions_table.log_button.click() # log out
+        self.actions_table.log_out() # log out
         self.actions_table.log_in("dru", "apocalypse")
         self.profile_page = ProfilePage(self.browser, root_uri=self.live_server_url)
         self.profile_page.go_to_profile_page(username=default_user)
@@ -132,8 +135,8 @@ class MakeAndEditCommitment(SeleniumTestCase):
         # Close action
         self.action_edit_form = ActionEditPage(self.browser, root_uri=self.live_server_url)
         self.action_edit_form.go_to_edit_page(title="Sign petition to make Boston a sanctuary city")
-        time.sleep(20)
         self.action_edit_form.select_status("Finished")
+        self.browser.execute_script("return arguments[0].scrollIntoView();", self.action_edit_form.submit_button)
         self.action_edit_form.submit_button.click()
         # Go back, link is gone
         self.action_page.go_to_detail_page(title="Sign petition to make Boston a sanctuary city")
@@ -142,6 +145,7 @@ class MakeAndEditCommitment(SeleniumTestCase):
         self.action_edit_form = ActionEditPage(self.browser, root_uri=self.live_server_url)
         self.action_edit_form.go_to_edit_page(title="Sign petition to make Boston a sanctuary city")
         self.action_edit_form.select_status("Open for action")
+        self.browser.execute_script("return arguments[0].scrollIntoView();", self.action_edit_form.submit_button)
         self.action_edit_form.submit_button.click()
         # Go back, link is there, click it
         self.action_page.go_to_detail_page(title="Sign petition to make Boston a sanctuary city")

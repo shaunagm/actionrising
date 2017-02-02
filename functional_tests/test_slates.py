@@ -14,7 +14,7 @@ class TestSlateList(SeleniumTestCase):
         super(TestSlateList, self).setUp()
         self.slates_table = SlateListPage(self.browser, root_uri=self.live_server_url)
         self.slates_table.log_in(default_user, default_password)
-        self.slates_table.go_to_default_slates_page_if_necessary()
+        self.slates_table.go_to_default_slates_page()
         self.wait_helper()
 
     def test_display_slates(self):
@@ -105,7 +105,6 @@ class TestSlateActionList(SeleniumTestCase):
     def test_owned_slate_actions_display(self):
         '''Make sure the 5th "manage" column is included when user owns slate.'''
         self.actions_table = SlateActionsListPage(self.browser, root_uri=self.live_server_url)
-        self.actions_table.log_in(default_user, default_password)
         self.actions_table.go_to_detail_page(title="Things to do on the Hellmouth")
         self.assertTrue(self.actions_table.datatables_js_is_enabled())
         self.assertEquals(len(self.actions_table.columns), 5)

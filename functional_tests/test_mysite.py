@@ -8,11 +8,14 @@ default_password = "apocalypse"
 
 class TestBasics(SeleniumTestCase):
 
-    def test_login_page(self):
+    def test_navbar_by_login_status(self):
         base_page = BasePage(self.browser, root_uri=self.live_server_url)
-        self.assertEquals(base_page.is_logged_in(), False)
+        self.assertEquals(len(base_page.navbar_links), 8)
         base_page.log_in(default_user, default_password)
-        self.assertEquals(base_page.is_logged_in(), True)
+        self.assertEquals(len(base_page.navbar_links), 14)
+        base_page.log_out()
+        self.wait_helper()
+        self.assertEquals(len(base_page.navbar_links), 8)
 
     def test_logged_out_landing_page(self):
         landing_page = LoggedOutLandingPage(self.browser, root_uri=self.live_server_url)
@@ -25,6 +28,4 @@ class TestBasics(SeleniumTestCase):
         self.wait_helper()
         landing_page.log_in(default_user, default_password)
         self.wait_helper()
-        self.assertEquals(len(landing_page.open_actions_items), 0)
-        landing_page.search_actions_link.click()
-        self.assertEquals(landing_page.w.current_url, self.live_server_url + "/actions/actions")
+        self.assertEquals(self.browser.title, "Dashboard")
