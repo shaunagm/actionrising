@@ -13,6 +13,8 @@
     {% endif %}
     {% if info.muted %} <span class="label label-info">Muted</span> {% endif %}
 
+    <br />
+
 {% empty %}
 
     You have no connections.  <a href="{% url 'follow-users-and-slates' %}">Add some.</a>

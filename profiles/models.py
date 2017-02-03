@@ -154,10 +154,12 @@ class Profile(models.Model):
         return [action for action in actions if action.status == "rea"]
 
     def get_open_pars(self):
-        return ProfileActionRelationship.objects.filter(profile=self, status="ace")
+        pars = ProfileActionRelationship.objects.filter(profile=self, status="ace")
+        return [par for par in pars if par.action.status == "rea"]
 
     def get_suggested_actions(self):
-        return ProfileActionRelationship.objects.filter(profile=self, status="sug")
+        pars = ProfileActionRelationship.objects.filter(profile=self, status="sug")
+        return [par for par in pars if par.action.status == "rea"]
 
     def get_suggested_actions_count(self):
         return len(self.get_suggested_actions())

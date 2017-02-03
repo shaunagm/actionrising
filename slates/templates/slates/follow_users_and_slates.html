@@ -14,7 +14,7 @@
          <p>When you follow a slate or user, their activity will show up on your feed.
            You'll also get emails when a user you follow creates an action or a slate
            you follow gets an action added to it.  If you find the emails annoying, you
-           can turn them off in <a href="">your settings</a>.</p>
+           can turn them off in <a href="{% url 'settings' %}">your settings</a>.</p>
        </div>
     </div>
 
@@ -22,7 +22,7 @@
        <div class="col-sm-5 col-sm-offset-1">
          <h2>Busy Users</h2>
          <p>Don't see what you want?  Search <a href="{% url 'profiles' %}">all users</a>.</p>
-         {% include 'profiles/profile_list_include.html' with object_list=users %}
+         {% include 'profiles/profile_list_include.html' with object_list=users  %}
        </div>
        <div class="col-sm-5">
          <h2>Recommended Slates</h2>
