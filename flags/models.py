@@ -9,7 +9,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
 from mysite.lib.utils import disable_for_loaddata
-from mysite.settings import NOTIFY_EMAIL
+from notifications.lib.email_handlers import flag_email
 from django.contrib.auth.models import User
 
 class Flag(models.Model):
@@ -40,9 +40,5 @@ class Flag(models.Model):
 @disable_for_loaddata
 def flag_email_handler(sender, instance, created, **kwargs):
     if created:
-        email_subj = "There's been a flag on ActionRising"
-        message = "https://www.actionrising.com/admin/flags/flag/" + str(instance.pk)
-        html_message = "<a href='https://www.actionrising.com/admin/flags/flag/" + str(instance.pk) + "/change'>Click here</a>"
-        sent = send_mail(email_subj, message, NOTIFY_EMAIL, ['actionrisingsite@gmail.com'],
-            fail_silently=False, html_message=html_message)
+        flag_email(instance)
 post_save.connect(flag_email_handler, sender=Flag)

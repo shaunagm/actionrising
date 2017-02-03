@@ -17,6 +17,16 @@ def get_toggle_notify_for_slate_url(target):
     url_path = reverse('toggle_slate_for_profile', kwargs={'slug': target.slug, 'toggle_type': 'stop_notify'})
     return 'https://www.actionrising.com' + url_path
 
+def log_sent_mail(subject, plain_message, recipient):
+    if len(plain_message) > 100:
+        plain_message = plain_message[:100]
+    print("AR-Email Sent: ", subject, plain_message, recipient)
+
+def log_unsent_email(subject, plain_message, recipient):
+    if len(plain_message) > 100:
+        plain_message = plain_message[:100]
+    print("AR-Email Failed to send: ", subject, plain_message, recipient)
+
 ###########################
 ### EVENT-DRIVEN EMAILS ###
 ###########################
@@ -45,7 +55,12 @@ def follow_notification_email(recipient, follower):
     }
     plain_message = render_to_string('notifications/email_templates/plain/follow.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/follow.html', ctx)
-    return send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    sent =  send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    if sent:
+        log_sent_mail(subject, plain_message, recipient.user.email)
+    else:
+        log_unsent_email(subject, plain_message, recipient.user.email)
+    return sent
 
 def follow_slate_notification_email(recipient, follower, slate):
     subject = "%s is following your slate on ActionRising" % follower
@@ -59,7 +74,12 @@ def follow_slate_notification_email(recipient, follower, slate):
     }
     plain_message = render_to_string('notifications/email_templates/plain/follow_slate.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/follow_slate.html', ctx)
-    return send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    if sent:
+        log_sent_mail(subject, plain_message, recipient.user.email)
+    else:
+        log_unsent_email(subject, plain_message, recipient.user.email)
+    return sent
 
 def action_taken_email(recipient, actor, action):
 
@@ -83,7 +103,12 @@ def action_taken_email(recipient, actor, action):
     }
     plain_message = render_to_string('notifications/email_templates/plain/actiontaken.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/actiontaken.html', ctx)
-    return send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    if sent:
+        log_sent_mail(subject, plain_message, recipient.user.email)
+    else:
+        log_unsent_email(subject, plain_message, recipient.user.email)
+    return sent
 
 def suggested_action_email(recipient, suggester, action):
     subject = "%s suggested an action for you on ActionRising" % suggester
@@ -101,7 +126,12 @@ def suggested_action_email(recipient, suggester, action):
 
     plain_message = render_to_string('notifications/email_templates/plain/suggestedaction.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/suggestedaction.html', ctx)
-    return send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    if sent:
+        log_sent_mail(subject, plain_message, recipient.user.email)
+    else:
+        log_unsent_email(subject, plain_message, recipient.user.email)
+    return sent
 
 def add_slate_email(recipient, actor, action, slate):
     subject = "%s added your action to a slate on ActionRising" % actor
@@ -125,7 +155,12 @@ def add_slate_email(recipient, actor, action, slate):
 
     plain_message = render_to_string('notifications/email_templates/plain/addslate.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/addslate.html', ctx)
-    return send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    if sent:
+        log_sent_mail(subject, plain_message, recipient.user.email)
+    else:
+        log_unsent_email(subject, plain_message, recipient.user.email)
+    return sent
 
 def comment_email(recipient, actor, action, comment):
     subject = "%s commented on your action on ActionRising" % actor
@@ -143,7 +178,12 @@ def comment_email(recipient, actor, action, comment):
 
     plain_message = render_to_string('notifications/email_templates/plain/comment.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/comment.html', ctx)
-    return send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    if sent:
+        log_sent_mail(subject, plain_message, recipient.user.email)
+    else:
+        log_unsent_email(subject, plain_message, recipient.user.email)
+    return sent
 
 def followed_user_creates_email(recipient, actor, created_object):
     subject = "%s created a new %s on ActionRising" % (actor, created_object.get_cname())
@@ -159,7 +199,12 @@ def followed_user_creates_email(recipient, actor, created_object):
     }
     plain_message = render_to_string('notifications/email_templates/plain/followed_user_created.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/followed_user_created.html', ctx)
-    return send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    if sent:
+        log_sent_mail(subject, plain_message, recipient.user.email)
+    else:
+        log_unsent_email(subject, plain_message, recipient.user.email)
+    return sent
 
 def followed_slate_updated_email(recipient, action, slate):
     subject = "A slate you follow has a new action!"
@@ -175,8 +220,12 @@ def followed_slate_updated_email(recipient, action, slate):
     }
     plain_message = render_to_string('notifications/email_templates/plain/followed_slate_updated.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/followed_slate_updated.html', ctx)
-    return send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
-
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    if sent:
+        log_sent_mail(subject, plain_message, recipient.user.email)
+    else:
+        log_unsent_email(subject, plain_message, recipient.user.email)
+    return sent
 
 ###########################
 ### DAILY ACTION EMAILS ###
@@ -196,7 +245,12 @@ def daily_action_email(recipient, action):
 
     plain_message = render_to_string('notifications/email_templates/plain/dailyaction.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/dailyaction.html', ctx)
-    return send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    if sent:
+        log_sent_mail(subject, plain_message, recipient.user.email)
+    else:
+        log_unsent_email(subject, plain_message, recipient.user.email)
+    return sent
 
 #############################
 ### ACCOUNTABILITY EMAILS ###
@@ -222,7 +276,12 @@ def hold_accountable_email(recipient, commitment):
 
     plain_message = render_to_string('notifications/email_templates/plain/hold_accountable.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/hold_accountable.html', ctx)
-    return send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    if sent:
+        log_sent_mail(subject, plain_message, recipient.user.email)
+    else:
+        log_unsent_email(subject, plain_message, recipient.user.email)
+    return sent
 
 def hold_accountable_email_nonuser(recipient_email, commitment):
     requester = commitment.profile
@@ -243,8 +302,12 @@ def hold_accountable_email_nonuser(recipient_email, commitment):
 
     plain_message = render_to_string('notifications/email_templates/plain/hold_accountable_nonuser.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/hold_accountable_nonuser.html', ctx)
-    return send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient_email], html_message=html_message)
-
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient_email], html_message=html_message)
+    if sent:
+        log_sent_mail(subject, plain_message, recipient_email)
+    else:
+        log_unsent_email(subject, plain_message, recipient_email)
+    return sent
 
 ###########################
 ### EMAILS TO NON-USERS ###
@@ -262,7 +325,12 @@ def request_email(invite):
 
     plain_message = render_to_string('notifications/email_templates/plain/request.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/request.html', ctx)
-    return send_mail(subject, plain_message, NOTIFY_EMAIL, [invite.email], html_message=html_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [invite.email], html_message=html_message)
+    if sent:
+        log_sent_mail(subject, plain_message, invite.email)
+    else:
+        log_unsent_email(subject, plain_message, invite.email)
+    return sent
 
 def invite_email(invite):
     subject = "%s is inviting you to join ActionRising" % invite.get_inviter_string()
@@ -276,7 +344,12 @@ def invite_email(invite):
 
     plain_message = render_to_string('notifications/email_templates/plain/invite.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/invite.html', ctx)
-    return send_mail(subject, plain_message, NOTIFY_EMAIL, [invite.email], html_message=html_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [invite.email], html_message=html_message)
+    if sent:
+        log_sent_mail(subject, plain_message, invite.email)
+    else:
+        log_unsent_email(subject, plain_message, invite.email)
+    return sent
 
 def invite_notification_email(invite):
     if invite.self_submitted:
@@ -305,7 +378,34 @@ def nonuser_email(recipient_email, notifier, message, instance):
 
     plain_message = render_to_string('notifications/email_templates/plain/nonuser.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/nonuser.html', ctx)
-    return send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient_email], html_message=html_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient_email], html_message=html_message)
+    if sent:
+        log_sent_mail(subject, plain_message, recipient_email)
+    else:
+        log_unsent_email(subject, plain_message, recipient_email)
+    return sent
+
+
+#######################
+### EMAILS TO ADMIN ###
+#######################
 
 def generic_admin_email(subject, plain_message):
-    return send_mail(subject, plain_message, NOTIFY_EMAIL, ["actionrisingsite@gmail.com"], html_message=plain_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, ["actionrisingsite@gmail.com"], html_message=plain_message)
+    if sent:
+        log_sent_mail(subject, plain_message, "actionrisingsite@gmail.com")
+    else:
+        log_unsent_email(subject, plain_message, "actionrisingsite@gmail.com")
+    return sent
+
+def flag_email(instance):
+    subject = "There's been a flag on ActionRising"
+    plain_message = "https://www.actionrising.com/admin/flags/flag/" + str(instance.pk)
+    html_message = "<a href='https://www.actionrising.com/admin/flags/flag/" + str(instance.pk) + "/change'>Click here</a>"
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, ['actionrisingsite@gmail.com'],
+        fail_silently=False, html_message=html_message)
+    if sent:
+        log_sent_mail(subject, plain_message, "actionrisingsite@gmail.com")
+    else:
+        log_unsent_email(subject, plain_message, "actionrisingsite@gmail.com")
+    return sent
