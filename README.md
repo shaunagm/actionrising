@@ -10,35 +10,38 @@ This project uses Django version 1.10.3. See documentation in the `docs` directo
 Note: these instructions have been tested on Linux (Ubuntu 14.04) and
 OS X 10.12.1.
 
-1) Clone the repo from GitHub
+1) Clone the repository from GitHub
 
 2) Create and activate a [virtualenv](https://virtualenv.pypa.io/en/stable/userguide/#usage)
 
-3) Install requirements
+3) Install the requirements
 
     pip install -r requirements.txt
 
-4) Run Django migrations (if needed, should be run the first time or if data
+4) Go to mysite/local_settings.py.  There are currently three custom keys you'll need to
+set.  Follow the instructions in that file to figure out which changes to make.
+
+5) Run Django migrations (if needed, should be run the first time or if data
   models change)
 
     python manage.py migrate
 
-5) Load the test fixtures to get some fake data:
+6) Load the test fixtures to get some fake data:
 
     python manage.py loaddata fixtures.json
 
-6) Start site
+7) Start site
 
     python manage.py runserver
 
-7) Open site in browser (see command line output of previous step for correct
+8) Open site in browser (see command line output of previous step for correct
   link, usually something like http://127.0.0.1:8000)
 
-8) Remember to run the tests and make sure they're passing before you make any changes:
+9) Remember to run the tests and make sure they're passing before you make any changes:
 
      python manage.py test
 
    Consider running coverage on tests as well:
-   
+
      coverage run manage.py test
      coverage report

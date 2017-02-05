@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
+from local_settings import SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -94,16 +94,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'actnowdb',
-        'USER': 'actnowadmin',
-        'PASSWORD': os.environ['PG_DB_PASSWORD'],
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
+from local_settings import DATABASES
 
 
 # Password validation
@@ -199,10 +190,8 @@ if sys.argv[1:2] != ['test'] and sys.argv[1] != 'runserver':
     CSRF_COOKIE_SECURE = True
 
 # Email
-EMAIL_HOST = 'smtp.sparkpostmail.com'
-EMAIL_PORT = 587
+from local_settings import EMAIL_HOST, EMAIL_PORT, EMAIL_HOST_PASSWORD
 EMAIL_HOST_USER = 'SMTP_Injection'
-EMAIL_HOST_PASSWORD =  os.environ['SPARKPOST_API_KEY']
 EMAIL_USE_TLS = True
 
 PRODUCTION_DOMAIN = "https://www.actionrising.com"
