@@ -2,10 +2,14 @@ from __future__ import unicode_literals
 
 import json, ast
 
+from django.utils.translation import ugettext as _
+from django.utils import timezone
 from django.db import models
+from django.contrib.auth.models import User
+from ckeditor.fields import RichTextField
 from mysite.lib.choices import DAILY_ACTION_SOURCE_CHOICES
 from actstream.models import Action
-from django.contrib.auth.models import User
+from notifications.lib import email_handlers
 
 class NotificationSettings(models.Model):
     user = models.OneToOneField(User, unique=True)
@@ -82,3 +86,33 @@ class DailyActionSettings(models.Model):
     def get_tag_filter_pks(self):
         pks = ast.literal_eval(self.tag_filter)
         return [int(pk) for pk in pks]
+
+EMAIL_CHOICES = (
+    ('draft', _('Draft')),
+    ('test', _('Test Email')),
+    ('send', _('Send to Users')),
+    ('done', _('Done')),
+)
+
+class GenericEmail(models.Model):
+    subject = models.CharField(max_length=200)
+    preheader_text = models.CharField(max_length=300, blank=True, null=True)
+    date = models.DateTimeField(default=timezone.now)
+    body = RichTextField(max_length=5000, blank=True, null=True)
+    read_more_link = models.CharField(max_length=200)
+    read_more_text = models.CharField(max_length=200)
+    status = models.CharField(max_length=5, choices=EMAIL_CHOICES, default='draft')
+
+    def __unicode__(self):
+        return "%s (%s)" % (self.subject, self.status)
+
+    def save(self, *args, **kwargs):
+        if self.pk and self.status == "test":
+            email_handlers.send_generic_email("actionrisingsite@gmail.com", self)
+        if self.pk and self.status == "send":
+            for user in User.objects.all():
+                if not user.email:
+                    continue
+                email_handlers.send_generic_email(user.email, self)
+            self.status = "done"
+        super(GenericEmail, self).save(*args, **kwargs)

@@ -385,6 +385,29 @@ def nonuser_email(recipient_email, notifier, message, instance):
         log_unsent_email(subject, plain_message, recipient_email)
     return sent
 
+##########################
+### GENERIC USER EMAIL ###
+##########################
+
+def send_generic_email(recipient_email, generic_email):
+
+    subject = generic_email.subject
+
+    ctx = {
+        # Required fields
+        'preheader_text': generic_email.preheader_text,
+        # Email-specific fields
+        'email_object': generic_email
+    }
+
+    plain_message = render_to_string('notifications/email_templates/plain/generic_email.html', ctx)
+    html_message = render_to_string('notifications/email_templates/html/generic_email.html', ctx)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient_email], html_message=html_message)
+    if sent:
+        log_sent_mail(subject, plain_message, recipient_email)
+    else:
+        log_unsent_email(subject, plain_message, recipient_email)
+    return sent
 
 #######################
 ### EMAILS TO ADMIN ###

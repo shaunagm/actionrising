@@ -1,0 +1,7 @@
+{{ email_object.body }}
+
+{% if email_object.read_more_link %}
+    {{ email_object.read_more_text }}: {{ email_object.read_more_link }}
+{% endif %}
+
+{% include 'notifications/email_templates/plain/notification_footer.html' %}
