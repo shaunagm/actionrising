@@ -148,6 +148,32 @@ class TestCommitmentMethods(TestCase):
         self.assertEqual(self.commitment.status, "expired")
         self.assertEqual(len(mail.outbox), 0)
 
+class TestCommitmentInteractions(TestCase):
+
+    def setUp(self):
+        self.buffy = User.objects.create(username="buffysummers")
+        self.action = Action.objects.create(title="Test Action", creator=self.buffy)
+        self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile,
+            action=self.action)
+        self.commitment = Commitment.objects.create(profile=self.buffy.profile,
+            action=self.action)
+
+    def test_closing_par_closes_commitment(self):
+        self.assertEqual(self.commitment.status, "waiting")
+        self.par.status = "clo"
+        self.par.save()
+        commitment = Commitment.objects.get(profile=self.buffy.profile,
+            action=self.action)
+        self.assertEqual(commitment.status, "removed")
+
+    def test_finishing_par_closes_commitment(self):
+        self.assertEqual(self.commitment.status, "waiting")
+        self.par.status = "don"
+        self.par.save()
+        commitment = Commitment.objects.get(profile=self.buffy.profile,
+            action=self.action)
+        self.assertEqual(commitment.status, "completed")
+
 ##################
 ### Test forms ###
 ##################

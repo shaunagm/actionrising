@@ -33,3 +33,22 @@ def reopen_commitment_when_par_is_reopened(par):
     c = Commitment.objects.filter(action=par.action, profile=par.profile).first()
     if c and c.status == "removed":
         c.reopen()
+
+def close_commitment_when_PAR_is_done(par):
+    '''If commitment was removed, reopen it and decide if it's active/waiting/expired.'''
+    from commitments.models import Commitment
+    c = Commitment.objects.filter(action=par.action, profile=par.profile).first()
+    if c and c.status in ["waiting", "active"]:
+        c.status = "completed"
+        c.save()
+
+def change_commitment_when_par_changes(par, previous_status, current_status):
+    if previous_status != "clo" and current_status == "clo":
+        close_commitment_when_PAR_is_closed(par)
+    if previous_status != "ace" and current_status == "ace":
+        reopen_commitment_when_par_is_reopened(par)
+    if previous_status != "don" and current_status == "don":
+        close_commitment_when_PAR_is_done(par)
+    # NOTE: This leaves some edge cases - what if a user marks an action as done,
+    # then undoes that?  But this is a small minority of use cases which we can come
+    # back to.

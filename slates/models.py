@@ -16,8 +16,6 @@ from actions.models import Action
 from mysite.settings import PRODUCTION_DOMAIN
 from mysite.lib import choices
 from mysite.lib.utils import disable_for_loaddata, slug_validator, slugify_helper
-from profiles.lib.status_helpers import open_pars_when_action_reopens, close_pars_when_action_closes
-
 
 class Slate(models.Model):
     """Stores a single slate."""

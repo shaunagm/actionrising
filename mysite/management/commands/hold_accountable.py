@@ -14,7 +14,7 @@ class Command(BaseCommand):
             print("Waiting commitments set to active")
             commitments = Commitment.objects.filter(status="active")
             for c in commitments:
-                c.hold_accountable()
+                c.hold_accountable_if_time()
             print("People held accountable")
         except:
             raise CommandError("Failure holding people accountable")
