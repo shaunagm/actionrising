@@ -88,6 +88,5 @@ def get_action_after_filters(user, actions):
 def generate_daily_action(user, popular_actions):
     actions = get_actions_from_sources(user, popular_actions)
     action = get_action_after_filters(user, actions)
-    if action:
-        user.dailyactionsettings.add_recently_seen_action(action)
+    user.dailyactionsettings.add_recently_seen_action(action)
     return action

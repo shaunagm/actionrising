@@ -157,6 +157,8 @@ def send_daily_actions():
         action = dailyaction.generate_daily_action(user, most_popular_actions)
         if action:
             email_handlers.daily_action_email(user.profile, action)
+        else:
+            print("User generated no action: ", user)
 
 ##############################
 ### NON USER NOTIFICATIONS ###

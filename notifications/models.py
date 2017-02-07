@@ -70,7 +70,8 @@ class DailyActionSettings(models.Model):
         pks = self.get_recently_seen_pks()
         if len(pks) > 10 or action is None:
             # If our filters/sources are giving us few actions, pop a pk regardless
-            pks.pop(0)
+            if len(pks) > 0:
+                pks.pop(0)
         if action:
             pks.append(action.pk)
         self.set_recently_seen_pks(pks)
