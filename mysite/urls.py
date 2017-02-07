@@ -35,6 +35,7 @@ urlpatterns = [
     url(r'^slates/', include('slates.urls')),
     url(r'^tags/', include('tags.urls')),
     url(r'^flags/', include('flags.urls')),
+    url(r'^blog/', include('blog.urls')),
     url(r'^notifications/', include('notifications.urls')),
     url(r'^comments/', include('django_comments.urls')),
     url(r'^invites/', include('invites.urls')),

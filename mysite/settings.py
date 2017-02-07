@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'notifications',
     'invites',
     'commitments',
+    'blog',
     'plugins.location_plugin',
     'functional_tests',
     'django_comments',
