@@ -5,7 +5,6 @@ from django.utils import timezone
 from commitments.models import Commitment
 
 class CommitmentForm(forms.ModelForm):
-    days_before_emailing = forms.IntegerField(initial=14)
     buddies = forms.MultipleChoiceField(required=False)
 
     class Meta:
@@ -32,6 +31,6 @@ class CommitmentForm(forms.ModelForm):
         instance.profile = self.profile
         instance.action = self.action
         days_wait = self.cleaned_data.get('days_before_emailing', 14)
-        instance.start_emails = datetime.datetime.now(timezone.utc) + datetime.timedelta(days=days_wait)
+        instance.update_start_date(days_wait)
         instance.save()
         return instance

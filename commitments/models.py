@@ -22,9 +22,19 @@ class Commitment(models.Model):
     message = models.CharField(max_length=400, blank=True, null=True)
     start_emails = models.DateTimeField(default=timezone.now)
     tries = models.IntegerField(default=3)
+    days_before_emailing = models.IntegerField(default=14)
 
     def __unicode__(self):
         return u'Commitment of profile %s to action %s' % (self.profile, self.action)
+
+    def update_start_date(self, days_wait):
+        if not self.pk:
+            self.start_emails = datetime.datetime.now(timezone.utc) + datetime.timedelta(days=days_wait)
+        else:
+            orig = Commitment.objects.get(pk=self.pk)
+            if orig.days_before_emailing != days_wait:
+                diff = days_wait - orig.days_before_emailing
+                self.start_emails = self.start_emails + datetime.timedelta(days=diff)
 
     def days_past_start(self):
         return (datetime.datetime.now(tz=pytz.utc) - self.start_emails).days
