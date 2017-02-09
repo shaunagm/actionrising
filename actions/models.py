@@ -25,7 +25,7 @@ class Action(models.Model):
     creator = models.ForeignKey(User)
     anonymize = models.BooleanField(default=False)
     main_link = models.CharField(max_length=300, blank=True, null=True)
-    description = RichTextField(max_length=2500, blank=True, null=True)  
+    description = RichTextField(max_length=4000, blank=True, null=True)  
     # privacy default is inh == inherit
     privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
     current_privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='sit')
