@@ -16,7 +16,7 @@ class FilterWizard_Location(forms.Form):
                     add your location</a> in your profile?""" % request.user.profile.get_edit_url()
         else:
             self.warning = """Your location is set to %s.  If that is incorrect,
-                <a target='_blank' href='%s'>you can change it in your profile/a>.""" % (location.location,
+                <a target='_blank' href='%s'>you can change it in your profile</a>.""" % (location.location,
                 request.user.profile.get_edit_url())
 
     def update_filter(self, actionfilter, request):
