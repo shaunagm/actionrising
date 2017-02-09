@@ -203,3 +203,6 @@ DEFAULT_FROM_EMAIL = NOTIFY_EMAIL
 SKIP_FUNCTIONAL_TESTS = False
 
 AUTHENTICATION_BACKENDS = ('mysite.lib.backends.CustomModelBackend',)
+
+# Ckeditor configs
+CKEDITOR_CONFIGS = { 'default': { 'width': '100%', }, }
