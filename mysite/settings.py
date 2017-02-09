@@ -25,7 +25,8 @@ from local_settings import SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'act-now.herokuapp.com', 'actionrising.com', 'www.actionrising.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'act-now.herokuapp.com', 'actionrising.com', 'www.actionrising.com',
+    'act-now-staging.herokuapp.com']
 
 SITE_ID = 1
 
