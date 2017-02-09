@@ -201,3 +201,5 @@ NOTIFY_EMAIL = "ActionRising <notify@www.actionrising.com>"   # was django-spark
 DEFAULT_FROM_EMAIL = NOTIFY_EMAIL
 
 SKIP_FUNCTIONAL_TESTS = False
+
+AUTHENTICATION_BACKENDS = ('mysite.lib.backends.CustomModelBackend',)
