@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 
 def index(request):
     if request.user.is_authenticated():
-        return HttpResponseRedirect(reverse('dashboard'))
+        return HttpResponseRedirect(request.user.navbarsettings.get_landing_url_from_index())
     return render(request, 'mysite/landing.html')
 
 def about(request):

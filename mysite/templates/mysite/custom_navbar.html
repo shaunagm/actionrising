@@ -1,0 +1,28 @@
+{% if request.user.navbarsettings.use_default %}
+  <li><a href="{% url 'dashboard' %}">Your Dashboard</a></li>
+  <li><a href="{% url 'find-actions-landing' %}">Find Actions</a></li>
+  <li><a href="{% url 'create-actions-landing' %}">Create Actions</a></li>
+{% else %}
+  <!-- These options should match the choices defined in profiles.forms.NavbarForm -->
+  {% if 'dash' in request.user.navbarsettings.get_links %}
+    <li><a href="{% url 'dashboard' %}">Your Dashboard</a></li>
+  {% endif %}
+  {% if 'openactions' in request.user.navbarsettings.get_links %}
+    <li><a href="{% url 'to_do' %}">Your Open Actions</a></li>
+  {% endif %}
+  {% if 'findactions' in request.user.navbarsettings.get_links %}
+    <li><a href="{% url 'find-actions-landing' %}">Find Actions</a></li>
+  {% endif %}
+  {% if 'createactions' in request.user.navbarsettings.get_links %}
+    <li><a href="{% url 'create-actions-landing' %}">Create Actions</a></li>
+  {% endif %}
+  {% if 'allactions' in request.user.navbarsettings.get_links %}
+    <li><a href="{% url 'actions' %}">All Actions</a></li>
+  {% endif %}
+  {% if 'addaction' in request.user.navbarsettings.get_links %}
+    <li><a href="{% url 'create_action' %}">Create an Action</a></li>
+  {% endif %}
+  {% if 'feed' in request.user.navbarsettings.get_links %}
+    <li><a href="{% url 'feed' %}">Your Feed</a></li>
+  {% endif %}
+{% endif %}

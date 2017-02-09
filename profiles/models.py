@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 
-import json, datetime
+import json, datetime, ast
 from random import shuffle
 from itertools import chain
 
@@ -494,3 +494,44 @@ class ProfileSlateRelationship(models.Model):
     def get_cname(self):
         class_name = 'ProfileSlateRelationship'
         return class_name
+
+class NavbarSettings(models.Model):
+    user = models.OneToOneField(User, unique=True, related_name="navbarsettings")
+    use_default = models.BooleanField(default=True)
+    links = models.CharField(max_length=80, blank=True, null=True)
+    use_default_landing = models.BooleanField(default=True)
+    landing_link = models.CharField(max_length=30, blank=True, null=True)
+
+    def __unicode__(self):
+        return u'NavbarSettings for %s' % (self.user.username)
+
+    def get_links(self):
+        if self.links is not None:
+            return ast.literal_eval(self.links)
+        return []
+
+    def get_landing_link(self):
+        if self.landing_link not in [None, "", []]:
+            return ast.literal_eval(self.landing_link)
+        return []
+
+    def get_landing_url(self):
+        if self.use_default_landing == False:
+            if 'dash' in self.landing_link:
+                return reverse('dashboard')
+            if 'actions' in self.landing_link:
+                return reverse('actions')
+            if 'feed' in self.landing_link:
+                return reverse('feed')
+        return reverse('index')
+
+    def get_landing_url_from_index(self):
+        '''Custom method to prevent infinite loop if reverse('index') accidentally returned'''
+        if self.use_default_landing == False:
+            if 'dash' in self.landing_link:
+                return reverse('dashboard')
+            if 'actions' in self.landing_link:
+                return reverse('actions')
+            if 'feed' in self.landing_link:
+                return reverse('feed')
+        return reverse('dashboard')
