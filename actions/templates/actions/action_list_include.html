@@ -2,18 +2,20 @@
 
 Filter:
 
-{% include 'actions/action_controls/status_control.html' %}
-{% include 'actions/action_controls/friends_control.html' %}
-{% include 'actions/action_controls/priority_control.html' %}
-{% include 'actions/action_controls/deadline_control.html' %}
-{% get_plugin_templates "action_controls" %}
-{% include 'actions/action_controls/notes_control.html' %}
+<span class="list-filters">
+    {% include 'actions/action_controls/status_control.html' %}
+    {% include 'actions/action_controls/friends_control.html' %}
+    {% include 'actions/action_controls/priority_control.html' %}
+    {% include 'actions/action_controls/deadline_control.html' %}
+    {% get_plugin_templates "action_controls" %}
+    {% include 'actions/action_controls/notes_control.html' %}
+</span>
 
 <table class="table table-striped table-hover main-list dt-responsive" id="actions">
   <thead>
     <tr>
-      <th>Created</th>
       <th>Action</th>
+      <th>Created</th>
       <th>Tags</th>
       <th>Trackers</th>
       <th>Deadline?</th>
