@@ -47,3 +47,6 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url('^activity/', include('actstream.urls')),
 ]
+
+handler404 = 'mysite.views.custom_404'
+handler500 = 'mysite.views.custom_500'

@@ -19,6 +19,16 @@ class PrivacyPolicyView(generic.TemplateView):
 def change_password_redirect(request):
     return HttpResponseRedirect(reverse('index'))
 
+def custom_404(request):
+    response = render(request, 'mysite/404.html')
+    response.status_code = 404
+    return response
+
+def custom_500(request):
+    response = render(request, 'mysite/500.html')
+    response.status_code = 500
+    return response
+
 def acme_challenge(request):
     return render(request, 'mysite/challenge.html')
 

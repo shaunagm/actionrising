@@ -40,3 +40,10 @@ DATABASES = {
 EMAIL_HOST = 'smtp.sparkpostmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_PASSWORD =  os.environ['SPARKPOST_API_KEY']
+
+# SETTING 4: DEBUG
+# Sets debug to true for devel and stage, but leaves it off for production
+if os.environ.get('IS_PRODUCTION_SITE') and os.environ.get('IS_PRODUCTION_SITE') == "True":
+    DEBUG = False
+else:
+    DEBUG = True

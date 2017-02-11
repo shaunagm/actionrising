@@ -23,7 +23,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 from local_settings import SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+from local_settings import DEBUG
+
+SEND_BROKEN_LINK_EMAILS = True
+MANAGERS = (('Admin', 'actionrisingsite@gmail.com'),)
 
 ALLOWED_HOSTS = ['127.0.0.1', 'act-now.herokuapp.com', 'actionrising.com', 'www.actionrising.com',
     'act-now-staging.herokuapp.com']
@@ -207,3 +210,23 @@ AUTHENTICATION_BACKENDS = ('mysite.lib.backends.CustomModelBackend',)
 
 # Ckeditor configs
 CKEDITOR_CONFIGS = { 'default': { 'width': '100%', }, }
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+        }
+    },
+    'loggers': {
+        'django': {
+            'propogate': True
+        }
+    },
+    'root': {
+        'handlers': ['console', ],
+        'level': 'INFO'
+    },
+}
