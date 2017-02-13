@@ -12,6 +12,7 @@
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
     <link rel="icon" type="image/png" href="{% static "images/favicon.ico" %}" />
     {% block page_specific_meta %}
+      {% include "mysite/share_meta_include.html" %}
     {% endblock page_specific_meta %}
 
     <script src="{% static "js/jquery-1.11.0.min.js" %}"></script>
@@ -32,7 +33,6 @@
     <link rel="stylesheet" href="{% static "css/jquery.dataTables.min.css" %}" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static "css/responsive.bootstrap.min.css" %}" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static "css/chosen.css" %}">
-
 
     {% include "mysite/css_include.html" %}
 
