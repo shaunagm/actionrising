@@ -6,11 +6,7 @@
   <meta property="og:title" content="ActionRising">
 {%endif %}
 
-{% if object.description %}
-  <meta property="og:description" content="{{ object.description|safe }}">
-{% else %}
-  <meta property="og:description" content="Take action with us on ActionRising!">
-{%endif %}
+<meta property="og:description" content="Take action with us on ActionRising!">
 
 {% if object.get_absolute_url_with_domain %}
   <meta property="og:url" content="{{ object.get_absolute_url_with_domain }}">
