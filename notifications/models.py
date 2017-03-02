@@ -111,12 +111,12 @@ class GenericEmail(models.Model):
 @disable_for_loaddata
 def generic_email_handler(sender, instance, created, **kwargs):
     if instance.status == "test":
-        email_handlers.send_generic_email("actionrisingsite@gmail.com", self)
+        email_handlers.send_generic_email("actionrisingsite@gmail.com", instance)
     if instance.status == "send":
         for user in User.objects.all():
             if not user.email:
                 continue
-            email_handlers.send_generic_email(user.email, self)
+            email_handlers.send_generic_email(user.email, instance)
         instance.status = "done"
         post_save.disconnect(generic_email_handler, sender=GenericEmail) # Prevents recursion
         instance.save()
