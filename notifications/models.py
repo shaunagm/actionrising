@@ -5,11 +5,13 @@ import json, ast
 from django.utils.translation import ugettext as _
 from django.utils import timezone
 from django.db import models
+from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 from mysite.lib.choices import DAILY_ACTION_SOURCE_CHOICES
 from actstream.models import Action
 from notifications.lib import email_handlers
+from mysite.lib.utils import disable_for_loaddata
 
 class NotificationSettings(models.Model):
     user = models.OneToOneField(User, unique=True)
@@ -106,13 +108,17 @@ class GenericEmail(models.Model):
     def __unicode__(self):
         return "%s (%s)" % (self.subject, self.status)
 
-    def save(self, *args, **kwargs):
-        if self.pk and self.status == "test":
-            email_handlers.send_generic_email("actionrisingsite@gmail.com", self)
-        if self.pk and self.status == "send":
-            for user in User.objects.all():
-                if not user.email:
-                    continue
-                email_handlers.send_generic_email(user.email, self)
-            self.status = "done"
-        super(GenericEmail, self).save(*args, **kwargs)
+@disable_for_loaddata
+def generic_email_handler(sender, instance, created, **kwargs):
+    if instance.status == "test":
+        email_handlers.send_generic_email("actionrisingsite@gmail.com", self)
+    if instance.status == "send":
+        for user in User.objects.all():
+            if not user.email:
+                continue
+            email_handlers.send_generic_email(user.email, self)
+        instance.status = "done"
+        post_save.disconnect(generic_email_handler, sender=GenericEmail) # Prevents recursion
+        instance.save()
+        post_save.connect(generic_email_handler, sender=GenericEmail) # Reconnect
+post_save.connect(generic_email_handler, sender=GenericEmail)
