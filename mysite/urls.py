@@ -45,6 +45,7 @@ urlpatterns = [
     url(r'^.well-known/acme-challenge/MdzRdJXytZiBN7PYPMUbU6HjvFP2aUDEN8saHRXGBCY', views.acme_challenge),
     url(r'^.well-known/acme-challenge/-_rzqfR-Q9sDxQqiKrK8naLr7nwmaCU2RbYS-hN-_Lc', views.acme_challenge2),
     url(r'^$', views.index, name='index'),
+    url(r'^django-rq/', include('django_rq.urls')),
     url('^activity/', include('actstream.urls')),
 ]
 

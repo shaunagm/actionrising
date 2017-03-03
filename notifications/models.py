@@ -108,17 +108,9 @@ class GenericEmail(models.Model):
     def __unicode__(self):
         return "%s (%s)" % (self.subject, self.status)
 
-@disable_for_loaddata
-def generic_email_handler(sender, instance, created, **kwargs):
-    if instance.status == "test":
-        email_handlers.send_generic_email("actionrisingsite@gmail.com", instance)
-    if instance.status == "send":
-        for user in User.objects.all():
-            if not user.email:
-                continue
-            email_handlers.send_generic_email(user.email, instance)
-        instance.status = "done"
-        post_save.disconnect(generic_email_handler, sender=GenericEmail) # Prevents recursion
-        instance.save()
-        post_save.connect(generic_email_handler, sender=GenericEmail) # Reconnect
-post_save.connect(generic_email_handler, sender=GenericEmail)
+    def save(self, *args, **kwargs):
+        import django_rq
+        from notifications.tasks import send_generic_emails
+        queue = django_rq.get_queue('high')
+        queue.enqueue(send_generic_emails, self)
+        super(GenericEmail, self).save(*args, **kwargs)
