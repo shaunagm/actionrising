@@ -102,8 +102,8 @@ class GenericEmail(models.Model):
     date = models.DateTimeField(default=timezone.now)
     body = RichTextField(max_length=5000, blank=True, null=True)
     plain_body = models.CharField(max_length=5000, blank=True, null=True)
-    read_more_link = models.CharField(max_length=200)
-    read_more_text = models.CharField(max_length=200)
+    read_more_link = models.CharField(max_length=200, blank=True, null=True)
+    read_more_text = models.CharField(max_length=200, blank=True, null=True)
     status = models.CharField(max_length=5, choices=EMAIL_CHOICES, default='draft')
 
     def __unicode__(self):
