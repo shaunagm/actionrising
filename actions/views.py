@@ -80,6 +80,16 @@ class ActionEditView(UserPassesTestMixin, generic.edit.UpdateView):
         form_kws["formtype"] = "update"
         return form_kws
 
+@login_required
+def keep_actions_open_view(request, pk):
+    action = Action.objects.get(pk=pk)
+    if action.creator == request.user:
+        action.keep_action_open()
+        return render(request, 'actions/keep_open.html', context={'action': action })
+    else:
+        return HttpResponseRedirect(reverse('actions'))
+
+
 class FindActionsLandingView(LoginRequiredMixin, generic.TemplateView):
     template_name = "actions/find_actions.html"
 

@@ -253,6 +253,52 @@ def daily_action_email(recipient, action):
     return sent
 
 #############################
+### ACTION CLOSING EMAILS ###
+#############################
+
+def close_action_warning_email(recipient, action):
+
+    subject = "Your action on ActionRising is closing soon"
+
+    ctx = {
+        # Required fields
+        'preheader_text': "Your action %s on ActionRising will close in 3 days" % action.title,
+        'manage_notifications_url': get_notificationsettings_url(recipient),
+        # Email-specific fields
+        'action': action
+    }
+
+    plain_message = render_to_string('notifications/email_templates/plain/close_action_warning.html', ctx)
+    html_message = render_to_string('notifications/email_templates/html/close_action_warning.html', ctx)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    if sent:
+        log_sent_mail(subject, plain_message, recipient.user.email)
+    else:
+        log_unsent_email(subject, plain_message, recipient.user.email)
+    return sent
+
+def close_action_email(recipient, action):
+    subject = "Your action on ActionRising has closed"
+
+    ctx = {
+        # Required fields
+        'preheader_text': "Your action %s on ActionRising has been automatically closed" % action.title,
+        'manage_notifications_url': get_notificationsettings_url(recipient),
+        # Email-specific fields
+        'action': action
+    }
+
+    plain_message = render_to_string('notifications/email_templates/plain/close_action.html', ctx)
+    html_message = render_to_string('notifications/email_templates/html/close_action.html', ctx)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    if sent:
+        log_sent_mail(subject, plain_message, recipient.user.email)
+    else:
+        log_unsent_email(subject, plain_message, recipient.user.email)
+    return sent
+
+
+#############################
 ### ACCOUNTABILITY EMAILS ###
 #############################
 

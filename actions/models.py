@@ -20,25 +20,35 @@ from profiles.lib.status_helpers import open_pars_when_action_reopens, close_par
 
 class Action(models.Model):
     """ Stores a single action """
+
+    # Basic action data
     slug = models.CharField(max_length=50, unique=True, validators=slug_validator)
     title = models.CharField(max_length=300)
     creator = models.ForeignKey(User)
     anonymize = models.BooleanField(default=False)
     main_link = models.CharField(max_length=300, blank=True, null=True)
-    description = RichTextField(max_length=4000, blank=True, null=True)  
+    description = RichTextField(max_length=4000, blank=True, null=True)
+    date_created = models.DateTimeField(default=timezone.now)
+    # default default is H == 'Unknown or variable'
+    duration = models.CharField(max_length=2, choices=TIME_CHOICES, default='H')
+    # suggested priority default is med == medium
+    priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='med')
+
+    # Privacy info
     # privacy default is inh == inherit
     privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
     current_privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='sit')
+
+    # Status info
     # status default is rea == open for action
     status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='rea')
     has_deadline = models.BooleanField(default=False)
     deadline = models.DateTimeField(blank=True, null=True)
-    # suggested priority default is med == medium
-    priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='med')
-    date_created = models.DateTimeField(default=timezone.now)
+    keep_open = models.BooleanField(default=False) # User can keep action open if no deadline
+    keep_open_date = models.DateTimeField(blank=True, null=True)
+
+    # Related models
     flags = GenericRelation('flags.Flag')
-    # default default is H == 'Unknown or variable'
-    duration = models.CharField(max_length=2, choices=TIME_CHOICES, default='H')
 
     def __unicode__(self):
         return self.title
@@ -82,6 +92,12 @@ class Action(models.Model):
     def get_edit_url(self):
         return reverse('edit_action', kwargs={'slug': self.slug})
 
+    def get_edit_url_with_domain(self):
+        return PRODUCTION_DOMAIN + self.get_edit_url()
+
+    def get_keep_open_url_with_domain(self):
+        return PRODUCTION_DOMAIN + reverse('keep_open_action', kwargs={'pk': self.pk})
+
     def get_tags(self):
         return self.tags.all()
 
@@ -120,6 +136,19 @@ class Action(models.Model):
     def get_status(self):
         # Added for conveniences' sake in vet_actions function
         return self.get_status_display()
+
+    def keep_action_open(self):
+        self.keep_open = True
+        self.status = 'rea'
+        self.keep_open_date = datetime.datetime.now(timezone.utc)
+        self.save()
+
+    def get_days_til_close_action(self):
+        now = datetime.datetime.now(timezone.utc)
+        if self.keep_open:      # if creator has decided to keep action open
+            return (now - self.keep_open_date).days
+        else:
+            return (now - self.date_created).days
 
     def get_days_til_deadline(self):
         now = datetime.datetime.now(timezone.utc)
