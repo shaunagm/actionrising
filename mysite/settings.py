@@ -25,6 +25,9 @@ from local_settings import SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 from local_settings import DEBUG
 
+# for testing
+from local_settings import CHROMEDRIVER_PATH
+
 SEND_BROKEN_LINK_EMAILS = True
 MANAGERS = (('Admin', 'actionrisingsite@gmail.com'),)
 
