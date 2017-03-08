@@ -19,3 +19,6 @@ htmlcov
 
 # Static files
 mysite/staticfiles/*
+
+# Config
+mysite/local_settings.py

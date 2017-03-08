@@ -12,7 +12,7 @@ OS X 10.12.1.
 
 1) Clone the repository from GitHub
 
-2) Create and activate a [virtualenv](https://virtualenv.pypa.io/en/stable/userguide/#usage)
+2) Inside the repo, create and activate a [virtualenv](https://virtualenv.pypa.io/en/stable/userguide/#usage) called `venv`
 
 3) Install the requirements
 
