@@ -29,7 +29,7 @@ Setting up the site locally
     pip install virtualenv
 
 #. Download and install `postgres`_. On OS X, the
-   [Postgres.App](http://postgresapp.com/) is recommended. To add
+   `Postgres.App`_ is recommended. To add
    Postgres.App to your path, type the following at the command line
    (be sure to restart your terminal to ensure the path is updated)::
 
@@ -81,5 +81,6 @@ Setting up the site locally
 .. _technical overview: https://github.com/shaunagm/actionrising/blob/master/docs/technical_overview.md
 .. _virtualenv: https://virtualenv.pypa.io/en/stable/userguide/#usage
 .. _postgres: https://www.postgresql.org/download/
+.. _Postgres.App: http://postgresapp.com/
 .. _pip: https://pip.pypa.io/en/stable/installing/
 .. __: http://127.0.0.1:8000
