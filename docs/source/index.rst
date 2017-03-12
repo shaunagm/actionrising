@@ -6,12 +6,14 @@
 Welcome to ActionRising's documentation!
 ========================================
 
+.. include:: ../../README.rst
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
    technical_overview.md
-   README.md
+
 
 
 Indices and tables

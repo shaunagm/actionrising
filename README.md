@@ -14,6 +14,7 @@ OS X (10.12.1 and 10.12.2).
 
 1. Install [pip](https://pip.pypa.io/en/stable/installing/) if you don't have it already. 
 
+
 1. Use pip to install a [virtualenv](https://virtualenv.pypa.io/en/stable/userguide/#usage) called `venv`:
 
     ```
