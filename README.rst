@@ -42,7 +42,7 @@ Setting up the site locally
     virtualenv venv --python=python2.7
     source venv/bin/activate
 
-#.  Once the virtualenv has been activated, install the requirements::
+#. Once the virtualenv has been activated, install the requirements::
 
     pip install -r requirements.txt
 
@@ -78,7 +78,7 @@ Setting up the site locally
 
 .. _actionrising.com: https://actionrising.com
 .. _Clone: https://help.github.com/articles/cloning-a-repository/
-.. _technical overview: https://github.com/shaunagm/actionrising/tree/master/docs/source/technical_overview.md
+.. _technical overview: https://github.com/shaunagm/actionrising/blob/master/docs/technical_overview.md
 .. _virtualenv: https://virtualenv.pypa.io/en/stable/userguide/#usage
 .. _postgres: https://www.postgresql.org/download/
 .. _pip: https://pip.pypa.io/en/stable/installing/
