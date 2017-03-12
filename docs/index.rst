@@ -10,6 +10,7 @@ Welcome to ActionRising's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   technical_overview
 
 
 Indices and tables
