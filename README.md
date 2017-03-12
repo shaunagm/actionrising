@@ -12,7 +12,11 @@ OS X (10.12.1 and 10.12.2).
 
 1) [Clone](https://help.github.com/articles/cloning-a-repository/) the repository from GitHub
 
-1) Install [pip](https://pip.pypa.io/en/stable/installing/) if you don't have it already.
+1) Install [pip](https://pip.pypa.io/en/stable/installing/) if you don't have it already. On Linux, you may need to install the following library (which cannot be installed through pip):
+
+    sudo apt-get install libpq-dev  # ubuntu
+
+Now you can go ahead and install the rest of the requirements.
 
 1) Use pip to install a [virtualenv](https://virtualenv.pypa.io/en/stable/userguide/#usage) called `venv`
 
