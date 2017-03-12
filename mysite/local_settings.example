@@ -17,10 +17,10 @@ SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 # (If you think you're unlikely to add or change models, you can use a different
 # backend like sqlite instead of following these instructions.
 # For help, see https://docs.djangoproject.com/en/1.10/ref/settings/#databases)
-# 1. Download and connect to PostgreSQL.
-# 2. Create a new superuser named actnowadmin.
-# 3. Create a database called actnowdb.
-# 4. Make up a password and either
+# 1. Download and connect to PostgreSQL. On OS X using Postgress.App, this can be done by clicking the elephant in the top bar and clicking activate.
+# 2. Create a new superuser named actnowadmin. On OS X, type psql to begin and enter CREATE USER actnowadmin WITH SUPERUSER;
+# 3. Create a database called actnowdb: CREATE DATABASE actnowdb OWNER actnowadmin;
+# 4. Make up a password (ALTER USER actnowadmin SET password 'password';) and either
 #    a. add it to venv/bin/activate with the line
 #       export PG_DB_PASSWORD='$your_pg_db_password', and reactivate your venv
 #    or
@@ -57,6 +57,6 @@ else:
 
 # SETTING 5:
 # The tests need the path to your global chromedriver rather than the virtualenv one.
-# You may need to change this path if your chromedriver is in a different location.
+# You may need to change this path if your chromedriver is in a different location. To find the path, try locate chromedriver. On OS X, the path was /Library/Frameworks/Python.framework/Versions/3.4/chromedriver-Darwin.
 
 CHROMEDRIVER_PATH = '/usr/local/bin/chromedriver'

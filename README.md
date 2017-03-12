@@ -8,16 +8,27 @@ This project uses Django version 1.10.3 and Python version 2.7. See documentatio
 ## Setting up the site locally
 
 Note: these instructions have been tested on Linux (Ubuntu 14.04) and
-OS X 10.12.1.
+OS X (10.12.1 and 10.12.2).
 
-1) Clone the repository from GitHub
+1) [Clone](https://help.github.com/articles/cloning-a-repository/) the repository from GitHub
 
-2) In the top level of the repo, create and activate a [virtualenv](https://virtualenv.pypa.io/en/stable/userguide/#usage) called `venv`
+1) Install [pip](https://pip.pypa.io/en/stable/installing/) if you don't have it already.
 
-    virtualenv venv
+1) Use pip to install a [virtualenv](https://virtualenv.pypa.io/en/stable/userguide/#usage) called `venv`
+
+    pip install virtualenv
+
+1) Download and install [postgres](https://www.postgresql.org/download/). On OS X, [Postgress.App](http://postgresapp.com/) is recommended. To add Postgress.App to your path, type the following at the command line. Be sure to restart your terminal to ensure the path is updated.
+
+    sudo mkdir -p /etc/paths.d &&
+    echo /Applications/Postgres.app/Contents/Versions/latest/bin | sudo tee /etc/paths.d/postgresapp
+
+1) Create and activate a virtual env called `venv` that uses python 2.7
+
+    virtualenv venv --python=python2.7
     source venv/bin/activate
 
-3) Install [pip](https://pip.pypa.io/en/stable/installing/) if you don't have it and install the requirements
+3) Once the virtualenv has been activated, install the requirements for it
 
     pip install -r requirements.txt
 
@@ -25,7 +36,7 @@ OS X 10.12.1.
 set.  Follow the instructions in that file to figure out which changes to make.
 
 5) Run Django migrations (if needed, should be run the first time or if data
-  models change)
+  models change). If you get an import error, double check local_settings.py and make sure you are using python2.7 for your virtualenv.
 
     python manage.py migrate
 
