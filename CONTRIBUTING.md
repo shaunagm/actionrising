@@ -172,8 +172,8 @@ Create an issue on that repository and provide the following information:
 
 ### Your First Code Contribution
 
-Unsure where to begin contributing to Atom? You can start by looking through
-the issues
+Unsure where to begin contributing to ActionRising? You can start by looking through
+the issues.
 
 ### Pull Requests
 
