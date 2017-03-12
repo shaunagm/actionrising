@@ -17,7 +17,13 @@ OS X 10.12.1.
     virtualenv venv
     source venv/bin/activate
 
-3) Install [pip](https://pip.pypa.io/en/stable/installing/) if you don't have it and install the requirements
+3) Install [pip](https://pip.pypa.io/en/stable/installing/) if you don't have it.  
+Before installing the requirements, you may need to install the following library
+(which cannot be installed through pip):
+
+    sudo apt-get install libpq-dev  # ubuntu
+
+Now you can go ahead and install the rest of the requirements.
 
     pip install -r requirements.txt
 
