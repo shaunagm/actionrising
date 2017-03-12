@@ -2,7 +2,7 @@
 
 Note: The production version is hosted at actionrising.com.
 
-This project uses Django version 1.10.3. See documentation in the `docs` directory for a brief
+This project uses Django version 1.10.3 and Python version 2.7. See documentation in the `docs` directory for a brief
 [technical overview](docs/technical_overview.md) for contributors.
 
 ## Setting up the site locally
@@ -12,13 +12,16 @@ OS X 10.12.1.
 
 1) Clone the repository from GitHub
 
-2) Inside the repo, create and activate a [virtualenv](https://virtualenv.pypa.io/en/stable/userguide/#usage) called `venv`
+2) In the top level of the repo, create and activate a [virtualenv](https://virtualenv.pypa.io/en/stable/userguide/#usage) called `venv`
 
-3) Install the requirements
+    virtualenv venv
+    source venv/bin/activate
+
+3) Install [pip](https://pip.pypa.io/en/stable/installing/) if you don't have it and install the requirements
 
     pip install -r requirements.txt
 
-4) Go to mysite/local_settings.py.  There are currently three custom keys you'll need to
+4) Copy mysite/local_settings.example to mysite/local_settings.py and edit the .py version. There are currently three custom keys you'll need to
 set.  Follow the instructions in that file to figure out which changes to make.
 
 5) Run Django migrations (if needed, should be run the first time or if data

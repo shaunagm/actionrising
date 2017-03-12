@@ -5,7 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from mysite.settings import SKIP_FUNCTIONAL_TESTS
+from mysite.settings import SKIP_FUNCTIONAL_TESTS, CHROMEDRIVER_PATH
 
 @skipIf(SKIP_FUNCTIONAL_TESTS, 'Skipping functional tests')
 @override_settings(DEBUG=True)
@@ -17,7 +17,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.browser = webdriver.Chrome("/usr/lib/chromium-browser/chromedriver")
+        cls.browser = webdriver.Chrome(CHROMEDRIVER_PATH)
         super(SeleniumTestCase, cls).setUpClass()
 
     def setUp(self):

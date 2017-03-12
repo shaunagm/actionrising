@@ -54,3 +54,9 @@ if os.environ.get('IS_PRODUCTION_SITE') and os.environ.get('IS_PRODUCTION_SITE')
     DEBUG = False
 else:
     DEBUG = True
+
+# SETTING 5:
+# The tests need the path to your global chromedriver rather than the virtualenv one.
+# You may need to change this path if your chromedriver is in a different location.
+
+CHROMEDRIVER_PATH = '/usr/local/bin/chromedriver'
