@@ -10,7 +10,8 @@ Welcome to ActionRising's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   technical_overview
+   technical_overview.md
+   README.md
 
 
 Indices and tables
