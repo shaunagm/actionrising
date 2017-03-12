@@ -16,7 +16,7 @@ OS X (10.12.1 and 10.12.2).
 
     sudo apt-get install libpq-dev  # ubuntu
 
-Now you can go ahead and install the rest of the requirements.
+    Now you can go ahead and install the rest of the requirements.
 
 1) Use pip to install a [virtualenv](https://virtualenv.pypa.io/en/stable/userguide/#usage) called `venv`
 
