@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.sites',
-    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'datetimewidget',
     'bootstrap3',
