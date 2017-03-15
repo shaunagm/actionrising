@@ -24,8 +24,9 @@ class TestAddAndFollowAction(SeleniumTestCase):
         self.wait_helper()
         self.action_edit_form = ActionEditPage(self.browser, root_uri=self.live_server_url)
         self.action_edit_form.go_to_create_page()
+        self.wait_helper()
         self.action_edit_form.title = "A new action to take"
-        self.browser.execute_script("return arguments[0].scrollIntoView();", self.action_edit_form.submit_button)        
+        self.browser.execute_script("return arguments[0].scrollIntoView();", self.action_edit_form.submit_button)
         self.action_edit_form.submit_button.click()
         # Go to profile page and see action is only listed in 'created', not 'tracked'
         self.profile_page = ProfilePage(self.browser, root_uri=self.live_server_url)

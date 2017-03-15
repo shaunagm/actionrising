@@ -10,7 +10,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from actstream import action
 from ckeditor.fields import RichTextField
 
-from mysite.lib.choices import (PRIVACY_CHOICES, PRIORITY_CHOICES, STATUS_CHOICES,
+from mysite.lib.choices import (PrivacyChoices, PRIORITY_CHOICES, STATUS_CHOICES,
     TIME_CHOICES, INDIVIDUAL_STATUS_CHOICES)
 from actions.models import Action
 from mysite.settings import PRODUCTION_DOMAIN
@@ -25,9 +25,8 @@ class Slate(models.Model):
     description = RichTextField(max_length=2500, blank=True, null=True)  # TODO Rich text?
     # status default is rea == open for action
     status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='rea')
-    # default privacy is inh == inherit
-    privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
-    current_privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='sit')
+    privacy = models.CharField(max_length=10, choices=PrivacyChoices.choices, default=PrivacyChoices.inherit)
+    current_privacy = models.CharField(max_length=10, choices=PrivacyChoices.choices, default=PrivacyChoices.sitewide)
     actions = models.ManyToManyField(Action, through='SlateActionRelationship')
     date_created = models.DateTimeField(default=timezone.now)
     flags = GenericRelation('flags.Flag')
@@ -40,7 +39,7 @@ class Slate(models.Model):
             self.slug = slugify_helper(Slate, self.title)
             self.current_privacy = self.creator.profile.privacy_defaults.global_default
         else:
-            if self.privacy != "inh" and self.privacy != self.current_privacy:
+            if self.privacy != PrivacyChoices.inherit and self.privacy != self.current_privacy:
                 self.current_privacy = self.privacy
         super(Slate, self).save(*args, **kwargs)
 
@@ -79,7 +78,7 @@ class Slate(models.Model):
             return False
 
     def refresh_current_privacy(self):
-        if self.privacy == "inh":
+        if self.privacy == PrivacyChoices.inherit:
             self.current_privacy = self.creator.profile.privacy_defaults.global_default
         else:
             self.current_privacy = self.privacy

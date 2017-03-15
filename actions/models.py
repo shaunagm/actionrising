@@ -13,7 +13,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from ckeditor.fields import RichTextField
 from plugins import plugin_helpers
 from mysite.settings import PRODUCTION_DOMAIN
-from mysite.lib.choices import (PRIVACY_CHOICES, PRIORITY_CHOICES, STATUS_CHOICES,
+from mysite.lib.choices import (PrivacyChoices, PRIORITY_CHOICES, STATUS_CHOICES,
     TIME_CHOICES, INDIVIDUAL_STATUS_CHOICES)
 from mysite.lib.utils import disable_for_loaddata, slug_validator, slugify_helper
 from profiles.lib.status_helpers import open_pars_when_action_reopens, close_pars_when_action_closes
@@ -35,9 +35,8 @@ class Action(models.Model):
     priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='med')
 
     # Privacy info
-    # privacy default is inh == inherit
-    privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
-    current_privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='sit')
+    privacy = models.CharField(max_length=10, choices=PrivacyChoices.choices, default=PrivacyChoices.inherit)
+    current_privacy = models.CharField(max_length=10, choices=PrivacyChoices.choices, default=PrivacyChoices.sitewide)
 
     # Status info
     # status default is rea == open for action
@@ -58,7 +57,7 @@ class Action(models.Model):
         if not self.pk:
             self.slug = slugify_helper(Action, self.title)
             self.current_privacy = self.creator.profile.privacy_defaults.global_default
-        if self.privacy != "inh" and self.privacy != self.current_privacy:
+        if self.privacy != PrivacyChoices.inherit and self.privacy != self.current_privacy:
             self.current_privacy = self.privacy
         if self.pk:
             orig = Action.objects.get(pk=self.pk)
@@ -102,7 +101,7 @@ class Action(models.Model):
         return self.tags.all()
 
     def refresh_current_privacy(self):
-        if self.privacy == "inh":
+        if self.privacy == PrivacyChoices.inherit:
             self.current_privacy = self.creator.profile.privacy_defaults.global_default
         else:
             self.current_privacy = self.privacy

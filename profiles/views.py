@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 
 from actstream.actions import follow, unfollow
 from mysite.lib.privacy import check_privacy, filter_list_for_privacy, filter_list_for_privacy_annotated
+from mysite.lib.choices import PrivacyChoices
 from django.contrib.auth.models import User
 from profiles.models import (Profile, Relationship, ProfileActionRelationship,
     ProfileSlateRelationship, NavbarSettings)
@@ -96,7 +97,7 @@ class ProfileSearchView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ProfileSearchView, self).get_context_data(**kwargs)
-        context['object_list'] = [profile.user for profile in Profile.objects.filter(current_privacy__in=["pub", "sit"])]
+        context['object_list'] = [profile.user for profile in Profile.objects.filter(current_privacy__in=[PrivacyChoices.public, PrivacyChoices.sitewide])]
         return context
 
 class FeedView(LoginRequiredMixin, generic.TemplateView):

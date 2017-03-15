@@ -10,7 +10,7 @@ class TestBasics(SeleniumTestCase):
 
     def test_navbar_by_login_status(self):
         base_page = BasePage(self.browser, root_uri=self.live_server_url)
-        self.assertEquals(len(base_page.navbar_links), 8)
+        self.assertEquals(len(base_page.navbar_links), 7)
         base_page.log_in(default_user, default_password)
         self.assertEquals(len(base_page.navbar_links), 14)
         base_page.log_out()

@@ -1,21 +1,19 @@
 from django.utils.translation import ugettext as _
+from djchoices import DjangoChoices, ChoiceItem
 
-PRIVACY_CHOICES = (
-    ('pub', _('Visible to Public')),
-    ('sit', _('Visible Sitewide')),
-    ('fol', _('Visible to Follows')),
-    # ('you', 'Only Visible to You'),
-    ('inh', _('Inherit')),
-)
+class PrivacyChoices(DjangoChoices):
+    public = ChoiceItem('public', _('Visible to Public')) #pub
+    sitewide = ChoiceItem('sitewide', _('Visible Sitewide')) #sit
+    follows = ChoiceItem('follows', _('Visible to Follows')) #fol
+    inherit = ChoiceItem('inherit', _('Inherit')) #inh
 
-PRIVACY_DEFAULT_CHOICES = (
-    ('pub', _('Visible to Public')),
-    ('sit', _('Visible Sitewide')),
-    ('fol', _('Visible to Follows')),
-    # ('fol', 'Visible to Buddies and Those You Follow'),
-    # ('bud', 'Visible to Buddies'),
-    # ('you', 'Only Visible to You'),
-)
+    @classmethod
+    def default_choices(cls):
+        return cls.choices[:-1]
+
+    @classmethod
+    def personalized(cls, user_choice):
+        return cls.choices[:-1] + (('inherit', user_choice),)
 
 STATUS_CHOICES = (
     # ('cre', 'In creation'),

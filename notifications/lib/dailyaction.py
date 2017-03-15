@@ -4,7 +4,7 @@ from actions.models import Action
 from profiles.models import ProfileActionRelationship
 
 def most_popular_actions(n=10):
-    return Action.objects.filter(status="rea").filter(current_privacy__in=["pub", "sit"]) \
+    return Action.objects.filter(status="rea").filter(current_privacy__in=[PrivacyChoices.public, PrivacyChoices.sitewide]) \
         .annotate(num_trackers=Count('profileactionrelationship')) \
         .order_by('-num_trackers')[:n]
 

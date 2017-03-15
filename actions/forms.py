@@ -5,7 +5,7 @@ from django.forms.widgets import HiddenInput
 from actions.models import Action
 from tags.lib import tag_helpers
 from tags.models import Tag
-from mysite.lib.choices import PRIVACY_CHOICES, TIME_CHOICES
+from mysite.lib.choices import PrivacyChoices, TIME_CHOICES
 from mysite.lib.privacy import get_global_privacy_default
 from plugins import plugin_helpers
 
@@ -31,8 +31,7 @@ class ActionForm(forms.ModelForm):
             self.fields['status'].widget = HiddenInput()
 
         # Set privacy
-        NEW_CHOICES = (PRIVACY_CHOICES[0], PRIVACY_CHOICES[1], PRIVACY_CHOICES[2], ('inh', get_global_privacy_default(user.profile, "decorated")))
-        self.fields['privacy'].choices = NEW_CHOICES
+        self.fields['privacy'].choices = PrivacyChoices.personalized(get_global_privacy_default(user.profile, "decorated"))
 
         # Set tags
         self.fields = tag_helpers.add_tag_fields_to_form(self.fields, self.instance, formtype)

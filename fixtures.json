@@ -312,8 +312,8 @@
         "description": "",
         "links": null,
         "date_joined": "2016-11-22T04:14:02.912Z",
-        "privacy": "inh",
-        "current_privacy": "fol"
+        "privacy": "inherit",
+        "current_privacy": "follows"
     }
 },
 {
@@ -327,8 +327,8 @@
         "description": "",
         "links": "",
         "date_joined": "2016-11-22T04:14:02Z",
-        "privacy": "inh",
-        "current_privacy": "fol"
+        "privacy": "inherit",
+        "current_privacy": "follows"
     }
 },
 {
@@ -342,8 +342,8 @@
         "description": null,
         "links": null,
         "date_joined": "2016-11-22T04:14:02.912Z",
-        "privacy": "inh",
-        "current_privacy": "fol"
+        "privacy": "inherit",
+        "current_privacy": "follows"
     }
 },
 {
@@ -357,8 +357,8 @@
         "description": null,
         "links": null,
         "date_joined": "2016-11-28T22:22:33.956Z",
-        "privacy": "inh",
-        "current_privacy": "fol"
+        "privacy": "inherit",
+        "current_privacy": "follows"
     }
 },
 {
@@ -372,8 +372,8 @@
         "description": null,
         "links": null,
         "date_joined": "2016-11-28T22:23:30.382Z",
-        "privacy": "inh",
-        "current_privacy": "fol"
+        "privacy": "inherit",
+        "current_privacy": "follows"
     }
 },
 {
@@ -387,8 +387,8 @@
         "description": "",
         "links": "",
         "date_joined": "2016-12-02T14:58:39Z",
-        "privacy": "inh",
-        "current_privacy": "fol"
+        "privacy": "inherit",
+        "current_privacy": "follows"
     }
 },
 {
@@ -402,8 +402,8 @@
         "description": "",
         "links": "",
         "date_joined": "2016-12-02T15:01:21Z",
-        "privacy": "inh",
-        "current_privacy": "fol"
+        "privacy": "inherit",
+        "current_privacy": "follows"
     }
 },
 {
@@ -491,7 +491,7 @@
     "pk": 5,
     "fields": {
         "profile": 5,
-        "global_default": "sit"
+        "global_default": "sitewide"
     }
 },
 {
@@ -499,7 +499,7 @@
     "pk": 6,
     "fields": {
         "profile": 6,
-        "global_default": "sit"
+        "global_default": "sitewide"
     }
 },
 {
@@ -507,7 +507,7 @@
     "pk": 7,
     "fields": {
         "profile": 7,
-        "global_default": "pub"
+        "global_default": "public"
     }
 },
 {
@@ -515,7 +515,7 @@
     "pk": 8,
     "fields": {
         "profile": 8,
-        "global_default": "pub"
+        "global_default": "public"
     }
 },
 {
@@ -523,7 +523,7 @@
     "pk": 9,
     "fields": {
         "profile": 9,
-        "global_default": "sit"
+        "global_default": "sitewide"
     }
 },
 {
@@ -531,7 +531,7 @@
     "pk": 10,
     "fields": {
         "profile": 10,
-        "global_default": "sit"
+        "global_default": "sitewide"
     }
 },
 {
@@ -539,7 +539,7 @@
     "pk": 11,
     "fields": {
         "profile": 11,
-        "global_default": "sit"
+        "global_default": "sitewide"
     }
 },
 {
@@ -645,8 +645,8 @@
         "anonymize": false,
         "main_link": "www.fakelinktomoreinfo.com",
         "description": "<p>Here&#39;s some instructions!</p>",
-        "privacy": "inh",
-        "current_privacy": "sit",
+        "privacy": "inherit",
+        "current_privacy": "sitewide",
         "status": "rea",
         "has_deadline": false,
         "deadline": null,
@@ -667,8 +667,8 @@
         "anonymize": true,
         "main_link": "",
         "description": "",
-        "privacy": "pub",
-        "current_privacy": "pub",
+        "privacy": "public",
+        "current_privacy": "public",
         "status": "rea",
         "has_deadline": false,
         "deadline": null,
@@ -689,8 +689,8 @@
         "anonymize": false,
         "main_link": "",
         "description": "",
-        "privacy": "sit",
-        "current_privacy": "sit",
+        "privacy": "sitewide",
+        "current_privacy": "sitewide",
         "status": "rea",
         "has_deadline": false,
         "deadline": null,
@@ -711,8 +711,8 @@
         "anonymize": false,
         "main_link": "",
         "description": "Do a thing!  Edited to say: actually we should probably not do this thing.",
-        "privacy": "inh",
-        "current_privacy": "sit",
+        "privacy": "inherit",
+        "current_privacy": "sitewide",
         "status": "wit",
         "has_deadline": false,
         "deadline": null,
@@ -733,8 +733,8 @@
         "anonymize": true,
         "main_link": "",
         "description": "<p>Let&#39;s see if this makes an activitystream update!?!?!!</p>",
-        "privacy": "inh",
-        "current_privacy": "sit",
+        "privacy": "inherit",
+        "current_privacy": "sitewide",
         "status": "rea",
         "has_deadline": false,
         "deadline": null,
@@ -755,8 +755,8 @@
         "anonymize": false,
         "main_link": "",
         "description": "",
-        "privacy": "inh",
-        "current_privacy": "sit",
+        "privacy": "inherit",
+        "current_privacy": "sitewide",
         "status": "rea",
         "has_deadline": false,
         "deadline": null,
@@ -776,8 +776,8 @@
         ],
         "description": "Indescribable.",
         "status": "rea",
-        "privacy": "inh",
-        "current_privacy": "sit",
+        "privacy": "inherit",
+        "current_privacy": "sitewide",
         "date_created": "2016-11-28T22:26:42Z"
     }
 },
@@ -792,8 +792,8 @@
         ],
         "description": "",
         "status": "rea",
-        "privacy": "inh",
-        "current_privacy": "sit",
+        "privacy": "inherit",
+        "current_privacy": "sitewide",
         "date_created": "2016-12-02T21:42:10Z"
     }
 },
@@ -808,8 +808,8 @@
         ],
         "description": "",
         "status": "rea",
-        "privacy": "pub",
-        "current_privacy": "sit",
+        "privacy": "public",
+        "current_privacy": "sitewide",
         "date_created": "2016-12-02T21:43:05Z"
     }
 },

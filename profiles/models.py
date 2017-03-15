@@ -17,8 +17,7 @@ from actstream.actions import follow, unfollow
 from actions.models import Action
 from slates.models import Slate
 from notifications.models import NotificationSettings, DailyActionSettings
-from mysite.lib.choices import (PRIVACY_CHOICES, PRIORITY_CHOICES, INDIVIDUAL_STATUS_CHOICES,
-    PRIVACY_DEFAULT_CHOICES)
+from mysite.lib.choices import (PrivacyChoices, PRIORITY_CHOICES, INDIVIDUAL_STATUS_CHOICES)
 from mysite.lib.utils import disable_for_loaddata
 from profiles.lib import status_helpers
 
@@ -35,15 +34,14 @@ class Profile(models.Model):
                                         related_name='connected_to')
     actions = models.ManyToManyField(Action, through='ProfileActionRelationship')
     slates = models.ManyToManyField(Slate, through='ProfileSlateRelationship')
-    # privacy default is inh == inherit
-    privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
-    current_privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='fol')
+    privacy = models.CharField(max_length=10, choices=PrivacyChoices.choices, default=PrivacyChoices.inherit)
+    current_privacy = models.CharField(max_length=10, choices=PrivacyChoices.choices, default=PrivacyChoices.follows)
 
     def __unicode__(self):
         return self.user.username
 
     def save(self, *args, **kwargs):
-        if self.pk and self.privacy != "inh" and self.privacy != self.current_privacy:
+        if self.pk and self.privacy != PrivacyChoices.inherit and self.privacy != self.current_privacy:
             self.current_privacy = self.privacy
         super(Profile, self).save(*args, **kwargs)
 
@@ -80,7 +78,7 @@ class Profile(models.Model):
         return PRODUCTION_DOMAIN + reverse('suggested', kwargs={'pk': self.user.pk })
 
     def refresh_current_privacy(self):
-        if self.privacy == "inh":
+        if self.privacy == PrivacyChoices.inherit:
             self.current_privacy = self.privacy_defaults.global_default
         else:
             self.current_privacy = self.privacy
@@ -388,8 +386,7 @@ class Relationship(models.Model):
 class PrivacyDefaults(models.Model):
     """Stores default privacy"""
     profile = models.OneToOneField(Profile, unique=True, related_name="privacy_defaults")
-    # global default privacy is sit == Visible sitewide
-    global_default = models.CharField(max_length=3, choices=PRIVACY_DEFAULT_CHOICES, default='pub')
+    global_default = models.CharField(max_length=10, choices=PrivacyChoices.default_choices(), default=PrivacyChoices.public)
 
     def __unicode__(self):
         return u'Privacy defaults for %s' % (self.profile.user.username)

@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from actions.models import Action
 from slates.models import Slate, SlateActionRelationship
 from commitments.models import Commitment
-from mysite.lib.choices import INDIVIDUAL_STATUS_CHOICES
+from mysite.lib.choices import INDIVIDUAL_STATUS_CHOICES, PrivacyChoices
 from profiles.models import (Profile, Relationship, ProfileActionRelationship,
     ProfileSlateRelationship)
 from profiles.templatetags.profile_extras import get_friendslist
@@ -256,7 +256,7 @@ class TestManageActionView(TestCase):
         self.slate = Slate.objects.create(slug="test-slate", creator=self.faith, title="Test Slate")
         self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action)
         class MockForm(object):
-            cleaned_data = {'priority': 'hig', 'status': 'rea', 'privacy': 'pub',
+            cleaned_data = {'priority': 'hig', 'status': 'rea', 'privacy': PrivacyChoices.public,
                 'profiles': [self.lorne.profile], 'slates': [self.slate], 'notes': "A note"}
         self.mock_form = MockForm()
 

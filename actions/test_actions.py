@@ -7,6 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from profiles.models import Profile, ProfileActionRelationship
 
+from mysite.lib.choices import PrivacyChoices
 from mysite.lib.utils import slugify_helper
 from actions.models import Action
 from actions.forms import ActionForm
@@ -70,7 +71,7 @@ class TestActionForms(TestCase):
         self.assertEqual(form_inherited_privacy, user_privacy)
 
     def test_action_form_privacy_choices_when_not_default(self):
-        self.buffy.profile.privacy_defaults.global_default = "sit"
+        self.buffy.profile.privacy_defaults.global_default = PrivacyChoices.sitewide
         self.buffy.profile.privacy_defaults.save()
         initial_form = ActionForm(user=self.buffy, formtype="create")
         form_inherited_privacy = initial_form.fields['privacy'].choices[3][1]

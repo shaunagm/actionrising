@@ -2,7 +2,7 @@ from django.forms import ModelForm, ModelMultipleChoiceField
 from datetimewidget.widgets import DateTimeWidget
 
 from actions.models import Action
-from mysite.lib.choices import PRIVACY_CHOICES
+from mysite.lib.choices import PrivacyChoices
 from mysite.lib.privacy import get_global_privacy_default
 from slates.models import Slate, SlateActionRelationship
 from slates.lib import slate_helpers
@@ -22,13 +22,12 @@ class SlateForm(ModelForm):
         self.formtype = formtype
 
         # Set actions queryset
-        self.fields['actions'].queryset = Action.objects.filter(status="rea").filter(current_privacy__in=["pub", "sit"]).order_by("title")
+        self.fields['actions'].queryset = Action.objects.filter(status="rea").filter(current_privacy__in=[PrivacyChoices.public, PrivacyChoices.sitewide]).order_by("title")
         if self.formtype == "update":
             self.fields['actions'].initial = self.instance.actions.all()
 
         # Set privacy
-        NEW_CHOICES = (PRIVACY_CHOICES[0], PRIVACY_CHOICES[1], PRIVACY_CHOICES[2], ('inh', get_global_privacy_default(user.profile, "decorated")))
-        self.fields['privacy'].choices = NEW_CHOICES
+        self.fields['privacy'].choices = PrivacyChoices.personalized(get_global_privacy_default(user.profile, "decorated"))
 
         # Set tags
         self.fields = tag_helpers.add_tag_fields_to_form(self.fields, self.instance, formtype)

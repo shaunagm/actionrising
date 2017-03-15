@@ -9,6 +9,7 @@ from django.db import models
 from profiles.models import Profile, ProfileActionRelationship, Relationship
 from actions.models import Action
 from slates.models import Slate
+from mysite.lib.choices import PrivacyChoices
 
 
 # Create your models here.
@@ -53,7 +54,7 @@ class RecommendationTracker(models.Model):
         if len(popular_slate_creators) > 15:
             popular_slate_creators = popular_slate_creators[:15]
         creators = list(set(popular_slate_creators + popular_action_creators))
-        creators = [creator.pk for creator in creators if creator.profile.current_privacy == "pub"]
+        creators = [creator.pk for creator in creators if creator.profile.current_privacy == PrivacyChoices.public]
         print("privacyfilled: ", creators)
         if len(creators) > 20:
             creators = random.sample(creators, 20)
