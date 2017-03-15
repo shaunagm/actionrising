@@ -9,9 +9,9 @@
   <tbody>
       {% for object in object_list reversed %}
        <tr>
-          <td><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></td>
-          <td>{{ object.actions.count }}</td>
-          <td>{{ object.profile_set.count }}</td>
+          <td class="title"><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></td>
+          <td class="size">{{ object.actions.count }}</td>
+          <td class="trackers">{{ object.profile_set.count }}</td>
         </tr>
       {% endfor %}
   </tbody>

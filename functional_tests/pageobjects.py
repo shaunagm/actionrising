@@ -87,12 +87,12 @@ class BaseListPage(BasePage):
 class BasicActionListPage(BaseListPage):
     action_table = MultiPageElement(id_="actions")
     # Additional Action Data
-    first_row_date = PageElement(css=".odd > td:nth-child(1)")
-    first_row_action = PageElement(css=".odd > td:nth-child(2)")
-    first_row_tags = PageElement(css=".odd > td:nth-child(3)")
-    first_row_tracker_count = PageElement(css=".odd > td:nth-child(4)")
+    first_row_date = PageElement(css=".odd > td.date")
+    first_row_action = PageElement(css=".odd > td.title")
+    first_row_tags = PageElement(css=".odd > td.tags")
+    first_row_tracker_count = PageElement(css=".odd > td.trackers")
     labels = MultiPageElement(css="span.label")
-    action_tds = MultiPageElement(css=".main-list tbody tr > td:nth-child(2)")
+    action_tds = MultiPageElement(css=".main-list tbody tr > td.title")
     # Additional Action Controls
     filter_location_dropdown = PageElement(id_="filter-location-group")
     filter_location_links = MultiPageElement(css=".filter-location, .nested-link")
@@ -141,10 +141,10 @@ class SlateActionsListPage(BasicActionListPage):
 
 class SlateListPage(BaseListPage):
     slates_table = MultiPageElement(id_="slates")
-    first_row_date = PageElement(css=".odd > td:nth-child(1)")
-    first_row_slate = PageElement(css=".odd > td:nth-child(2)")
-    first_row_creator = PageElement(css=".odd > td:nth-child(3)")
-    first_row_action_count = PageElement(css=".odd > td:nth-child(4)")
+    first_row_date = PageElement(css=".odd > td.date")
+    first_row_slate = PageElement(css=".odd > td.title")
+    first_row_creator = PageElement(css=".odd > td.creator")
+    first_row_action_count = PageElement(css=".odd > td.size")
 
     def go_to_default_slates_page(self):
         self.w.get(self.root_uri + "/slates/slates")
