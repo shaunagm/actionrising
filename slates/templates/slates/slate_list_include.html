@@ -27,14 +27,14 @@ Filter:
   <tbody>
       {% for object in object_list reversed %}
        <tr>
-         <td><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></td>
-         <td data-sort="{{ object.date_created|date:"Y m d"}}">
+         <td class="title"><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></td>
+         <td class="date" data-sort="{{ object.date_created|date:"Y m d"}}">
            {{ object.date_created|date:"D M d"}}</td>
-          <td>{{ object.creator }}</td>
-          <td>{{ object.is_active }}</td>
-          <td>{% if object.creator in friendlist %} True {% endif %} </td>
-          <td>{{ object.actions.count }}</td>
-          <td>{{ object.profile_set.count }}</td>
+          <td class="creator">{{ object.creator }}</td>
+          <td class="active">{{ object.is_active }}</td>
+          <td class="friend">{% if object.creator in friendlist %} True {% endif %} </td>
+          <td class="size">{{ object.actions.count }}</td>
+          <td class="trackers">{{ object.profile_set.count }}</td>
         </tr>
       {% endfor %}
   </tbody>

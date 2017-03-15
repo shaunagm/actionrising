@@ -10,10 +10,10 @@
   <tbody>
       {% for par in object_list %}
       <tr>
-          <td><a href="{{ par.action.get_robust_url }}">{{ par.action.title }}</a></td>
-          <td>{{ par.action.deadline }}</td>
-          <td>{{ par.get_suggesters_html|safe }}</td>
-          <td><a href="{% url 'manage_suggested_action' slug=par.action.slug type='accept' %}">
+          <td class="title"><a href="{{ par.action.get_robust_url }}">{{ par.action.title }}</a></td>
+          <td class="deadline">{{ par.action.deadline }}</td>
+          <td class="suggesters">{{ par.get_suggesters_html|safe }}</td>
+          <td class="manage"><a href="{% url 'manage_suggested_action' slug=par.action.slug type='accept' %}">
                   <span class="label label-success">Accept</span></a>
               <a href="{% url 'manage_suggested_action' slug=par.action.slug type='reject' %}">
                   <span class="label label-danger">Reject</span></a>

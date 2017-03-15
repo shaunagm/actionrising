@@ -1,17 +1,17 @@
 {% load plugin_templatetags %}
 
 <tr>
-    <td><a href="{{ action.get_robust_url }}">{{ action.title }}</a></td>
-    <td data-sort="{{ action.date_created|date:"Y m d"}}">
+    <td class="title"><a href="{{ action.get_robust_url }}">{{ action.title }}</a></td>
+    <td class="date" data-sort="{{ action.date_created|date:"Y m d"}}">
       {{ action.date_created|date:"D M d"}}</td>
-    <td>{% include "tags/label_include.html" with object_list=action.get_tags %}</td>
-    <td>{{ action.profile_set.count }}</td>
-    <td>{{ action.get_days_til_deadline }}</td>
-    <td>{{ action.get_priority_display }}</td>
-    <td>{{ action.is_active }}</td>
-    <td>{% if action.get_creator in friendlist %} True {% endif %} </td>
-    <td>{{ rel.notes }}</td>
-    <td>{{ action.get_duration_display }}</td>
-    {% include 'slates/manage_action_include.html' %}
+    <td class="tags">{% include "tags/label_include.html" with object_list=action.get_tags %}</td>
+    <td class="trackers">{{ action.profile_set.count }}</td>
+    <td class="deadline">{{ action.get_days_til_deadline }}</td>
+    <td class="priority">{{ action.get_priority_display }}</td>
+    <td class="active">{{ action.is_active }}</td>
+    <td class="friend">{% if action.get_creator in friendlist %} True {% endif %} </td>
+    <td class="notes">{{ rel.notes }}</td>
+    <td class="duration">{{ action.get_duration_display }}</td>
+    {% include "slates/manage_action_include.html" %}
     {% get_plugin_templates "action_row_hidden" %}
 </tr>
