@@ -1,3 +1,5 @@
+import sys
+
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.core.urlresolvers import reverse
@@ -20,12 +22,14 @@ def get_toggle_notify_for_slate_url(target):
 def log_sent_mail(subject, plain_message, recipient):
     if len(plain_message) > 100:
         plain_message = plain_message[:100]
-    print("AR-Email Sent: ", subject, plain_message, recipient)
+    if 'test' not in sys.argv:
+        print("AR-Email Sent: ", subject, plain_message, recipient)
 
 def log_unsent_email(subject, plain_message, recipient):
     if len(plain_message) > 100:
         plain_message = plain_message[:100]
-    print("AR-Email Failed to send: ", subject, plain_message, recipient)
+    if 'test' not in sys.argv:
+        print("AR-Email Failed to send: ", subject, plain_message, recipient)
 
 ###########################
 ### EVENT-DRIVEN EMAILS ###
