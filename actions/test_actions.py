@@ -7,7 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from profiles.models import Profile, ProfileActionRelationship
 
-from mysite.lib.choices import PrivacyChoices
+from mysite.lib.choices import PrivacyChoices, StatusChoices
 from mysite.lib.utils import slugify_helper
 from actions.models import Action
 from actions.forms import ActionForm
@@ -43,10 +43,10 @@ class TestActionMethods(TestCase):
         self.assertEqual(self.action.get_robust_url(), '/actions/action/test-action')
 
     def test_is_active(self):
-        self.action.status = 'rea'
+        self.action.status = StatusChoices.ready
         self.action.save()
         self.assertTrue(self.action.is_active())
-        self.action.status = 'wit'
+        self.action.status = StatusChoices.withdrawn
         self.action.save()
         self.assertFalse(self.action.is_active())
 

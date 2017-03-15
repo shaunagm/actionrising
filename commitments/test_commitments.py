@@ -8,6 +8,7 @@ from commitments.models import Commitment
 from commitments.forms import CommitmentForm
 from profiles.models import ProfileActionRelationship, Relationship
 from actions.models import Action
+from mysite.lib.choices import ToDoStatusChoices
 
 ###################
 ### Test models ###
@@ -39,20 +40,20 @@ class TestCommitmentMethods(TestCase):
         self.assertEqual(self.commitment.days_given(), 37)
 
     def test_reopen_active_commitment_as_active(self):
-        self.commitment.status = "clo"
+        self.commitment.status = ToDoStatusChoices.closed
         self.commitment.save()
         self.commitment.reopen()
         self.assertEqual(self.commitment.status, "active")
 
     def test_reopen_waiting_commitment_as_waiting(self):
-        self.commitment.status = "clo"
+        self.commitment.status = ToDoStatusChoices.closed
         self.commitment.start_emails = datetime.datetime.now(tz=pytz.utc) + datetime.timedelta(days=10)
         self.commitment.save()
         self.commitment.reopen()
         self.assertEqual(self.commitment.status, "waiting")
 
     def test_reopen_expired_commitment_as_expired(self):
-        self.commitment.status = "clo"
+        self.commitment.status = ToDoStatusChoices.closed
         self.commitment.start_emails = datetime.datetime.now(tz=pytz.utc) - datetime.timedelta(days=80)
         self.commitment.save()
         self.commitment.reopen()
@@ -160,7 +161,7 @@ class TestCommitmentInteractions(TestCase):
 
     def test_closing_par_closes_commitment(self):
         self.assertEqual(self.commitment.status, "waiting")
-        self.par.status = "clo"
+        self.par.status = ToDoStatusChoices.closed
         self.par.save()
         commitment = Commitment.objects.get(profile=self.buffy.profile,
             action=self.action)
@@ -168,7 +169,7 @@ class TestCommitmentInteractions(TestCase):
 
     def test_finishing_par_closes_commitment(self):
         self.assertEqual(self.commitment.status, "waiting")
-        self.par.status = "don"
+        self.par.status = ToDoStatusChoices.done
         self.par.save()
         commitment = Commitment.objects.get(profile=self.buffy.profile,
             action=self.action)

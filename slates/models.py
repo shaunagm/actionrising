@@ -10,8 +10,8 @@ from django.contrib.contenttypes.fields import GenericRelation
 from actstream import action
 from ckeditor.fields import RichTextField
 
-from mysite.lib.choices import (PrivacyChoices, PRIORITY_CHOICES, STATUS_CHOICES,
-    TIME_CHOICES, INDIVIDUAL_STATUS_CHOICES)
+from mysite.lib.choices import (PrivacyChoices, PRIORITY_CHOICES, StatusChoices,
+    TIME_CHOICES, ToDoStatusChoices)
 from actions.models import Action
 from mysite.settings import PRODUCTION_DOMAIN
 from mysite.lib import choices
@@ -23,8 +23,7 @@ class Slate(models.Model):
     title = models.CharField(max_length=300)
     creator = models.ForeignKey(User)
     description = RichTextField(max_length=2500, blank=True, null=True)  # TODO Rich text?
-    # status default is rea == open for action
-    status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='rea')
+    status = models.CharField(max_length=10, choices=StatusChoices.choices, default=StatusChoices.ready)
     privacy = models.CharField(max_length=10, choices=PrivacyChoices.choices, default=PrivacyChoices.inherit)
     current_privacy = models.CharField(max_length=10, choices=PrivacyChoices.choices, default=PrivacyChoices.sitewide)
     actions = models.ManyToManyField(Action, through='SlateActionRelationship')
@@ -72,7 +71,7 @@ class Slate(models.Model):
             return None
 
     def is_active(self):
-        if self.status == "rea":  # Arguably we should add 'in creation' too
+        if self.status == StatusChoices.ready:  # Arguably we should add 'in creation' too
             return True
         else:
             return False
@@ -109,7 +108,7 @@ class SlateActionRelationship(models.Model):
     # default priority is med == medium
     priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='med')
     # default status is ace == accepted
-    status = models.CharField(max_length=3, choices=INDIVIDUAL_STATUS_CHOICES, default='ace')
+    status = models.CharField(max_length=10, choices=ToDoStatusChoices.choices, default=ToDoStatusChoices.accepted)
     notes = models.CharField(max_length=2500, blank=True, null=True)
 
     def get_cname(self):
@@ -120,7 +119,7 @@ class SlateActionRelationship(models.Model):
         return "Relationship of slate: %s and action: %s " % (self.slate, self.action)
 
     def get_status(self):
-        if self.action.status in ["wit", "rej"]:
+        if self.action.status is ToDoStatusChoices.rejected:
             return self.action.get_status_display()
         else:
             return self.get_status_display()

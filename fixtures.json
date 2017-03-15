@@ -549,7 +549,7 @@
         "profile": 6,
         "action": 9,
         "priority": "med",
-        "status": "ace",
+        "status": "accepted",
         "committed": false,
         "last_suggester": null,
         "suggested_by": "[\"shauna\"]",
@@ -565,7 +565,7 @@
         "profile": 6,
         "action": 11,
         "priority": "med",
-        "status": "ace",
+        "status": "accepted",
         "committed": false,
         "last_suggester": null,
         "suggested_by": "",
@@ -581,7 +581,7 @@
         "profile": 7,
         "action": 9,
         "priority": "med",
-        "status": "don",
+        "status": "done",
         "committed": false,
         "last_suggester": null,
         "suggested_by": "",
@@ -597,7 +597,7 @@
         "profile": 8,
         "action": 9,
         "priority": "med",
-        "status": "sug",
+        "status": "suggested",
         "committed": false,
         "last_suggester": null,
         "suggested_by": "",
@@ -647,7 +647,7 @@
         "description": "<p>Here&#39;s some instructions!</p>",
         "privacy": "inherit",
         "current_privacy": "sitewide",
-        "status": "rea",
+        "status": "ready",
         "has_deadline": false,
         "deadline": null,
         "priority": "eme",
@@ -669,7 +669,7 @@
         "description": "",
         "privacy": "public",
         "current_privacy": "public",
-        "status": "rea",
+        "status": "ready",
         "has_deadline": false,
         "deadline": null,
         "priority": "hig",
@@ -691,7 +691,7 @@
         "description": "",
         "privacy": "sitewide",
         "current_privacy": "sitewide",
-        "status": "rea",
+        "status": "ready",
         "has_deadline": false,
         "deadline": null,
         "priority": "med",
@@ -713,7 +713,7 @@
         "description": "Do a thing!  Edited to say: actually we should probably not do this thing.",
         "privacy": "inherit",
         "current_privacy": "sitewide",
-        "status": "wit",
+        "status": "withdrawn",
         "has_deadline": false,
         "deadline": null,
         "priority": "med",
@@ -735,7 +735,7 @@
         "description": "<p>Let&#39;s see if this makes an activitystream update!?!?!!</p>",
         "privacy": "inherit",
         "current_privacy": "sitewide",
-        "status": "rea",
+        "status": "ready",
         "has_deadline": false,
         "deadline": null,
         "priority": "low",
@@ -757,7 +757,7 @@
         "description": "",
         "privacy": "inherit",
         "current_privacy": "sitewide",
-        "status": "rea",
+        "status": "ready",
         "has_deadline": false,
         "deadline": null,
         "priority": "med",
@@ -775,7 +775,7 @@
             "buffysummers"
         ],
         "description": "Indescribable.",
-        "status": "rea",
+        "status": "ready",
         "privacy": "inherit",
         "current_privacy": "sitewide",
         "date_created": "2016-11-28T22:26:42Z"
@@ -791,7 +791,7 @@
             "giles"
         ],
         "description": "",
-        "status": "rea",
+        "status": "ready",
         "privacy": "inherit",
         "current_privacy": "sitewide",
         "date_created": "2016-12-02T21:42:10Z"
@@ -807,7 +807,7 @@
             "dru"
         ],
         "description": "",
-        "status": "rea",
+        "status": "ready",
         "privacy": "public",
         "current_privacy": "sitewide",
         "date_created": "2016-12-02T21:43:05Z"
@@ -820,7 +820,7 @@
         "slate": 10,
         "action": 9,
         "priority": "med",
-        "status": "ace",
+        "status": "accepted",
         "notes": ""
     }
 },
@@ -831,7 +831,7 @@
         "slate": 10,
         "action": 11,
         "priority": "med",
-        "status": "ace",
+        "status": "accepted",
         "notes": ""
     }
 },
@@ -842,7 +842,7 @@
         "slate": 12,
         "action": 25,
         "priority": "med",
-        "status": "ace",
+        "status": "accepted",
         "notes": ""
     }
 },
@@ -853,7 +853,7 @@
         "slate": 12,
         "action": 10,
         "priority": "med",
-        "status": "ace",
+        "status": "accepted",
         "notes": ""
     }
 },
@@ -864,7 +864,7 @@
         "slate": 12,
         "action": 11,
         "priority": "eme",
-        "status": "ace",
+        "status": "accepted",
         "notes": ""
     }
 },

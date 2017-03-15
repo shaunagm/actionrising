@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from actions.models import Action
 from slates.models import Slate, SlateActionRelationship
 from commitments.models import Commitment
-from mysite.lib.choices import INDIVIDUAL_STATUS_CHOICES, PrivacyChoices
+from mysite.lib.choices import StatusChoices, ToDoStatusChoices, PrivacyChoices
 from profiles.models import (Profile, Relationship, ProfileActionRelationship,
     ProfileSlateRelationship)
 from profiles.templatetags.profile_extras import get_friendslist
@@ -58,7 +58,7 @@ class TestProfileMethods(TestCase):
         self.assertEqual(self.buffy.profile.get_open_actions(), [self.action])
 
     def test_get_suggested_actions(self):
-        self.par.status = "sug"
+        self.par.status = ToDoStatusChoices.suggested
         self.par.save()
         self.assertEqual(list(self.buffy.profile.get_suggested_actions()), [self.par])
         self.assertEqual(self.buffy.profile.get_suggested_actions_count(), 1)
@@ -238,7 +238,7 @@ class TestProfileActionRelationshipView(TestCase):
     def test_par_helper_add(self):
         toggle_par_helper("add", self.buffy.profile, self.action)
         par = ProfileActionRelationship.objects.get(profile=self.buffy.profile, action=self.action)
-        self.assertEqual(par.status, "ace")
+        self.assertEqual(par.status, ToDoStatusChoices.accepted)
 
     def test_par_helper_remove(self):
         toggle_par_helper("add", self.buffy.profile, self.action)
@@ -256,14 +256,14 @@ class TestManageActionView(TestCase):
         self.slate = Slate.objects.create(slug="test-slate", creator=self.faith, title="Test Slate")
         self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action)
         class MockForm(object):
-            cleaned_data = {'priority': 'hig', 'status': 'rea', 'privacy': PrivacyChoices.public,
+            cleaned_data = {'priority': 'hig', 'status': ToDoStatusChoices.done, 'privacy': PrivacyChoices.public,
                 'profiles': [self.lorne.profile], 'slates': [self.slate], 'notes': "A note"}
         self.mock_form = MockForm()
 
     def test_changes_fields_from_defaults(self):
-        self.assertEqual([self.par.priority, self.par.status], ["med", "ace"])
+        self.assertEqual([self.par.priority, self.par.status], ["med", ToDoStatusChoices.accepted])
         manage_action_helper(self.par, self.mock_form, self.buffy)
-        self.assertEqual([self.par.priority, self.par.status], ["hig", "rea"])
+        self.assertEqual([self.par.priority, self.par.status], ["hig", ToDoStatusChoices.done])
 
     def test_make_new_par_for_profile(self):
         with self.assertRaises(ObjectDoesNotExist):
@@ -287,11 +287,11 @@ class TestMarkAsDoneView(TestCase):
         self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action)
 
     def test_mark_as_accepted(self):
-        self.assertEqual(self.par.status, "ace")
+        self.assertEqual(self.par.status, ToDoStatusChoices.accepted)
         par = mark_as_done_helper(self.buffy.profile, self.action, "done")
-        self.assertEqual(par.status, "don")
+        self.assertEqual(par.status, ToDoStatusChoices.done)
         par = mark_as_done_helper(self.buffy.profile, self.action, "accepted")
-        self.assertEqual(par.status, "ace")
+        self.assertEqual(par.status, ToDoStatusChoices.accepted)
 
 class TestManageSuggestedActionView(TestCase):
 
@@ -300,17 +300,17 @@ class TestManageSuggestedActionView(TestCase):
         self.faith = User.objects.create(username="faithlehane")
         self.action = Action.objects.create(slug="test-action", creator=self.buffy)
         self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile,
-            action=self.action, last_suggester=self.faith, status="sug")
+            action=self.action, last_suggester=self.faith, status=ToDoStatusChoices.suggested)
 
     def test_manage_suggested_action_helper_accept(self):
-        self.assertEqual(self.par.status, "sug")
+        self.assertEqual(self.par.status, ToDoStatusChoices.suggested)
         par = manage_suggested_action_helper(self.par, "accept")
-        self.assertEqual(par.status, "ace")
+        self.assertEqual(par.status, ToDoStatusChoices.accepted)
 
     def test_manage_suggested_action_helper_reject(self):
-        self.assertEqual(self.par.status, "sug")
+        self.assertEqual(self.par.status, ToDoStatusChoices.suggested)
         par = manage_suggested_action_helper(self.par, "reject")
-        self.assertEqual(par.status, "wit")
+        self.assertEqual(par.status, ToDoStatusChoices.rejected)
 
 #########################
 ### Test templatetags ###
@@ -349,46 +349,46 @@ class TestStatusHelper(TestCase):
         Commitment.objects.create(profile=self.buffy.profile, action=self.action)
 
     def test_close_accepted_pars_when_action_closes(self):
-        self.action.status = "fin"
+        self.action.status = StatusChoices.finished
         self.action.save()
         par = ProfileActionRelationship.objects.get(profile=self.buffy.profile, action=self.action)
-        self.assertEqual(par.status, "clo")
+        self.assertEqual(par.status, ToDoStatusChoices.closed)
 
     def test_delete_suggested_pars_when_action_closes(self):
         par = ProfileActionRelationship.objects.get(profile=self.buffy.profile, action=self.action)
-        par.status = "sug"
+        par.status = ToDoStatusChoices.suggested
         par.save()
-        self.action.status = "wit"
+        self.action.status = StatusChoices.withdrawn
         self.action.save()
         par = ProfileActionRelationship.objects.filter(profile=self.buffy.profile, action=self.action)
         self.assertFalse(par)
 
     def test_open_pars_when_action_reopens(self):
         # Close action
-        self.action.status = "fin"
+        self.action.status = StatusChoices.finished
         self.action.save()
         par = ProfileActionRelationship.objects.get(profile=self.buffy.profile, action=self.action)
-        self.assertEqual(par.status, "clo")
+        self.assertEqual(par.status, ToDoStatusChoices.closed)
         # Reopen action
-        self.action.status = "rea"
+        self.action.status = StatusChoices.ready
         self.action.save()
         par = ProfileActionRelationship.objects.get(profile=self.buffy.profile, action=self.action)
-        self.assertEqual(par.status, "ace")
+        self.assertEqual(par.status, ToDoStatusChoices.accepted)
 
     def test_close_commitment_when_PAR_is_closed(self):
         par = ProfileActionRelationship.objects.get(profile=self.buffy.profile, action=self.action)
-        par.status = "clo"
+        par.status = ToDoStatusChoices.closed
         par.save()
         com = Commitment.objects.get(profile=self.buffy.profile, action=self.action)
         self.assertEqual(com.status, "removed")
 
     def test_open_commitment_when_PAR_is_reopened(self):
         par = ProfileActionRelationship.objects.get(profile=self.buffy.profile, action=self.action)
-        par.status = "clo"
+        par.status = ToDoStatusChoices.closed
         par.save()
         com = Commitment.objects.get(profile=self.buffy.profile, action=self.action)
         self.assertEqual(com.status, "removed")
-        par.status = "ace"
+        par.status = ToDoStatusChoices.accepted
         par.save()
         com = Commitment.objects.get(profile=self.buffy.profile, action=self.action)
         self.assertEqual(com.status, "active")
@@ -396,7 +396,7 @@ class TestStatusHelper(TestCase):
     def test_close_commitment_when_action_is_closed(self):
         '''Ties the helpers together'''
         # Close action
-        self.action.status = "fin"
+        self.action.status = StatusChoices.finished
         self.action.save()
         com = Commitment.objects.get(profile=self.buffy.profile, action=self.action)
         self.assertEqual(com.status, "removed")
@@ -404,10 +404,10 @@ class TestStatusHelper(TestCase):
     def test_reopen_commitment_when_action_is_reopened(self):
         '''Ties the helpers together'''
         # Close action
-        self.action.status = "fin"
+        self.action.status = StatusChoices.finished
         self.action.save()
         # Reopen action
-        self.action.status = "rea"
+        self.action.status = StatusChoices.ready
         self.action.save()
         # Test
         com = Commitment.objects.get(profile=self.buffy.profile, action=self.action)
@@ -480,7 +480,7 @@ class TestTrackers(TestCase):
         result = trackers.get_slate_tracking(self.action)
         new_dict = trackers.get_tracker_list_for_action(result, self.buffy)
         self.assertEqual(len(new_dict), 5)
-        suggested_dict = new_dict['sug']
+        suggested_dict = new_dict[ToDoStatusChoices.suggested]
         self.assertEqual(suggested_dict['status_display'], "Suggested to them")
 
     def test_get_tracker_list_for_slate(self):

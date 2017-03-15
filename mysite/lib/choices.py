@@ -15,20 +15,29 @@ class PrivacyChoices(DjangoChoices):
     def personalized(cls, user_choice):
         return cls.choices[:-1] + (('inherit', user_choice),)
 
-STATUS_CHOICES = (
-    # ('cre', 'In creation'),
-    ('rea', _('Open for action')),
-    ('fin', _('Finished')),
-    ('wit', _('Withdrawn')),
-)
+class StatusChoices(DjangoChoices):
+    ready = ChoiceItem('ready', _('Open for action'))
+    finished = ChoiceItem('finished', _('Finished'))
+    withdrawn = ChoiceItem('withdrawn', _('Withdrawn'))
 
-INDIVIDUAL_STATUS_CHOICES = (
-    ('sug', _('Suggested to you')),
-    ('ace', _('Accepted')),
-    ('don', _('Done')),
-    ('wit', _('Rejected')),
-    ('clo', _('Action was closed or withdrawn')),
-)
+class ToDoStatusChoices(DjangoChoices):
+    suggested = ChoiceItem('suggested', _('Suggested to you'))
+    accepted = ChoiceItem('accepted', _('Accepted'))
+    done = ChoiceItem('done', _('Done'))
+    rejected = ChoiceItem('rejected', _('Rejected'))
+    closed = ChoiceItem('closed', _('Action was closed or withdrawn'))
+
+    @classmethod
+    def third_person(cls, status):
+        return {
+            'suggested': 'Suggested to them',
+            'accepted': 'On their to do list',
+            'done': 'Action completed',
+            'closed': 'Action closed before they did it',
+            'rejected': 'This should never get used!'
+        }[status]
+
+
 
 PRIORITY_CHOICES = (
     ('low', _('Low')),

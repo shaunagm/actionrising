@@ -7,6 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from profiles.models import Profile, ProfileActionRelationship
 
+from mysite.lib.choices import StatusChoices
 from mysite.lib.utils import slugify_helper
 from actions.models import Action
 from slates.models import Slate, SlateActionRelationship
@@ -30,10 +31,10 @@ class TestSlateMethods(TestCase):
         self.assertEqual(self.slate.get_robust_url(), '/slates/slate/test-slate')
 
     def test_is_active(self):
-        self.slate.status = 'rea'
+        self.slate.status = StatusChoices.ready
         self.slate.save()
         self.assertTrue(self.slate.is_active())
-        self.slate.status = 'fin'
+        self.slate.status = StatusChoices.finished
         self.slate.save()
         self.assertFalse(self.slate.is_active())
 

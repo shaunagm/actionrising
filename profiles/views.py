@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 
 from actstream.actions import follow, unfollow
 from mysite.lib.privacy import check_privacy, filter_list_for_privacy, filter_list_for_privacy_annotated
-from mysite.lib.choices import PrivacyChoices
+from mysite.lib.choices import PrivacyChoices, ToDoStatusChoices
 from django.contrib.auth.models import User
 from profiles.models import (Profile, Relationship, ProfileActionRelationship,
     ProfileSlateRelationship, NavbarSettings)
@@ -132,7 +132,7 @@ def toggle_relationships(request, pk, toggle_type):
 def toggle_par_helper(toggle_type, current_profile, action):
     if toggle_type == 'add':
         par, create = ProfileActionRelationship.objects.get_or_create(profile=current_profile, action=action)
-        par.status = 'ace'
+        par.status = ToDoStatusChoices.accepted
         par.date_accepted = datetime.datetime.now(tz=pytz.utc)
         par.save()
     if toggle_type == 'remove':
@@ -189,7 +189,7 @@ def manage_action_helper(par, form, user):
         new_profile = User.objects.get(username=profile.user.username).profile
         new_par, created = ProfileActionRelationship.objects.get_or_create(
             profile=new_profile, action=par.action,
-            defaults={'status': 'sug', 'last_suggester': user })
+            defaults={'status': ToDoStatusChoices.suggested, 'last_suggester': user })
         new_par.add_suggester(user.username)
     for slate in form.cleaned_data['slates']:
         # TODO: Right now this is pretty inefficient.  Would be nice to show users which of
@@ -217,10 +217,10 @@ def mark_as_done_helper(profile, action, mark_as):
     par, created = ProfileActionRelationship.objects.get_or_create(profile=profile,
         action=action)
     if mark_as == 'done':
-        par.status = 'don'
+        par.status = ToDoStatusChoices.done
         par.date_finished = datetime.datetime.now(tz=pytz.utc)
     else:
-        par.status = 'ace'
+        par.status = ToDoStatusChoices.accepted
         par.date_accepted = datetime.datetime.now(tz=pytz.utc)
     par.save()
     return par
@@ -237,10 +237,10 @@ def mark_as_done(request, slug, mark_as):
 
 def manage_suggested_action_helper(par, type):
     if type == 'accept':
-        par.status = "ace"
+        par.status = ToDoStatusChoices.accepted
         par.date_accepted = datetime.datetime.now(tz=pytz.utc)
     if type == 'reject':
-        par.status = "wit"
+        par.status = ToDoStatusChoices.rejected
     par.save()
     return par
 

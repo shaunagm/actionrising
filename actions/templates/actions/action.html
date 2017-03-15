@@ -11,10 +11,10 @@
   <div class="row">
     <div class="col-sm-11 col-sm-offset-1">
       <h2>{{ action.title }}
-        {% ifequal action.status "fin" %}
+        {% ifequal action.status "finished" %}
             <a href="#" class="btn btn-danger">This action is finished</a>
         {% endifequal %}
-        {% ifequal action.status "wit" %}
+        {% ifequal action.status "withdrawn" %}
             <a href="#" class="btn btn-danger">This action has been withdrawn</a>
         {% endifequal %}
       </h2>
@@ -67,7 +67,7 @@
         <div class="row">
       		 <div class="col-sm-12">
                 {% include "actions/action_items/edit_object.html" %}
-                {% if action.status == "rea" %}
+                {% if action.status == "ready" %}
                     {% include "actions/action_items/manage_action.html" %}
                     {% include "actions/action_items/mark_action_as_done.html" %}
                     {% include "actions/action_items/make_commitment.html" %}

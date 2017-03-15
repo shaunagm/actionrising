@@ -17,7 +17,7 @@ from actstream.actions import follow, unfollow
 from actions.models import Action
 from slates.models import Slate
 from notifications.models import NotificationSettings, DailyActionSettings
-from mysite.lib.choices import (PrivacyChoices, PRIORITY_CHOICES, INDIVIDUAL_STATUS_CHOICES)
+from mysite.lib.choices import (PrivacyChoices, PRIORITY_CHOICES, StatusChoices, ToDoStatusChoices)
 from mysite.lib.utils import disable_for_loaddata
 from profiles.lib import status_helpers
 
@@ -136,28 +136,28 @@ class Profile(models.Model):
         return [profile.user for profile in Profile.objects.filter(pk__in=notify)]
 
     def get_most_recent_actions_created(self):
-        actions = self.user.action_set.filter(status__in=["rea", "fin"]).order_by('-date_created')
+        actions = self.user.action_set.filter(status__in=[StatusChoices.ready, StatusChoices.finished]).order_by('-date_created')
         if len(actions) > 5:
             return actions[:5]
         return actions
 
     def get_most_recent_actions_tracked(self):
-        actions = [par.action for par in self.profileactionrelationship_set.all() if par.action.status in ["rea", "fin"]]
+        actions = [par.action for par in self.profileactionrelationship_set.all() if par.action.status in [StatusChoices.ready, StatusChoices.finished]]
         if len(actions) > 5:
             return actions[:5]
         return actions
 
     def get_open_actions(self):
-        actions = [par.action for par in self.profileactionrelationship_set.filter(status="ace")]
-        return [action for action in actions if action.status == "rea"]
+        actions = [par.action for par in self.profileactionrelationship_set.filter(status=ToDoStatusChoices.accepted)]
+        return [action for action in actions if action.status == StatusChoices.ready]
 
     def get_open_pars(self):
-        pars = ProfileActionRelationship.objects.filter(profile=self, status="ace")
-        return [par for par in pars if par.action.status == "rea"]
+        pars = ProfileActionRelationship.objects.filter(profile=self, status=ToDoStatusChoices.accepted)
+        return [par for par in pars if par.action.status == StatusChoices.ready]
 
     def get_suggested_actions(self):
-        pars = ProfileActionRelationship.objects.filter(profile=self, status="sug")
-        return [par for par in pars if par.action.status == "rea"]
+        pars = ProfileActionRelationship.objects.filter(profile=self, status=ToDoStatusChoices.suggested)
+        return [par for par in pars if par.action.status == StatusChoices.ready]
 
     def get_suggested_actions_count(self):
         return len(self.get_suggested_actions())
@@ -192,7 +192,7 @@ class Profile(models.Model):
         finished_count = 0
         for action in self.profileactionrelationship_set.all():
             total_count += 1
-            if action.status == "don":
+            if action.status == ToDoStatusChoices.done:
                 finished_count += 1
         if total_count == 0:
             return 0
@@ -215,12 +215,12 @@ class Profile(models.Model):
         # Get actions made by people you follow
         people = self.get_people_user_follows()
         for person in people:
-            for action in person.user.action_set.filter(status="rea"):
+            for action in person.user.action_set.filter(status=StatusChoices.ready):
                 actions.append(action)
         # Get actions in slates you follow
         for slate in self.slates.all():
             for sar in slate.slateactionrelationship_set.all():
-                if sar.action.status == "rea":
+                if sar.action.status == StatusChoices.ready:
                     actions.append(sar.action)
         return actions
 
@@ -421,7 +421,7 @@ class ProfileActionRelationship(models.Model):
     # default priority is med == medium
     priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='med')
     # default status is ace == accepted
-    status = models.CharField(max_length=3, choices=INDIVIDUAL_STATUS_CHOICES, default='ace')
+    status = models.CharField(max_length=10, choices=ToDoStatusChoices.choices, default=ToDoStatusChoices.accepted)
     committed = models.BooleanField(default=False)
     last_suggester = models.ForeignKey(User, blank=True, null=True)
     suggested_by = models.CharField(max_length=500, blank=True, null=True)
@@ -443,7 +443,7 @@ class ProfileActionRelationship(models.Model):
         return class_name
 
     def get_status(self):
-        if self.action.status in ["wit", "rej"]:
+        if self.action.status == StatusChoices.withdrawn:
             return self.action.get_status_display()
         else:
             return self.get_status_display()
@@ -474,11 +474,11 @@ class ProfileActionRelationship(models.Model):
 @disable_for_loaddata
 def par_handler(sender, instance, created, **kwargs):
     if created:
-        if instance.status == "sug":
+        if instance.status == ToDoStatusChoices.suggested:
             action.send(instance.last_suggester, verb='suggested action', action_object=instance.action, target=instance.profile.user)
         else:
             action.send(instance.profile.user, verb='is taking action', target=instance.action)
-    if instance.status == "don":
+    if instance.status == ToDoStatusChoices.done:
         action.send(instance.profile.user, verb='completed action', target=instance.action)
 post_save.connect(par_handler, sender=ProfileActionRelationship)
 
