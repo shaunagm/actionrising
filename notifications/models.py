@@ -8,7 +8,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
-from mysite.lib.choices import DAILY_ACTION_SOURCE_CHOICES
+from mysite.lib.choices import DailyActionSourceChoices
 from actstream.models import Action
 from notifications.lib import email_handlers
 from mysite.lib.utils import disable_for_loaddata
@@ -48,12 +48,12 @@ class DailyActionSettings(models.Model):
     user = models.OneToOneField(User, unique=True)
     recently_seen = models.CharField(max_length=50, blank=True, null=True)
     # Sources
-    my_own_actions = models.CharField(max_length=5, choices=DAILY_ACTION_SOURCE_CHOICES,
-        default='few')
-    my_friends_actions = models.CharField(max_length=5, choices=DAILY_ACTION_SOURCE_CHOICES,
-        default='few')
-    popular_actions = models.CharField(max_length=5, choices=DAILY_ACTION_SOURCE_CHOICES,
-        default='few')
+    my_own_actions = models.CharField(max_length=5, choices=DailyActionSourceChoices.choices,
+        default=DailyActionSourceChoices.few)
+    my_friends_actions = models.CharField(max_length=5, choices=DailyActionSourceChoices.choices,
+        default=DailyActionSourceChoices.few)
+    popular_actions = models.CharField(max_length=5, choices=DailyActionSourceChoices.choices,
+        default=DailyActionSourceChoices.few)
     # Filters
     duration_filter = models.CharField(max_length=200, blank=True, null=True)
     duration_filter_on = models.BooleanField(default=False)
