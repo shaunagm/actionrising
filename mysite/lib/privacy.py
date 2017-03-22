@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from mysite.lib.choices import PrivacyChoices
 
 def get_global_default_given_object(object):
     '''Finds the privacy defaults model associated with a given object'''
@@ -62,17 +63,17 @@ def user_in_followers(object, user):
 
 def check_privacy_given_setting(privacy_setting, object, user):
     '''Checks if user passes the privacy level for a given object'''
-    if privacy_setting == "pub":
+    if privacy_setting == PrivacyChoices.public:
         return True
-    if privacy_setting == "sit" and user.is_authenticated():
+    if privacy_setting == PrivacyChoices.sitewide and user.is_authenticated():
         return True
-    if privacy_setting == "fol" and user_in_followers(object, user):
+    if privacy_setting == PrivacyChoices.follows and user_in_followers(object, user):
         return True
     return False
 
 def get_privacy_setting(object):
     '''Gets relevant privacy setting for object'''
-    if hasattr(object, 'privacy') and object.privacy != "inh":
+    if hasattr(object, 'privacy') and object.privacy != PrivacyChoices.inherit:
         return object.privacy
     return get_global_privacy_default(object)
 

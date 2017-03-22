@@ -1,12 +1,14 @@
+from mysite.lib.choices import ToDoStatusChoices
+
 def close_pars_when_action_closes(action):
     '''If action is closed, closes PARs that active, and delete suggested actions'''
     from profiles.models import ProfileActionRelationship
     pars = ProfileActionRelationship.objects.filter(action=action)
     for par in pars:
-        if par.status == "ace":
-            par.status = "clo"
+        if par.status == ToDoStatusChoices.accepted:
+            par.status = ToDoStatusChoices.closed
             par.save()
-        if par.status == "sug":
+        if par.status == ToDoStatusChoices.suggested:
             par.delete()
 
 def open_pars_when_action_reopens(action):
@@ -14,8 +16,8 @@ def open_pars_when_action_reopens(action):
     from profiles.models import ProfileActionRelationship
     pars = ProfileActionRelationship.objects.filter(action=action)
     for par in pars:
-        if par.status == "clo":
-            par.status = "ace"
+        if par.status == ToDoStatusChoices.closed:
+            par.status = ToDoStatusChoices.accepted
             par.save()
 
 def close_commitment_when_PAR_is_closed(par):
@@ -43,11 +45,11 @@ def close_commitment_when_PAR_is_done(par):
         c.save()
 
 def change_commitment_when_par_changes(par, previous_status, current_status):
-    if previous_status != "clo" and current_status == "clo":
+    if previous_status != ToDoStatusChoices.closed and current_status == ToDoStatusChoices.closed:
         close_commitment_when_PAR_is_closed(par)
-    if previous_status != "ace" and current_status == "ace":
+    if previous_status != ToDoStatusChoices.accepted and current_status == ToDoStatusChoices.accepted:
         reopen_commitment_when_par_is_reopened(par)
-    if previous_status != "don" and current_status == "don":
+    if previous_status != ToDoStatusChoices.done and current_status == ToDoStatusChoices.done:
         close_commitment_when_PAR_is_done(par)
     # NOTE: This leaves some edge cases - what if a user marks an action as done,
     # then undoes that?  But this is a small minority of use cases which we can come

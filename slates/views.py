@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin,  LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
 from flags.lib.flag_helpers import get_user_flag_if_exists
+from mysite.lib.choices import PrivacyChoices, StatusChoices
 from mysite.lib.privacy import (check_privacy, filter_list_for_privacy,
     filter_list_for_privacy_annotated)
 from misc.models import RecommendationTracker
@@ -41,12 +42,12 @@ class SlateListView(LoginRequiredMixin, generic.ListView):
     # Note: templates can likely be refactored to use same template as TopicListView
     template_name = "slates/slates.html"
     model = Slate
-    queryset = Slate.objects.filter(status__in=["rea", "fin"]).filter(current_privacy__in=["pub", "sit"])
+    queryset = Slate.objects.filter(status__in=[StatusChoices.ready, StatusChoices.finished]).filter(current_privacy__in=[PrivacyChoices.public, PrivacyChoices.sitewide])
 
 class PublicSlateListView(generic.ListView):
     template_name = "slates/slates.html"
     model = Slate
-    queryset = Slate.objects.filter(status__in=["rea", "fin"]).filter(current_privacy="pub")
+    queryset = Slate.objects.filter(status__in=[StatusChoices.ready, StatusChoices.finished]).filter(current_privacy=PrivacyChoices.public)
 
 class SlateCreateView(LoginRequiredMixin, generic.edit.CreateView):
     model = Slate

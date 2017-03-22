@@ -312,8 +312,8 @@
         "description": "",
         "links": null,
         "date_joined": "2016-11-22T04:14:02.912Z",
-        "privacy": "inh",
-        "current_privacy": "fol"
+        "privacy": "inherit",
+        "current_privacy": "follows"
     }
 },
 {
@@ -327,8 +327,8 @@
         "description": "",
         "links": "",
         "date_joined": "2016-11-22T04:14:02Z",
-        "privacy": "inh",
-        "current_privacy": "fol"
+        "privacy": "inherit",
+        "current_privacy": "follows"
     }
 },
 {
@@ -342,8 +342,8 @@
         "description": null,
         "links": null,
         "date_joined": "2016-11-22T04:14:02.912Z",
-        "privacy": "inh",
-        "current_privacy": "fol"
+        "privacy": "inherit",
+        "current_privacy": "follows"
     }
 },
 {
@@ -357,8 +357,8 @@
         "description": null,
         "links": null,
         "date_joined": "2016-11-28T22:22:33.956Z",
-        "privacy": "inh",
-        "current_privacy": "fol"
+        "privacy": "inherit",
+        "current_privacy": "follows"
     }
 },
 {
@@ -372,8 +372,8 @@
         "description": null,
         "links": null,
         "date_joined": "2016-11-28T22:23:30.382Z",
-        "privacy": "inh",
-        "current_privacy": "fol"
+        "privacy": "inherit",
+        "current_privacy": "follows"
     }
 },
 {
@@ -387,8 +387,8 @@
         "description": "",
         "links": "",
         "date_joined": "2016-12-02T14:58:39Z",
-        "privacy": "inh",
-        "current_privacy": "fol"
+        "privacy": "inherit",
+        "current_privacy": "follows"
     }
 },
 {
@@ -402,8 +402,8 @@
         "description": "",
         "links": "",
         "date_joined": "2016-12-02T15:01:21Z",
-        "privacy": "inh",
-        "current_privacy": "fol"
+        "privacy": "inherit",
+        "current_privacy": "follows"
     }
 },
 {
@@ -491,7 +491,7 @@
     "pk": 5,
     "fields": {
         "profile": 5,
-        "global_default": "sit"
+        "global_default": "sitewide"
     }
 },
 {
@@ -499,7 +499,7 @@
     "pk": 6,
     "fields": {
         "profile": 6,
-        "global_default": "sit"
+        "global_default": "sitewide"
     }
 },
 {
@@ -507,7 +507,7 @@
     "pk": 7,
     "fields": {
         "profile": 7,
-        "global_default": "pub"
+        "global_default": "public"
     }
 },
 {
@@ -515,7 +515,7 @@
     "pk": 8,
     "fields": {
         "profile": 8,
-        "global_default": "pub"
+        "global_default": "public"
     }
 },
 {
@@ -523,7 +523,7 @@
     "pk": 9,
     "fields": {
         "profile": 9,
-        "global_default": "sit"
+        "global_default": "sitewide"
     }
 },
 {
@@ -531,7 +531,7 @@
     "pk": 10,
     "fields": {
         "profile": 10,
-        "global_default": "sit"
+        "global_default": "sitewide"
     }
 },
 {
@@ -539,7 +539,7 @@
     "pk": 11,
     "fields": {
         "profile": 11,
-        "global_default": "sit"
+        "global_default": "sitewide"
     }
 },
 {
@@ -548,8 +548,8 @@
     "fields": {
         "profile": 6,
         "action": 9,
-        "priority": "med",
-        "status": "ace",
+        "priority": "medium",
+        "status": "accepted",
         "committed": false,
         "last_suggester": null,
         "suggested_by": "[\"shauna\"]",
@@ -564,8 +564,8 @@
     "fields": {
         "profile": 6,
         "action": 11,
-        "priority": "med",
-        "status": "ace",
+        "priority": "medium",
+        "status": "accepted",
         "committed": false,
         "last_suggester": null,
         "suggested_by": "",
@@ -580,8 +580,8 @@
     "fields": {
         "profile": 7,
         "action": 9,
-        "priority": "med",
-        "status": "don",
+        "priority": "medium",
+        "status": "done",
         "committed": false,
         "last_suggester": null,
         "suggested_by": "",
@@ -596,8 +596,8 @@
     "fields": {
         "profile": 8,
         "action": 9,
-        "priority": "med",
-        "status": "sug",
+        "priority": "medium",
+        "status": "suggested",
         "committed": false,
         "last_suggester": null,
         "suggested_by": "",
@@ -645,14 +645,14 @@
         "anonymize": false,
         "main_link": "www.fakelinktomoreinfo.com",
         "description": "<p>Here&#39;s some instructions!</p>",
-        "privacy": "inh",
-        "current_privacy": "sit",
-        "status": "rea",
+        "privacy": "inherit",
+        "current_privacy": "sitewide",
+        "status": "ready",
         "has_deadline": false,
         "deadline": null,
-        "priority": "eme",
+        "priority": "emergency",
         "date_created": "2016-11-22T04:14:02Z",
-        "duration": "H"
+        "duration": "unknown"
     }
 },
 {
@@ -667,14 +667,14 @@
         "anonymize": true,
         "main_link": "",
         "description": "",
-        "privacy": "pub",
-        "current_privacy": "pub",
-        "status": "rea",
+        "privacy": "public",
+        "current_privacy": "public",
+        "status": "ready",
         "has_deadline": false,
         "deadline": null,
-        "priority": "hig",
+        "priority": "high",
         "date_created": "2016-11-25T04:14:02Z",
-        "duration": "H"
+        "duration": "unknown"
     }
 },
 {
@@ -689,14 +689,14 @@
         "anonymize": false,
         "main_link": "",
         "description": "",
-        "privacy": "sit",
-        "current_privacy": "sit",
-        "status": "rea",
+        "privacy": "sitewide",
+        "current_privacy": "sitewide",
+        "status": "ready",
         "has_deadline": false,
         "deadline": null,
-        "priority": "med",
+        "priority": "medium",
         "date_created": "2016-11-23T04:14:02Z",
-        "duration": "H"
+        "duration": "unknown"
     }
 },
 {
@@ -711,14 +711,14 @@
         "anonymize": false,
         "main_link": "",
         "description": "Do a thing!  Edited to say: actually we should probably not do this thing.",
-        "privacy": "inh",
-        "current_privacy": "sit",
-        "status": "wit",
+        "privacy": "inherit",
+        "current_privacy": "sitewide",
+        "status": "withdrawn",
         "has_deadline": false,
         "deadline": null,
-        "priority": "med",
+        "priority": "medium",
         "date_created": "2016-12-02T14:52:20Z",
-        "duration": "H"
+        "duration": "unknown"
     }
 },
 {
@@ -733,14 +733,14 @@
         "anonymize": true,
         "main_link": "",
         "description": "<p>Let&#39;s see if this makes an activitystream update!?!?!!</p>",
-        "privacy": "inh",
-        "current_privacy": "sit",
-        "status": "rea",
+        "privacy": "inherit",
+        "current_privacy": "sitewide",
+        "status": "ready",
         "has_deadline": false,
         "deadline": null,
         "priority": "low",
         "date_created": "2016-12-02T15:04:48Z",
-        "duration": "H"
+        "duration": "unknown"
     }
 },
 {
@@ -755,14 +755,14 @@
         "anonymize": false,
         "main_link": "",
         "description": "",
-        "privacy": "inh",
-        "current_privacy": "sit",
-        "status": "rea",
+        "privacy": "inherit",
+        "current_privacy": "sitewide",
+        "status": "ready",
         "has_deadline": false,
         "deadline": null,
-        "priority": "med",
+        "priority": "medium",
         "date_created": "2017-01-06T17:21:26Z",
-        "duration": "H"
+        "duration": "unknown"
     }
 },
 {
@@ -775,9 +775,9 @@
             "buffysummers"
         ],
         "description": "Indescribable.",
-        "status": "rea",
-        "privacy": "inh",
-        "current_privacy": "sit",
+        "status": "ready",
+        "privacy": "inherit",
+        "current_privacy": "sitewide",
         "date_created": "2016-11-28T22:26:42Z"
     }
 },
@@ -791,9 +791,9 @@
             "giles"
         ],
         "description": "",
-        "status": "rea",
-        "privacy": "inh",
-        "current_privacy": "sit",
+        "status": "ready",
+        "privacy": "inherit",
+        "current_privacy": "sitewide",
         "date_created": "2016-12-02T21:42:10Z"
     }
 },
@@ -807,9 +807,9 @@
             "dru"
         ],
         "description": "",
-        "status": "rea",
-        "privacy": "pub",
-        "current_privacy": "sit",
+        "status": "ready",
+        "privacy": "public",
+        "current_privacy": "sitewide",
         "date_created": "2016-12-02T21:43:05Z"
     }
 },
@@ -819,8 +819,8 @@
     "fields": {
         "slate": 10,
         "action": 9,
-        "priority": "med",
-        "status": "ace",
+        "priority": "medium",
+        "status": "accepted",
         "notes": ""
     }
 },
@@ -830,8 +830,8 @@
     "fields": {
         "slate": 10,
         "action": 11,
-        "priority": "med",
-        "status": "ace",
+        "priority": "medium",
+        "status": "accepted",
         "notes": ""
     }
 },
@@ -841,8 +841,8 @@
     "fields": {
         "slate": 12,
         "action": 25,
-        "priority": "med",
-        "status": "ace",
+        "priority": "medium",
+        "status": "accepted",
         "notes": ""
     }
 },
@@ -852,8 +852,8 @@
     "fields": {
         "slate": 12,
         "action": 10,
-        "priority": "med",
-        "status": "ace",
+        "priority": "medium",
+        "status": "accepted",
         "notes": ""
     }
 },
@@ -863,8 +863,8 @@
     "fields": {
         "slate": 12,
         "action": 11,
-        "priority": "eme",
-        "status": "ace",
+        "priority": "emergency",
+        "status": "accepted",
         "notes": ""
     }
 },

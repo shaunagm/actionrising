@@ -1,24 +1,17 @@
-from mysite.lib.choices import INDIVIDUAL_STATUS_CHOICES
+from mysite.lib.choices import ToDoStatusChoices
 from mysite.lib.privacy import filter_list_for_privacy_annotated, filter_list_for_privacy
 from profiles.models import ProfileActionRelationship, ProfileSlateRelationship
 from slates.models import SlateActionRelationship
 
-STATUS_DISPLAY_DICT = {
-    'sug': 'Suggested to them',
-    'ace': 'On their to do list',
-    'don': 'Action completed',
-    'clo': 'Action closed before they did it',
-    'wit': 'This should never get used!'}
-
 def get_people_tracking(object):
     if object.get_cname() == "Action":
-        trackers = ProfileActionRelationship.objects.filter(action=object).exclude(status="wit")
+        trackers = ProfileActionRelationship.objects.filter(action=object).exclude(status=ToDoStatusChoices.rejected)
     else:
         trackers = ProfileSlateRelationship.objects.filter(slate=object)
     return trackers
 
 def get_slate_tracking(object):
-    return SlateActionRelationship.objects.filter(action=object).exclude(status="wit")
+    return SlateActionRelationship.objects.filter(action=object).exclude(status=ToDoStatusChoices.rejected)
 
 def get_people_phrase(people_trackers):
     if len(people_trackers) == 1:
@@ -33,12 +26,13 @@ def get_slate_phrase(slate_trackers):
         return "%d slates" % len(slate_trackers)
 
 def get_tracker_list_for_action(trackers, user):
-    action_data = {}
-    for status in [choice[0] for choice in INDIVIDUAL_STATUS_CHOICES]:
-        filtered_trackers = trackers.filter(status=status)
-        annotated_list = filter_list_for_privacy_annotated(filtered_trackers, user)
-        action_data[status] = {'status_display': STATUS_DISPLAY_DICT[status], 'list': annotated_list }
-    return action_data
+    return {
+        status_value: {
+            'status_display': ToDoStatusChoices.third_person(status_value),
+            'list': filter_list_for_privacy_annotated(trackers.filter(status=status_value), user)
+        }
+        for status_value in ToDoStatusChoices.values.iterkeys()
+    }
 
 def get_tracker_list_for_slate(people_trackers, user):
     # Are we checking for anything but privacy here?

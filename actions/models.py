@@ -13,8 +13,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from ckeditor.fields import RichTextField
 from plugins import plugin_helpers
 from mysite.settings import PRODUCTION_DOMAIN
-from mysite.lib.choices import (PRIVACY_CHOICES, PRIORITY_CHOICES, STATUS_CHOICES,
-    TIME_CHOICES, INDIVIDUAL_STATUS_CHOICES)
+from mysite.lib.choices import PrivacyChoices, PriorityChoices, StatusChoices, TimeChoices
 from mysite.lib.utils import disable_for_loaddata, slug_validator, slugify_helper
 from profiles.lib.status_helpers import open_pars_when_action_reopens, close_pars_when_action_closes
 
@@ -30,18 +29,15 @@ class Action(models.Model):
     description = RichTextField(max_length=4000, blank=True, null=True)
     date_created = models.DateTimeField(default=timezone.now)
     # default default is H == 'Unknown or variable'
-    duration = models.CharField(max_length=2, choices=TIME_CHOICES, default='H')
-    # suggested priority default is med == medium
-    priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='med')
+    duration = models.CharField(max_length=10, choices=TimeChoices.choices, default=TimeChoices.unknown)
+    priority = models.CharField(max_length=10, choices=PriorityChoices.choices, default=PriorityChoices.medium)
 
     # Privacy info
-    # privacy default is inh == inherit
-    privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
-    current_privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='sit')
+    privacy = models.CharField(max_length=10, choices=PrivacyChoices.choices, default=PrivacyChoices.inherit)
+    current_privacy = models.CharField(max_length=10, choices=PrivacyChoices.choices, default=PrivacyChoices.sitewide)
 
     # Status info
-    # status default is rea == open for action
-    status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='rea')
+    status = models.CharField(max_length=10, choices=StatusChoices.choices, default=StatusChoices.ready)
     has_deadline = models.BooleanField(default=False)
     deadline = models.DateTimeField(blank=True, null=True)
     keep_open = models.BooleanField(default=False) # User can keep action open if no deadline
@@ -58,13 +54,13 @@ class Action(models.Model):
         if not self.pk:
             self.slug = slugify_helper(Action, self.title)
             self.current_privacy = self.creator.profile.privacy_defaults.global_default
-        if self.privacy != "inh" and self.privacy != self.current_privacy:
+        if self.privacy != PrivacyChoices.inherit and self.privacy != self.current_privacy:
             self.current_privacy = self.privacy
         if self.pk:
             orig = Action.objects.get(pk=self.pk)
-            if orig.status == "rea" and self.status != "rea":
+            if orig.status == StatusChoices.ready and self.status != StatusChoices.ready:
                 close_pars_when_action_closes(self)
-            if orig.status != "rea" and self.status == "rea":
+            if orig.status != StatusChoices.ready and self.status == StatusChoices.ready:
                 open_pars_when_action_reopens(self)
         super(Action, self).save(*args, **kwargs)
 
@@ -102,7 +98,7 @@ class Action(models.Model):
         return self.tags.all()
 
     def refresh_current_privacy(self):
-        if self.privacy == "inh":
+        if self.privacy == PrivacyChoices.inherit:
             self.current_privacy = self.creator.profile.privacy_defaults.global_default
         else:
             self.current_privacy = self.privacy
@@ -115,7 +111,7 @@ class Action(models.Model):
             return self.creator
 
     def is_active(self):
-        if self.status == "rea":  # Arguably we should add 'in creation' too
+        if self.status == StatusChoices.ready:  # Arguably we should add 'in creation' too
             return True
         else:
             return False
@@ -139,7 +135,7 @@ class Action(models.Model):
 
     def keep_action_open(self):
         self.keep_open = True
-        self.status = 'rea'
+        self.status = StatusChoices.ready
         self.keep_open_date = datetime.datetime.now(timezone.utc)
         self.save()
 
@@ -221,7 +217,7 @@ class ActionFilter(models.Model):
             return json.loads(self.time)
 
     def get_time_string(self):
-        display_names = [dict(TIME_CHOICES).get(short) for short in self.get_time()]
+        display_names = [TimeChoices.labels[short] for short in self.get_time()]
         return "Duration of actions: " +  ", ".join(display_names)
 
     def get_plugin_fields(self):

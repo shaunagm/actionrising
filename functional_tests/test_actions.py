@@ -96,7 +96,7 @@ class TestActionDetail(SeleniumTestCase):
 
     def test_action_tracking_display(self):
         self.action_page.display_tracker_link.click()
-        self.wait_helper("profile_ace")
+        self.wait_helper("profile_accepted")
         time.sleep(4)
         self.assertEquals(len(self.action_page.suggested_trackers), 1)
         self.assertEqual(self.action_page.suggested_trackers[0].text, "Faith Lehane")
@@ -111,7 +111,7 @@ class TestActionDetail(SeleniumTestCase):
         self.wait_helper("manage-action-list")
         # Logged in user should now appear in accepted trackers
         self.action_page.display_tracker_link.click()
-        self.wait_helper("profile_ace")
+        self.wait_helper("profile_accepted")
         time.sleep(4)
         self.assertEquals(len(self.action_page.accepted_trackers), 2)
         self.assertEqual(self.action_page.accepted_trackers[0].text, "Buffy Summers")
@@ -119,7 +119,7 @@ class TestActionDetail(SeleniumTestCase):
         self.action_page.select_manage_action_option("Remove from todos")
         self.wait_helper()
         self.action_page.display_tracker_link.click()
-        self.wait_helper("profile_ace")
+        self.wait_helper("profile_accepted")
         time.sleep(4)
         self.assertEquals(len(self.action_page.accepted_trackers), 1)
         self.assertEqual(self.action_page.accepted_trackers[0].text, "Willow")
@@ -129,7 +129,7 @@ class TestActionDetail(SeleniumTestCase):
         self.action_page.manage_action_button.click()
         self.wait_helper()
         self.action_page.display_tracker_link.click()
-        self.wait_helper("profile_ace")
+        self.wait_helper("profile_accepted")
         time.sleep(4)
         self.assertEquals(len(self.action_page.accepted_trackers), 2)
         # Logged in user should now appear in accepted trackers but not done trackers
@@ -141,7 +141,7 @@ class TestActionDetail(SeleniumTestCase):
         self.wait_helper()
         # Logged in user should now appear in done trackers but not accepted trackers
         self.action_page.display_tracker_link.click()
-        self.wait_helper("profile_ace")
+        self.wait_helper("profile_accepted")
         time.sleep(4)
         self.assertEquals(len(self.action_page.accepted_trackers), 1)
         self.assertEqual(self.action_page.accepted_trackers[0].text, "Willow")

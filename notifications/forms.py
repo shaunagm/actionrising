@@ -1,11 +1,11 @@
 from django.forms import ModelForm, MultipleChoiceField
-from mysite.lib.choices import TIME_CHOICES
+from mysite.lib.choices import TimeChoices
 
 from tags.models import Tag
 from notifications.models import DailyActionSettings
 
 class DailyActionForm(ModelForm):
-    duration_filter = MultipleChoiceField(choices=TIME_CHOICES, required=False)
+    duration_filter = MultipleChoiceField(choices=TimeChoices.choices, required=False)
     tag_filter = MultipleChoiceField(choices=[(0,0)], required=False)
 
     class Meta:

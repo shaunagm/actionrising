@@ -4,6 +4,7 @@ from django.core import mail
 from django.contrib.auth.models import User
 from django_comments.models import Comment
 from actions.models import Action
+from mysite.lib.choices import ToDoStatusChoices
 from tags.models import Tag
 from slates.models import Slate, SlateActionRelationship
 from profiles.models import Relationship, ProfileActionRelationship
@@ -251,7 +252,7 @@ class DailyActionTests(TestCase):
         action = Action.objects.first() # Action0 through Action3 are Buffy par objects
         self.assertTrue(dailyaction.finished_action_filter(self.buffy, action))
         par = ProfileActionRelationship.objects.get(profile=self.buffy.profile, action=action)
-        par.status = "don"
+        par.status = ToDoStatusChoices.done
         par.save()
         self.assertFalse(dailyaction.finished_action_filter(self.buffy, action))
 
@@ -296,7 +297,7 @@ class DailyActionTests(TestCase):
         action = Action.objects.first() # Action0 through Action3 are Buffy par objects
         self.assertTrue(dailyaction.filter_action(self.buffy, action))
         par = ProfileActionRelationship.objects.get(profile=self.buffy.profile, action=action)
-        par.status = "don"
+        par.status = ToDoStatusChoices.done
         par.save()
         self.assertFalse(dailyaction.filter_action(self.buffy, action))
 
@@ -335,7 +336,7 @@ class DailyActionTests(TestCase):
 
     def test_actions_filtered_when_action_status_set_to_done(self):
         for action in Action.objects.all():
-            action.status = "don"
+            action.status = ToDoStatusChoices.done
             action.save()
         popular_actions = dailyaction.most_popular_actions(n=10)
         result = dailyaction.generate_daily_action(self.buffy, popular_actions)

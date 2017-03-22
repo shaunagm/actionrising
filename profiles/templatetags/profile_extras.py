@@ -1,7 +1,6 @@
 from django import template
 from django.contrib.auth.models import User
 from django_comments.models import Comment
-from mysite.lib.choices import INDIVIDUAL_STATUS_CHOICES
 from mysite.lib.privacy import check_privacy
 from profiles.models import ProfileActionRelationship, Profile, Relationship
 

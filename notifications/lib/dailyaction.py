@@ -2,9 +2,10 @@ import random
 from django.db.models import Count
 from actions.models import Action
 from profiles.models import ProfileActionRelationship
+from mysite.lib.choices import PrivacyChoices, StatusChoices, ToDoStatusChoices
 
 def most_popular_actions(n=10):
-    return Action.objects.filter(status="rea").filter(current_privacy__in=["pub", "sit"]) \
+    return Action.objects.filter(status=StatusChoices.ready).filter(current_privacy__in=[PrivacyChoices.public, PrivacyChoices.sitewide]) \
         .annotate(num_trackers=Count('profileactionrelationship')) \
         .order_by('-num_trackers')[:n]
 
@@ -47,7 +48,7 @@ def recent_action_filter(user, action):
 def finished_action_filter(user, action):
     par = ProfileActionRelationship.objects.filter(profile=user.profile, action=action)
     if par:
-        if par[0].status in ["wit", "don"]:
+        if par[0].status in [ToDoStatusChoices.rejected, ToDoStatusChoices.done]:
             return
     return action
 
