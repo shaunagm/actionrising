@@ -9,14 +9,14 @@ from django.contrib.auth.models import User
 from actions.models import Action
 from profiles.models import Profile, ProfileActionRelationship
 from notifications.lib import email_handlers
-from mysite.lib.choices import COMMITMENT_STATUS_CHOICES
+from mysite.lib.choices import CommitmentStatusChoices
 from mysite.lib.utils import disable_for_loaddata
 
 class Commitment(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     action = models.ForeignKey(Action, on_delete=models.CASCADE)
-    status = models.CharField(max_length=10, choices=COMMITMENT_STATUS_CHOICES,
-        default='waiting')
+    status = models.CharField(max_length=10, choices=CommitmentStatusChoices.choices,
+        default=CommitmentStatusChoices.waiting)
     buddies = models.CharField(max_length=400, blank=True, null=True) # Add getters + setters to store this in json
     offsite_buddies = models.CharField(max_length=400, blank=True, null=True) # Add getters + setters to store this in json
     message = models.CharField(max_length=400, blank=True, null=True)

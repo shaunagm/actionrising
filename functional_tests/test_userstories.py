@@ -24,8 +24,9 @@ class TestAddAndFollowAction(SeleniumTestCase):
         self.wait_helper()
         self.action_edit_form = ActionEditPage(self.browser, root_uri=self.live_server_url)
         self.action_edit_form.go_to_create_page()
+        self.wait_helper()
         self.action_edit_form.title = "A new action to take"
-        self.browser.execute_script("return arguments[0].scrollIntoView();", self.action_edit_form.submit_button)        
+        self.browser.execute_script("return arguments[0].scrollIntoView();", self.action_edit_form.submit_button)
         self.action_edit_form.submit_button.click()
         # Go to profile page and see action is only listed in 'created', not 'tracked'
         self.profile_page = ProfilePage(self.browser, root_uri=self.live_server_url)
@@ -177,7 +178,7 @@ class LoggedOutUser(SeleniumTestCase):
         self.action_page = BasicActionDetailPage(self.browser, root_uri=self.live_server_url)
         self.action_page.go_to_detail_page(title="Sign petition to make Boston a sanctuary city")
         self.action_page.display_slate_tracker_link.click()
-        self.wait_helper("slate_ace")
+        self.wait_helper("slate_accepted")
         time.sleep(3)
         self.assertEquals(self.action_page.accepted_slate_trackers[0].text, "High stakes slate of actions")
         self.assertEquals(len(self.action_page.accepted_slate_trackers), 1)

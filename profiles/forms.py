@@ -5,7 +5,7 @@ from django.forms import (ModelForm, ModelMultipleChoiceField, ModelChoiceField,
 from django.forms import inlineformset_factory
 from django.forms.widgets import HiddenInput
 
-from mysite.lib.choices import PRIVACY_DEFAULT_CHOICES, PRIVACY_CHOICES
+from mysite.lib.choices import PrivacyChoices
 from mysite.lib.privacy import get_global_privacy_default
 from profiles.models import (Profile, ProfileActionRelationship, PrivacyDefaults,
     NavbarSettings)
@@ -17,7 +17,7 @@ class ProfileForm(ModelForm):
     last_name = CharField(max_length=30, required=False, label="Last name")
     privacy_default = ChoiceField(label='Default privacy setting',
                                 widget=Select(),
-                                choices=PRIVACY_DEFAULT_CHOICES,
+                                choices=PrivacyChoices.default_choices(),
                                 required=True)
 
     class Meta:
@@ -30,8 +30,7 @@ class ProfileForm(ModelForm):
         # Set privacy
         self.fields['privacy_default'].help_text = 'This setting will apply to all actions and slates you create unless you override them individually.'
         self.fields['privacy_default'].initial = self.instance.privacy_defaults.global_default
-        NEW_CHOICES = (PRIVACY_CHOICES[0], PRIVACY_CHOICES[1], PRIVACY_CHOICES[2], ('inh', get_global_privacy_default(user.profile, "decorated")))
-        self.fields['privacy'].choices = NEW_CHOICES
+        self.fields['privacy'].choices = PrivacyChoices.personalized(get_global_privacy_default(user.profile, "decorated"))
 
         # Set plugin fields
         self = plugin_helpers.add_plugin_fields(self)

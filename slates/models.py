@@ -10,8 +10,8 @@ from django.contrib.contenttypes.fields import GenericRelation
 from actstream import action
 from ckeditor.fields import RichTextField
 
-from mysite.lib.choices import (PRIVACY_CHOICES, PRIORITY_CHOICES, STATUS_CHOICES,
-    TIME_CHOICES, INDIVIDUAL_STATUS_CHOICES)
+from mysite.lib.choices import (PrivacyChoices, PriorityChoices, StatusChoices,
+    ToDoStatusChoices)
 from actions.models import Action
 from mysite.settings import PRODUCTION_DOMAIN
 from mysite.lib import choices
@@ -23,11 +23,9 @@ class Slate(models.Model):
     title = models.CharField(max_length=300)
     creator = models.ForeignKey(User)
     description = RichTextField(max_length=2500, blank=True, null=True)  # TODO Rich text?
-    # status default is rea == open for action
-    status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='rea')
-    # default privacy is inh == inherit
-    privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='inh')
-    current_privacy = models.CharField(max_length=3, choices=PRIVACY_CHOICES, default='sit')
+    status = models.CharField(max_length=10, choices=StatusChoices.choices, default=StatusChoices.ready)
+    privacy = models.CharField(max_length=10, choices=PrivacyChoices.choices, default=PrivacyChoices.inherit)
+    current_privacy = models.CharField(max_length=10, choices=PrivacyChoices.choices, default=PrivacyChoices.sitewide)
     actions = models.ManyToManyField(Action, through='SlateActionRelationship')
     date_created = models.DateTimeField(default=timezone.now)
     flags = GenericRelation('flags.Flag')
@@ -40,7 +38,7 @@ class Slate(models.Model):
             self.slug = slugify_helper(Slate, self.title)
             self.current_privacy = self.creator.profile.privacy_defaults.global_default
         else:
-            if self.privacy != "inh" and self.privacy != self.current_privacy:
+            if self.privacy != PrivacyChoices.inherit and self.privacy != self.current_privacy:
                 self.current_privacy = self.privacy
         super(Slate, self).save(*args, **kwargs)
 
@@ -73,13 +71,13 @@ class Slate(models.Model):
             return None
 
     def is_active(self):
-        if self.status == "rea":  # Arguably we should add 'in creation' too
+        if self.status == StatusChoices.ready:  # Arguably we should add 'in creation' too
             return True
         else:
             return False
 
     def refresh_current_privacy(self):
-        if self.privacy == "inh":
+        if self.privacy == PrivacyChoices.inherit:
             self.current_privacy = self.creator.profile.privacy_defaults.global_default
         else:
             self.current_privacy = self.privacy
@@ -107,10 +105,8 @@ class SlateActionRelationship(models.Model):
     """Stores relationship between a single slate and a single action."""
     slate = models.ForeignKey(Slate, on_delete=models.CASCADE)
     action = models.ForeignKey(Action, on_delete=models.CASCADE)
-    # default priority is med == medium
-    priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='med')
-    # default status is ace == accepted
-    status = models.CharField(max_length=3, choices=INDIVIDUAL_STATUS_CHOICES, default='ace')
+    priority = models.CharField(max_length=10, choices=PriorityChoices.choices, default=PriorityChoices.medium)
+    status = models.CharField(max_length=10, choices=ToDoStatusChoices.choices, default=ToDoStatusChoices.accepted)
     notes = models.CharField(max_length=2500, blank=True, null=True)
 
     def get_cname(self):
@@ -121,7 +117,7 @@ class SlateActionRelationship(models.Model):
         return "Relationship of slate: %s and action: %s " % (self.slate, self.action)
 
     def get_status(self):
-        if self.action.status in ["wit", "rej"]:
+        if self.action.status is ToDoStatusChoices.rejected:
             return self.action.get_status_display()
         else:
             return self.get_status_display()

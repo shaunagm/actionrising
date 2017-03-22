@@ -1,64 +1,65 @@
 from django.utils.translation import ugettext as _
+from djchoices import DjangoChoices, ChoiceItem
 
-PRIVACY_CHOICES = (
-    ('pub', _('Visible to Public')),
-    ('sit', _('Visible Sitewide')),
-    ('fol', _('Visible to Follows')),
-    # ('you', 'Only Visible to You'),
-    ('inh', _('Inherit')),
-)
+class PrivacyChoices(DjangoChoices):
+    public = ChoiceItem('public', _('Visible to Public')) #pub
+    sitewide = ChoiceItem('sitewide', _('Visible Sitewide')) #sit
+    follows = ChoiceItem('follows', _('Visible to Follows')) #fol
+    inherit = ChoiceItem('inherit', _('Inherit')) #inh
 
-PRIVACY_DEFAULT_CHOICES = (
-    ('pub', _('Visible to Public')),
-    ('sit', _('Visible Sitewide')),
-    ('fol', _('Visible to Follows')),
-    # ('fol', 'Visible to Buddies and Those You Follow'),
-    # ('bud', 'Visible to Buddies'),
-    # ('you', 'Only Visible to You'),
-)
+    @classmethod
+    def default_choices(cls):
+        return cls.choices[:-1]
 
-STATUS_CHOICES = (
-    # ('cre', 'In creation'),
-    ('rea', _('Open for action')),
-    ('fin', _('Finished')),
-    ('wit', _('Withdrawn')),
-)
+    @classmethod
+    def personalized(cls, user_choice):
+        return cls.choices[:-1] + (('inherit', user_choice),)
 
-INDIVIDUAL_STATUS_CHOICES = (
-    ('sug', _('Suggested to you')),
-    ('ace', _('Accepted')),
-    ('don', _('Done')),
-    ('wit', _('Rejected')),
-    ('clo', _('Action was closed or withdrawn')),
-)
+class StatusChoices(DjangoChoices):
+    ready = ChoiceItem('ready', _('Open for action'))
+    finished = ChoiceItem('finished', _('Finished'))
+    withdrawn = ChoiceItem('withdrawn', _('Withdrawn'))
 
-PRIORITY_CHOICES = (
-    ('low', _('Low')),
-    ('med', _('Medium')),
-    ('hig', _('High')),
-    ('eme', _('Emergency')),
-)
+class ToDoStatusChoices(DjangoChoices):
+    suggested = ChoiceItem('suggested', _('Suggested to you'))
+    accepted = ChoiceItem('accepted', _('Accepted'))
+    done = ChoiceItem('done', _('Done'))
+    rejected = ChoiceItem('rejected', _('Rejected'))
+    closed = ChoiceItem('closed', _('Action was closed or withdrawn'))
 
-TIME_CHOICES = (
-    ('A', _('Ten minutes or less')),
-    ('B', _('Under an hour')),
-    ('C', _('A few hours')),
-    ('E', _('A day or more, not ongoing')),
-    ('F', _('Minor ongoing commitment')),
-    ('G', _('Major ongoing commitment')),
-    ('H', _('Unknown or variable')),
-)
+    @classmethod
+    def third_person(cls, status):
+        return {
+            'suggested': 'Suggested to them',
+            'accepted': 'On their to do list',
+            'done': 'Action completed',
+            'closed': 'Action closed before they did it',
+            'rejected': 'This should never get used!'
+        }[status]
 
-DAILY_ACTION_SOURCE_CHOICES = (
-    ('many', _('A lot')),
-    ('few', _('A little')),
-    ('none', _('None')),
-)
+class PriorityChoices(DjangoChoices):
+    low = ChoiceItem('low', _('Low'))
+    medium = ChoiceItem('medium', _('Medium'))
+    high = ChoiceItem('high', _('High'))
+    emergency = ChoiceItem('emergency', _('Emergency'))
 
-COMMITMENT_STATUS_CHOICES = (
-    ('waiting', _('Commitment made, not yet at deadline')),
-    ('active', _('Commitment made, past deadline')),
-    ('completed', _('Commitment carried out')),
-    ('expired', _('Commitment expired, user took too long')),
-    ('removed', _('Par was closed or deleted')),
-)
+class TimeChoices(DjangoChoices):
+    minutes = ChoiceItem('minutes', _('Ten minutes or less')) #A
+    hour = ChoiceItem('hour', _('Under an hour')) #B
+    hours = ChoiceItem('hours', _('A few hours')) #C
+    day = ChoiceItem('day', _('A day or more, not ongoing')) #E
+    minor = ChoiceItem('minor', _('Minor ongoing commitment')) #F
+    major = ChoiceItem('major', _('Major ongoing commitment')) #G
+    unknown = ChoiceItem('unknown', _('Unknown or variable')) #H
+
+class DailyActionSourceChoices(DjangoChoices):
+    many = ChoiceItem('many', _('A lot'))
+    few = ChoiceItem('few', _('A little'))
+    none = ChoiceItem('none', _('None'))
+
+class CommitmentStatusChoices(DjangoChoices):
+    waiting = ChoiceItem('waiting', _('Commitment made, not yet at deadline'))
+    active = ChoiceItem('active', _('Commitment made, past deadline'))
+    completed = ChoiceItem('completed', _('Commitment carried out'))
+    expired = ChoiceItem('expired', _('Commitment expired, user took too long'))
+    removed = ChoiceItem('removed', _('Par was closed or deleted'))

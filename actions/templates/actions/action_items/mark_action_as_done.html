@@ -1,5 +1,5 @@
 {% if request.user.is_authenticated %}
-    {% ifnotequal par.status 'don' %}
+    {% ifnotequal par.status 'done' %}
         <div class="action-item">
            <a id="mark_as_done" class="manage-action-links" href="{% url 'mark_as_done' object.slug 'done' %}" title="Mark as done">
              <i class="fa fa-check-circle-o" aria-hidden="true"></i>

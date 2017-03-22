@@ -8,6 +8,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin,  LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
 from flags.lib.flag_helpers import get_user_flag_if_exists
+from mysite.lib.choices import PrivacyChoices, StatusChoices
 from mysite.lib.privacy import (check_privacy, filter_list_for_privacy,
     filter_list_for_privacy_annotated)
 from profiles.lib.trackers import get_tracker_data_for_action
@@ -40,12 +41,12 @@ class ActionView(UserPassesTestMixin, generic.DetailView):
 class ActionListView(LoginRequiredMixin, generic.ListView):
     template_name = "actions/actions.html"
     model = Action
-    queryset = Action.objects.filter(status__in=["rea", "fin"]).filter(current_privacy__in=["pub", "sit"])
+    queryset = Action.objects.filter(status__in=[StatusChoices.ready, StatusChoices.finished]).filter(current_privacy__in=[PrivacyChoices.public, PrivacyChoices.sitewide])
 
 class PublicActionListView(generic.ListView):
     template_name = "actions/actions.html"
     model = Action
-    queryset = Action.objects.filter(status__in=["rea", "fin"]).filter(current_privacy="pub")
+    queryset = Action.objects.filter(status__in=[StatusChoices.ready, StatusChoices.finished]).filter(current_privacy=PrivacyChoices.public)
 
 class ActionCreateView(LoginRequiredMixin, generic.edit.CreateView):
     model = Action
