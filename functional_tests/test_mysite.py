@@ -15,7 +15,7 @@ class TestBasics(SeleniumTestCase):
         self.assertEquals(len(base_page.navbar_links), 20)
         base_page.log_out()
         self.wait_helper()
-        self.assertEquals(len(base_page.navbar_links), 8)
+        self.assertEquals(len(base_page.navbar_links), 7)
 
     def test_logged_out_landing_page(self):
         landing_page = LoggedOutLandingPage(self.browser, root_uri=self.live_server_url)
