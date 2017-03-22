@@ -15,18 +15,16 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+if os.environ.get("AR_SITE_TYPE") and os.environ.get("AR_SITE_TYPE") == "PRODUCTION":
+    from production_settings import (SECRET_KEY, DEBUG, CHROMEDRIVER_PATH, DATABASES,
+        EMAIL_HOST, EMAIL_PORT, EMAIL_HOST_PASSWORD)
+elif os.environ.get("AR_SITE_TYPE") and os.environ.get("AR_SITE_TYPE") == "STAGING":
+    from staging_settings import (SECRET_KEY, DEBUG, CHROMEDRIVER_PATH, DATABASES,
+        EMAIL_HOST, EMAIL_PORT, EMAIL_HOST_PASSWORD)
+else:
+    from local_settings import (SECRET_KEY, DEBUG, CHROMEDRIVER_PATH, DATABASES,
+        EMAIL_HOST, EMAIL_PORT, EMAIL_HOST_PASSWORD)
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-from local_settings import SECRET_KEY
-
-# SECURITY WARNING: don't run with debug turned on in production!
-from local_settings import DEBUG
-
-# for testing
-from local_settings import CHROMEDRIVER_PATH
 
 SEND_BROKEN_LINK_EMAILS = True
 MANAGERS = (('Admin', 'actionrisingsite@gmail.com'),)
@@ -98,13 +96,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/1.10/ref/settings/#databases
-
-from local_settings import DATABASES
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -199,7 +190,6 @@ if sys.argv[1:2] != ['test'] and sys.argv[1] != 'runserver':
     CSRF_COOKIE_SECURE = True
 
 # Email
-from local_settings import EMAIL_HOST, EMAIL_PORT, EMAIL_HOST_PASSWORD
 EMAIL_HOST_USER = 'SMTP_Injection'
 EMAIL_USE_TLS = True
 
