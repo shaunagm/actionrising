@@ -548,7 +548,7 @@
     "fields": {
         "profile": 6,
         "action": 9,
-        "priority": "med",
+        "priority": "medium",
         "status": "accepted",
         "committed": false,
         "last_suggester": null,
@@ -564,7 +564,7 @@
     "fields": {
         "profile": 6,
         "action": 11,
-        "priority": "med",
+        "priority": "medium",
         "status": "accepted",
         "committed": false,
         "last_suggester": null,
@@ -580,7 +580,7 @@
     "fields": {
         "profile": 7,
         "action": 9,
-        "priority": "med",
+        "priority": "medium",
         "status": "done",
         "committed": false,
         "last_suggester": null,
@@ -596,7 +596,7 @@
     "fields": {
         "profile": 8,
         "action": 9,
-        "priority": "med",
+        "priority": "medium",
         "status": "suggested",
         "committed": false,
         "last_suggester": null,
@@ -650,9 +650,9 @@
         "status": "ready",
         "has_deadline": false,
         "deadline": null,
-        "priority": "eme",
+        "priority": "emergency",
         "date_created": "2016-11-22T04:14:02Z",
-        "duration": "H"
+        "duration": "unknown"
     }
 },
 {
@@ -672,9 +672,9 @@
         "status": "ready",
         "has_deadline": false,
         "deadline": null,
-        "priority": "hig",
+        "priority": "high",
         "date_created": "2016-11-25T04:14:02Z",
-        "duration": "H"
+        "duration": "unknown"
     }
 },
 {
@@ -694,9 +694,9 @@
         "status": "ready",
         "has_deadline": false,
         "deadline": null,
-        "priority": "med",
+        "priority": "medium",
         "date_created": "2016-11-23T04:14:02Z",
-        "duration": "H"
+        "duration": "unknown"
     }
 },
 {
@@ -716,9 +716,9 @@
         "status": "withdrawn",
         "has_deadline": false,
         "deadline": null,
-        "priority": "med",
+        "priority": "medium",
         "date_created": "2016-12-02T14:52:20Z",
-        "duration": "H"
+        "duration": "unknown"
     }
 },
 {
@@ -740,7 +740,7 @@
         "deadline": null,
         "priority": "low",
         "date_created": "2016-12-02T15:04:48Z",
-        "duration": "H"
+        "duration": "unknown"
     }
 },
 {
@@ -760,9 +760,9 @@
         "status": "ready",
         "has_deadline": false,
         "deadline": null,
-        "priority": "med",
+        "priority": "medium",
         "date_created": "2017-01-06T17:21:26Z",
-        "duration": "H"
+        "duration": "unknown"
     }
 },
 {
@@ -819,7 +819,7 @@
     "fields": {
         "slate": 10,
         "action": 9,
-        "priority": "med",
+        "priority": "medium",
         "status": "accepted",
         "notes": ""
     }
@@ -830,7 +830,7 @@
     "fields": {
         "slate": 10,
         "action": 11,
-        "priority": "med",
+        "priority": "medium",
         "status": "accepted",
         "notes": ""
     }
@@ -841,7 +841,7 @@
     "fields": {
         "slate": 12,
         "action": 25,
-        "priority": "med",
+        "priority": "medium",
         "status": "accepted",
         "notes": ""
     }
@@ -852,7 +852,7 @@
     "fields": {
         "slate": 12,
         "action": 10,
-        "priority": "med",
+        "priority": "medium",
         "status": "accepted",
         "notes": ""
     }
@@ -863,7 +863,7 @@
     "fields": {
         "slate": 12,
         "action": 11,
-        "priority": "eme",
+        "priority": "emergency",
         "status": "accepted",
         "notes": ""
     }

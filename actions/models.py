@@ -13,8 +13,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from ckeditor.fields import RichTextField
 from plugins import plugin_helpers
 from mysite.settings import PRODUCTION_DOMAIN
-from mysite.lib.choices import (PrivacyChoices, PRIORITY_CHOICES, StatusChoices,
-    TIME_CHOICES)
+from mysite.lib.choices import PrivacyChoices, PriorityChoices, StatusChoices, TimeChoices
 from mysite.lib.utils import disable_for_loaddata, slug_validator, slugify_helper
 from profiles.lib.status_helpers import open_pars_when_action_reopens, close_pars_when_action_closes
 
@@ -30,9 +29,8 @@ class Action(models.Model):
     description = RichTextField(max_length=4000, blank=True, null=True)
     date_created = models.DateTimeField(default=timezone.now)
     # default default is H == 'Unknown or variable'
-    duration = models.CharField(max_length=2, choices=TIME_CHOICES, default='H')
-    # suggested priority default is med == medium
-    priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='med')
+    duration = models.CharField(max_length=10, choices=TimeChoices.choices, default=TimeChoices.unknown)
+    priority = models.CharField(max_length=10, choices=PriorityChoices.choices, default=PriorityChoices.medium)
 
     # Privacy info
     privacy = models.CharField(max_length=10, choices=PrivacyChoices.choices, default=PrivacyChoices.inherit)
@@ -219,7 +217,7 @@ class ActionFilter(models.Model):
             return json.loads(self.time)
 
     def get_time_string(self):
-        display_names = [dict(TIME_CHOICES).get(short) for short in self.get_time()]
+        display_names = [TimeChoices.labels[short] for short in self.get_time()]
         return "Duration of actions: " +  ", ".join(display_names)
 
     def get_plugin_fields(self):

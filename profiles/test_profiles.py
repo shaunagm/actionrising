@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from actions.models import Action
 from slates.models import Slate, SlateActionRelationship
 from commitments.models import Commitment
-from mysite.lib.choices import StatusChoices, ToDoStatusChoices, PrivacyChoices
+from mysite.lib.choices import StatusChoices, ToDoStatusChoices, PriorityChoices, PrivacyChoices
 from profiles.models import (Profile, Relationship, ProfileActionRelationship,
     ProfileSlateRelationship)
 from profiles.templatetags.profile_extras import get_friendslist
@@ -256,14 +256,14 @@ class TestManageActionView(TestCase):
         self.slate = Slate.objects.create(slug="test-slate", creator=self.faith, title="Test Slate")
         self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action)
         class MockForm(object):
-            cleaned_data = {'priority': 'hig', 'status': ToDoStatusChoices.done, 'privacy': PrivacyChoices.public,
+            cleaned_data = {'priority': PriorityChoices.high, 'status': ToDoStatusChoices.done, 'privacy': PrivacyChoices.public,
                 'profiles': [self.lorne.profile], 'slates': [self.slate], 'notes': "A note"}
         self.mock_form = MockForm()
 
     def test_changes_fields_from_defaults(self):
-        self.assertEqual([self.par.priority, self.par.status], ["med", ToDoStatusChoices.accepted])
+        self.assertEqual([self.par.priority, self.par.status], [PriorityChoices.medium, ToDoStatusChoices.accepted])
         manage_action_helper(self.par, self.mock_form, self.buffy)
-        self.assertEqual([self.par.priority, self.par.status], ["hig", ToDoStatusChoices.done])
+        self.assertEqual([self.par.priority, self.par.status], [PriorityChoices.high, ToDoStatusChoices.done])
 
     def test_make_new_par_for_profile(self):
         with self.assertRaises(ObjectDoesNotExist):

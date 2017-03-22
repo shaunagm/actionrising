@@ -10,8 +10,8 @@ from django.contrib.contenttypes.fields import GenericRelation
 from actstream import action
 from ckeditor.fields import RichTextField
 
-from mysite.lib.choices import (PrivacyChoices, PRIORITY_CHOICES, StatusChoices,
-    TIME_CHOICES, ToDoStatusChoices)
+from mysite.lib.choices import (PrivacyChoices, PriorityChoices, StatusChoices,
+    ToDoStatusChoices)
 from actions.models import Action
 from mysite.settings import PRODUCTION_DOMAIN
 from mysite.lib import choices
@@ -105,9 +105,7 @@ class SlateActionRelationship(models.Model):
     """Stores relationship between a single slate and a single action."""
     slate = models.ForeignKey(Slate, on_delete=models.CASCADE)
     action = models.ForeignKey(Action, on_delete=models.CASCADE)
-    # default priority is med == medium
-    priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='med')
-    # default status is ace == accepted
+    priority = models.CharField(max_length=10, choices=PriorityChoices.choices, default=PriorityChoices.medium)
     status = models.CharField(max_length=10, choices=ToDoStatusChoices.choices, default=ToDoStatusChoices.accepted)
     notes = models.CharField(max_length=2500, blank=True, null=True)
 

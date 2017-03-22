@@ -37,24 +37,32 @@ class ToDoStatusChoices(DjangoChoices):
             'rejected': 'This should never get used!'
         }[status]
 
+class PriorityChoices(DjangoChoices):
+    low = ChoiceItem('low', _('Low'))
+    medium = ChoiceItem('medium', _('Medium'))
+    high = ChoiceItem('high', _('High'))
+    emergency = ChoiceItem('emergency', _('Emergency'))
 
+class TimeChoices(DjangoChoices):
+    minutes = ChoiceItem('minutes', _('Ten minutes or less')) #A
+    hour = ChoiceItem('hour', _('Under an hour')) #B
+    hours = ChoiceItem('hours', _('A few hours')) #C
+    day = ChoiceItem('day', _('A day or more, not ongoing')) #E
+    minor = ChoiceItem('minor', _('Minor ongoing commitment')) #F
+    major = ChoiceItem('major', _('Major ongoing commitment')) #G
+    unknown = ChoiceItem('unknown', _('Unknown or variable')) #H
 
-PRIORITY_CHOICES = (
-    ('low', _('Low')),
-    ('med', _('Medium')),
-    ('hig', _('High')),
-    ('eme', _('Emergency')),
-)
+class DailyActionSourceChoices(DjangoChoices):
+    many = ChoiceItem('many', _('A lot'))
+    few = ChoiceItem('few', _('A little'))
+    none = ChoiceItem('none', _('None'))
 
-TIME_CHOICES = (
-    ('A', _('Ten minutes or less')),
-    ('B', _('Under an hour')),
-    ('C', _('A few hours')),
-    ('E', _('A day or more, not ongoing')),
-    ('F', _('Minor ongoing commitment')),
-    ('G', _('Major ongoing commitment')),
-    ('H', _('Unknown or variable')),
-)
+class CommitmentStatusChoices(DjangoChoices):
+    waiting = ChoiceItem('waiting', _('Commitment made, not yet at deadline'))
+    active = ChoiceItem('active', _('Commitment made, past deadline'))
+    completed = ChoiceItem('completed', _('Commitment carried out'))
+    expired = ChoiceItem('expired', _('Commitment expired, user took too long'))
+    removed = ChoiceItem('removed', _('Par was closed or deleted'))
 
 DAILY_ACTION_SOURCE_CHOICES = (
     ('many', _('A lot')),

@@ -5,7 +5,7 @@ from django.forms.widgets import HiddenInput
 from actions.models import Action
 from tags.lib import tag_helpers
 from tags.models import Tag
-from mysite.lib.choices import PrivacyChoices, TIME_CHOICES
+from mysite.lib.choices import PrivacyChoices, TimeChoices
 from mysite.lib.privacy import get_global_privacy_default
 from plugins import plugin_helpers
 
@@ -79,8 +79,8 @@ class FilterWizard_Topic(forms.Form):
 
 class FilterWizard_Time(forms.Form):
     question = "How much time can you spend on the action?"
-    time = forms.MultipleChoiceField(choices=TIME_CHOICES, required=False, label='',
-        initial=(c[0] for c in TIME_CHOICES))
+    time = forms.MultipleChoiceField(choices=TimeChoices.choices, required=False, label='',
+        initial=(label for label in TimeChoices.labels))
 
     def update_filter(self, actionfilter, request):
         if 'time' in request.POST and request.POST['time']:

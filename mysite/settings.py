@@ -31,7 +31,7 @@ from local_settings import CHROMEDRIVER_PATH
 SEND_BROKEN_LINK_EMAILS = True
 MANAGERS = (('Admin', 'actionrisingsite@gmail.com'),)
 
-ALLOWED_HOSTS = ['127.0.0.1', 'act-now.herokuapp.com', 'actionrising.com', 'www.actionrising.com',
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'act-now.herokuapp.com', 'actionrising.com', 'www.actionrising.com',
     'act-now-staging.herokuapp.com']
 
 SITE_ID = 1

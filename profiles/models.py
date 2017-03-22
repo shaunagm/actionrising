@@ -17,7 +17,7 @@ from actstream.actions import follow, unfollow
 from actions.models import Action
 from slates.models import Slate
 from notifications.models import NotificationSettings, DailyActionSettings
-from mysite.lib.choices import (PrivacyChoices, PRIORITY_CHOICES, StatusChoices, ToDoStatusChoices)
+from mysite.lib.choices import (PrivacyChoices, PriorityChoices, StatusChoices, ToDoStatusChoices)
 from mysite.lib.utils import disable_for_loaddata
 from profiles.lib import status_helpers
 
@@ -418,9 +418,7 @@ class ProfileActionRelationship(models.Model):
     """Stores relationship between a profile and an action"""
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     action = models.ForeignKey(Action, on_delete=models.CASCADE)
-    # default priority is med == medium
-    priority = models.CharField(max_length=3, choices=PRIORITY_CHOICES, default='med')
-    # default status is ace == accepted
+    priority = models.CharField(max_length=10, choices=PriorityChoices.choices, default=PriorityChoices.medium)
     status = models.CharField(max_length=10, choices=ToDoStatusChoices.choices, default=ToDoStatusChoices.accepted)
     committed = models.BooleanField(default=False)
     last_suggester = models.ForeignKey(User, blank=True, null=True)
