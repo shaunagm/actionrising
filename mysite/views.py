@@ -13,6 +13,9 @@ def index(request):
 def about(request):
     return render(request, 'mysite/about.html')
 
+class LearnMoreView(generic.TemplateView):
+    template_name = "actions/learn.html"
+
 class PrivacyPolicyView(generic.TemplateView):
     template_name = "mysite/privacy_policy.html"
 

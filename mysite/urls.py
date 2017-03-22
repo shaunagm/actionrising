@@ -20,6 +20,7 @@ from django.contrib.auth import views as auth_views
 from mysite import views
 
 urlpatterns = [
+    url(r'^learn-more/?$', views.LearnMoreView.as_view(), name='learn-more'),
     url(r'^login/$', auth_views.login, {'template_name': 'profiles/login.html'}, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
     url(r'^password/$', auth_views.password_change, {'template_name': 'mysite/password.html'}, name='password_reset'),
