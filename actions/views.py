@@ -97,9 +97,6 @@ class FindActionsLandingView(LoginRequiredMixin, generic.TemplateView):
 class CreateActionsLandingView(LoginRequiredMixin, generic.TemplateView):
     template_name = "actions/create_actions.html"
 
-class ActionLearnView(LoginRequiredMixin, generic.TemplateView):
-    template_name = "actions/learn.html"
-
 def filter_wizard_forms(request):
     form_list = [forms.FilterWizard_Kind(), forms.FilterWizard_Topic(),
         forms.FilterWizard_Time(), forms.FilterWizard_Friends(request)]
