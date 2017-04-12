@@ -1,19 +1,37 @@
 <div class="navbar navbar-default navbar-fixed-top">
    <div class="container">
      <div class="navbar-header">
+
        {% if request.user.is_authenticated %}
             <a href="{{ request.user.navbarsettings.get_landing_url }}" class="navbar-brand">ActionRising</a>
        {% else %}
             <a href="{% url 'index' %}" class="navbar-brand">ActionRising</a>
        {% endif %}
+
        <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
          <span class="icon-bar"></span>
          <span class="icon-bar"></span>
          <span class="icon-bar"></span>
        </button>
+
      </div>
      <div class="navbar-collapse collapse" id="navbar-main">
        <ul class="nav navbar-nav">
+
+
+       {% if request.user.is_authenticated %}
+          <li><a href="{% url 'actions' %}">Actions</a></li>
+          <li><a href="{% url 'follow-users-and-slates' %}">Community</a></li>
+       {% else %}
+          <li><a href="{% url 'public-actions' %}">Actions</a></li>
+          <li><a href="{% url 'public-slates' %}">Community</a></li>
+       {% endif %}
+          <li><a href="{% url 'create_action' %}">Create Action</a></li>
+          <li><a href="{% url 'create_slate' %}">Create Slate</a></li>
+
+       </ul>
+       <ul class="nav navbar-nav navbar-right">
+
          {% if request.user.is_authenticated %}
              <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
@@ -27,35 +45,7 @@
          {% else %}
              <li><a href="{% url 'login' %}" class="log_button">Log In</a></li>
          {% endif %}
-       </ul>
-       <ul class="nav navbar-nav navbar-right">
-         {% if request.user.is_authenticated %}
 
-              {% include 'mysite/custom_navbar.html' %}
-
-             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                  aria-expanded="false" id="more_dropdown">More <span class="caret"></span></a>
-              <ul class="dropdown-menu" role="menu" id="more_dropdown_menu">
-                <li><a href="{% url 'navbar_settings' %}">Customize Your Navbar</a></li>
-                <li class="divider"></li>
-                <li class="li-title">Find Content</li>
-                <li><a href="{% url 'actions' %}">All Actions</a></li>
-                <!-- <li><a href="{% url 'profile' request.user.pk %}">Filtered Actions</a></li> -->
-                <li><a href="{% url 'slates' %}">All Slates</a></li>
-                <li><a href="{% url 'follow-users-and-slates' %}">Recommended</a></li>
-                <li class="divider"></li>
-                <li class="li-title">Create Content</li>
-                <li><a href="{% url 'create_action' %}">Create Action</a></li>
-                <li><a href="{% url 'create_slate' %}">Create Slate</a></li>
-                <li><a href="{% url 'action_filter' %}">Create Filter</a></li>
-                <li class="divider"></li>
-                <li class="li-title">Your Stuff</li>
-                <li><a href="{% url 'to_do' %}">Your Open Actions</a></li>
-                <li><a href="{% url 'feed' %}">Your Feed</a></li>
-              </ul>
-            </li>
-         {% endif %}
        </ul>
      </div>
    </div>
