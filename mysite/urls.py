@@ -32,6 +32,8 @@ urlpatterns = [
     url(r'^privacy-policy$', views.PrivacyPolicyView.as_view(), name='privacy-policy'),
     url(r'^profiles/', include('profiles.urls')),
     url(r'^actions/', include('actions.urls')),
+    url(r'^actions/', include('actions.urls')),
+    url(r'^specialactions/', include('plugins.urls')),
     url(r'^slates/', include('slates.urls')),
     url(r'^tags/', include('tags.urls')),
     url(r'^flags/', include('flags.urls')),

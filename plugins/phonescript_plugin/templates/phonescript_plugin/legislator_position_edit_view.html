@@ -1,0 +1,38 @@
+{% extends "actions/action.html" %}
+
+{% block action_plugin_addon %}
+
+<h3>Edit Legislator Positions</h3>
+<!-- Name included to fix FF select issue: http://stackoverflow.com/a/12650918  -->
+  <form id="legislator_position" name="legislator_position" method="POST">
+
+    {% csrf_token %}
+
+    <button type="submit" class="btn btn-success btn-default legbutton">Save changes</button>
+    {{ form }}
+  </form>
+
+{% endblock action_plugin_addon %}
+
+
+{% block page_specific_javascript %}
+
+  <!-- This code means we only post changed data. -->
+
+  $('[name="csrfmiddlewaretoken"]').addClass( "changedData" );
+
+  var myFunction = function() { $(this).addClass( "changedData" ) };
+  $("form select, form input").each(function() {
+      this.addEventListener('change', myFunction, false);
+  });
+
+  $('#legislator_position').submit(function() {
+    $("form select, form input, form label").each(function() {
+      if ($(this).hasClass("changedData")) {
+      } else {
+        $(this).attr("disabled", "disabled");
+      }
+    });
+  })
+
+{% endblock page_specific_javascript %}

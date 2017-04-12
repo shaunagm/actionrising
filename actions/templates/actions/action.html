@@ -50,6 +50,9 @@
              <div class="well" id="description">
                 {{ action.description|safe }}
              </div>
+             {% block action_plugin_addon %}
+             {% endblock action_plugin_addon %}
+
              {% include "mysite/basic_info_include.html" %}
 
              {% load plugin_templatetags %}

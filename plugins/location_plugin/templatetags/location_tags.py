@@ -2,6 +2,7 @@ from django import template
 
 from django.contrib.contenttypes.models import ContentType
 from plugins.location_plugin.models import Location
+from plugins.location_plugin.lib.location_selects import states, districts
 
 register = template.Library()
 
@@ -24,3 +25,7 @@ def get_state_and_district(context, located_object, override_hide=False):
     location = get_location_helper(located_object)
     if location and (not location.hide_location or override_hide):
         return {'state': location.state, 'district': location.district}
+
+@register.assignment_tag(takes_context=True)
+def get_location_selects(context, override_hide=False):
+    return { 'states': states, 'districts': districts }
