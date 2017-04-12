@@ -24,7 +24,7 @@ Setting up the site locally
 
     sudo apt-get install libpq-dev  # ubuntu
 
-#. Use pip to install a `virtualenv`_ called `venv`::
+#. Use pip to install `virtualenv`_::
 
     pip install virtualenv
 
