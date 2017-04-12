@@ -1,0 +1,16 @@
+<h3>Universal Scripts</h3>
+
+<p>These scripts will be shown to everyone viewing your action.  For each script,
+  select one or more representatives to be paired with the script.  For instance, if you
+  write a script and select Paul Ryan and Mitch McConnell, people will see two additional
+  phone actions, one for Ryan and one for McConnell.</p>
+
+<p>You can use multiple universal scripts.  Just be careful not to select the same representatives
+  for each script.  If you do, one of the options will be selected for that representative at
+  random.</p>
+
+{{ forms.management_form }}
+
+{% for script in forms %}
+    {% include "phonescript_plugin/individual_universal_script_include.html" with form=script count=forloop.counter %}
+{% endfor %}

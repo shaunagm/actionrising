@@ -18,6 +18,13 @@ $("#id_topic_tags, #id_type_tags, #id_goal_tags").chosen()
 
 <div class="row">
   <div class="col-sm-10">
+
+    {% if special_action_form %}
+
+      {{ special_action_form }}
+
+    {% endif %}
+
     <form class="form-horizontal" action="" method="post" id="action-form">
       {% csrf_token %}
       {% bootstrap_form form layout='horizontal' %}

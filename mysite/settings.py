@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'commitments',
     'blog',
     'plugins.location_plugin',
+    'plugins.phonescript_plugin',
     'functional_tests',
     'django_comments',
     'ckeditor',
@@ -248,3 +249,5 @@ RQ_QUEUES = {
         # 'DB': 0,
     }
 }
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000

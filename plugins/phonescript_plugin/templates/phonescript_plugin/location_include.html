@@ -1,0 +1,48 @@
+{% load bootstrap3 %}
+{% load location_tags %}
+{% get_location_selects as data %}
+
+<div class="location-selector">
+
+  <select id="states">
+    {% for state in data.states %}
+        <option value="{{ state }}">{{ state }}</option>
+    {% endfor %}
+  </select>
+
+  or
+
+  <select id="districts">
+    {% for district in data.districts %}
+        <option value="{{ district }}">{{ district }}</option>
+    {% endfor %}
+  </select>
+
+  <br />
+
+  <div id="errorfield"></div>
+  <button onclick="getscripts()">Get scripts for my location</a>
+  <button onclick="gotodefault()">Just give me the defaults</a>
+
+</div>
+
+<script>
+
+function getscripts() {
+    district = $( "#districts" ).val();
+    if (district != "---") {
+      district_array = district.split(" ");
+      location.href= window.location.href + district_array[0];
+    }
+    state = $( "#states" ).val();
+    if (state != "---") {
+      location.href= window.location.href + state;
+    }
+     $( "#errorfield" ).text = "Please select a district or state";
+}
+
+function gotodefault() {
+  location.href= window.location.href + "default";
+}
+
+</script>

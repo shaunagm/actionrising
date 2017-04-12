@@ -1,0 +1,21 @@
+{% extends "mysite/base.html" %}
+
+{% block title %} Notifications for {{ request.user }} | ActionRising{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+       <div class="col-sm-10 col-sm-offset-1">
+
+         <h2> Notifications for {{ request.user }}</h2>
+
+         {% for note in object_list %}
+
+             {% include 'profiles/feed_include.html' with action=note.event %}
+
+         {% endfor %}
+
+      </div>
+    </div>
+
+{% endblock content %}

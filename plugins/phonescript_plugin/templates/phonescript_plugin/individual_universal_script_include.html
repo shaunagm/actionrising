@@ -1,0 +1,30 @@
+{% load bootstrap3 %}
+
+{% ifequal count 1 %}
+  <div class="row script" id="uni_script_{{count}}">
+{% else %}
+  <div class="row script collapse" id="uni_script_{{count}}">
+{% endifequal %}
+
+  <div class="col-sm-12">
+      <h3>Universal Script {{count}}</h3>
+
+      {% bootstrap_field form.content layout='horizontal' %}
+
+      {% bootstrap_field form.always_reps layout='horizontal' %}
+
+      {% bootstrap_field form.priority layout='horizontal' %}
+
+      {% for hidden in form.hidden_fields %}
+          {{ hidden }}
+      {% endfor %}
+
+      <a onclick=shownewscript_universal({{count}})>Add another script</a>
+  </div>
+</div>
+
+<script>
+var zeroed_count = {{ count }} - 1
+var id = "#id_uni-" + zeroed_count + "-always_reps";
+$(id).chosen({width: '100%'});
+</script>

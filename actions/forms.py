@@ -25,8 +25,10 @@ class ActionForm(forms.ModelForm):
 
     def __init__(self, user, formtype, *args, **kwargs):
         super(ActionForm, self).__init__(*args, **kwargs)
+
         self.user = user
         self.formtype = formtype
+
         if self.formtype == "create":
             self.fields['status'].widget = HiddenInput()
 

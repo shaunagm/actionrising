@@ -52,6 +52,12 @@ class ActionCreateView(LoginRequiredMixin, generic.edit.CreateView):
     model = Action
     form_class = forms.ActionForm
 
+    def get(self, request, *args, **kwargs):
+        if not request.user.profile.verified and len(request.user.action_set.all()) > 10:
+            return render(request, 'invites/verification_limit.html', {'actions': True})
+        else:
+            return super(ActionCreateView, self).get(request, *args, **kwargs)
+
     def get_form_kwargs(self):
         form_kws = super(ActionCreateView, self).get_form_kwargs()
         form_kws["user"] = self.request.user
@@ -60,12 +66,6 @@ class ActionCreateView(LoginRequiredMixin, generic.edit.CreateView):
 
     def get_success_url(self, **kwargs):
         return self.object.get_absolute_url()
-
-    def get(self, request, *args, **kwargs):
-        if not request.user.profile.verified and len(request.user.action_set.all()) > 10:
-            return render(request, 'invites/verification_limit.html', {'actions': True})
-        else:
-            return super(ActionCreateView, self).get(request, *args, **kwargs)
 
 class ActionEditView(UserPassesTestMixin, generic.edit.UpdateView):
     model = Action
