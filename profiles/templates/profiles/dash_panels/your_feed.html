@@ -1,14 +1,11 @@
 <div class="panel panel-primary">
   <div class="panel-heading">
     <h3 class="panel-title">
-      <a data-toggle="collapse" href="#Feed">Your Feed</a>
+      Community Activity
       <a href="{% url 'feed' %}" title="Open in new page" class="extra-padding-left">↱</a>
-      <a data-toggle="collapse" href="#feed" title="Collapse">
-          <div class="float-right">▲</div>
-      </a>
     </h3>
   </div>
-  <div id="feed" class="panel-collapse">
+  <div id="feed">
    <div class="panel-body">
      {% load activity_tags %}
      {% load profile_extras %}
@@ -19,7 +16,7 @@
           {% include 'profiles/feed_include.html' %}
        {% endif %}
      {% empty %}
-        Your feed is empty.  <a href="{% url 'follow-users-and-slates' %}">Follow some users
+       <a href="{% url 'follow-users-and-slates' %}">Follow some users
           and slates</a> and their activity will appear here.
      {% endfor %}
    </div>
