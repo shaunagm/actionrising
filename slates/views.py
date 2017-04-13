@@ -104,7 +104,7 @@ def manage_action_for_slate(request, pk):
         context = {'form': form, 'sar': sar}
         return render(request, 'slates/manage_action_for_slate.html', context)
 
-class FollowUsersAndSlates(LoginRequiredMixin, generic.TemplateView):
+class FollowUsersAndSlates(generic.TemplateView):
     template_name = "slates/follow_users_and_slates.html"
 
     def get_context_data(self, **kwargs):
