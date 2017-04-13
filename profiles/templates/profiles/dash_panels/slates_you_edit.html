@@ -9,12 +9,11 @@
   </div>
   <div id="slates-edit" class="panel-collapse collapse">
    <div class="panel-body">
-     {% for sar in followed_slates %}
-         <a href="{{ sar.slate.get_absolute_url}}">{{ sar.slate.title }}</a> <br />
-
+     {% for slate in created_slates %}
+       <a href="{{ slate.get_absolute_url }}">{{ slate }}</a><br />
      {% empty %}
-         You don't contribute to any slates yet.  <a href="{% url 'create-slate' %}">
-           Create a slate</a>.
+       You don't contribute to any slates yet.
+       <a href="{% url 'create-slate' %}"> Create a slate</a>.
      {% endfor %}
    </div>
  </div>
