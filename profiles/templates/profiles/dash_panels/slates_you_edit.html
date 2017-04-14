@@ -12,8 +12,8 @@
      {% for slate in created_slates %}
        <a href="{{ slate.get_absolute_url }}">{{ slate }}</a><br />
      {% empty %}
-       You don't contribute to any slates yet.
-       <a href="{% url 'create-slate' %}"> Create a slate</a>.
+       Slates are lists that you can add actions to over time, keeping your audience up to date on your area of interest.
+       <a href="{% url 'create-slate' %}">Create a slate!</a>
      {% endfor %}
    </div>
  </div>
