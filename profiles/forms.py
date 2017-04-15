@@ -7,8 +7,7 @@ from django.forms.widgets import HiddenInput
 
 from mysite.lib.choices import PrivacyChoices
 from mysite.lib.privacy import get_global_privacy_default
-from profiles.models import (Profile, ProfileActionRelationship, PrivacyDefaults,
-    NavbarSettings)
+from profiles.models import (Profile, ProfileActionRelationship, PrivacyDefaults)
 from slates.models import Slate
 from plugins import plugin_helpers
 
@@ -77,37 +76,3 @@ class ProfileActionRelationshipForm(ModelForm):
             self.fields['slates'].queryset = par.profile.user.slate_set.all()
         else:
             super(ProfileActionRelationshipForm, self).__init__(*args, **kwargs)
-
-LINK_CHOICES = (
-    ('dash', _('Your Dashboard')),
-    ('findactions', _('Find Actions Landing Page')),
-    ('createactions', _('Create Actions Landing Page')),
-    ('openactions', _('Your Open Actions')),
-    ('allactions', _('All Actions')),
-    ('addaction', _('Create An Action')),
-    ('feed', _('Your Feed')),
-)
-
-LANDING_LINK_CHOICES = (
-    ('dash', _('Your Dashboard')),
-    ('actions', _('Search Actions')),
-    ('feed', _('Your Feed')),
-)
-
-class NavbarForm(ModelForm):
-    links = CharField(widget=SelectMultiple(choices=LINK_CHOICES), required=False)
-    landing_link = CharField(widget=SelectMultiple(choices=LANDING_LINK_CHOICES), required=False)
-
-    class Meta:
-        model = NavbarSettings
-        fields = ["use_default", "links", "use_default_landing", "landing_link"]
-
-    def __init__(self, *args, **kwargs):
-        super(NavbarForm, self).__init__(*args, **kwargs)
-        if self.instance.pk is not None:
-            self.initial['links'] = self.instance.get_links()
-            self.initial['landing_link'] = self.instance.get_landing_link()
-        self.fields['use_default'].label = "Use the default navbar"
-        self.fields['links'].label = "Select up to four links to show in your navbar"
-        self.fields['use_default_landing'].label = "Use the default landing page"
-        self.fields['landing_link'].label = "Select a link to use as your landing page"
