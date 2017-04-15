@@ -2,14 +2,16 @@
 
   <div class="panel-heading">
     <h3 class="panel-title">
-      Community Activity
+      <span data-toggle="collapse" href="#feed">
+        Your Community Activity
+      </span>
       <a href="{% url 'feed' %}" title="Open in new page" class="float-right">
         <span class="material-icons">open_in_new</span>
       </a>
     </h3>
   </div>
 
-  <div id="feed">
+  <div id="feed" class="panel-collapse collapse in">
    <div class="panel-body">
      {% load activity_tags %}
      {% load profile_extras %}

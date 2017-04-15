@@ -56,7 +56,39 @@
     footer a { color: white; }
     footer span { padding-left: 10px; padding-right: 15px;}
 
-    .material-icons { font-size: 20px; }
+    .material-icons {
+      font-size: 20px;
+    }
+
+    .stats-flex {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    .stats-flex h4 {
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    .stats-flex .badge {
+      background-color: #df691a;
+      border-radius: 16px;
+      padding: 4px 8px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .progress {
+      background-color: lightgray;
+      margin-bottom: 0;
+      width: 50%;
+    }
+
+    .progress .progress-bar {
+      min-width: 2em;
+    }
+
     .panel-heading [data-toggle="collapse"]:after
     {
         font-family: 'Glyphicons Halflings';
@@ -64,6 +96,7 @@
         float: right;
         font-size: 16px;
         line-height: 22px;
+        margin-left: 10px;
 
         /* rotate "play" icon from > (right arrow) to down arrow */
         -webkit-transform: rotate(-90deg);
@@ -74,6 +107,7 @@
     }
     .panel-heading [data-toggle="collapse"].collapsed:after
     {
+        margin-left: 10px;
         /* rotate "play" icon from > (right arrow) to ^ (up arrow) */
         -webkit-transform: rotate(90deg);
         -moz-transform:    rotate(90deg);
