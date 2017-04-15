@@ -15,7 +15,7 @@
      {% for par in open_actions %}
          <a href="{{ par.action.get_absolute_url}}">{{ par.action.title }}</a> <br />
      {% empty %}
-         You don't have any open actions. <a href="{% url 'find-actions-landing' %}">Find some.</a>
+         You don't have any open actions. <a href="{% url 'actions' %}">Find some.</a>
      {% endfor %}
    </div>
  </div>
