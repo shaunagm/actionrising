@@ -2,33 +2,51 @@
 
 {% load static %}
 
-{% block title %} Find Users and Slates to Follow | ActionRising{% endblock %}
+{% block title %} Users and Slates | ActionRising{% endblock %}
 
 {% block content %}
 
-    <div class="row">
-       <div class="col-sm-10 col-sm-offset-1">
-         <h2>Find Users & Slates to Follow</h2>
-         <p>To follow a slate or user, look for a link like this just below the name/title:
-           <img src="{% static 'images/follow_screenshot.png' %}"></p>
-         <p>When you follow a slate or user, their activity will show up on your feed.
-           You'll also get emails when a user you follow creates an action or a slate
-           you follow gets an action added to it.  If you find the emails annoying, you
-           can turn them off in <a href="{% url 'settings' %}">your settings</a>.</p>
-       </div>
+  <div class="row">
+    <div class="col-sm-4 col-sm-offset-1">
+      Search
+
+      <h4>Your Community</h4>
+
+        <div class="panel panel-primary">
+
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <span data-toggle="collapse" class="collapsed" href="#people">
+                People
+              </span>
+            </h3>
+          </div>
+
+          <div id="people" class="panel-collapse collapse">
+           <div class="panel-body">
+             {% load activity_tags %}
+             {% load profile_extras %}
+             {% activity_stream 'user' user  %}
+             {% for action in stream|slice:":15" %}
+               {% filtered_feed action as filtered_action %}
+               {% if filtered_action %}
+                  {% include 'profiles/feed_include.html' %}
+               {% endif %}
+             {% empty %}
+               <a href="{% url 'follow-users-and-slates' %}">Follow users and slates</a>
+               and their activity will appear here.
+             {% endfor %}
+           </div>
+         </div>
+
+        </div>
+
+        Slates
     </div>
 
-    <div class="row">
-       <div class="col-sm-5 col-sm-offset-1">
-         <h2>Busy Users</h2>
-         <p>Don't see what you want?  Search <a href="{% url 'profiles' %}">all users</a>.</p>
-         {% include 'profiles/profile_list_include.html' with object_list=users  %}
-       </div>
-       <div class="col-sm-5">
-         <h2>Recommended Slates</h2>
-         <p>Don't see what you want?  Search <a href="{% url 'slates' %}">all slates</a>.</p>
-         {% include 'slates/slate_list_limited_include.html' with object_list=slates %}
-       </div>
+    <div class="col-sm-6">
+      ActionRising Community Activity
     </div>
+  </div>
 
 {% endblock content %}
