@@ -19,12 +19,9 @@ def filtered_feed(context, action):
     if not check_privacy(action.actor.profile, user):
         return []
     if action.target is not None:
-        if type(action.target) == User:
-            if not check_privacy(action.target.profile, user):
-                return []
-        else:
-            if not check_privacy(action.target, user):
-                return []
+        target = action.target.profile if type(action.target) == User else action.target
+        if not check_privacy(target, user):
+            return []
     if type(action.action_object) is not Comment and action.action_object is not None and not check_privacy(action.action_object, user):
         return []
     return action

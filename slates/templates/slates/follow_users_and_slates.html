@@ -8,44 +8,33 @@
 
   <div class="row">
     <div class="col-sm-4 col-sm-offset-1">
-      Search
+
+      <!-- TODO  Search -->
 
       <h4>Your Community</h4>
 
-        <div class="panel panel-primary">
+      {% include 'profiles/dash_panels/your_connections.html' %}
 
-          <div class="panel-heading">
-            <h3 class="panel-title">
-              <span data-toggle="collapse" class="collapsed" href="#people">
-                People
-              </span>
-            </h3>
-          </div>
+      {% include 'profiles/dash_panels/slates_you_follow.html' %}
 
-          <div id="people" class="panel-collapse collapse">
-           <div class="panel-body">
-             {% load activity_tags %}
-             {% load profile_extras %}
-             {% activity_stream 'user' user  %}
-             {% for action in stream|slice:":15" %}
-               {% filtered_feed action as filtered_action %}
-               {% if filtered_action %}
-                  {% include 'profiles/feed_include.html' %}
-               {% endif %}
-             {% empty %}
-               <a href="{% url 'follow-users-and-slates' %}">Follow users and slates</a>
-               and their activity will appear here.
-             {% endfor %}
-           </div>
-         </div>
+      {% include 'profiles/dash_panels/slates_you_edit.html' %}
 
-        </div>
-
-        Slates
     </div>
 
     <div class="col-sm-6">
-      ActionRising Community Activity
+      <h4>ActionRising Community Activity</h4>
+        {% load activity_tags %}
+        {% load profile_extras %}
+
+        {% activity_stream 'model' user  %}
+        {% for action in stream|slice:":1000" %}
+          {% filtered_feed action as filtered_action %}
+          {% if filtered_action %}
+            {% include 'profiles/feed_include.html' with user=user  %}
+          {% endif %}
+        {% endfor %}
+
+
     </div>
   </div>
 
