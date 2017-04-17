@@ -4,71 +4,67 @@
 
 {% block content %}
 
-    <div class="row">
-       <div class="col-sm-10 col-sm-offset-1">
-         <h2 id="profile-username">
-           {% if object.profile.get_full_name %}
-              {{ object.profile.get_full_name }} ({{ object.username }})
-           {% else %}
-              {{ object.username }}
-           {% endif %}
-         </h2>
-       </div>
+  <div class="row">
+    <div class="col-sm-10 col-sm-offset-1">
+      <h2 id="profile-username">
+        {% if object.profile.get_full_name %}
+          {{ object.profile.get_full_name }} ({{ object.username }})
+        {% else %}
+          {{ object.username }}
+        {% endif %}
+      </h2>
     </div>
+  </div>
 
-    <div class="row">
-       <div class="col-sm-10 col-sm-offset-1 profile-action-items">
-          {% if request.user.is_authenticated %}
-              {% include "profiles/profile_action_items/edit.html" %}
-              {% ifnotequal object.username request.user.username %}
-                  {% include "profiles/profile_action_items/follow.html" %}
-                  {% include "profiles/profile_action_items/notify.html" %}
-                  {% include "profiles/profile_action_items/mute.html" %}
-              {% endifnotequal %}
-          {% endif %}
-       </div>
+  <div class="row">
+    <div class="col-sm-10 col-sm-offset-1 profile-action-items">
+      {% if request.user.is_authenticated %}
+        {% include "profiles/profile_action_items/edit.html" %}
+        {% ifnotequal object.username request.user.username %}
+          {% include "profiles/profile_action_items/follow.html" %}
+          {% include "profiles/profile_action_items/notify.html" %}
+          {% include "profiles/profile_action_items/mute.html" %}
+        {% endifnotequal %}
+      {% endif %}
     </div>
+  </div>
 
-    <div class="row">
-       <div class="col-sm-10 col-sm-offset-1">
-         {% if object.profile.description %}
-          <h4>{{ object.profile.description|safe }}</h4>
-         {% endif %}
-       </div>
+  <div class="row">
+    <div class="col-sm-10 col-sm-offset-1">
+      {% if object.profile.description %}
+        <h4>{{ object.profile.description|safe }}</h4>
+      {% endif %}
     </div>
+  </div>
 
-    <div class="row">
-       <div class="col-sm-10 col-sm-offset-1">
-          {% include "mysite/basic_info_include.html" with object=object.profile %}
+  <div class="row">
+    <div class="col-sm-10 col-sm-offset-1">
+      {% include "mysite/basic_info_include.html" with object=object.profile %}
 
-          {% load plugin_templatetags %}
-          {% get_plugin_templates "profile_instance" %}
-       </div>
+      {% load plugin_templatetags %}
+      {% get_plugin_templates "profile_instance" %}
     </div>
+  </div>
 
-   {% if total_actions %}
-   <div class="row">
-      <div class="col-sm-5 col-sm-offset-1">
+  {% if total_actions %}
+    <div class="row">
+      <div class="col-sm-12">
         {% include "profiles/gamify_include.html" %}
       </div>
     </div>
-   {% endif %}
+  {% endif %}
 
   <div class="row">
-     <div class="col-sm-5 col-sm-offset-1" id="created-actions-div">
-			 <h3>Recent actions created</h3>
-			 		{% include "actions/action_list_limited_include.html" with object_list=created_actions.public_list %}
-     </div>
-     <div class="col-sm-5" id="tracked-actions-div">
-			 <h3>Recent actions tracked</h3>
-			 		{% include "actions/action_list_limited_include.html" with object_list=tracked_actions.public_list %}
-     </div>
-   </div>
+    <div class="col-sm-5 col-sm-offset-1" id="created-actions-div">
+      {% include 'profiles/dash_panels/content_you_created.html' %}
+    </div>
+    <div class="col-sm-5">
+     {% include 'profiles/dash_panels/activity_log.html' %}
+    </div>
+  </div>
 
 
-     <!-- {% include 'profiles/dash_panels/activity_log.html' %} -->
 
 
-     <!-- {% include 'profiles/dash_panels/content_you_created.html' %} -->
 
 {% endblock content %}
