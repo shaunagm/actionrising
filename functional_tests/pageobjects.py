@@ -293,3 +293,28 @@ class CommitmentPage(BasePage):
 
     def go_to_commitment_page(self, url):
         self.w.get(url)
+
+class PhonescriptCreatePage(BasePage):
+    # tabs
+    constituent_script_tab = PageElement(id_="constituent_link")
+    default_script_tab = PageElement(id_="default_link")
+    universal_script_tab = PageElement(id_="universal_link")
+    details_tab = PageElement(id_="details_link")
+    # Details form content
+    title = PageElement(id_="id_title")
+    # Default script form_content
+    default_script_content = PageElement(id_="id_def-content")
+    # Constituent script form content
+    conscript_1_content = PageElement(id_="id_con-0-content")
+    # Submit button
+    submit_button = PageElement(css=".action-submit-button")
+
+    def go_to_create_page(self):
+        self.w.get(self.root_uri + "/specialactions/phonescriptscreate")
+
+    def select_rep_type(self, rep_type):
+        select = Select(self.w.find_element_by_id('id_con-0-rep_type'))
+        select.select_by_visible_text(rep_type)
+
+class PhonescriptDetailPage(BasePage):
+    script_panels = MultiPageElement(css=".script-panel")

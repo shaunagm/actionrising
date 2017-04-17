@@ -1,6 +1,6 @@
 from django import forms
 from plugins.phonescript_plugin.models import (PhoneScript, Legislator, ScriptMatcher,
-    POSITION_CHOICES)
+    PositionChoices, TypeChoices)
 from actions.models import Action
 
 class DefaultForm(forms.ModelForm):
@@ -12,7 +12,7 @@ class DefaultForm(forms.ModelForm):
     def save(self, action, commit=True):
         instance = super(DefaultForm, self).save(commit=False)
         instance.action = action
-        instance.script_type = "default"
+        instance.script_type = TypeChoices.default
         instance.save()
 
 class ConstituentForm(forms.ModelForm):
@@ -20,8 +20,6 @@ class ConstituentForm(forms.ModelForm):
     class Meta:
         model = PhoneScript
         fields = ['content', 'priority', 'rep_type', 'party', 'position']
-        # fields = ['content', 'priority', 'rep_type', 'party', 'position',
-        #     'committees', 'states', 'districts']
         labels = {
             'content': 'Text of phonescript',
         }
@@ -29,7 +27,7 @@ class ConstituentForm(forms.ModelForm):
     def save(self, action=None, commit=True):
         instance = super(ConstituentForm, self).save(commit=False)
         instance.action = action
-        instance.script_type = "constituent"
+        instance.script_type = TypeChoices.constituent
         instance.save()
 
 ConstituentFormset = forms.modelformset_factory(PhoneScript, ConstituentForm, extra=10)
@@ -51,7 +49,7 @@ class UniversalForm(forms.ModelForm):
     def save(self, action=None, commit=True):
         instance = super(UniversalForm, self).save(commit=False)
         instance.action = action
-        instance.script_type = "universal"
+        instance.script_type = TypeChoices.universal
         instance.save()
         # TODO: if reps have been removed, delete
 
@@ -68,7 +66,7 @@ class LegislatorPositionForm(forms.Form):
            field_name = "smdata_" + sm.legislator.bioguide_id
            self.fields[field_name + "_leg"] = forms.CharField(initial=sm.legislator,
                 disabled=True, label="")
-           self.fields[field_name + "_pos"] = forms.ChoiceField(choices=POSITION_CHOICES[:4],
+           self.fields[field_name + "_pos"] = forms.ChoiceField(choices=PositionChoices.choices[:4],
                 label="Position", required=False)
            self.initial[field_name + "_pos"] = sm.position
            self.fields[field_name + "_not"] = forms.CharField(initial=sm.notes,

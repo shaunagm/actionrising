@@ -38,28 +38,28 @@
     <p>Pick an option below to get started.</p>
 
       <ul class="nav nav-pills">
-        <li><a href="#constituent" data-toggle="tab" aria-expanded="false">
+        <li><a id="constituent_link" href="#constituent" data-toggle="tab" aria-expanded="false">
             Add Constituent Scripts
             {% if constituent_forms.is_bound and not constituent_forms.is_valid %}
                 <i class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i>
             {% endif %}
             </a>
         </li>
-        <li><a href="#default" data-toggle="tab" aria-expanded="false">
+        <li><a id="default_link" href="#default" data-toggle="tab" aria-expanded="false">
             Set a Default Script
             {% if default_form.errors %}
                 <i class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i>
             {% endif %}
             </a>
         </li>
-        <li><a href="#universal" data-toggle="tab" aria-expanded="false">
+        <li><a id="universal_link" href="#universal" data-toggle="tab" aria-expanded="false">
             Add Universal Scripts
             {% if universal_forms.is_bound and not universal_forms.is_valid %}
                 <i class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i>
             {% endif %}
             </a>
         </li>
-        <li><a href="#details" data-toggle="tab" aria-expanded="false">
+        <li><a id="details_link" href="#details" data-toggle="tab" aria-expanded="false">
             Add General Action Details
             {% if form.errors %}
                 <i class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i>

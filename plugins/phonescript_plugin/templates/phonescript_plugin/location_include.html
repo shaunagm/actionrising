@@ -18,11 +18,13 @@
     {% endfor %}
   </select>
 
+  <a href="#" class="btn btn-success" onclick="getscripts()">Get scripts for my location</a>
   <br />
 
   <div id="errorfield"></div>
-  <button onclick="getscripts()">Get scripts for my location</a>
-  <button onclick="gotodefault()">Just give me the defaults</a>
+  <br />
+
+  <a href="#" class="btn btn-warning" onclick="gotodefault()">Just give me the defaults</a>
 
 </div>
 
@@ -32,11 +34,11 @@ function getscripts() {
     district = $( "#districts" ).val();
     if (district != "---") {
       district_array = district.split(" ");
-      location.href= window.location.href + district_array[0];
+      location.href= window.location.href + "/" + district_array[0];
     }
     state = $( "#states" ).val();
     if (state != "---") {
-      location.href= window.location.href + state;
+      location.href= window.location.href + "/" + state;
     }
      $( "#errorfield" ).text = "Please select a district or state";
 }

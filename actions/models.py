@@ -44,6 +44,7 @@ class Action(models.Model):
 
     # Related models
     flags = GenericRelation('flags.Flag')
+    special_action = models.CharField(max_length=30, blank=True, null=True)
 
     def __unicode__(self):
         return self.title

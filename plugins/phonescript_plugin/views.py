@@ -5,7 +5,8 @@ from django.http import HttpResponseRedirect
 from actions.models import Action
 from actions.views import ActionEditView, ActionCreateView, ActionView
 
-from plugins.phonescript_plugin.models import PhoneScript, ScriptMatcher
+from plugins.phonescript_plugin.models import (PhoneScript, ScriptMatcher, Legislator,
+    TypeChoices)
 from plugins.phonescript_plugin.forms import (DefaultForm, ConstituentFormset,
     UniversalFormset, LegislatorPositionForm)
 from plugins.phonescript_plugin.lib import phonescripts
@@ -26,6 +27,12 @@ def lookup_helper(action, lookup):
 class PhoneScriptView(ActionView):
     template_name = "phonescript_plugin/action.html"
 
+    def get(self, request, *args, **kwargs):
+        # We need to override actionview's get to prevent infinite recursion
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
     def get_context_data(self, **kwargs):
         context = super(PhoneScriptView, self).get_context_data(**kwargs)
         # Are we coming here via temporary location or explicit "no location"
@@ -34,7 +41,7 @@ class PhoneScriptView(ActionView):
             context['scripts'], context['status'] = lookup_helper(self.object, lookup)
             return context
         # If not, this is the first time through, so check status:
-        status, location = phonescripts.get_user_status(self.request.user)
+        location, status = phonescripts.get_user_status(self.request.user)
         if not location:
             context['status'] = status
         else:
@@ -79,6 +86,8 @@ class PhoneScriptCreateView(ActionCreateView):
             if uform.has_changed():
                 uform.save(action=self.object)
         phonescripts.create_initial_script_matches(self.object)
+        self.object.special_action = "phonescript_plugin"
+        self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form, default_form, constituent_forms, universal_forms):
@@ -91,19 +100,26 @@ class PhoneScriptCreateView(ActionCreateView):
 class PhoneScriptEditView(ActionEditView):
     template_name = "phonescript_plugin/action_form.html"
 
+    def get(self, request, *args, **kwargs):
+        # We need to override actionview's get to prevent infinite recursion
+        self.object = self.get_object()
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        return self.render_to_response(self.get_context_data(form=form))
+
     def get_context_data(self, **kwargs):
         context = super(PhoneScriptEditView, self).get_context_data(**kwargs)
         action = self.get_object()
         # Search for constituent scripts and prefill
-        cqs = PhoneScript.objects.filter(action=action, script_type="constituent")
+        cqs = PhoneScript.objects.filter(action=action, script_type=TypeChoices.constituent)
         cqs = cqs if cqs else PhoneScript.objects.none()
         context['constituent_forms'] = ConstituentFormset(prefix="con", queryset=cqs)
         # Search for universal scripts and prefill
-        uqs = PhoneScript.objects.filter(action=action, script_type="universal")
+        uqs = PhoneScript.objects.filter(action=action, script_type=TypeChoices.universal)
         uqs = uqs if uqs else PhoneScript.objects.none()
         context['universal_forms'] = UniversalFormset(prefix="uni", queryset=uqs)
         # Search for default script and prefill
-        df = PhoneScript.objects.filter(action=action, script_type="default")
+        df = PhoneScript.objects.filter(action=action, script_type=TypeChoices.default)
         if df:
             context['default_form'] = DefaultForm(prefix="def", instance=df.first())
         else:
@@ -117,7 +133,7 @@ class PhoneScriptEditView(ActionEditView):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         # Get additional forms
-        df = PhoneScript.objects.filter(action=self.object, script_type="default")
+        df = PhoneScript.objects.filter(action=self.object, script_type=TypeChoices.default)
         initial_data = df.first() if df else None
         default_form = DefaultForm(self.request.POST, prefix="def", instance=initial_data)
         constituent_forms = ConstituentFormset(self.request.POST, prefix="con")
@@ -138,6 +154,7 @@ class PhoneScriptEditView(ActionEditView):
         for uform in universal_forms:
             if uform.has_changed():
                 uform.save(action=self.object)
+        phonescripts.update_all_script_matches(self.object)
         return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form, default_form, constituent_forms, universal_forms):
@@ -178,16 +195,20 @@ class LegislatorPositionEditView(generic.edit.FormView):
         context['action'] = action
         return context
 
-    def save_item(self, item):
-        print(item)
-        
-        # ScriptMatcher.objects.filter()
+    def save_item(self, key, value, action):
+        split_keys = key.split("_")
+        if len(split_keys) > 1 and split_keys[0] == "smdata":
+            id, data = split_keys[1], split_keys[2]
+            leg = Legislator.objects.get(bioguide_id=id)
+            matcher = ScriptMatcher.objects.get(legislator=leg, action=action)
+            if data == "pos":
+                matcher.position = value
+            elif data == "not":
+                matcher.notes = value
+            matcher.save()
 
     def post(self, request, *args, **kwargs):
         action = Action.objects.get(slug=self.kwargs['slug'])
         for item in request.POST:
-            try:
-                self.save_item(item, action)
-            except:
-                pass
+            self.save_item(item, request.POST[item], action)
         return HttpResponseRedirect(action.get_absolute_url())

@@ -25,6 +25,15 @@ class ActionView(UserPassesTestMixin, generic.DetailView):
     template_name = 'actions/action.html'
     model = Action
 
+    def get(self, request, *args, **kwargs):
+        # Check if this is a special action and, if so, redirect
+        action = self.get_object()
+        if action.special_action:
+            name = action.special_action.split("_")[0] + "_action"
+            return redirect(name, slug=action.slug)
+        else:
+            return super(ActionView, self).get(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super(ActionView, self).get_context_data(**kwargs)
         context['tag_list'] = self.object.get_tags()
@@ -70,6 +79,15 @@ class ActionCreateView(LoginRequiredMixin, generic.edit.CreateView):
 class ActionEditView(UserPassesTestMixin, generic.edit.UpdateView):
     model = Action
     form_class = forms.ActionForm
+
+    def get(self, request, *args, **kwargs):
+        # Check if this is a special action and, if so, redirect
+        action = self.get_object()
+        if action.special_action:
+            name = "edit_" + action.special_action.split("_")[0] + "_action"
+            return redirect(name, slug=action.slug)
+        else:
+            return super(ActionEditView, self).get(request, *args, **kwargs)
 
     def test_func(self):
         obj = self.get_object()

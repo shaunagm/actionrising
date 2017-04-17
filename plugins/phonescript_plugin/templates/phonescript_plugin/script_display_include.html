@@ -1,10 +1,20 @@
-<div class="panel panel-success">
+<div class="panel panel-success script-panel">
   <div class="panel-heading">
     <h3 class="panel-title">{{ script.rep.full_appellation }} ({{ script.rep.phone }})</h3>
   </div>
   <div class="panel-body">
     {{ script.content }}
     <br />
-    <span class="label label-default">Priority: {{ script.priority }}</span>
+    <span class="label label-default">Priority:
+      {% ifequal script.priority 3 %}
+        High
+      {% endifequal %}
+      {% ifequal script.priority 2 %}
+        Medium
+      {% endifequal %}
+      {% ifequal script.priority 1 %}
+        Low
+      {% endifequal %}
+    </span>
   </div>
 </div>

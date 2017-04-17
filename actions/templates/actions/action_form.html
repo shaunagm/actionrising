@@ -23,6 +23,16 @@ $("#id_topic_tags, #id_type_tags, #id_goal_tags").chosen()
 
       {{ special_action_form }}
 
+    {% else %}
+
+        <div class="row">
+          <div class="col-sm-10 col-sm-offset-2 createactionbuttons">
+            <h3>Create a special action?
+            <a href="{% url 'create_phonescript_action' %}" class="btn btn-success">PhoneScript</a>
+            </h3>
+          </div>
+        </div>
+
     {% endif %}
 
     <form class="form-horizontal" action="" method="post" id="action-form">

@@ -15,3 +15,8 @@ special_action_plugins = [
 
 
 plugins = field_plugins + special_action_plugins
+
+'''
+Notes for docs:
+- The plugin's name, x_plugin, must match the url for the detail view
+'''
