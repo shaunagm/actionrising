@@ -114,4 +114,5 @@ class FollowUsersAndSlates(LoginRequiredMixin, generic.TemplateView):
         context['slates'] = rectracker.retrieve_slates()
         context['created_slates'] = self.request.user.slate_set.all()
         context['followed_slates'] = self.request.user.profile.profileslaterelationship_set.all()
+        context['your_friends'] = self.request.user.profile.get_list_of_relationships()
         return context

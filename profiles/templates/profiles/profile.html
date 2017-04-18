@@ -31,18 +31,22 @@
 
   <div class="row">
     <div class="col-sm-10 col-sm-offset-1">
-      {% if object.profile.description %}
-        <h4>{{ object.profile.description|safe }}</h4>
-      {% endif %}
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-sm-10 col-sm-offset-1">
-      {% include "mysite/basic_info_include.html" with object=object.profile %}
-
-      {% load plugin_templatetags %}
-      {% get_plugin_templates "profile_instance" %}
+      <div class="profile-personal">
+        <div class="profile-info well">
+          <div>
+            <span class="fa fa-eye"></span><span>{{ object.profile.get_current_privacy_display }}</span>
+          </div>
+          <div>
+            {% load plugin_templatetags %}
+            {% get_plugin_templates "profile_instance" %}
+          </div>
+        </div>
+        {% if object.profile.description %}
+          <div class="well profile-description">
+            <h4>{{ object.profile.description|safe }}</h4>
+          </div>
+        {% endif %}
+      </div>
     </div>
   </div>
 
@@ -56,15 +60,12 @@
 
   <div class="row">
     <div class="col-sm-5 col-sm-offset-1" id="created-actions-div">
+      {% include 'profiles/dash_panels/actions_you_tracked.html' %}
       {% include 'profiles/dash_panels/content_you_created.html' %}
     </div>
     <div class="col-sm-5">
-     {% include 'profiles/dash_panels/activity_log.html' %}
+      {% include 'profiles/dash_panels/activity_log.html' %}
     </div>
   </div>
-
-
-
-
 
 {% endblock content %}

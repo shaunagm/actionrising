@@ -1,7 +1,7 @@
 <div class="panel panel-primary">
   <div class="panel-heading">
     <h3 class="panel-title">
-      <span data-toggle="collapse" href="#content">Content You've Created</span>
+      <span data-toggle="collapse" href="#content">Content Created</span>
     </h3>
   </div>
   <div id="content" class="panel-collapse collapse in">
@@ -10,6 +10,7 @@
       {% for action in created_actions %}
         <a href="{{ action.get_absolute_url }}">{{ action }}</a><br />
       {% empty %}
+        <!-- #TODO -->
         You haven't created any actions. <a href="{% url 'create_action' %}">Make one</a>.
       {% endfor %}
 

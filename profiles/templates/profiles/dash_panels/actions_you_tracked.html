@@ -1,0 +1,17 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <span data-toggle="collapse" href="#tracked">Actions Tracked</span>
+    </h3>
+  </div>
+  <div id="tracked" class="panel-collapse collapse in">
+    <div class="panel-body">
+      {% for action in tracked_actions %}
+        <a href="{{ action.get_absolute_url }}">{{ action }}</a><br />
+      {% empty %}
+        You haven't tracked any actions. <a href="{% url 'actions' %}">Find some!</a>
+      {% endfor %}
+
+    </div>
+  </div>
+</div>
