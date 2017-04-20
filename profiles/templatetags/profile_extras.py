@@ -25,3 +25,7 @@ def filtered_feed(context, action):
     if type(action.action_object) is not Comment and action.action_object is not None and not check_privacy(action.action_object, user):
         return []
     return action
+
+@register.simple_tag
+def is_own_profile(user, object):
+    return object.username == user.username

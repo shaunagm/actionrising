@@ -1,7 +1,16 @@
+{% load profile_extras %}
+{% is_own_profile request.user object as own %}
+
 <div class="panel panel-primary">
   <div class="panel-heading">
     <h3 class="panel-title">
-      <span data-toggle="collapse" href="#content">Content Created</span>
+      <span data-toggle="collapse" href="#content">
+        {% if own %}
+          Content You Created
+        {% else %}
+          Content {{ object.username }} Created
+        {% endif %}
+      </span>
     </h3>
   </div>
   <div id="content" class="panel-collapse collapse in">
@@ -10,15 +19,23 @@
       {% for action in created_actions %}
         <a href="{{ action.get_absolute_url }}">{{ action }}</a><br />
       {% empty %}
-        <!-- #TODO -->
-        You haven't created any actions. <a href="{% url 'create_action' %}">Make one</a>.
+        {% if own %}
+          You haven't created any actions yet.
+          <a href="{% url 'create_action' %}">Make one</a>.
+        {% else %}
+          {{ object.username }} hasn't created any actions yet.
+        {% endif %}
       {% endfor %}
 
       <h4>Slates</h4>
       {% for slate in created_slates %}
         <a href="{{ slate.get_absolute_url }}">{{ slate }}</a><br />
       {% empty %}
-        You haven't created any slates.  <a href="{% url 'create_slate' %}">Make one</a>.
+        {% if own %}
+          You haven't created any slates yet. <a href="{% url 'create_slate' %}">Make one</a>.
+        {% else %}
+          {{ object.username }} hasn't created any slates yet.
+        {% endif %}
       {% endfor %}
     </div>
   </div>

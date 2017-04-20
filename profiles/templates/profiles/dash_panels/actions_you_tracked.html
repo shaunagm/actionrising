@@ -1,7 +1,16 @@
+{% load profile_extras %}
+{% is_own_profile request.user object as own %}
+
 <div class="panel panel-primary">
   <div class="panel-heading">
     <h3 class="panel-title">
-      <span data-toggle="collapse" href="#tracked">Actions Tracked</span>
+      <span data-toggle="collapse" href="#tracked">
+        {% if own %}
+          Actions You Tracked
+        {% else %}
+          Actions {{ object.username }} Tracked
+        {% endif %}
+      </span>
     </h3>
   </div>
   <div id="tracked" class="panel-collapse collapse in">
@@ -9,7 +18,11 @@
       {% for action in tracked_actions %}
         <a href="{{ action.get_absolute_url }}">{{ action }}</a><br />
       {% empty %}
-        You haven't tracked any actions. <a href="{% url 'actions' %}">Find some!</a>
+        {% if own %}
+          You haven't tracked any actions yet. <a href="{% url 'actions' %}">Find some!</a>
+        {% else %}
+          {{ object.username }} hasn't tracked any actions yet.
+        {% endif %}
       {% endfor %}
 
     </div>

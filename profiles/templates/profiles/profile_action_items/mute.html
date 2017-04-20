@@ -3,10 +3,10 @@
     <a href="{% url 'toggle_relationships' pk=object.pk toggle_type='mute' %}">
       {% if mutes %}
           <i class="fa fa-volume-up" aria-hidden="true"></i>
-          Unmute user
+          Unmute
       {% else %}
           <i class="fa fa-volume-off" aria-hidden="true"></i>
-          Mute user
+          Mute
       {% endif %}
     </a>
   </div>
