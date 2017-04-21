@@ -1,23 +1,40 @@
 {% extends "mysite/base.html" %}
 
 {% block page_specific_javascript %}
-    {% include "actions/action_datatablesjs_include.html" %}
+  {% include "actions/action_datatablesjs_include.html" %}
 {% endblock page_specific_javascript %}
 
 {% block content %}
 
-    {% load profile_extras %}
-    {% get_friendslist as friendlist %}
+  {% load profile_extras %}
+  {% get_friendslist as friendlist %}
 
-    <div class="row">
-       <div class="col-sm-10 col-sm-offset-1">
+  <div class="row">
+    <div class="col-sm-10 col-sm-offset-1">
+      <ul class="nav nav-tabs">
+        <li class="nav-item active">
+          <a class="nav-link active" data-toggle="tab" role="tab" href="#all">All Actions</a>
+        </li>
+        {% for filter in your_filters %}
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" role="tab" href="#{{filter}}">{{filter}}</a>
+          </li>
+        {% endfor %}
+      </ul>
 
-         <h2>Actions</h2>
+      <div class="tab-content">
+        <div class="tab-pane active" id="all" role="tabpanel">
+          <h2>Actions</h2>
+          {% include "actions/action_list_include.html" with object_list=object_list %}
+        </div>
+        {% for filter in your_filters %}
+          <div class="tab-pane" id={{ filter }} role="tabpanel">
+            
+          </div>
+        {% endfor %}
 
-         {% include "actions/action_list_include.html" with object_list=object_list %}
-
-       </div>
     </div>
+  </div>
 
 
 {% endblock content %}
