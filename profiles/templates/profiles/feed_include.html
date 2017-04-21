@@ -2,7 +2,7 @@
 <div class="actstream-action">
   <a href="{{ action.actor.profile.get_absolute_url }}">{{ action.actor }}</a> {{ action.verb }}
   {% if action.action_object %}
-  <a href="{{ action.action_object.get_absolute_url }}">{{ action.action_object }}</a> to
+    <a href="{{ action.action_object.get_absolute_url }}">{{ action.action_object }}</a> to
   {% endif %}
   {% if action.target.get_absolute_url %}
     <a href="{{ action.target.get_absolute_url }}">
