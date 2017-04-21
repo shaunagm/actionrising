@@ -22,19 +22,19 @@
     </div>
 
     <div class="col-sm-6">
-      <h4>ActionRising Community Activity</h4>
+      <h4> ActionRising Activity </h4>
+      <div class="well">
         {% load activity_tags %}
         {% load profile_extras %}
 
         {% activity_stream 'model' user  %}
         {% for action in stream|slice:":1000" %}
-          {% filtered_feed action as filtered_action %}
+          {% others_filtered_feed action as filtered_action %}
           {% if filtered_action %}
             {% include 'profiles/feed_include.html' with user=user  %}
           {% endif %}
         {% endfor %}
-
-
+      </div>
     </div>
   </div>
 

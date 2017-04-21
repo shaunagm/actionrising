@@ -26,6 +26,18 @@ def filtered_feed(context, action):
         return []
     return action
 
+@register.assignment_tag(takes_context=True)
+def others_filtered_feed(context, action):
+    if filtered_feed(context, action):
+        user = context['request'].user
+        names = [item.username for item in [action.actor, action.target, action.action_object] if type(item) == User]
+        if user.username not in names:
+            return action
+        else:
+            return []
+    else:
+        return []
+
 @register.simple_tag
 def is_own_profile(user, object):
     return object.username == user.username
