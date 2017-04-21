@@ -42,6 +42,8 @@ class ProfileView(UserPassesTestMixin, generic.DetailView):
             context['total_actions'] = obj.profile.profileactionrelationship_set.count()
             context['percent_finished'] = obj.profile.get_percent_finished()
             context['action_streak_current'] = obj.profile.get_action_streak()
+            #TODO
+            context['your_friends'] = self.request.user.profile.get_list_of_relationships()
             current_profile = self.request.user.profile
             relationship = current_profile.get_relationship_given_profile(obj.profile)
             if relationship:

@@ -1,22 +1,37 @@
+{% load profile_extras %}
+{% is_own_profile request.user object as own %}
 
 {% for info in object_list %}
-    <a href="{{ info.profile.get_absolute_url }}" class="extra-padding-right">
-      {{ info.profile.get_name }}</a>
-    {% if info.mutual %}
-        <span class="label label-success">Mutual follow</span>
-    {% else %}
-        {% if info.follows_you %}
-            <span class="label label-info">Follows you</span>
-        {% elif info.you_follow %}
-            <span class="label label-warning">You follow</span>
-        {% endif %}
+  <a href="{{ info.profile.get_absolute_url }}" class="extra-padding-right">
+    {{ info.profile.get_name }}
+  </a>
+  {% if info.mutual %}
+    <span class="label label-success">Mutual follow</span>
+  {% else %}
+    {% if info.follows_you %}
+      {% if own %}
+        <span class="label label-info">Follows you</span>
+      {% else %}
+        <span class="label label-info">Follows {{ object.username }}</span>
+      {% endif %}
+    {% elif info.you_follow %}
+      {% if own %}
+        <span class="label label-warning">You follow</span>
+      {% else %}
+        <span class="label label-warning">{{ object.username }} follows</span>
+      {% endif %}
     {% endif %}
-    {% if info.muted %} <span class="label label-info">Muted</span> {% endif %}
+  {% endif %}
+  {% if info.muted %}
+    <span class="label label-info">Muted</span>
+  {% endif %}
 
-    <br />
+  <br />
 
 {% empty %}
 
+  {% if own %}
     <a href="{% url 'follow-users-and-slates' %}">Find some people to follow!</a>
+  {% endif %}
 
 {% endfor %}

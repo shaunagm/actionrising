@@ -1,7 +1,16 @@
+{% load profile_extras %}
+{% is_own_profile request.user object as own %}
+
 <div class="panel panel-primary">
   <div class="panel-heading">
     <h3 class="panel-title">
-      <a class="collapsed" data-toggle="collapse" href="#friends">Your Friends</a>
+      <a class="collapsed" data-toggle="collapse" href="#friends">
+        {% if own %}
+          Your Friends
+        {% else %}
+          {{ object.username }}'s Friends
+        {% endif %}
+      </a>
     </h3>
   </div>
   <div id="friends" class="panel-collapse collapse">
