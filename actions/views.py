@@ -43,6 +43,12 @@ class ActionListView(LoginRequiredMixin, generic.ListView):
     model = Action
     queryset = Action.objects.filter(status__in=[StatusChoices.ready, StatusChoices.finished]).filter(current_privacy__in=[PrivacyChoices.public, PrivacyChoices.sitewide])
 
+    def get_context_data(self, **kwargs):
+        context = super(ActionListView, self).get_context_data(**kwargs)
+        context['your_filters'] = self.request.user.actionfilter_set.all()
+        print context
+        return context
+
 class PublicActionListView(generic.ListView):
     template_name = "actions/actions.html"
     model = Action

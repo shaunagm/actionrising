@@ -17,7 +17,7 @@
         </li>
         {% for filter in your_filters %}
           <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" role="tab" href="#{{filter}}">{{filter}}</a>
+            <a class="nav-link" data-toggle="tab" role="tab" href="#filter-{{forloop.counter}}">Filter {{ forloop.counter }}</a>
           </li>
         {% endfor %}
       </ul>
@@ -28,8 +28,15 @@
           {% include "actions/action_list_include.html" with object_list=object_list %}
         </div>
         {% for filter in your_filters %}
-          <div class="tab-pane" id={{ filter }} role="tabpanel">
-            
+          <div class="tab-pane" id="filter-{{ forloop.counter }}" role="tabpanel">
+            <h2>Filtered Actions</h2>
+            <div class="well filter-summary">
+              {% for line in filter.get_summary %}
+                <p>{{line|safe }}</p>
+              {% endfor %}
+            </div>
+
+            {% include "actions/action_list_limited_include.html" with object_list=filter.filter_actions %}
           </div>
         {% endfor %}
 
