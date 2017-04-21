@@ -1,4 +1,6 @@
 {% extends "mysite/base.html" %}
+{% load profile_extras %}
+{% is_own_profile request.user object as own %}
 
 {% block title %} {{ object.username }} | ActionRising{% endblock %}
 
@@ -60,8 +62,12 @@
 
   <div class="row">
     <div class="col-sm-5 col-sm-offset-1" id="created-actions-div">
-      {% include 'profiles/dash_panels/actions_you_tracked.html' %}
-      {% include 'profiles/dash_panels/content_you_created.html' %}
+      {% if own %}
+        {% include 'profiles/dash_panels/actions_you_tracked.html' %}
+        {% include 'profiles/dash_panels/content_you_created.html' %}
+      {% else %}
+        {% include 'profiles/dash_panels/your_connections.html' %}
+      {% endif %}
     </div>
     <div class="col-sm-5">
       {% include 'profiles/dash_panels/activity_log.html' %}
