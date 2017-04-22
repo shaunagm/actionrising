@@ -14,10 +14,10 @@ from mysite.lib.privacy import check_privacy, filter_list_for_privacy, filter_li
 from mysite.lib.choices import PrivacyChoices, ToDoStatusChoices
 from django.contrib.auth.models import User
 from profiles.models import (Profile, Relationship, ProfileActionRelationship,
-    ProfileSlateRelationship, NavbarSettings)
+    ProfileSlateRelationship)
 from actions.models import Action
 from slates.models import Slate, SlateActionRelationship
-from profiles.forms import ProfileForm, ProfileActionRelationshipForm, NavbarForm
+from profiles.forms import ProfileForm, ProfileActionRelationshipForm
 
 @login_required
 def index(request):
@@ -275,14 +275,3 @@ class DashboardView(LoginRequiredMixin, generic.TemplateView):
 
 class SettingsView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'profiles/settings.html'
-
-class NavbarSettingsView(LoginRequiredMixin, generic.UpdateView):
-    model = NavbarSettings
-    form_class = NavbarForm
-    template_name = "profiles/navbar_settings.html"
-
-    def get_object(self):
-        return NavbarSettings.objects.get(user=self.request.user)
-
-    def get_success_url(self, **kwargs):
-        return reverse('settings')

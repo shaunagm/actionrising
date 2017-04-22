@@ -7,14 +7,16 @@
 <div class="row">
    <div class="col-sm-8 col-sm-offset-2 center-text">
 
+     <h4>You can add up to five custom filters to your Actions page.</h4>
+
      <form id="filterform" action="" method="post">{% csrf_token %}
 
        {% for form in forms %}
           <div id="formdiv{{ forloop.counter }}" class="filterformdiv">
 
-            <h3>Question {{ forloop.counter }} of {{ forms|length }}</h3>
 
             <h2>{{ form.question }}</h2>
+
 
             <div class="extra-padding-top">
 
@@ -39,6 +41,7 @@
                 {% bootstrap_button "Get Results" button_type="submit" button_class="btn-primary" icon="star" %}
             </div>
 
+            <h4>Question {{ forloop.counter }} of {{ forms|length }}</h4>
           </div>
        {% endfor %}
 
