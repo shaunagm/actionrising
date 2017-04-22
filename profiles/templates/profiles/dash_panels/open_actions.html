@@ -12,7 +12,7 @@
   </div>
 
   <div id="openactions" class="panel-collapse collapse in">
-   <div class="panel-body">
+   <div class="panel-body to-do">
      {% for par in open_actions %}
        <a href="{{ par.action.get_absolute_url}}">{{ par.action.title }}</a> <br />
      {% empty %}

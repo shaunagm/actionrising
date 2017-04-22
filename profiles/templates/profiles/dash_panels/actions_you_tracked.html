@@ -4,7 +4,7 @@
 <div class="panel panel-primary">
   <div class="panel-heading">
     <h3 class="panel-title">
-      <span data-toggle="collapse" href="#tracked">
+      <span data-toggle="collapse" href="#tracked-actions">
         {% if own %}
           Actions You Tracked
         {% else %}
@@ -13,7 +13,7 @@
       </span>
     </h3>
   </div>
-  <div id="tracked" class="panel-collapse collapse in">
+  <div id="tracked-actions" class="panel-collapse collapse in">
     <div class="panel-body">
       {% for action in tracked_actions %}
         <a href="{{ action.get_absolute_url }}">{{ action }}</a><br />

@@ -4,7 +4,7 @@
 <div class="panel panel-primary">
   <div class="panel-heading">
     <h3 class="panel-title">
-      <span data-toggle="collapse" href="#content">
+      <span data-toggle="collapse" href="#created-content">
         {% if own %}
           Content You Created
         {% else %}
@@ -13,7 +13,7 @@
       </span>
     </h3>
   </div>
-  <div id="content" class="panel-collapse collapse in">
+  <div id="created-content" class="panel-collapse collapse in">
     <div class="panel-body">
       <h4>Actions</h4>
       {% for action in created_actions %}

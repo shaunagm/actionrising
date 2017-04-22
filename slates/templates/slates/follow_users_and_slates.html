@@ -11,17 +11,19 @@
 
       <h4>Your Community</h4>
 
-      {% include 'profiles/dash_panels/your_connections.html' with search=True object=request.user %}
+      {% if created_slates %}
+        {% include 'profiles/dash_panels/slates_you_edit.html' %}
+      {% endif %}
 
       {% include 'profiles/dash_panels/slates_you_follow.html' with search=True %}
 
-      {% include 'profiles/dash_panels/slates_you_edit.html' %}
+      {% include 'profiles/dash_panels/your_connections.html' with search=True object=request.user %}
 
     </div>
 
     <div class="col-sm-6">
       <h4> ActionRising Activity </h4>
-      <div class="well">
+      <div class="well activity">
         {% load activity_tags %}
         {% load profile_extras %}
 
