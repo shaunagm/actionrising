@@ -40,4 +40,4 @@ def others_filtered_feed(context, action):
 
 @register.simple_tag
 def is_own_profile(user, object):
-    return object.username == user.username
+    return object == user
