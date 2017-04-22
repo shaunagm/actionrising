@@ -111,5 +111,5 @@ class FollowUsersAndSlates(LoginRequiredMixin, generic.TemplateView):
         context = super(FollowUsersAndSlates, self).get_context_data(**kwargs)
         context['created_slates'] = self.request.user.slate_set.all()
         context['followed_slates'] = self.request.user.profile.profileslaterelationship_set.all()
-        context['your_friends'] = self.request.user.profile.get_list_of_relationships()
+        context['friends'] = self.request.user.profile.get_list_of_relationships()
         return context

@@ -1,15 +1,31 @@
+{% load profile_extras %}
+{% is_own_profile request.user object as own %}
 
 <div class="actstream-action">
-  <a href="{{ action.actor.profile.get_absolute_url }}">{{ action.actor }}</a> {{ action.verb }}
-  {% if action.action_object %}
-    <a href="{{ action.action_object.get_absolute_url }}">{{ action.action_object }}</a> to
-  {% endif %}
-  {% if action.target.get_absolute_url %}
-    <a href="{{ action.target.get_absolute_url }}">
+  {% ifequal request.user action.actor %}
+    You
   {% else %}
-    <a href="{{ action.target.profile.get_absolute_url }}">
+    <a href="{{ action.actor.profile.get_absolute_url }}">{{ action.actor }}</a>
+  {% endifequal %}
+  {{ action.verb }}
+  {% if action.action_object %}
+    {% ifequal request.user action.action_object %}
+      you
+    {% else %}
+      <a href="{{ action.action_object.get_absolute_url }}">{{ action.action_object }}</a>
+    {% endifequal %}
+    to
   {% endif %}
-  {{ action.target }}</a>
+  {% ifequal request.user action.target %}
+    you
+  {% else %}
+    {% if action.target.get_absolute_url %}
+      <a href="{{ action.target.get_absolute_url }}">
+    {% else %}
+      <a href="{{ action.target.profile.get_absolute_url }}">
+    {% endif %}
+    {{ action.target }}</a>
+  {% endifequal %}
 </div>
 <div class="actstream-action-time">
   {{ action.timestamp }}
