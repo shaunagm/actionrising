@@ -9,13 +9,11 @@
   <div class="row">
     <div class="col-sm-4 col-sm-offset-1">
 
-      <!-- TODO  Search users and slates -->
-
       <h4>Your Community</h4>
 
-      {% include 'profiles/dash_panels/your_connections.html' %}
+      {% include 'profiles/dash_panels/your_connections.html' with search=True object=request.user %}
 
-      {% include 'profiles/dash_panels/slates_you_follow.html' %}
+      {% include 'profiles/dash_panels/slates_you_follow.html' with search=True %}
 
       {% include 'profiles/dash_panels/slates_you_edit.html' %}
 

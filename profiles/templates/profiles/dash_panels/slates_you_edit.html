@@ -1,17 +1,17 @@
 <div class="panel panel-primary">
   <div class="panel-heading">
     <h3 class="panel-title">
-      <a class="collapsed" data-toggle="collapse" href="#slates-edit">
+      <a data-toggle="collapse" href="#slates-edit">
         Slates You Contribute To
       </a>
     </h3>
   </div>
-  <div id="slates-edit" class="panel-collapse collapse">
+  <div id="slates-edit" class="panel-collapse collapse in">
    <div class="panel-body">
      {% for slate in created_slates %}
        <a href="{{ slate.get_absolute_url }}">{{ slate }}</a><br />
      {% empty %}
-       Slates are lists that you can add actions to over time, keeping your audience up to date on your area of interest.
+       <p>Slates are lists that you can add actions to over time, keeping your audience up to date on your area of interest.</p>
        <a href="{% url 'create-slate' %}">Create a slate!</a>
      {% endfor %}
    </div>
