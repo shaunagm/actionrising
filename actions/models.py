@@ -249,7 +249,7 @@ class ActionFilter(models.Model):
         if self.time:
             current_queryset = current_queryset.filter(duration__in=self.get_time())
         if self.friends:
-            friend_ids = [user.id for user in self.user.profile.get_people_tracking()]
+            friend_ids = [user.id for user in self.creator.profile.get_people_tracking()]
             current_queryset = current_queryset.filter(creator__in=friend_ids)
         current_queryset = plugin_helpers.run_filters_for_plugins(self, current_queryset)
         return current_queryset
