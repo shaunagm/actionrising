@@ -11,9 +11,11 @@
           {{ object.username }}'s Activity Log
         {% endif %}
       </span>
-      <a href="{% url 'activity' %}" title="Open in new page" class="float-right">
-        <span class="material-icons">open_in_new</span>
-      </a>
+      {% if own %}
+        <a href="{% url 'activity' %}" title="Open in new page" class="float-right">
+          <span class="material-icons">open_in_new</span>
+        </a>
+      {% endif %}
     </h3>
   </div>
   <div id="actionhistory" class="panel-collapse collapse in">
