@@ -26,20 +26,21 @@
   <div class="col-sm-10 col-sm-offset-1">
     <h2>{% if object %} Edit {% else %} Create {% endif %} a PhoneScript action</h2>
     <p>With a phonescript action, you can provide a list of scripts for people to use
-      when calling Congress.  We use location data provided by users to only show them
-      the relevant scipts.</p>
-    <p>You can add two different kinds of scripts to your actions. The first are
-      <span class="text-primary"><b>constituent scripts</b></span>.  With these scripts,
-      you can specify what kind of scripts a constituent gets for their representative
-      based on conditions like 'are they a Democrat' or 'are they on X committee'.</p>
-    <p>We know you might want everyone to call a given representative.  So you
-      can also add <span class="text-primary"><b>universal scripts</b></span>.  All of
-      these scripts will show up for everyone.</p>
-    <p>Pick an option below to get started.</p>
+      when calling Congress.  There are three different kinds of scripts you can add:</p>
+      <ul>
+        <li><b>Conditional Scripts</b>: Show people different scripts depending on their
+          legislator - whether they're a Democrat, a Senator, or for or against a given issue.
+          People will only see scripts that apply to legislators they can vote for.</li>
+        <li><b>Default Script</b>: Set up a default script for people to see when the legislators
+          they can vote for don't match any conditions in your conditional scripts.</li>
+        <li><b>Universal Script</b>: Ask everyone, even non-constituents, to call a particular
+          legislator.</li>
+      </ul>
+    </p>
 
       <ul class="nav nav-pills">
         <li><a id="constituent_link" href="#constituent" data-toggle="tab" aria-expanded="false">
-            Add Constituent Scripts
+            Add Conditional Scripts
             {% if constituent_forms.is_bound and not constituent_forms.is_valid %}
                 <i class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i>
             {% endif %}
@@ -59,13 +60,6 @@
             {% endif %}
             </a>
         </li>
-        <li><a id="details_link" href="#details" data-toggle="tab" aria-expanded="false">
-            Add General Action Details
-            {% if form.errors %}
-                <i class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i>
-            {% endif %}
-            </a>
-        </li>
       </ul>
 
       <form class="form-horizontal" action="" method="post" id="action-form">
@@ -81,9 +75,6 @@
         <div class="tab-pane" id="universal">
           {% include "phonescript_plugin/universal_script_include.html" with forms=universal_forms %}
         </div>
-        <div class="tab-pane" id="details">
-          {% include "phonescript_plugin/action_details_include.html" with form=form %}
-        </div>
       </div>
 
     </div>
@@ -91,6 +82,7 @@
 
   <div class="row extra-padding-top">
     <div class="col-sm-10 col-sm-offset-1">
+      {% include "phonescript_plugin/action_details_include.html" with form=form %}
 
       {% buttons %}
           {% bootstrap_button "Cancel" button_type="link" button_class="btn-default" %}
