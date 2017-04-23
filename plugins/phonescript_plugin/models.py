@@ -48,6 +48,7 @@ class Legislator(models.Model):
     phone = models.CharField(max_length=15)
     state = models.CharField(max_length=2, blank=True, null=True)
     district = models.CharField(max_length=10, blank=True, null=True)
+    in_office = models.BooleanField(default=True)
 
     def __unicode__(self):
         return "%s %s %s" % (self.title, self.first_name, self.last_name)
@@ -57,6 +58,9 @@ class Legislator(models.Model):
 
     def full_appellation(self):
         return "%s %s %s (%s)" % (self.title, self.first_name, self.last_name, self.state)
+
+    def select_name(self):
+        return "%s-%s (%s)" % (self.state, self.district, self.last_name)
 
     def get_script_given_action(self, action):
         matches = ScriptMatcher.objects.filter(legislator=self, action=action)
