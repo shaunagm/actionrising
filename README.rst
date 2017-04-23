@@ -60,6 +60,10 @@ Setting up the site locally
 
     python manage.py loaddata fixtures.json
 
+#. Create a database table for `caching`_ ::
+
+    python manage.py createcachetable
+
 #. Start site::
 
     python manage.py runserver
@@ -83,4 +87,5 @@ Setting up the site locally
 .. _postgres: https://www.postgresql.org/download/
 .. _Postgres.App: http://postgresapp.com/
 .. _pip: https://pip.pypa.io/en/stable/installing/
+.. _caching: https://docs.djangoproject.com/en/1.11/topics/cache/#database-caching
 .. __: http://127.0.0.1:8000

@@ -28,7 +28,8 @@ class Command(BaseCommand):
                     leg_object.in_office = False
                     leg_object.save()
             # update cache
-            district_selects = [leg.select_name() for leg in Legislator.objects.filter(district__isnull=False, in_office=True)]
+            district_selects = [leg.select_name() for leg
+                in Legislator.objects.filter(district__isnull=False, in_office=True).order_by('state', 'district')]
             cache.set('district_selects', district_selects, 1209600) # Expiration set to two weeks
             print("Legislator cache updated")
         except:
