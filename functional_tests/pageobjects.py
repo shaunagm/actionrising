@@ -296,7 +296,7 @@ class CommitmentPage(BasePage):
 
 class PhonescriptCreatePage(BasePage):
     # tabs
-    constituent_script_tab = PageElement(id_="constituent_link")
+    constituent_script_tab = PageElement(id_="conditional_link")
     default_script_tab = PageElement(id_="default_link")
     universal_script_tab = PageElement(id_="universal_link")
     details_tab = PageElement(id_="details_link")

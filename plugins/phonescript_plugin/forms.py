@@ -4,6 +4,7 @@ from plugins.phonescript_plugin.models import (PhoneScript, Legislator, ScriptMa
 from actions.models import Action
 
 class DefaultForm(forms.ModelForm):
+    content = forms.CharField(max_length=1000, required=False) # Allows the form to validate when not filled out
 
     class Meta:
         model = PhoneScript
@@ -11,9 +12,10 @@ class DefaultForm(forms.ModelForm):
 
     def save(self, action, commit=True):
         instance = super(DefaultForm, self).save(commit=False)
-        instance.action = action
-        instance.script_type = TypeChoices.default
-        instance.save()
+        if instance.content not in [None, "", []]:
+            instance.action = action
+            instance.script_type = TypeChoices.default
+            instance.save()
 
 class ConstituentForm(forms.ModelForm):
 

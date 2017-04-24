@@ -28,18 +28,20 @@
     <p>With a phonescript action, you can provide a list of scripts for people to use
       when calling Congress.  There are three different kinds of scripts you can add:</p>
       <ul>
-        <li><b>Conditional Scripts</b>: Show people different scripts depending on their
-          legislator - whether they're a Democrat, a Senator, or for or against a given issue.
-          People will only see scripts that apply to legislators they can vote for.</li>
-        <li><b>Default Script</b>: Set up a default script for people to see when the legislators
-          they can vote for don't match any conditions in your conditional scripts.</li>
+        <li><b>Conditional Scripts</b>: Show people different scripts depending on things
+          about their legislator - for example, whether they're a Democrat, a Senator,
+          or for or against a given issue. People will only see scripts that apply to legislators
+          they can vote for.</li>
+        <li><b>Default Script</b>: Show a default script when a legislator doesn't match
+          any conditional scripts.  People will only see default scripts for legislators they
+          can vote for.</li>
         <li><b>Universal Script</b>: Ask everyone, even non-constituents, to call a particular
           legislator.</li>
       </ul>
     </p>
 
-      <ul class="nav nav-pills">
-        <li><a id="constituent_link" href="#constituent" data-toggle="tab" aria-expanded="false">
+      <ul class="nav nav-tabs" id="scriptoptions">
+        <li><a id="conditional_link" href="#conditional" data-toggle="tab" aria-expanded="false">
             Add Conditional Scripts
             {% if constituent_forms.is_bound and not constituent_forms.is_valid %}
                 <i class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i>
@@ -66,7 +68,7 @@
         {% csrf_token %}
 
       <div class="tab-content">
-        <div class="tab-pane" id="constituent">
+        <div class="tab-pane" id="conditional">
           {% include "phonescript_plugin/constituent_script_include.html" with forms=constituent_forms %}
         </div>
         <div class="tab-pane" id="default">
@@ -77,11 +79,6 @@
         </div>
       </div>
 
-    </div>
-  </div>
-
-  <div class="row extra-padding-top">
-    <div class="col-sm-10 col-sm-offset-1">
       {% include "phonescript_plugin/action_details_include.html" with form=form %}
 
       {% buttons %}
