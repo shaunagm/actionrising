@@ -7,15 +7,25 @@ from plugins.location_plugin.models import get_timezone_given_user
 
 class TimezoneMiddleware(MiddlewareMixin):
     def process_request(self, request):
+
+        # Skip for anonymous users
+        if not request.user.is_authenticated:
+            return
+
+        # If user has timezone calculated, apply
         tzname = request.session.get('django_timezone')
         if tzname:
             timezone.activate(pytz.timezone(tzname))
-        elif request.session.get('timezone_status') == "Failed":
-            timezone.deactivate()
+            return
+
+        # Try to calculate timezone
+        if request.session.get('timezone_status') == "Failed":
+                timezone.deactivate()
         else:
             tz = get_timezone_given_user(request.user)
-            if not tz:
+            if tz:
+                request.session['django_timezone'] = tz
+                timezone.activate(pytz.timezone(tz))
+            else:
                 request.session['timezone_status'] = "Failed"
                 timezone.deactivate()
-            else:
-                request.session['django_timezone'] = tz
