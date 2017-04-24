@@ -40,7 +40,8 @@ $("#id_topic_tags, #id_type_tags, #id_goal_tags").chosen()
       {% bootstrap_form form layout='horizontal' %}
       {% buttons %}
         <div class="col-md-10 col-md-offset-2">
-          {% bootstrap_button "Cancel" button_type="link" button_class="btn-default" %}
+
+          <a class="btn btn-default" href="{{ request.META.HTTP_REFERER }}">Cancel</a>
           {% bootstrap_button "Submit" button_type="submit" button_class="btn-primary action-submit-button" icon="star" %}
         </div>
       {% endbuttons %}
