@@ -12,7 +12,7 @@
           {% if location_dict.district %}
               <a class="filter-location" href="#">My District</a>
           {% else %}
-              <a class="nested-link" href="{% url 'edit_profile' pk=request.user.profile.pk %}">
+              <a class="nested-link" href="{{ request.user.profile.get_edit_url }}">
                   Add your district</a>
           {% endif %}
         </li>
@@ -21,7 +21,7 @@
         {% if location_dict.state %}
             <a class="filter-location" href="#">My State</a>
         {% else %}
-            <a class="nested-link" href="{% url 'edit_profile' pk=request.user.profile.pk %}">
+            <a class="nested-link" href="{{ request.user.profile.get_edit_url }}">
                 Add your state</a>
         {% endif %}
         </li>

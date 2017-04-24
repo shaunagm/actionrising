@@ -1,6 +1,6 @@
 {% if follows %}
   <div class="action-item">
-    <a href="{% url 'toggle_relationships' pk=object.pk toggle_type='notify' %}">
+    <a href="{% url 'toggle_relationships' slug=object.username toggle_type='notify' %}">
       {% if notified_of %}
           <i class="fa fa-times" aria-hidden="true"></i>
           Turn off notifications

@@ -1,6 +1,6 @@
 {% if follows %}
   <div class="action-item">
-    <a href="{% url 'toggle_relationships' pk=object.pk toggle_type='mute' %}">
+    <a href="{% url 'toggle_relationships' slug=object.username toggle_type='mute' %}">
       {% if mutes %}
           <i class="fa fa-volume-up" aria-hidden="true"></i>
           Unmute user
