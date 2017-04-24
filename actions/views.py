@@ -108,7 +108,7 @@ class ActionEditView(UserPassesTestMixin, generic.edit.UpdateView):
 @login_required
 def keep_actions_open_view(request, pk):
     action = Action.objects.get(pk=pk)
-    if action.creator == request.user:
+    if action.creator == request.user or request.user.is_staff:
         action.keep_action_open()
         return render(request, 'actions/keep_open.html', context={'action': action })
     else:
