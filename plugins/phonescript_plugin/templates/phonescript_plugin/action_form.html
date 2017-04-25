@@ -41,21 +41,24 @@
     </p>
 
       <ul class="nav nav-tabs" id="scriptoptions">
-        <li><a id="conditional_link" href="#conditional" data-toggle="tab" aria-expanded="false">
+        <li class="nav-item">
+          <a id="conditional_link" href="#conditional" data-toggle="tab" aria-expanded="false">
             Add Conditional Scripts
             {% if constituent_forms.is_bound and not constituent_forms.is_valid %}
                 <i class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i>
             {% endif %}
             </a>
         </li>
-        <li><a id="default_link" href="#default" data-toggle="tab" aria-expanded="false">
+        <li class="nav-item">
+          <a id="default_link" href="#default" data-toggle="tab" aria-expanded="false">
             Set a Default Script
             {% if default_form.errors %}
                 <i class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i>
             {% endif %}
             </a>
         </li>
-        <li><a id="universal_link" href="#universal" data-toggle="tab" aria-expanded="false">
+        <li class="nav-item">
+          <a id="universal_link" href="#universal" data-toggle="tab" aria-expanded="false">
             Add Universal Scripts
             {% if universal_forms.is_bound and not universal_forms.is_valid %}
                 <i class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i>
@@ -78,6 +81,8 @@
           {% include "phonescript_plugin/universal_script_include.html" with forms=universal_forms %}
         </div>
       </div>
+
+      <hr class="script-hr">
 
       {% include "phonescript_plugin/action_details_include.html" with form=form %}
 
