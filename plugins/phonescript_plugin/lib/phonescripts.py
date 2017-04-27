@@ -171,8 +171,10 @@ def create_initial_script_matches(action):
         return False
     else:
         for leg in legislators:
+            sm = ScriptMatcher.objects.create(action=action, legislator=leg)
             script = get_constituent_script_for_leg(leg, action)
-            ScriptMatcher.objects.create(action=action, legislator=leg, script=script)
+            sm.script = script
+            sm.save()
     return True # Return true if successful
 
 def update_all_script_matches(action):
