@@ -139,8 +139,10 @@ class TestPhoneScriptLib(TestCase):
             location="Somerville, MA", district="7", state="MA")
 
     def test_get_legislators(self):
+        leg = Legislator.objects.all()
+        self.assertEqual(len(leg), 0)
         leg = phonescripts.get_legislators()
-        self.assertEqual(len(leg), 536)
+        self.assertEqual(len(leg), 537)
 
     def test_get_constituent_script_for_leg(self):
         phonescripts.get_legislators()
@@ -169,7 +171,7 @@ class TestPhoneScriptLib(TestCase):
             script_type=TypeChoices.default)
         created = phonescripts.create_initial_script_matches(self.action)
         self.assertEqual(created, True)
-        self.assertEqual(len(ScriptMatcher.objects.filter(action=self.action)), 536)
+        self.assertEqual(len(ScriptMatcher.objects.filter(action=self.action)), 537)
 
     def test_update_all_script_matches(self):
         pass

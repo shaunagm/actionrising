@@ -15,7 +15,6 @@ class TestPhonescriptActionDetail(SeleniumTestCase):
         self.phonescript_page.log_in(default_user, default_password)
         self.phonescript_page.go_to_create_page()
         # Add details
-        self.phonescript_page.details_tab.click()
         self.phonescript_page.title = "Woo a title"
         # Add default script
         self.phonescript_page.default_script_tab.click()

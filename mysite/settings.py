@@ -253,3 +253,11 @@ RQ_QUEUES = {
 }
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
+
+# Caches!
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'my_cache_table',
+    }
+}

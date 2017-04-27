@@ -1,9 +1,11 @@
 from django import forms
 from plugins.phonescript_plugin.models import (PhoneScript, Legislator, ScriptMatcher,
     PositionChoices, TypeChoices)
+from plugins.phonescript_plugin.lib import phonescripts
 from actions.models import Action
 
 class DefaultForm(forms.ModelForm):
+    content = forms.CharField(max_length=1000, required=False) # Allows the form to validate when not filled out
 
     class Meta:
         model = PhoneScript
@@ -11,9 +13,10 @@ class DefaultForm(forms.ModelForm):
 
     def save(self, action, commit=True):
         instance = super(DefaultForm, self).save(commit=False)
-        instance.action = action
-        instance.script_type = TypeChoices.default
-        instance.save()
+        if instance.content not in [None, "", []]:
+            instance.action = action
+            instance.script_type = TypeChoices.default
+            instance.save()
 
 class ConstituentForm(forms.ModelForm):
 
@@ -43,8 +46,11 @@ class UniversalForm(forms.ModelForm):
         if instance:
             kwargs.update(initial={'always_reps': instance.get_always_reps()})
         super(UniversalForm, self).__init__(*args, **kwargs)
+        legislators = Legislator.objects.filter(in_office=True)
+        if legislators.count < 1:
+            legislators = phonescripts.create_legislators()
         self.fields['always_reps'].label = 'Specific people to show this script for'
-        self.fields['always_reps'].widget = forms.SelectMultiple(choices=[(i.pk, i.full_appellation()) for i in Legislator.objects.all()])
+        self.fields['always_reps'].widget = forms.SelectMultiple(choices=[(i.pk, i.full_appellation()) for i in legislators])
 
     def save(self, action=None, commit=True):
         instance = super(UniversalForm, self).save(commit=False)
