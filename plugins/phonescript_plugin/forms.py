@@ -1,6 +1,7 @@
 from django import forms
 from plugins.phonescript_plugin.models import (PhoneScript, Legislator, ScriptMatcher,
     PositionChoices, TypeChoices)
+from plugins.phonescript_plugin.lib import phonescripts
 from actions.models import Action
 
 class DefaultForm(forms.ModelForm):
@@ -45,8 +46,11 @@ class UniversalForm(forms.ModelForm):
         if instance:
             kwargs.update(initial={'always_reps': instance.get_always_reps()})
         super(UniversalForm, self).__init__(*args, **kwargs)
+        legislators = Legislator.objects.filter(in_office=True)
+        if legislators.count < 1:
+            legislators = phonescripts.create_legislators()
         self.fields['always_reps'].label = 'Specific people to show this script for'
-        self.fields['always_reps'].widget = forms.SelectMultiple(choices=[(i.pk, i.full_appellation()) for i in Legislator.objects.all()])
+        self.fields['always_reps'].widget = forms.SelectMultiple(choices=[(i.pk, i.full_appellation()) for i in legislators])
 
     def save(self, action=None, commit=True):
         instance = super(UniversalForm, self).save(commit=False)
