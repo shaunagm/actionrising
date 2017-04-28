@@ -110,6 +110,7 @@ class FollowUsersAndSlates(LoginRequiredMixin, generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super(FollowUsersAndSlates, self).get_context_data(**kwargs)
         rectracker = RecommendationTracker.objects.first()
-        context['users'] = rectracker.retrieve_users()
-        context['slates'] = rectracker.retrieve_slates()
+        if rectracker:
+            context['users'] = rectracker.retrieve_users()
+            context['slates'] = rectracker.retrieve_slates()
         return context
