@@ -29,16 +29,16 @@ class TestProfileMethods(TestCase):
         self.action = Action.objects.create(slug="test-action", title="Test Action", creator=self.buffy)
         self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action)
 
-    def test_get_relationship_given_profile(self):
-        relationship = self.buffy.profile.get_relationship_given_profile(self.faith.profile)
+    def test_get_relationship(self):
+        relationship = self.buffy.profile.get_relationship(self.faith.profile)
         self.assertEqual(relationship, self.relationship)
 
     def test_get_relationship_given_own_profile(self):
-        relationship = self.buffy.profile.get_relationship_given_profile(self.buffy.profile)
+        relationship = self.buffy.profile.get_relationship(self.buffy.profile)
         self.assertIsNone(relationship)
 
     def test_get_relationship_given_profile_when_no_relationship_exists(self):
-        relationship = self.buffy.profile.get_relationship_given_profile(self.lorne.profile)
+        relationship = self.buffy.profile.get_relationship(self.lorne.profile)
         self.assertIsNone(relationship)
 
     def test_get_followers(self):

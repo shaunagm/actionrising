@@ -49,6 +49,12 @@ class Profile(models.Model):
         class_name = 'Profile'
         return class_name
 
+    def get_creator(self):
+        return self.user
+
+    def get_profile(self):
+        return self
+
     def get_full_name(self):
         names = []
         if self.user.first_name not in [None, ""]:
@@ -87,14 +93,13 @@ class Profile(models.Model):
     def get_user_privacy(self):
         return self.privacy_defaults.global_default
 
-    def get_relationship_given_profile(self, profile):
-        rel = Relationship.objects.filter(person_A=self, person_B=profile)
-        if rel:
-            return rel[0]
-        rel = Relationship.objects.filter(person_A=profile, person_B=self)
-        if rel:
-            return rel[0]
-        return None
+    def get_relationship(self, other):
+        return self.get_relationship_with(other) or other.get_relationship_with(self)
+
+    def get_relationship_with(self, other):
+        '''Helper for get_relationship - looks for relationship unidirectionally.'''
+        rel = Relationship.objects.filter(person_A=self, person_B=other)
+        return rel[0] if rel else None
 
     def get_par_given_action(self, action):
         try:
@@ -114,7 +119,7 @@ class Profile(models.Model):
         # This should be something like for rel in self.relationship_set.all()
         # but it doesn't seem to work
         for person in self.get_connected_people():
-            rel = self.get_relationship_given_profile(person)
+            rel = self.get_relationship(person)
             if rel.target_follows_current_profile(self):
                 followers.append(person.pk)
         return Profile.objects.filter(pk__in=followers)
@@ -122,7 +127,7 @@ class Profile(models.Model):
     def get_people_user_follows(self):
         people_followed = []
         for person in self.get_connected_people():
-            rel = self.get_relationship_given_profile(person)
+            rel = self.get_relationship(person)
             if rel.current_profile_follows_target(self):
                 people_followed.append(person.pk)
         return Profile.objects.filter(pk__in=people_followed)
@@ -130,7 +135,7 @@ class Profile(models.Model):
     def get_people_to_notify(self):
         notify = []
         for person in self.get_connected_people():
-            rel = self.get_relationship_given_profile(person)
+            rel = self.get_relationship(person)
             if rel.target_notified_of_current_profile(self):
                 notify.append(person.pk)
         return [profile.user for profile in Profile.objects.filter(pk__in=notify)]
@@ -165,24 +170,28 @@ class Profile(models.Model):
     def get_connected_people(self):
         for_a = [rel.person_B for rel in Relationship.objects.filter(person_A=self)]
         for_b = [rel.person_A for rel in Relationship.objects.filter(person_B=self)]
-        return list(chain(for_a, for_b))
+        return for_a + for_b
 
     def get_list_of_relationships(self):
         people = []
         for person in self.get_connected_people():
-            rel = self.get_relationship_given_profile(person)
+            rel = self.get_relationship(person)
             you_follow = rel.current_profile_follows_target(self)
             follows_you = rel.target_follows_current_profile(self)
             muted = rel.current_profile_mutes_target(self)
             profile = rel.get_other(self)
-            people.append({'profile': profile, 'mutual': follows_you and you_follow,
-                'follows_you': follows_you, 'you_follow': you_follow, 'muted': muted})
+            people.append({
+                'profile': profile,
+                'mutual': follows_you and you_follow,
+                'follows_you': follows_you,
+                'you_follow': you_follow,
+                'muted': muted})
         return people
 
     def get_people_tracking(self):
         people = []
         for person in self.get_connected_people():
-            rel = self.get_relationship_given_profile(person)
+            rel = self.get_relationship(person)
             if rel.current_profile_follows_target(self) and not rel.current_profile_mutes_target(self):
                 people.append(person.user)
         return people
@@ -223,6 +232,13 @@ class Profile(models.Model):
                 if sar.action.status == StatusChoices.ready:
                     actions.append(sar.action)
         return actions
+
+    def is_visible_to(self, viewer):
+        return PrivacyChoices.privacy_tests[self.current_privacy](self, viewer)
+
+    def follows(self, other):
+        return other in self.get_people_user_follows()
+
 
     # Add methods to save and access links as json objects
 
@@ -440,6 +456,12 @@ class ProfileActionRelationship(models.Model):
         class_name = 'ProfileActionRelationship'
         return class_name
 
+    def get_creator(self):
+        return self.profile.get_creator()
+
+    def get_profile(self):
+        return self.profile
+
     def get_status(self):
         if self.action.status == StatusChoices.withdrawn:
             return self.action.get_status_display()
@@ -468,6 +490,9 @@ class ProfileActionRelationship(models.Model):
             suggesters.append(suggester)
         self.set_suggesters(suggesters)
 
+    def is_visible_to(self, viewer):
+        return self.profile.is_visible_to(viewer) and self.action.is_visible_to(viewer)
+
 # I think we just want to track PAR & PSR for now.
 @disable_for_loaddata
 def par_handler(sender, instance, created, **kwargs):
@@ -489,3 +514,12 @@ class ProfileSlateRelationship(models.Model):
     def get_cname(self):
         class_name = 'ProfileSlateRelationship'
         return class_name
+
+    def get_creator(self):
+        return self.profile.get_creator()
+
+    def get_profile(self):
+        return self.profile
+
+    def is_visible_to(self, viewer):
+        return self.profile.is_visible_to(viewer) and self.slate.is_visible_to(viewer)

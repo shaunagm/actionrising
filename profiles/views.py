@@ -44,7 +44,7 @@ class ProfileView(UserPassesTestMixin, generic.DetailView):
             context['percent_finished'] = obj.profile.get_percent_finished()
             context['action_streak_current'] = obj.profile.get_action_streak()
             current_profile = self.request.user.profile
-            relationship = current_profile.get_relationship_given_profile(obj.profile)
+            relationship = current_profile.get_relationship(obj.profile)
             if relationship:
                 context['follows'] = relationship.current_profile_follows_target(current_profile)
                 context['mutes'] = relationship.current_profile_mutes_target(current_profile)
@@ -117,7 +117,7 @@ class ActivityView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'profiles/activity.html'
 
 def toggle_relationships_helper(toggle_type, current_profile, target_profile):
-    relationship = current_profile.get_relationship_given_profile(target_profile)
+    relationship = current_profile.get_relationship(target_profile)
     if not relationship:
         relationship = Relationship.objects.create(person_A=current_profile, person_B=target_profile)
     if toggle_type == 'follow':
