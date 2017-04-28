@@ -15,16 +15,8 @@ def get_friendslist(context):
 
 @register.assignment_tag(takes_context=True)
 def filtered_feed(context, action):
-    user = context['request'].user
-    if not check_privacy(action.actor.profile, user):
-        return []
-    if action.target is not None:
-        if type(action.target) == User:
-            if not check_privacy(action.target.profile, user):
-                return []
-        else:
-            if not check_privacy(action.target, user):
-                return []
-    if type(action.action_object) is not Comment and action.action_object is not None and not check_privacy(action.action_object, user):
-        return []
-    return action
+    viewer = context['request'].user
+    actor_ok = check_privacy(action.actor.profile, viewer)
+    target_ok = action.target is None or check_privacy(action.target, viewer)
+    object_ok = action.action_object is None or type(action.action_object) is Comment or check_privacy(action.action_object, viewer)
+    return action if actor_ok and target_ok and object_ok else None
