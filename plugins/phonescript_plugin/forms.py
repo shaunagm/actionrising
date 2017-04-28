@@ -75,7 +75,7 @@ class LegislatorPositionForm(forms.Form):
     def __init__(self, action_slug, *args, **kwargs):
        super(LegislatorPositionForm, self).__init__(*args, **kwargs)
        self.action = Action.objects.get(slug=action_slug)
-       sm_set = ScriptMatcher.objects.filter(action=self.action)
+       sm_set = ScriptMatcher.objects.filter(action=self.action).order_by("-legislator__title", "legislator__last_name")
        # TO DO: get these in a reasonable order, split by Sen + House at least, maybe also party
        for sm in sm_set:
            field_name = "smdata_" + sm.legislator.bioguide_id
