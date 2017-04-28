@@ -1,6 +1,6 @@
 
 {% for info in object_list %}
-    <a href="{{ info.user.profile.get_absolute_url }}" class="extra-padding-right">
+    <a href="{{ info.profile.get_absolute_url }}" class="extra-padding-right">
       {{ info.profile.get_name }}</a>
     {% if info.mutual %}
         <span class="label label-success">Mutual follow</span>
