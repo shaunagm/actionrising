@@ -8,8 +8,7 @@ from tags.models import Tag
 
 from mysite.lib.utils import slugify_helper
 from mysite.lib.choices import PrivacyChoices
-from mysite.lib.privacy import (check_for_ownership, get_global_privacy_default,
-    check_privacy)
+from mysite.lib.privacy import check_privacy, get_global_privacy_default
 
 ##################
 ### Test utils ###
@@ -26,32 +25,32 @@ class TestPrivacyUtils(TestCase):
         self.par = ProfileActionRelationship(profile=self.faith.profile, action=self.action)
         self.sar = SlateActionRelationship(slate=self.slate, action=self.action)
 
-    def test_check_for_ownership_profile(self):
-        self.assertFalse(check_for_ownership(self.faith.profile, self.buffy))
-        self.assertTrue(check_for_ownership(self.faith.profile, self.faith))
-        self.assertFalse(check_for_ownership(self.faith.profile, self.anon))
+    def test_profile_creator(self):
+        self.assertFalse(self.faith.profile.get_creator() == self.buffy)
+        self.assertTrue(self.faith.profile.get_creator() == self.faith)
+        self.assertFalse(self.faith.profile.get_creator() == self.anon)
 
-    def test_check_for_ownership_action(self):
-        self.assertFalse(check_for_ownership(self.action, self.buffy))
-        self.assertTrue(check_for_ownership(self.action, self.faith))
-        self.assertFalse(check_for_ownership(self.action, self.anon))
+    def test_action_creator(self):
+        self.assertFalse(self.action.get_creator() == self.buffy)
+        self.assertTrue(self.action.get_creator() == self.faith)
+        self.assertFalse(self.action.get_creator() == self.anon)
 
-    def test_check_for_ownership_slate(self):
-        self.assertFalse(check_for_ownership(self.slate, self.buffy))
-        self.assertTrue(check_for_ownership(self.slate, self.faith))
-        self.assertFalse(check_for_ownership(self.slate, self.anon))
+    def test_slate_creator(self):
+        self.assertFalse(self.slate.get_creator() == self.buffy)
+        self.assertTrue(self.slate.get_creator() == self.faith)
+        self.assertFalse(self.slate.get_creator() == self.anon)
 
-    def test_check_for_ownership_par(self):
+    def test_par_creator(self):
         # The owner of the profile in the PAR 'owns' the PAR
-        self.assertFalse(check_for_ownership(self.par, self.buffy))
-        self.assertTrue(check_for_ownership(self.par, self.faith))
-        self.assertFalse(check_for_ownership(self.par, self.anon))
+        self.assertFalse(self.par.get_creator() == self.buffy)
+        self.assertTrue(self.par.get_creator() == self.faith)
+        self.assertFalse(self.par.get_creator() == self.anon)
 
-    def test_check_for_ownership_sar(self):
+    def test_sar_creator(self):
         # The creator of the slate 'owns' the SAR
-        self.assertFalse(check_for_ownership(self.sar, self.buffy))
-        self.assertTrue(check_for_ownership(self.sar, self.faith))
-        self.assertFalse(check_for_ownership(self.sar, self.anon))
+        self.assertFalse(self.sar.get_creator() == self.buffy)
+        self.assertTrue(self.sar.get_creator() == self.faith)
+        self.assertFalse(self.sar.get_creator() == self.anon)
 
     def test_get_global_privacy_default_when_unchanged(self):
         self.assertEqual(get_global_privacy_default(self.faith.profile), PrivacyChoices.public)
