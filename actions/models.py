@@ -68,6 +68,12 @@ class Action(models.Model):
         class_name = 'Action'
         return class_name
 
+    def get_creator(self):
+        return self.creator
+
+    def get_profile(self):
+        return self.creator.profile
+
     def get_absolute_url(self):
         return reverse('action', kwargs={'slug': self.slug})
 
@@ -155,6 +161,9 @@ class Action(models.Model):
             else:
                 return float((self.deadline - now).seconds)/float(86400)
         return -1
+
+    def is_visible_to(self, viewer):
+        return PrivacyChoices.privacy_tests[self.current_privacy](self, viewer)
 
 @disable_for_loaddata
 def action_handler(sender, instance, created, **kwargs):

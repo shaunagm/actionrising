@@ -46,6 +46,12 @@ class Slate(models.Model):
         class_name = 'Slate'
         return class_name
 
+    def get_creator(self):
+        return self.creator
+
+    def get_profile(self):
+        return self.creator.profile
+
     def get_absolute_url(self):
         return reverse('slate', kwargs={'slug': self.slug})
 
@@ -90,6 +96,9 @@ class Slate(models.Model):
                 people.append(psr.profile.user)
         return people
 
+    def is_visible_to(self, viewer):
+        return PrivacyChoices.privacy_tests[self.current_privacy](self, viewer)
+
 @disable_for_loaddata
 def slate_handler(sender, instance, created, **kwargs):
     if not created and (timezone.now() - instance.date_created).seconds < 600:
@@ -113,6 +122,12 @@ class SlateActionRelationship(models.Model):
         class_name = 'SlateActionRelationship'
         return class_name
 
+    def get_creator(self):
+        return self.slate.get_creator()
+
+    def get_profile(self):
+        return self.slate.get_creator().get_profile()
+
     def __unicode__(self):
         return "Relationship of slate: %s and action: %s " % (self.slate, self.action)
 
@@ -121,6 +136,9 @@ class SlateActionRelationship(models.Model):
             return self.action.get_status_display()
         else:
             return self.get_status_display()
+
+    def is_visible_to(self, viewer):
+        return self.action.is_visible_to(viewer) and self.slate.is_visible_to(viewer)
 
 @disable_for_loaddata
 def sar_handler(sender, instance, created, **kwargs):
