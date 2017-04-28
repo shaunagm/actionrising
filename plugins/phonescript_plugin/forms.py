@@ -61,6 +61,15 @@ class UniversalForm(forms.ModelForm):
 
 UniversalFormset = forms.modelformset_factory(PhoneScript, UniversalForm, extra=10)
 
+class ReadOnlyText(forms.TextInput):
+    '''Read only field that displays as text for use in LegislatorPositionForm.'''
+    input_type = 'text'
+
+    def render(self, name, value, attrs=None):
+        if value is None:
+            value = ''
+        return value
+
 class LegislatorPositionForm(forms.Form):
 
     def __init__(self, action_slug, *args, **kwargs):
@@ -71,7 +80,7 @@ class LegislatorPositionForm(forms.Form):
        for sm in sm_set:
            field_name = "smdata_" + sm.legislator.bioguide_id
            self.fields[field_name + "_leg"] = forms.CharField(initial=sm.legislator,
-                disabled=True, label="")
+                disabled=True, label="", widget=ReadOnlyText)
            self.fields[field_name + "_pos"] = forms.ChoiceField(choices=PositionChoices.choices[:4],
                 label="Position", required=False)
            self.initial[field_name + "_pos"] = sm.position
