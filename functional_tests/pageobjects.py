@@ -310,7 +310,7 @@ class PhonescriptCreatePage(BasePage):
     submit_button = PageElement(css=".action-submit-button")
 
     def go_to_create_page(self):
-        self.w.get(self.root_uri + "/specialactions/phonescriptscreate")
+        self.w.get(self.root_uri + "/specialactions/phonescripts/create")
 
     def select_rep_type(self, rep_type):
         select = Select(self.w.find_element_by_id('id_con-0-rep_type'))
