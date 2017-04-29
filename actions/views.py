@@ -55,7 +55,6 @@ class ActionListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, **kwargs):
         context = super(ActionListView, self).get_context_data(**kwargs)
         context['your_filters'] = self.request.user.actionfilter_set.all().order_by('date_created')
-        print context
         return context
 
 class PublicActionListView(generic.ListView):

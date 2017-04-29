@@ -216,8 +216,6 @@ class LegislatorPositionEditView(generic.edit.FormView):
 def mass_position_editor(request, slug, partysplit):
     action = Action.objects.get(slug=slug)
     matches = ScriptMatcher.objects.filter(action=action)
-    print("partysplit: ", partysplit)
-    print(PartyChoices.dem)
     for match in matches:
         if match.legislator.party == PartyChoices.dem:
             match.position = PositionChoices.for_position if partysplit == "demfor" \
