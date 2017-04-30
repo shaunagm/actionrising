@@ -83,13 +83,6 @@ class Profile(models.Model):
     def get_suggestion_url_with_domain(self):
         return PRODUCTION_DOMAIN + reverse('suggested', kwargs={'slug': self.user })
 
-    def refresh_current_privacy(self):
-        if self.privacy == PrivacyChoices.inherit:
-            self.current_privacy = self.privacy_defaults.global_default
-        else:
-            self.current_privacy = self.privacy
-        self.save()
-
     def get_user_privacy(self):
         return self.privacy_defaults.global_default
 
@@ -114,31 +107,22 @@ class Profile(models.Model):
         except:
             return None
 
+    def filter_connected_profiles(self, predicate):
+        '''Helper for getting profiles with a particular kind of relationship to self.
+        predicate: function from Relationship to boolean.'''
+        profile_pks = [profile.pk for profile in self.get_connected_people()
+                       if predicate(self.get_relationship(profile))]
+        return Profile.objects.filter(pk__in=profile_pks)
+
     def get_followers(self):
-        followers = []
-        # This should be something like for rel in self.relationship_set.all()
-        # but it doesn't seem to work
-        for person in self.get_connected_people():
-            rel = self.get_relationship(person)
-            if rel.target_follows_current_profile(self):
-                followers.append(person.pk)
-        return Profile.objects.filter(pk__in=followers)
+        return self.filter_connected_profiles(lambda rel: rel.target_follows_current_profile(self))
 
     def get_people_user_follows(self):
-        people_followed = []
-        for person in self.get_connected_people():
-            rel = self.get_relationship(person)
-            if rel.current_profile_follows_target(self):
-                people_followed.append(person.pk)
-        return Profile.objects.filter(pk__in=people_followed)
+        return self.filter_connected_profiles(lambda rel: rel.current_profile_follows_target(self))
 
     def get_people_to_notify(self):
-        notify = []
-        for person in self.get_connected_people():
-            rel = self.get_relationship(person)
-            if rel.target_notified_of_current_profile(self):
-                notify.append(person.pk)
-        return [profile.user for profile in Profile.objects.filter(pk__in=notify)]
+        profiles = self.filter_connected_profiles(lambda rel: rel.target_notified_of_current_profile(self))
+        return [profile.user for profile in profiles]
 
     def get_most_recent_actions_created(self):
         actions = self.user.action_set.filter(status__in=[StatusChoices.ready, StatusChoices.finished]).order_by('-date_created')
@@ -189,12 +173,15 @@ class Profile(models.Model):
         return people
 
     def get_people_tracking(self):
-        people = []
-        for person in self.get_connected_people():
-            rel = self.get_relationship(person)
-            if rel.current_profile_follows_target(self) and not rel.current_profile_mutes_target(self):
-                people.append(person.user)
-        return people
+        relationships = [(profile, self.get_relationship(profile)) for profile in self.get_connected_people()]
+        return [profile.user for (profile, rel) in relationships
+                if rel.current_profile_follows_target(self) and not rel.current_profile_mutes_target(self)]
+        # people = []
+        # for person in self.get_connected_people():
+        #     rel = self.get_relationship(person)
+        #     if rel.current_profile_follows_target(self) and not rel.current_profile_mutes_target(self):
+        #         people.append(person.user)
+        # return people
 
     def get_percent_finished(self):
         total_count = 0

@@ -9,7 +9,7 @@ class PrivacyChoices(DjangoChoices):
     privacy_tests = {
         'public': lambda object, viewer: True,
         'sitewide': lambda object, viewer: viewer.is_authenticated(),
-        'follows': lambda object, viewer: object.get_creator() == viewer or object.get_profile().follows(viewer)
+        'follows': lambda object, viewer: object.get_creator() == viewer or object.get_profile().follows(viewer.profile)
     }
 
     @classmethod

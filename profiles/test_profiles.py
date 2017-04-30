@@ -2,7 +2,7 @@ from django.test import TestCase, Client
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AnonymousUser
 from actions.models import Action
 from slates.models import Slate, SlateActionRelationship
 from commitments.models import Commitment
@@ -22,12 +22,24 @@ class TestProfileMethods(TestCase):
 
     def setUp(self):
         self.buffy = User.objects.create(username="buffysummers")
+        self.buffy.profile.current_privacy = 'follows'
+        self.buffy.save()
         self.faith = User.objects.create(username="faithlehane")
+        self.faith.profile.current_privacy = 'follows'
+        self.faith.save()
         self.relationship = Relationship.objects.create(person_A=self.buffy.profile,
             person_B=self.faith.profile)
+        self.relationship.B_follows_A = True
+        self.relationship.save()
         self.lorne = User.objects.create(username="lorne") # Relationshipless
+        self.willow = User.objects.create(username="willow")
+        self.willow.profile.current_privacy = 'sitewide'
+        self.willow.save()
         self.action = Action.objects.create(slug="test-action", title="Test Action", creator=self.buffy)
         self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action)
+        self.slate = Slate.objects.create(slug="test-slate", title="Test Slate", creator=self.faith)
+        self.sar = SlateActionRelationship.objects.create(slate=self.slate, action=self.action)
+        self.anon = AnonymousUser()
 
     def test_get_relationship(self):
         relationship = self.buffy.profile.get_relationship(self.faith.profile)
@@ -42,11 +54,14 @@ class TestProfileMethods(TestCase):
         self.assertIsNone(relationship)
 
     def test_get_followers(self):
-        self.relationship.B_follows_A = True
-        self.relationship.save()
         self.assertEqual(list(self.buffy.profile.get_followers()), [self.faith.profile])
         self.assertEqual(list(self.faith.profile.get_followers()), [])
         self.assertEqual(list(self.lorne.profile.get_followers()), [])
+
+    def test_get_people_user_follows(self):
+        self.assertEqual(list(self.buffy.profile.get_people_user_follows()), [])
+        self.assertEqual(list(self.lorne.profile.get_people_user_follows()), [])
+        self.assertEqual(list(self.faith.profile.get_people_user_follows()), [self.buffy.profile])
 
     def test_get_par_given_action(self):
         par = self.buffy.profile.get_par_given_action(self.action)
@@ -62,6 +77,50 @@ class TestProfileMethods(TestCase):
         self.par.save()
         self.assertEqual(list(self.buffy.profile.get_suggested_actions()), [self.par])
         self.assertEqual(self.buffy.profile.get_suggested_actions_count(), 1)
+
+    def test_follows(self):
+        self.assertFalse(self.buffy.profile.follows(self.faith.profile))
+        self.assertTrue(self.faith.profile.follows(self.buffy.profile))
+        self.assertFalse(self.buffy.profile.follows(self.lorne.profile))
+        self.assertFalse(self.lorne.profile.follows(self.buffy.profile))
+
+    def test_is_visible(self):
+        self.assertTrue(self.faith.profile.is_visible_to(self.buffy))
+        self.assertFalse(self.buffy.profile.is_visible_to(self.faith))
+        self.assertTrue(self.lorne.profile.is_visible_to(self.buffy))
+        self.assertTrue(self.lorne.profile.is_visible_to(self.anon))
+        self.assertTrue(self.willow.profile.is_visible_to(self.buffy))
+        self.assertFalse(self.willow.profile.is_visible_to(self.anon))
+
+    def test_default_privacy(self):
+        self.assertEqual(self.lorne.profile.current_privacy, 'public')
+
+    def test_profile_creator(self):
+        self.assertFalse(self.faith.profile.get_creator() == self.buffy)
+        self.assertTrue(self.faith.profile.get_creator() == self.faith)
+        self.assertFalse(self.faith.profile.get_creator() == self.anon)
+
+    def test_action_creator(self):
+        self.assertFalse(self.action.get_creator() == self.faith)
+        self.assertTrue(self.action.get_creator() == self.buffy)
+        self.assertFalse(self.action.get_creator() == self.anon)
+
+    def test_slate_creator(self):
+        self.assertFalse(self.slate.get_creator() == self.buffy)
+        self.assertTrue(self.slate.get_creator() == self.faith)
+        self.assertFalse(self.slate.get_creator() == self.anon)
+
+    def test_par_creator(self):
+        # The owner of the profile in the PAR 'owns' the PAR
+        self.assertFalse(self.par.get_creator() == self.faith)
+        self.assertTrue(self.par.get_creator() == self.buffy)
+        self.assertFalse(self.par.get_creator() == self.anon)
+
+    def test_sar_creator(self):
+        # The creator of the slate 'owns' the SAR
+        self.assertFalse(self.sar.get_creator() == self.buffy)
+        self.assertTrue(self.sar.get_creator() == self.faith)
+        self.assertFalse(self.sar.get_creator() == self.anon)
 
 class TestRelationshipMethods(TestCase):
 

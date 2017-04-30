@@ -126,7 +126,7 @@ class SlateActionRelationship(models.Model):
         return self.slate.get_creator()
 
     def get_profile(self):
-        return self.slate.get_creator().get_profile()
+        return self.slate.get_creator().profile
 
     def __unicode__(self):
         return "Relationship of slate: %s and action: %s " % (self.slate, self.action)
