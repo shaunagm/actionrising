@@ -1,4 +1,4 @@
-Contribution guidelines
-=======================
+Contributor guidelines
+----------------------
 
-.. include: ../../CONTRIBUTING.md
+.. include:: ../../../CONTRIBUTING.md
