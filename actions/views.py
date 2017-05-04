@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from flags.lib.flag_helpers import get_user_flag_if_exists
 from mysite.lib.choices import PrivacyChoices, StatusChoices
 from mysite.lib.privacy import (check_privacy, filter_list_for_privacy,
-    filter_list_for_privacy_annotated)
+    filter_list_for_privacy_annotated, filtered_list_view)
 from profiles.lib.trackers import get_tracker_data_for_action
 from tags.lib import tag_helpers
 from actions.models import Action, ActionFilter
@@ -50,18 +50,14 @@ class ActionView(UserPassesTestMixin, generic.DetailView):
 class ActionListView(LoginRequiredMixin, generic.ListView):
     template_name = "actions/actions.html"
     model = Action
+    #TODO status filter
     queryset = Action.objects.filter(status__in=[StatusChoices.ready, StatusChoices.finished]).filter(current_privacy__in=[PrivacyChoices.public, PrivacyChoices.sitewide])
 
     def get_context_data(self, **kwargs):
         context = super(ActionListView, self).get_context_data(**kwargs)
         context['your_filters'] = self.request.user.actionfilter_set.all().order_by('date_created')
-        print context
+        context['object_list'] = filtered_list_view(Action, self.request.user)
         return context
-
-class PublicActionListView(generic.ListView):
-    template_name = "actions/actions.html"
-    model = Action
-    queryset = Action.objects.filter(status__in=[StatusChoices.ready, StatusChoices.finished]).filter(current_privacy=PrivacyChoices.public)
 
 class ActionCreateView(LoginRequiredMixin, generic.edit.CreateView):
     model = Action

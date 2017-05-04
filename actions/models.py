@@ -165,6 +165,15 @@ class Action(models.Model):
     def is_visible_to(self, viewer):
         return PrivacyChoices.privacy_tests[self.current_privacy](self, viewer)
 
+    @classmethod
+    def default_order_field(self):
+        return '-date_created'
+
+    @classmethod
+    def default_sort(self, items):
+        return sorted(items, key = lambda x: getattr(x, 'date_created'), reverse = True)
+
+
 @disable_for_loaddata
 def action_handler(sender, instance, created, **kwargs):
     if not created and (timezone.now() - instance.date_created).seconds < 600:

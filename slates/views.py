@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from flags.lib.flag_helpers import get_user_flag_if_exists
 from mysite.lib.choices import PrivacyChoices, StatusChoices
 from mysite.lib.privacy import (check_privacy, filter_list_for_privacy,
-    filter_list_for_privacy_annotated)
+    filter_list_for_privacy_annotated, filtered_list_view)
 from misc.models import RecommendationTracker
 from profiles.lib.trackers import get_tracker_data_for_slate
 from slates.models import Slate, SlateActionRelationship
@@ -38,16 +38,15 @@ class SlateView(UserPassesTestMixin, generic.DetailView):
         obj = self.get_object()
         return check_privacy(obj, self.request.user)
 
-class SlateListView(LoginRequiredMixin, generic.ListView):
+class SlateListView(generic.ListView):
     # Note: templates can likely be refactored to use same template as TopicListView
     template_name = "slates/slates.html"
     model = Slate
-    queryset = Slate.objects.filter(status__in=[StatusChoices.ready, StatusChoices.finished]).filter(current_privacy__in=[PrivacyChoices.public, PrivacyChoices.sitewide])
 
-class PublicSlateListView(generic.ListView):
-    template_name = "slates/slates.html"
-    model = Slate
-    queryset = Slate.objects.filter(status__in=[StatusChoices.ready, StatusChoices.finished]).filter(current_privacy=PrivacyChoices.public)
+    def get_context_data(self, **kwargs):
+        context = super(SlateListView, self).get_context_data(**kwargs)
+        context['object_list'] = filtered_list_view(Slate, self.request.user) #TODO status
+        return context
 
 class SlateCreateView(LoginRequiredMixin, generic.edit.CreateView):
     model = Slate

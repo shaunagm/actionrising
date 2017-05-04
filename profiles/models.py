@@ -226,6 +226,14 @@ class Profile(models.Model):
     def follows(self, other):
         return other in self.get_people_user_follows()
 
+    @classmethod
+    def default_order_field(self):
+        return '-date_joined'
+
+    @classmethod
+    def default_sort(self, items):
+        return sorted(items, key = lambda x: getattr(x, 'date_joined'), reverse = True)
+
 
     # Add methods to save and access links as json objects
 

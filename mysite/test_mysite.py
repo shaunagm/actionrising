@@ -20,10 +20,12 @@ class TestPrivacyUtils(TestCase):
         self.buffy = User.objects.create(username="buffysummers")
         self.faith = User.objects.create(username="faithlehane")
         self.anon = AnonymousUser()
-        self.action = Action.objects.create(slug="test-action", creator=self.faith)
-        self.slate = Slate.objects.create(slug="test-slate", creator=self.faith)
+        self.action = Action.objects.create(slug="test-action", creator=self.faith, title='myaction')
+        self.slate = Slate.objects.create(slug="test-slate", creator=self.faith, title='myslate')
         self.par = ProfileActionRelationship(profile=self.faith.profile, action=self.action)
+        self.par.save()
         self.sar = SlateActionRelationship(slate=self.slate, action=self.action)
+        self.sar.save()
 
     def test_get_global_privacy_default_when_unchanged(self):
         self.assertEqual(get_global_privacy_default(self.faith.profile), PrivacyChoices.public)
@@ -97,7 +99,8 @@ class TestPrivacyUtils(TestCase):
         # Now we set the global default to sitewide and only Buffy can access
         self.faith.profile.privacy_defaults.global_default = PrivacyChoices.sitewide
         self.faith.profile.privacy_defaults.save()
-        self.faith.profile.save_dependencies()
+        self.action.refresh_current_privacy()
+        self.slate.refresh_current_privacy()
         self.assertTrue(check_privacy(self.sar, self.buffy))
         self.assertFalse(check_privacy(self.sar, self.anon))
         # If we change action to public and slate to sitewide, only Buffy can access

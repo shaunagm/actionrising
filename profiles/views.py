@@ -10,7 +10,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
 from actstream.actions import follow, unfollow
-from mysite.lib.privacy import check_privacy, filter_list_for_privacy, filter_list_for_privacy_annotated
+from mysite.lib.privacy import check_privacy, filter_list_for_privacy, filter_list_for_privacy_annotated, filtered_list_view
 from mysite.lib.choices import PrivacyChoices, ToDoStatusChoices
 from django.contrib.auth.models import User
 from profiles.models import (Profile, Relationship, ProfileActionRelationship,
@@ -30,6 +30,7 @@ class ProfileView(UserPassesTestMixin, generic.DetailView):
 
     def test_func(self):
         obj = self.get_object()
+        #TODO test
         return check_privacy(obj.profile, self.request.user)
 
     def get_context_data(self, **kwargs):
@@ -101,13 +102,13 @@ class ProfileSuggestedView(UserPassesTestMixin, generic.DetailView):
         context['actions'] = self.object.profile.get_suggested_actions()
         return context
 
-class ProfileSearchView(LoginRequiredMixin, generic.ListView):
+class ProfileSearchView(generic.ListView):
     template_name = 'profiles/profiles.html'
     model = User
 
     def get_context_data(self, **kwargs):
         context = super(ProfileSearchView, self).get_context_data(**kwargs)
-        context['object_list'] = [profile.user for profile in Profile.objects.filter(current_privacy__in=[PrivacyChoices.public, PrivacyChoices.sitewide])]
+        context['object_list'] = [profile.user for profile in filtered_list_view(Profile, self.request.user)]
         return context
 
 class FeedView(LoginRequiredMixin, generic.TemplateView):
