@@ -363,49 +363,25 @@ def hold_accountable_email_nonuser(recipient_email, commitment):
 ### EMAILS TO NON-USERS ###
 ###########################
 
-def request_email(invite):
+def request_email(user, confirmation_url):
     subject = "Confirm your ActionRising account"
 
     ctx = {
         # Required fields
         'preheader_text': subject,
         # Email-specific fields
-        'invite': invite
+        'user': user,
+        'confirmation_url': confirmation_url
     }
 
     plain_message = render_to_string('notifications/email_templates/plain/request.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/request.html', ctx)
-    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [invite.email], html_message=html_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [user.email], html_message=html_message)
     if sent:
-        log_sent_mail(subject, plain_message, invite.email)
+        log_sent_mail(subject, plain_message, user.email)
     else:
-        log_unsent_email(subject, plain_message, invite.email)
+        log_unsent_email(subject, plain_message, user.email)
     return sent
-
-def invite_email(invite):
-    subject = "%s is inviting you to join ActionRising" % invite.get_inviter_string()
-
-    ctx = {
-        # Required fields
-        'preheader_text': subject,
-        # Email-specific fields
-        'invite': invite
-    }
-
-    plain_message = render_to_string('notifications/email_templates/plain/invite.html', ctx)
-    html_message = render_to_string('notifications/email_templates/html/invite.html', ctx)
-    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [invite.email], html_message=html_message)
-    if sent:
-        log_sent_mail(subject, plain_message, invite.email)
-    else:
-        log_unsent_email(subject, plain_message, invite.email)
-    return sent
-
-def invite_notification_email(invite):
-    if invite.self_submitted:
-        return request_email(invite)
-    else:
-        return invite_email(invite)
 
 def nonuser_email(recipient_email, notifier, message, instance):
     subject = "%s wants you to take action on ActionRising" % (notifier)

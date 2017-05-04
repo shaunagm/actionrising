@@ -19,9 +19,6 @@ class LearnMoreView(generic.TemplateView):
 class PrivacyPolicyView(generic.TemplateView):
     template_name = "mysite/privacy_policy.html"
 
-def change_password_redirect(request):
-    return HttpResponseRedirect(reverse('index'))
-
 def custom_404(request):
     response = render(request, 'mysite/404.html')
     response.status_code = 404
@@ -31,9 +28,3 @@ def custom_500(request):
     response = render(request, 'mysite/500.html')
     response.status_code = 500
     return response
-
-def acme_challenge(request):
-    return render(request, 'mysite/challenge.html')
-
-def acme_challenge2(request):
-    return render(request, 'mysite/challenge2.html')

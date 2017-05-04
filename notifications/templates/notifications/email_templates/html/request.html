@@ -6,7 +6,7 @@
     <td style="font-family:sans-serif;font-size:14px;vertical-align:top;">
 
       <p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">
-        Hi there {{ invite.username }},</p>
+        Hi there {{ user.username }},</p>
       <p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">
         You've requested an account on ActionRising.</p>
 
@@ -18,7 +18,7 @@
                 <tbody>
                   <tr>
                     <td style="font-family:sans-serif;font-size:14px;vertical-align:top;background-color:#ffffff;border-radius:5px;text-align:center;background-color:#3498db;">
-                      <a href="{{ invite.get_confirmation_url }}" target="_blank" style="text-decoration:underline;background-color:#ffffff;border:solid 1px #3498db;border-radius:5px;box-sizing:border-box;color:#3498db;cursor:pointer;display:inline-block;font-size:14px;font-weight:bold;margin:0;padding:12px 25px;text-decoration:none;text-transform:capitalize;background-color:#2b3e50;border-color:#2b3e50;color:#ffffff;">
+                      <a href="{{ confirmation_url }}" target="_blank" style="text-decoration:underline;background-color:#ffffff;border:solid 1px #3498db;border-radius:5px;box-sizing:border-box;color:#3498db;cursor:pointer;display:inline-block;font-size:14px;font-weight:bold;margin:0;padding:12px 25px;text-decoration:none;text-transform:capitalize;background-color:#2b3e50;border-color:#2b3e50;color:#ffffff;">
                       Confirm your email</a> </td>
                   </tr>
                 </tbody>
