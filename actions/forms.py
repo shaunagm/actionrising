@@ -8,13 +8,19 @@ from tags.models import Tag
 from mysite.lib.choices import PrivacyChoices, TimeChoices
 from mysite.lib.privacy import get_global_privacy_default
 from plugins import plugin_helpers
+from slates.models import Slate, SlateActionRelationship
+
+class SlateChoiceField(forms.ModelMultipleChoiceField):
+   def label_from_instance(self, obj):
+        return obj.title
 
 class ActionForm(forms.ModelForm):
+    slates = SlateChoiceField(queryset=Slate.objects.all(), label="Add to your slates", required=False)
 
     class Meta:
         model = Action
         fields = ['title', 'anonymize', 'description', 'privacy', 'priority', 'duration',
-            'status', 'deadline']
+            'status', 'deadline', 'slates']
         widgets = {
             'deadline': DateTimeWidget(options={'format': 'mm/dd/yyyy HH:mm'}, bootstrap_version=3),
         }
@@ -38,6 +44,9 @@ class ActionForm(forms.ModelForm):
         # Set tags
         self.fields = tag_helpers.add_tag_fields_to_form(self.fields, self.instance, formtype)
 
+        # Set slates
+        self.fields['slates'].queryset = user.slate_set.all()
+
         # Set plugin fields
         self = plugin_helpers.add_plugin_fields(self)
 
@@ -55,6 +64,10 @@ class ActionForm(forms.ModelForm):
 
         # Handle plugins
         plugin_helpers.process_plugin_fields(self, instance)
+
+        # Handle slates
+        for slate in self.cleaned_data['slates']:
+            SlateActionRelationship.objects.get_or_create(slate=slate, action=instance)
 
         return instance
 

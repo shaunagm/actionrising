@@ -19,13 +19,16 @@ class TimezoneMiddleware(MiddlewareMixin):
             return
 
         # Try to calculate timezone
-        if request.session.get('timezone_status') == "Failed":
-                timezone.deactivate()
-        else:
-            tz = get_timezone_given_user(request.user)
-            if tz:
-                request.session['django_timezone'] = tz
-                timezone.activate(pytz.timezone(tz))
+        try:
+            if request.session.get('timezone_status') == "Failed":
+                    timezone.deactivate()
             else:
-                request.session['timezone_status'] = "Failed"
-                timezone.deactivate()
+                tz = get_timezone_given_user(request.user)
+                if tz:
+                    request.session['django_timezone'] = tz
+                    timezone.activate(pytz.timezone(tz))
+                else:
+                    request.session['timezone_status'] = "Failed"
+                    timezone.deactivate()
+        except:
+            print("Error calculating timezone")

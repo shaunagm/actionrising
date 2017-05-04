@@ -12,4 +12,6 @@ urlpatterns = [
     url(r'positions/(?P<slug>[-\w]+)/edit/?$', views.LegislatorPositionEditView.as_view(),
         name='edit_phonescript_positions'),
     url(r'edit/(?P<slug>[-\w]+)/?$', views.PhoneScriptEditView.as_view(), name='edit_phonescript_action'),
+    url(r'mass_edit_position/(?P<slug>[-\w]+)/(?P<partysplit>[-\w]+)/?$', views.mass_position_editor,
+        name='mass_edit_position'),
 ]

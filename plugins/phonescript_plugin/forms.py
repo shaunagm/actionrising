@@ -61,17 +61,26 @@ class UniversalForm(forms.ModelForm):
 
 UniversalFormset = forms.modelformset_factory(PhoneScript, UniversalForm, extra=10)
 
+class ReadOnlyText(forms.TextInput):
+    '''Read only field that displays as text for use in LegislatorPositionForm.'''
+    input_type = 'text'
+
+    def render(self, name, value, attrs=None):
+        if value is None:
+            value = ''
+        return value
+
 class LegislatorPositionForm(forms.Form):
 
     def __init__(self, action_slug, *args, **kwargs):
        super(LegislatorPositionForm, self).__init__(*args, **kwargs)
        self.action = Action.objects.get(slug=action_slug)
-       sm_set = ScriptMatcher.objects.filter(action=self.action)
+       sm_set = ScriptMatcher.objects.filter(action=self.action).order_by("-legislator__title", "legislator__last_name")
        # TO DO: get these in a reasonable order, split by Sen + House at least, maybe also party
        for sm in sm_set:
            field_name = "smdata_" + sm.legislator.bioguide_id
            self.fields[field_name + "_leg"] = forms.CharField(initial=sm.legislator,
-                disabled=True, label="")
+                disabled=True, label="", widget=ReadOnlyText)
            self.fields[field_name + "_pos"] = forms.ChoiceField(choices=PositionChoices.choices[:4],
                 label="Position", required=False)
            self.initial[field_name + "_pos"] = sm.position

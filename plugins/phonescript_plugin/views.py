@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import generic
 from django.http import HttpResponseRedirect
 
@@ -6,7 +6,7 @@ from actions.models import Action
 from actions.views import ActionEditView, ActionCreateView, ActionView
 
 from plugins.phonescript_plugin.models import (PhoneScript, ScriptMatcher, Legislator,
-    TypeChoices)
+    TypeChoices, PartyChoices, PositionChoices)
 from plugins.phonescript_plugin.forms import (DefaultForm, ConstituentFormset,
     UniversalFormset, LegislatorPositionForm)
 from plugins.phonescript_plugin.lib import phonescripts
@@ -212,3 +212,16 @@ class LegislatorPositionEditView(generic.edit.FormView):
         for item in request.POST:
             self.save_item(item, request.POST[item], action)
         return HttpResponseRedirect(action.get_absolute_url())
+
+def mass_position_editor(request, slug, partysplit):
+    action = Action.objects.get(slug=slug)
+    matches = ScriptMatcher.objects.filter(action=action)
+    for match in matches:
+        if match.legislator.party == PartyChoices.dem:
+            match.position = PositionChoices.for_position if partysplit == "demfor" \
+                else PositionChoices.against_position
+        elif match.legislator.party == PartyChoices.rep:
+            match.position = PositionChoices.against_position if partysplit == "demfor" \
+                else PositionChoices.for_position
+        match.save()
+    return redirect('edit_phonescript_positions', slug=slug)
