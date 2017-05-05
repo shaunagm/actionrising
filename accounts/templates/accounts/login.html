@@ -5,8 +5,15 @@
 {% block content %}
 
 <div class="row">
-   <div class="col-sm-4 col-sm-offset-1">
+   <div class="col-sm-6 col-sm-offset-1">
       <h2>Login</h2>
+      <a href="{% url 'social:begin' 'twitter' %}" class="btn btn-info">Login with Twitter</a>
+      <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-info">Login with Facebook</a>
+      <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-info">Login with Google</a>
+    </div>
+  </div>
+  <div class="row">
+     <div class="col-sm-4 col-sm-offset-1">
       <form method="post">
         {% csrf_token %}
         {% bootstrap_form form layout='horizontal' %}
