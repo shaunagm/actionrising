@@ -16,7 +16,7 @@ class SignUpForm(ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'password', 'email'] # may need to make email required in form
+        fields = ['email', 'username', 'password']
 
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args, **kwargs)
