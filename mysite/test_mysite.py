@@ -53,10 +53,10 @@ class TestPrivacyUtils(TestCase):
         # Now we set the global default to sitewide
         self.faith.profile.privacy_defaults.global_default = PrivacyChoices.sitewide
         self.faith.profile.privacy_defaults.save()
-        self.action.refresh_current_privacy() #TODO is this called appropriately in the codebase?
-        self.assertEqual(self.action.current_privacy, PrivacyChoices.sitewide)
-        self.assertTrue(check_privacy(self.action, self.buffy))
-        self.assertFalse(check_privacy(self.action, self.anon))
+        action = Action.objects.get(title='myaction')
+        self.assertEqual(action.current_privacy, PrivacyChoices.sitewide)
+        self.assertTrue(check_privacy(action, self.buffy))
+        self.assertFalse(check_privacy(action, self.anon))
         # Now let's make access more open on the individual objects
         self.action.privacy = PrivacyChoices.public
         self.action.save()
@@ -99,10 +99,9 @@ class TestPrivacyUtils(TestCase):
         # Now we set the global default to sitewide and only Buffy can access
         self.faith.profile.privacy_defaults.global_default = PrivacyChoices.sitewide
         self.faith.profile.privacy_defaults.save()
-        self.action.refresh_current_privacy()
-        self.slate.refresh_current_privacy()
-        self.assertTrue(check_privacy(self.sar, self.buffy))
-        self.assertFalse(check_privacy(self.sar, self.anon))
+        sar = SlateActionRelationship.objects.first()
+        self.assertTrue(check_privacy(sar, self.buffy))
+        self.assertFalse(check_privacy(sar, self.anon))
         # If we change action to public and slate to sitewide, only Buffy can access
         self.sar.slate.privacy = PrivacyChoices.sitewide
         self.sar.slate.save()

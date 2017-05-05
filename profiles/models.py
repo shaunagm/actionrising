@@ -83,6 +83,13 @@ class Profile(models.Model):
     def get_suggestion_url_with_domain(self):
         return PRODUCTION_DOMAIN + reverse('suggested', kwargs={'slug': self.user })
 
+    def refresh_current_privacy(self):
+        if self.privacy == PrivacyChoices.inherit:
+            self.current_privacy = self.privacy_defaults.global_default
+        else:
+            self.current_privacy = self.privacy
+        self.save()
+
     def get_user_privacy(self):
         return self.privacy_defaults.global_default
 
@@ -233,6 +240,10 @@ class Profile(models.Model):
     @classmethod
     def default_sort(self, items):
         return sorted(items, key = lambda x: getattr(x, 'date_joined'), reverse = True)
+
+    @classmethod
+    def status_filter(self):
+        return []
 
 
     # Add methods to save and access links as json objects
@@ -416,14 +427,12 @@ class PrivacyDefaults(models.Model):
         return class_name
 
     def save_dependencies(self):
-        self.profile.current_privacy = self.global_default
-        self.profile.save()
+        self.profile.refresh_current_privacy()
         for slate in self.profile.user.slate_set.all():
-            slate.current_privacy = self.global_default
-            slate.save()
+            slate.refresh_current_privacy()
         for action in self.profile.user.action_set.all():
-            action.current_privacy = self.global_default
-            action.save()
+            action.refresh_current_privacy()
+
 
 class ProfileActionRelationship(models.Model):
     """Stores relationship between a profile and an action"""

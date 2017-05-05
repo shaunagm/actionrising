@@ -45,7 +45,8 @@ class SlateListView(generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super(SlateListView, self).get_context_data(**kwargs)
-        context['object_list'] = filtered_list_view(Slate, self.request.user) #TODO status
+        context['object_list'] = [object for object in filtered_list_view(Slate, self.request.user)
+                                  if object.status in [StatusChoices.ready, StatusChoices.finished]]
         return context
 
 class SlateCreateView(LoginRequiredMixin, generic.edit.CreateView):

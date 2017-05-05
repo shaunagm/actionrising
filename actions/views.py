@@ -47,16 +47,17 @@ class ActionView(UserPassesTestMixin, generic.DetailView):
         obj = self.get_object()
         return check_privacy(obj, self.request.user)
 
-class ActionListView(LoginRequiredMixin, generic.ListView):
+class ActionListView(generic.ListView):
     template_name = "actions/actions.html"
     model = Action
-    #TODO status filter
     queryset = Action.objects.filter(status__in=[StatusChoices.ready, StatusChoices.finished]).filter(current_privacy__in=[PrivacyChoices.public, PrivacyChoices.sitewide])
 
     def get_context_data(self, **kwargs):
         context = super(ActionListView, self).get_context_data(**kwargs)
-        context['your_filters'] = self.request.user.actionfilter_set.all().order_by('date_created')
-        context['object_list'] = filtered_list_view(Action, self.request.user)
+        if self.request.user.is_authenticated():
+            context['your_filters'] = self.request.user.actionfilter_set.all().order_by('date_created')
+        context['object_list'] = [object for object in filtered_list_view(Action, self.request.user)
+                                  if object.status in [StatusChoices.ready, StatusChoices.finished]]
         return context
 
 class ActionCreateView(LoginRequiredMixin, generic.edit.CreateView):
