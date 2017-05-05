@@ -34,9 +34,9 @@ class ProfileView(UserPassesTestMixin, generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProfileView, self).get_context_data(**kwargs)
         if self.request.user.is_authenticated():
-            context['created_actions'] = filter_list_for_privacy_annotated(
+            context['created_actions'] = filter_list_for_privacy(
                 self.object.profile.get_most_recent_actions_created(), self.request.user)
-            context['tracked_actions'] = filter_list_for_privacy_annotated(
+            context['tracked_actions'] = filter_list_for_privacy(
                 self.object.profile.get_most_recent_actions_tracked(), self.request.user)
             obj = self.get_object()
             context['total_actions'] = obj.profile.profileactionrelationship_set.count()
