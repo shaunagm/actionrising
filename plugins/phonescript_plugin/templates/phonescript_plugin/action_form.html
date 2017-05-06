@@ -1,0 +1,103 @@
+{% extends "mysite/base.html" %}
+
+{% load bootstrap3 %}
+
+{% block page_specific_javascript %}
+
+  $("#id_topic_tags, #id_type_tags").chosen({width: '100%'})
+
+  function shownewscript_constituent(count) {
+      next = count + 1;
+      id = "#con_script_" + next;
+      $(id).toggle();
+  }
+
+  function shownewscript_universal(count) {
+      next = count + 1;
+      id = "#uni_script_" + next;
+      $(id).toggle();
+  }
+
+{% endblock page_specific_javascript %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-sm-10 col-sm-offset-1">
+    <h2>{% if object %} Edit {% else %} Create {% endif %} a PhoneScript action</h2>
+    <p>With a phonescript action, you can provide a list of scripts for people to use
+      when calling Congress.  There are three different kinds of scripts you can add:</p>
+      <ul>
+        <li><b>Conditional Scripts</b>: Show people different scripts depending on things
+          about their legislator - for example, whether they're a Democrat, a Senator,
+          or for or against a given issue. People will only see scripts that apply to legislators
+          they can vote for.</li>
+        <li><b>Default Script</b>: Show a default script when a legislator doesn't match
+          any conditional scripts.  People will only see default scripts for legislators they
+          can vote for.</li>
+        <li><b>Universal Script</b>: Ask everyone, even non-constituents, to call a particular
+          legislator.</li>
+      </ul>
+    </p>
+
+      <ul class="nav nav-tabs" id="scriptoptions">
+        <li class="nav-item">
+          <a id="conditional_link" href="#conditional" data-toggle="tab" aria-expanded="false">
+            Add Conditional Scripts
+            {% if constituent_forms.is_bound and not constituent_forms.is_valid %}
+                <i class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i>
+            {% endif %}
+            </a>
+        </li>
+        <li class="nav-item">
+          <a id="default_link" href="#default" data-toggle="tab" aria-expanded="false">
+            Set a Default Script
+            {% if default_form.errors %}
+                <i class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i>
+            {% endif %}
+            </a>
+        </li>
+        <li class="nav-item">
+          <a id="universal_link" href="#universal" data-toggle="tab" aria-expanded="false">
+            Add Universal Scripts
+            {% if universal_forms.is_bound and not universal_forms.is_valid %}
+                <i class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i>
+            {% endif %}
+            </a>
+        </li>
+      </ul>
+
+      <form class="form-horizontal" action="" method="post" id="action-form">
+        {% csrf_token %}
+
+      <div class="tab-content">
+        <div class="tab-pane" id="conditional">
+          {% include "phonescript_plugin/constituent_script_include.html" with forms=constituent_forms %}
+        </div>
+        <div class="tab-pane" id="default">
+          {% include "phonescript_plugin/default_script_include.html" with form=default_form %}
+        </div>
+        <div class="tab-pane" id="universal">
+          {% include "phonescript_plugin/universal_script_include.html" with forms=universal_forms %}
+        </div>
+      </div>
+
+      <hr class="script-hr">
+
+      {% include "phonescript_plugin/action_details_include.html" with form=form %}
+
+      {% buttons %}
+          {% bootstrap_button "Cancel" button_type="link" button_class="btn-default" %}
+          {% bootstrap_button "Submit" button_type="submit" button_class="btn-primary action-submit-button" icon="star" %}
+      {% endbuttons %}
+
+      </form>
+
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block page_specific_css %}
+  {{ form.media }}
+{% endblock page_specific_css %}

@@ -1,7 +1,7 @@
 import datetime, pytz
 
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -25,6 +25,7 @@ def index(request):
 
 class ProfileView(generic.DetailView):
     template_name = 'profiles/profile.html'
+    slug_field = 'username'
     model = User
 
     def get_context_data(self, **kwargs):
@@ -51,6 +52,15 @@ class ProfileView(generic.DetailView):
 class ProfileEditView(UserPassesTestMixin, generic.UpdateView):
     model = Profile
     form_class = ProfileForm
+    slug_field = 'user'
+
+    def get_object(self, queryset=None):
+        slug = self.kwargs.get(self.slug_url_kwarg, None)
+        if slug:
+            user = User.objects.get(username=slug)
+            return Profile.objects.get(user=user)
+        else:
+            raise Http404(_(u"No user supplied to profile edit view"))
 
     def test_func(self):
         obj = self.get_object()
@@ -118,14 +128,14 @@ def toggle_relationships_helper(toggle_type, current_profile, target_profile):
         return relationship.toggle_notified_of_for_current_profile(current_profile)
 
 @login_required
-def toggle_relationships(request, pk, toggle_type):
+def toggle_relationships(request, slug, toggle_type):
     current_profile = request.user.profile
     try:
-        target_user = User.objects.get(pk=pk)
+        target_user = User.objects.get(username=slug)
     except ObjectDoesNotExist: # If the target username got borked
         return HttpResponseRedirect(reverse('index'))
     status = toggle_relationships_helper(toggle_type, current_profile, target_user.profile)
-    return HttpResponseRedirect(reverse('profile', kwargs={'pk':target_user.pk}))
+    return HttpResponseRedirect(reverse('profile', kwargs={'slug':target_user.username}))
 
 def toggle_par_helper(toggle_type, current_profile, action):
     if toggle_type == 'add':

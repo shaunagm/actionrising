@@ -25,6 +25,15 @@ class ActionView(UserPassesTestMixin, generic.DetailView):
     template_name = 'actions/action.html'
     model = Action
 
+    def get(self, request, *args, **kwargs):
+        # Check if this is a special action and, if so, redirect
+        action = self.get_object()
+        if action.special_action:
+            name = action.special_action.split("_")[0] + "_action"
+            return redirect(name, slug=action.slug)
+        else:
+            return super(ActionView, self).get(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super(ActionView, self).get_context_data(**kwargs)
         context['tag_list'] = self.object.get_tags()
@@ -46,7 +55,6 @@ class ActionListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, **kwargs):
         context = super(ActionListView, self).get_context_data(**kwargs)
         context['your_filters'] = self.request.user.actionfilter_set.all().order_by('date_created')
-        print context
         return context
 
 class PublicActionListView(generic.ListView):
@@ -58,6 +66,12 @@ class ActionCreateView(LoginRequiredMixin, generic.edit.CreateView):
     model = Action
     form_class = forms.ActionForm
 
+    def get(self, request, *args, **kwargs):
+        if not request.user.profile.verified and len(request.user.action_set.all()) > 10:
+            return render(request, 'accounts/verification_limit.html', {'actions': True})
+        else:
+            return super(ActionCreateView, self).get(request, *args, **kwargs)
+
     def get_form_kwargs(self):
         form_kws = super(ActionCreateView, self).get_form_kwargs()
         form_kws["user"] = self.request.user
@@ -67,15 +81,18 @@ class ActionCreateView(LoginRequiredMixin, generic.edit.CreateView):
     def get_success_url(self, **kwargs):
         return self.object.get_absolute_url()
 
-    def get(self, request, *args, **kwargs):
-        if not request.user.profile.verified and len(request.user.action_set.all()) > 10:
-            return render(request, 'invites/verification_limit.html', {'actions': True})
-        else:
-            return super(ActionCreateView, self).get(request, *args, **kwargs)
-
 class ActionEditView(UserPassesTestMixin, generic.edit.UpdateView):
     model = Action
     form_class = forms.ActionForm
+
+    def get(self, request, *args, **kwargs):
+        # Check if this is a special action and, if so, redirect
+        action = self.get_object()
+        if action.special_action:
+            name = "edit_" + action.special_action.split("_")[0] + "_action"
+            return redirect(name, slug=action.slug)
+        else:
+            return super(ActionEditView, self).get(request, *args, **kwargs)
 
     def test_func(self):
         obj = self.get_object()
@@ -90,7 +107,7 @@ class ActionEditView(UserPassesTestMixin, generic.edit.UpdateView):
 @login_required
 def keep_actions_open_view(request, pk):
     action = Action.objects.get(pk=pk)
-    if action.creator == request.user:
+    if action.creator == request.user or request.user.is_staff:
         action.keep_action_open()
         return render(request, 'actions/keep_open.html', context={'action': action })
     else:

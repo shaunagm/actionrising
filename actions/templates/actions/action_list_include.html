@@ -8,7 +8,7 @@
     {% get_plugin_templates "action_controls" %}
     {% include 'actions/action_controls/notes_control.html' %}
 </span>
-{% if create_filter %}
+{% if create_filter and user.is_authenticated %}
   <span class="new-filter">
     <a href={% url 'action_filter' %}>Create a customized feed of actions</a>
   </span>

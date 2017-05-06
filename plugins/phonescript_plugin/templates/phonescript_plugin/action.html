@@ -1,0 +1,40 @@
+{% extends "actions/action.html" %}
+
+{% block action_plugin_addon %}
+<div class="well" id="script_content">
+
+{% ifequal status "Anon" %}
+  You're not logged in.  You can <a href="{% url 'sign-up' %}">join the site</a>
+  and add your location to your profile, or just add a location temporarily here:
+  {% include "phonescript_plugin/location_include.html" %}
+{% endifequal %}
+
+{% ifequal status "Data Missing" %}
+  Your profile has missing or incomplete location data.  You can <a href="{{ request.user.profile.get_edit_url }}">
+    edit your profile</a> to add or fix your location, or just select a temporary location here:
+  {% include "phonescript_plugin/location_include.html" %}
+{% endifequal %}
+
+{% ifequal status "Success" %}
+    {% for script in scripts %}
+        {% include "phonescript_plugin/script_display_include.html" with script=script %}
+    {% endfor %}
+
+    <div class="row">
+      <div class="col-sm-8 col-sm-offset-4 legislator-links">
+        {% ifequal object.creator request.user %}
+          <a href="{% url 'edit_phonescript_positions' object.slug %}" class="btn btn-info">Edit Legislator Positions</a>
+        {% endifequal %}
+          <a href="{% url 'view_phonescript_positions' object.slug %}" class="btn btn-info">View Legislator Positions</a>
+      </div>
+    </div>
+
+{% endifequal %}
+
+{% ifequal status "Error" %}
+   We're sorry, there was an error.  <a href="{{ object.get_absolute_url }}">Go back to action.</a>
+{% endifequal %}
+
+
+  </div>
+{% endblock action_plugin_addon %}

@@ -20,34 +20,32 @@ from django.contrib.auth import views as auth_views
 from mysite import views
 
 urlpatterns = [
+
+    # Site info pages
     url(r'^learn-more/?$', views.LearnMoreView.as_view(), name='learn-more'),
-    url(r'^login/$', auth_views.login, {'template_name': 'profiles/login.html'}, name='login'),
-    url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
-    url(r'^password/$', auth_views.password_change, {'template_name': 'mysite/password.html'}, name='password_reset'),
-    url(r'^password/changed$', views.change_password_redirect, name='password_change_done'),
-    url(r'^password_reset/$', auth_views.password_reset, { 'html_email_template_name': 'registration/password_reset_email.html' }, name='password_reset'),
-    url(r'^password_reset/done/$', auth_views.password_reset_done, name='password_reset_done'),
-    url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-        auth_views.password_reset_confirm, name='password_reset_confirm'),
-    url(r'^reset/done/$', auth_views.password_reset_complete, name='password_reset_complete'),
     url(r'^privacy-policy$', views.PrivacyPolicyView.as_view(), name='privacy-policy'),
-    url(r'^profiles/', include('profiles.urls')),
+    url(r'^about/?$', views.about, name='about'),
+
+    # Links to apps
     url(r'^actions/', include('actions.urls')),
+    url(r'^profiles/', include('profiles.urls')),
+    url(r'^accounts/', include('accounts.urls')),
+    url(r'^specialactions/', include('plugins.urls')),
     url(r'^slates/', include('slates.urls')),
     url(r'^tags/', include('tags.urls')),
     url(r'^flags/', include('flags.urls')),
     url(r'^blog/', include('blog.urls')),
     url(r'^notifications/', include('notifications.urls')),
     url(r'^comments/', include('django_comments.urls')),
-    url(r'^invites/', include('invites.urls')),
     url(r'^commitments/', include('commitments.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^about/?$', views.about, name='about'),
-    url(r'^.well-known/acme-challenge/MdzRdJXytZiBN7PYPMUbU6HjvFP2aUDEN8saHRXGBCY', views.acme_challenge),
-    url(r'^.well-known/acme-challenge/-_rzqfR-Q9sDxQqiKrK8naLr7nwmaCU2RbYS-hN-_Lc', views.acme_challenge2),
-    url(r'^$', views.index, name='index'),
+
+    # Third party apps
     url(r'^django-rq/', include('django_rq.urls')),
     url('^activity/', include('actstream.urls')),
+
+    # Index
+    url(r'^$', views.index, name='index'),
 ]
 
 handler404 = 'mysite.views.custom_404'

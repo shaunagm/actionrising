@@ -3,7 +3,7 @@
 {% load bootstrap3 %}
 
 {% block page_specific_javascript %}
-$("#id_topic_tags, #id_type_tags, #id_goal_tags").chosen()
+$("#id_topic_tags, #id_type_tags, #id_goal_tags, #id_slates").chosen()
 {% endblock page_specific_javascript %}
 
 {% block content %}
@@ -13,17 +13,21 @@ $("#id_topic_tags, #id_type_tags, #id_goal_tags").chosen()
     <h2>{% if object %} Edit {% else %} Create {% endif %}action</h2>
     <p>An action is any kind of task a user can do, from attending a protest to
     calling a representative to reading a resource to volunteering in their neighborhood.</p>
+    <p>Creating a phone campaign action?  Use our
+      <a href="{% url 'create_phonescript_action' %}" class="text-emphasis">phonescript action form</a>.</p>
   </div>
 </div>
 
 <div class="row">
   <div class="col-sm-10">
+
     <form class="form-horizontal" action="" method="post" id="action-form">
       {% csrf_token %}
       {% bootstrap_form form layout='horizontal' %}
       {% buttons %}
         <div class="col-md-10 col-md-offset-2">
-          {% bootstrap_button "Cancel" button_type="link" button_class="btn-default" %}
+
+          <a class="btn btn-default" href="{{ request.META.HTTP_REFERER }}">Cancel</a>
           {% bootstrap_button "Submit" button_type="submit" button_class="btn-primary action-submit-button" icon="star" %}
         </div>
       {% endbuttons %}

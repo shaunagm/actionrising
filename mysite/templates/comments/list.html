@@ -1,7 +1,7 @@
 <dl id="comments">
   {% for comment in comment_list %}
     <dt id="c{{ comment.id }}">
-      {{ comment.submit_date }} by <a href="{% url 'profile' pk=comment.user.pk %}">{{ comment.name }}</a>
+      {{ comment.submit_date }} by <a href="{% url 'profile' slug=comment.user.username %}">{{ comment.name }}</a>
     </dt>
     <dd>
       <p>{{ comment.comment }}</p>

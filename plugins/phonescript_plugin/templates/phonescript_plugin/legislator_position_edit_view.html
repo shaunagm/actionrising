@@ -1,0 +1,55 @@
+{% extends "actions/action.html" %}
+
+{% block action_plugin_addon %}
+
+<h3>Edit Legislator Positions</h3>
+
+  <a href="{% url 'mass_edit_position' slug=action.slug partysplit='demfor' %}" class="btn btn-warning massbutton">
+    Mark all Dems as 'for' / GOP as 'against'</a>
+  <a href="{% url 'mass_edit_position' slug=action.slug partysplit='demagainst' %}" class="btn btn-warning massbutton">
+    Mark all Dems as 'against' / GOP as 'for'</a>
+
+<!-- Name included to fix FF select issue: http://stackoverflow.com/a/12650918  -->
+  <form id="legislator_position" name="legislator_position" method="POST">
+
+    {% csrf_token %}
+
+    <button type="submit" class="btn btn-success btn-default legbutton">Save changes</button>
+
+    {% for field in form %}
+
+        {{ field }}
+
+        {% cycle 'legislator' 'position' 'notes' as field_type silent %}
+        {% ifequal field_type 'notes' %}
+        <br />
+        {% endifequal %}
+
+    {% endfor %}
+
+  </form>
+
+{% endblock action_plugin_addon %}
+
+
+{% block page_specific_javascript %}
+
+  <!-- This code means we only post changed data. -->
+
+  $('[name="csrfmiddlewaretoken"]').addClass( "changedData" );
+
+  var myFunction = function() { $(this).addClass( "changedData" ) };
+  $("form select, form input").each(function() {
+      this.addEventListener('change', myFunction, false);
+  });
+
+  $('#legislator_position').submit(function() {
+    $("form select, form input, form label").each(function() {
+      if ($(this).hasClass("changedData")) {
+      } else {
+        $(this).attr("disabled", "disabled");
+      }
+    });
+  })
+
+{% endblock page_specific_javascript %}

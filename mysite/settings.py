@@ -50,15 +50,16 @@ INSTALLED_APPS = [
     'bootstrap3',
     'profiles',
     'actions',
+    'accounts',
     'misc',
     'slates',
     'tags',
     'flags',
     'notifications',
-    'invites',
     'commitments',
     'blog',
     'plugins.location_plugin',
+    'plugins.phonescript_plugin',
     'functional_tests',
     'django_comments',
     'ckeditor',
@@ -75,6 +76,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Custom
+    'mysite.middleware.middleware.TimezoneMiddleware',
 ]
 
 ROOT_URLCONF = 'mysite.urls'
@@ -246,5 +249,15 @@ RQ_QUEUES = {
         # 'HOST': 'localhost',
         # 'PORT': 6379,
         # 'DB': 0,
+    }
+}
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
+
+# Caches!
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'my_cache_table',
     }
 }

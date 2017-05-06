@@ -63,19 +63,19 @@ class Profile(models.Model):
         return self.user.username
 
     def get_absolute_url(self):
-        return reverse('profile', kwargs={'pk': self.user.pk })
+        return reverse('profile', kwargs={'slug': self.user.username})
 
     def get_absolute_url_with_domain(self):
         return PRODUCTION_DOMAIN + self.get_absolute_url()
 
     def get_edit_url(self):
-        return reverse('edit_profile', kwargs={'pk': self.pk })
+        return reverse('edit_profile', kwargs={'slug': self.user.username })
 
     def get_edit_url_with_domain(self):
         return PRODUCTION_DOMAIN + self.get_edit_url()
 
     def get_suggestion_url_with_domain(self):
-        return PRODUCTION_DOMAIN + reverse('suggested', kwargs={'pk': self.user.pk })
+        return PRODUCTION_DOMAIN + reverse('suggested', kwargs={'slug': self.user })
 
     def refresh_current_privacy(self):
         if self.privacy == PrivacyChoices.inherit:
@@ -236,6 +236,11 @@ def create_user_profile(sender, instance, created, **kwargs):
         PrivacyDefaults.objects.create(profile=profile)
         NotificationSettings.objects.create(user=instance)
         DailyActionSettings.objects.create(user=instance)
+        # Add Location creation here, since signals aren't working for some reason
+        from plugins.location_plugin.models import Location
+        from django.contrib.contenttypes.models import ContentType
+        ctype = ContentType.objects.get_for_model(Profile)
+        location = Location.objects.create(content_type=ctype, object_id=profile.pk)
 post_save.connect(create_user_profile, sender=User)
 
 class Relationship(models.Model):

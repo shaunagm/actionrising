@@ -1,0 +1,36 @@
+{% load bootstrap3 %}
+
+{% ifequal count 1 %}
+  <div class="row script" id="con_script_{{count}}">
+{% else %}
+  <div class="row script collapse" id="con_script_{{count}}">
+{% endifequal %}
+
+  <div class="col-sm-12">
+      <h3>Constituent Script {{count}}</h3>
+
+      {% bootstrap_field form.content layout='horizontal' %}
+
+      {% bootstrap_field form.priority layout='horizontal' %}
+
+      <h4>Conditions</h4>
+
+      <div class="row">
+        <div class="col-sm-4">
+          {% bootstrap_field form.rep_type layout='horizontal' %}
+        </div>
+        <div class="col-sm-4">
+          {% bootstrap_field form.party layout='horizontal' %}
+        </div>
+        <div class="col-sm-4">
+          {% bootstrap_field form.position layout='horizontal' %}
+        </div>
+      </div>
+
+      {% for hidden in form.hidden_fields %}
+          {{ hidden }}
+      {% endfor %}
+
+      <a onclick=shownewscript_constituent({{count}})>Add another script</a>
+  </div>
+</div>

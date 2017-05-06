@@ -35,7 +35,7 @@
               Account <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu" id="account_dropdown_menu">
-              <li><a href="{% url 'profile' request.user.pk %}">Profile</a></li>
+              <li><a href="{{ request.user.profile.get_absolute_url }}">Profile</a></li>
               <li><a href="{% url 'settings' %}">Settings</a></li>
               <li><a href="{% url 'logout' %}" class="log_button">Log Out</a></li>
             </ul>

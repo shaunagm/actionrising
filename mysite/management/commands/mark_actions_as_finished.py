@@ -23,6 +23,8 @@ class Command(BaseCommand):
                         action.save()
                         if action.creator.email:
                             email_handlers.close_action_email(action.creator.profile, action)
+                            message = "<a href='%s'>%s</a>" % (action.get_keep_open_url_with_domain(), action.title)
+                            email_handlers.generic_admin_email("Action closed", message)
             print("Actions marked as finished")
         except:
             raise CommandError("Failure marking actions as finished")

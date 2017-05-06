@@ -11,7 +11,6 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericRelation
 
 from ckeditor.fields import RichTextField
-from plugins import plugin_helpers
 from mysite.settings import PRODUCTION_DOMAIN
 from mysite.lib.choices import PrivacyChoices, PriorityChoices, StatusChoices, TimeChoices
 from mysite.lib.utils import disable_for_loaddata, slug_validator, slugify_helper
@@ -45,6 +44,7 @@ class Action(models.Model):
 
     # Related models
     flags = GenericRelation('flags.Flag')
+    special_action = models.CharField(max_length=30, blank=True, null=True)
 
     def __unicode__(self):
         return self.title
@@ -251,6 +251,7 @@ class ActionFilter(models.Model):
         if self.friends:
             friend_ids = [user.id for user in self.creator.profile.get_people_tracking()]
             current_queryset = current_queryset.filter(creator__in=friend_ids)
+        from plugins import plugin_helpers
         current_queryset = plugin_helpers.run_filters_for_plugins(self, current_queryset)
         return current_queryset
 
@@ -264,6 +265,7 @@ class ActionFilter(models.Model):
             strings.append(self.get_time_string())
         if self.friends:
             strings.append("created by friends only")
+        from plugins import plugin_helpers
         plugin_strings = plugin_helpers.get_plugin_field_strings(self)
         if plugin_strings:
             strings += plugin_strings
