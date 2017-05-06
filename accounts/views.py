@@ -6,6 +6,9 @@ from django.contrib.auth.models import User
 from django.views import generic
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_text
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+from social_django.models import UserSocialAuth
 
 from accounts.lib.tokens import account_activation_token
 from accounts.forms import SignUpForm
@@ -43,3 +46,27 @@ def confirmation(request, uidb64, token):
 
 def change_password_redirect(request):
     return HttpResponseRedirect(reverse('index'))
+
+class SettingsView(LoginRequiredMixin, generic.TemplateView):
+    template_name = 'accounts/account_settings.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(SettingsView, self).get_context_data(**kwargs)
+        user = self.request.user
+        try:
+            context['twitter_login'] = user.social_auth.get(provider='twitter')
+        except UserSocialAuth.DoesNotExist:
+            pass
+        try:
+            context['facebook_login'] = user.social_auth.get(provider='facebook')
+        except UserSocialAuth.DoesNotExist:
+            pass
+        try:
+            context['google_login'] = user.social_auth.get(provider='google-oauth2')
+        except UserSocialAuth.DoesNotExist:
+            pass
+
+        if user.social_auth.count() > 1 or (user.has_usable_password() and user.email):
+            context['can_disconnect'] = True
+
+        return context

@@ -1,0 +1,38 @@
+{% extends "mysite/base.html" %}
+
+{% block title %} {{ object.username }} | ActionRising{% endblock %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-sm-5 col-sm-offset-1">
+    <div class="well">
+      <h3>Access Settings</h3>
+
+      {% if user.has_usable_password %}
+        <a href="{% url 'password_change' %}" class="btn btn-success" id="password-button">
+          Change your password</a>
+      {% else %}
+        <a href="{% url 'password_set' %}" class="btn btn-success" id="password-button">
+          Set your password</a>
+      {% endif %}
+
+      {% include 'accounts/linked_accounts.html' %}
+
+    </div>
+  </div>
+  <div class="col-sm-5">
+    <div class="well">
+    <h2>Notification Settings</h2>
+    <a href="{% url 'manage_notifications' user.notificationsettings.pk %}"
+      id="manage-notifications-button" class="btn btn-success">
+      Change email notifications</a>
+      <br />
+    <a href="{% url 'daily_action' user.dailyactionsettings.pk %}"
+      id="manage-notifications-button" class="btn btn-success">
+      Customize your daily actions</a>
+  </div>
+</div>
+</div>
+
+{% endblock content %}

@@ -10,7 +10,6 @@ urlpatterns = [
     url(r'^todo/$', views.ToDoView.as_view(), name='to_do'),
     url(r'^feed/$', views.FeedView.as_view(), name='feed'),
     url(r'^activity/$', views.ActivityView.as_view(), name='activity'),
-    url(r'^settings/$', views.SettingsView.as_view(), name='settings'),
     url(r'^suggested/(?P<slug>[-\w]+)$', views.ProfileSuggestedView.as_view(), name='suggested'),
     url(r'^edit/(?P<slug>[-\w]+)$', views.ProfileEditView.as_view(), name='edit_profile'),
     url(r'^toggle/(?P<slug>[-\w]+)/(?P<toggle_type>[-\w]+)$', views.toggle_relationships, name='toggle_relationships'),
