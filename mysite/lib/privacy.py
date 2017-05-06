@@ -73,8 +73,8 @@ def check_privacy_given_setting(privacy_setting, object, user):
 
 def get_privacy_setting(object):
     '''Gets relevant privacy setting for object'''
-    if hasattr(object, 'privacy') and object.privacy != PrivacyChoices.inherit:
-        return object.privacy
+    if hasattr(object, 'current_privacy'):
+        return object.current_privacy
     return get_global_privacy_default(object)
 
 def check_privacy(object, user):

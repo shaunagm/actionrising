@@ -23,13 +23,9 @@ from profiles.forms import ProfileForm, ProfileActionRelationshipForm
 def index(request):
     return HttpResponseRedirect(reverse('profiles'))
 
-class ProfileView(UserPassesTestMixin, generic.DetailView):
+class ProfileView(generic.DetailView):
     template_name = 'profiles/profile.html'
     model = User
-
-    def test_func(self):
-        obj = self.get_object()
-        return check_privacy(obj.profile, self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super(ProfileView, self).get_context_data(**kwargs)
@@ -43,6 +39,7 @@ class ProfileView(UserPassesTestMixin, generic.DetailView):
             context['percent_finished'] = obj.profile.get_percent_finished()
             context['action_streak_current'] = obj.profile.get_action_streak()
             context['friends'] = obj.profile.get_list_of_relationships()
+            context['visible_to_user'] = check_privacy(obj.profile, self.request.user)
             current_profile = self.request.user.profile
             relationship = current_profile.get_relationship_given_profile(obj.profile)
             if relationship:
