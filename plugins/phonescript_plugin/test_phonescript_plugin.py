@@ -133,10 +133,13 @@ class TestPhoneScriptLib(TestCase):
         self.testing_user = User.objects.create(username="testing_user")
         self.action = Action.objects.create(title="ActionX", creator=self.testing_user)
         self.user_with_location = User.objects.create(username="glorificus")
-        # Create location for user
+        # Update location for user
         ctype = ContentType.objects.get_for_model(self.user_with_location.profile)
-        self.location = Location.objects.create(content_type=ctype, object_id=self.user_with_location.profile.pk,
-            location="Somerville, MA", district="7", state="MA")
+        self.location = Location.objects.get(content_type=ctype, object_id=self.user_with_location.profile.pk)
+        self.location.location = "Somerville, MA"
+        self.location.district = "7"
+        self.location.state = "MA"
+        self.location.save()
 
     def test_get_legislators(self):
         leg = Legislator.objects.all()

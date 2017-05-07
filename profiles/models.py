@@ -258,6 +258,11 @@ def create_user_profile(sender, instance, created, **kwargs):
         PrivacyDefaults.objects.create(profile=profile)
         NotificationSettings.objects.create(user=instance)
         DailyActionSettings.objects.create(user=instance)
+        # Add Location creation here, since signals aren't working for some reason
+        from plugins.location_plugin.models import Location
+        from django.contrib.contenttypes.models import ContentType
+        ctype = ContentType.objects.get_for_model(Profile)
+        location = Location.objects.create(content_type=ctype, object_id=profile.pk)
 post_save.connect(create_user_profile, sender=User)
 
 class Relationship(models.Model):

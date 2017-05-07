@@ -67,7 +67,7 @@ class ActionCreateView(LoginRequiredMixin, generic.edit.CreateView):
 
     def get(self, request, *args, **kwargs):
         if not request.user.profile.verified and len(request.user.action_set.all()) > 10:
-            return render(request, 'invites/verification_limit.html', {'actions': True})
+            return render(request, 'accounts/verification_limit.html', {'actions': True})
         else:
             return super(ActionCreateView, self).get(request, *args, **kwargs)
 

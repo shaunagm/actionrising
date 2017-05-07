@@ -24,7 +24,7 @@ class TestBasics(SeleniumTestCase):
         landing_page = LoggedOutLandingPage(self.browser, root_uri=self.live_server_url)
         landing_page.go_to_index_if_necessary()
         landing_page.signup.click()
-        self.assertEquals(landing_page.w.current_url[-15:], "invites/sign-up")
+        self.assertEquals(landing_page.w.current_url[-16:], "accounts/sign-up")
 
     def test_logged_in_landing_page(self):
         landing_page = LoggedInLandingPage(self.browser, root_uri=self.live_server_url)

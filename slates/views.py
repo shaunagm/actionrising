@@ -64,7 +64,7 @@ class SlateCreateView(LoginRequiredMixin, generic.edit.CreateView):
 
     def get(self, request, *args, **kwargs):
         if not request.user.profile.verified and len(request.user.slate_set.all()) > 5:
-            return render(request, 'invites/verification_limit.html', {'slates': True})
+            return render(request, 'accounts/verification_limit.html', {'slates': True})
         else:
             return super(SlateCreateView, self).get(request, *args, **kwargs)
 
