@@ -375,8 +375,8 @@
         "description": null,
         "links": null,
         "date_joined": "2016-11-22T04:14:02.912Z",
-        "privacy": "inherit",
-        "current_privacy": "follows"
+        "privacy": "sitewide",
+        "current_privacy": "sitewide"
     }
 },
 {
@@ -420,8 +420,8 @@
         "description": "",
         "links": "",
         "date_joined": "2016-12-02T14:58:39Z",
-        "privacy": "inherit",
-        "current_privacy": "sitewide"
+        "privacy": "public",
+        "current_privacy": "public"
     }
 },
 {
@@ -1001,7 +1001,7 @@
         ],
         "description": "",
         "status": "ready",
-        "privacy": "inherit",
+        "privacy": "sitewide",
         "current_privacy": "sitewide",
         "date_created": "2016-12-02T21:42:10Z"
     }
@@ -1018,7 +1018,39 @@
         "description": "",
         "status": "ready",
         "privacy": "public",
-        "current_privacy": "sitewide",
+        "current_privacy": "public",
+        "date_created": "2016-12-02T21:43:05Z"
+    }
+},
+{
+    "model": "slates.slate",
+    "pk": 313,
+    "fields": {
+        "slug": "buffy-can-see-slate",
+        "title": "Slate Buffy Can See",
+        "creator": [
+            "thewitch"
+        ],
+        "description": "",
+        "status": "ready",
+        "privacy": "follows",
+        "current_privacy": "follows",
+        "date_created": "2016-12-02T21:43:05Z"
+    }
+},
+{
+    "model": "slates.slate",
+    "pk": 314,
+    "fields": {
+        "slug": "buffy-cannot-see-slate",
+        "title": "Slate Buffy Cannot See",
+        "creator": [
+            "tara_m"
+        ],
+        "description": "",
+        "status": "ready",
+        "privacy": "follows",
+        "current_privacy": "follows",
         "date_created": "2016-12-02T21:43:05Z"
     }
 },

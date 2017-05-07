@@ -108,7 +108,11 @@ class ProfileSearchView(generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ProfileSearchView, self).get_context_data(**kwargs)
-        context['object_list'] = [profile.user for profile in filtered_list_view(Profile, self.request.user)]
+        if self.request.user.is_authenticated():
+            context['object_list'] = [profile.user for profile in Profile.objects.all()]
+        else:
+            context['object_list'] = [profile.user for profile in
+                                      Profile.objects.filter(current_privacy=PrivacyChoices.public)]
         return context
 
 class FeedView(LoginRequiredMixin, generic.TemplateView):

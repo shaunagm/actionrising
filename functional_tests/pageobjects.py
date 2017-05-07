@@ -122,10 +122,7 @@ class BasicActionListPage(BaseListPage):
                 link.click()
 
     def get_actions(self):
-        actions = []
-        for action in self.action_tds:
-            actions.append(action.text)
-        return actions
+        return [action.text for action in self.action_tds]
 
 class SlateActionsListPage(BasicActionListPage):
 
@@ -142,9 +139,14 @@ class SlateListPage(BaseListPage):
     first_row_slate = PageElement(css=".odd > td.title")
     first_row_creator = PageElement(css=".odd > td.creator")
     first_row_action_count = PageElement(css=".odd > td.size")
+    slate_tds = MultiPageElement(css=".main-list tbody tr > td.title")
 
     def go_to_default_slates_page(self):
         self.w.get(self.root_uri + "/slates/slates")
+
+    def get_slates(self):
+        return [slate.text for slate in self.slate_tds]
+
 
 class BaseObjectDetailPage(BasePage):
     creator = PageElement(id_="created_by")

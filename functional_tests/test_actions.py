@@ -3,9 +3,6 @@ import time
 from .base import SeleniumTestCase
 from .pageobjects import BasicActionListPage, BasicActionDetailPage
 from profiles.models import Profile, ProfileActionRelationship
-from selenium import webdriver
-
-driver = webdriver.Chrome()
 
 default_user = "buffysummers"
 default_password = "apocalypse"

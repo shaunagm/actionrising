@@ -172,7 +172,7 @@ class LoggedOutUser(SeleniumTestCase):
         self.assertEquals(self.landing_page.signup.text, "Sign Up")
         self.landing_page.public_actions.click()
         self.actions_table = BasicActionListPage(self.browser, root_uri=self.live_server_url)
-        self.actions_table.return_to_default_actions_page():
+        self.actions_table.return_to_default_actions_page()
         self.wait_helper()
         self.actions_table.first_row_action.click()
         self.action_page = BasicActionDetailPage(self.browser, root_uri=self.live_server_url)

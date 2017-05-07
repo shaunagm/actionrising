@@ -101,11 +101,11 @@ class Slate(models.Model):
 
     @classmethod
     def default_order_field(self):
-        return '-date_created'
+        return 'date_created'
 
     @classmethod
     def default_sort(self, items):
-        return sorted(items, key = lambda x: getattr(x, 'date_created'), reverse = True)
+        return sorted(items, key = lambda x: getattr(x, 'date_created'))
 
 
 @disable_for_loaddata

@@ -49,7 +49,7 @@ class TestProfileMethods(TestCase):
         relationship = self.buffy.profile.get_relationship(self.buffy.profile)
         self.assertIsNone(relationship)
 
-    def test_get_relationship_given_profile_when_no_relationship_exists(self):
+    def test_get_relationship_when_no_relationship_exists(self):
         relationship = self.buffy.profile.get_relationship(self.lorne.profile)
         self.assertIsNone(relationship)
 
