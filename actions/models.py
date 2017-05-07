@@ -110,7 +110,7 @@ class Action(models.Model):
             self.current_privacy = self.privacy
         self.save()
 
-    def get_creator(self):
+    def get_visible_creator(self):
         if self.anonymize:
             return "Anonymous"
         else:
@@ -167,11 +167,11 @@ class Action(models.Model):
 
     @classmethod
     def default_order_field(self):
-        return '-date_created'
+        return 'date_created'
 
     @classmethod
     def default_sort(self, items):
-        return sorted(items, key = lambda x: getattr(x, 'date_created'), reverse = True)
+        return sorted(items, key = lambda x: getattr(x, 'date_created'))
 
 
 @disable_for_loaddata
@@ -179,12 +179,9 @@ def action_handler(sender, instance, created, **kwargs):
     if not created and (timezone.now() - instance.date_created).seconds < 600:
         return  # Don't show updated if the action was created in the last ten minutes
     verb_to_use = "created" if created else "updated"
-    if instance.get_creator() == "Anonymous":
-        # TODO: This is still going to be a problem if you change anonymity after creation,
-        # we'll need to break some of the following links after anonymizing.
-        action.send(instance, verb="was "+verb_to_use)
-    else:
-        action.send(instance.creator, verb=verb_to_use, target=instance)
+    # TODO: This is still going to be a problem if you change anonymity after creation,
+    # we'll need to break some of the following links after anonymizing.
+    action.send(instance.get_visible_creator(), verb=verb_to_use, target=instance)
 post_save.connect(action_handler, sender=Action)
 
 class ActionFilter(models.Model):

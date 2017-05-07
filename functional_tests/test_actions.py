@@ -3,9 +3,29 @@ import time
 from .base import SeleniumTestCase
 from .pageobjects import BasicActionListPage, BasicActionDetailPage
 from profiles.models import Profile, ProfileActionRelationship
+from selenium import webdriver
+
+driver = webdriver.Chrome()
 
 default_user = "buffysummers"
 default_password = "apocalypse"
+
+class TestPublicActionList(SeleniumTestCase):
+
+    def setUp(self):
+        super(TestPublicActionList, self).setUp()
+        self.actions_table = BasicActionListPage(self.browser, root_uri=self.live_server_url)
+        self.actions_table.go_to_default_actions_page_if_necessary()
+        self.actions = self.actions_table.get_actions()
+
+    def test_public_action_shows(self):
+        self.assertTrue("Public Test Action" in self.actions)
+
+    def test_sitewide_action_hidden(self):
+        self.assertFalse("Sitewide Test Action" in self.actions)
+
+    def test_protected_action_hidden(self):
+        self.assertFalse("Buffy Can See" in self.actions)
 
 class TestActionList(SeleniumTestCase):
 
@@ -18,11 +38,21 @@ class TestActionList(SeleniumTestCase):
     def test_display_actions(self):
         self.assertTrue(self.actions_table.datatables_js_is_enabled())
         self.assertEquals(len(self.actions_table.columns), 4)
-        self.assertEquals(len(self.actions_table.rows), 5)
-        self.assertEquals(self.actions_table.first_row_date.text, "Fri Jan 06")
-        self.assertEquals(self.actions_table.first_row_action.text, "An Action In Sacramento")
+        self.assertEquals(self.actions_table.first_row_date.text, "Sat Apr 22")
+        self.assertEquals(self.actions_table.first_row_action.text, "Anonymous Action")
         self.assertEquals(self.actions_table.first_row_tracker_count.text, "0")
         self.assertEquals(len(self.actions_table.labels), 4)
+        actions = self.actions_table.get_actions()
+        self.assertTrue("Public Test Action" in actions)
+        self.assertTrue("Sitewide Test Action" in actions)
+        self.assertTrue("Tara's Public Action" in actions)
+        self.assertTrue("Faith's Public Action" in actions)
+        self.assertTrue("Buffy Can See" in actions)
+        self.assertFalse("Buffy Cannot See" in actions)
+        self.assertTrue("Do Bad Stuff" in actions)
+        # withdrawn
+        self.assertFalse("An Unproductive Action" in actions)
+        self.assertTrue("Anonymous Action" in actions)
 
     # def test_filter_actions_by_status(self):
     #     self.actions_table.active_only.click()
@@ -31,13 +61,21 @@ class TestActionList(SeleniumTestCase):
 
     def test_filter_actions_by_friends(self):
         self.actions_table.friends_only.click()
-        self.assertEquals(len(self.actions_table.rows), 2)
-        self.assertEquals(self.actions_table.first_row_action.text, "Donate to Planned Parenthood")
+        actions = self.actions_table.get_actions()
+        # no relationship between vampire and buffy
+        self.assertFalse("Do Bad Stuff" in actions)
+        # faith follows buffy
+        self.assertFalse("Faith's Public Action" in actions)
+        # buffy and thewitch follow each other
+        self.assertTrue("Buffy Can See" in actions)
+        # buffy follows tara
+        self.assertTrue("Tara's Public Action" in actions)
+        self.assertFalse("Anonymous Action" in actions)
 
     def test_filter_actions_by_priority(self):
         self.actions_table.select_priority("Emergency")
-        self.assertEquals(len(self.actions_table.rows), 1)
-        self.assertEquals(self.actions_table.first_row_action.text, "Denounce Trump's proposed appointment of Steve Bannon")
+        self.assertEquals(len(self.actions_table.rows), 8)
+        self.assertEquals(self.actions_table.first_row_action.text, "Anonymous Action")
         self.actions_table.select_priority("High")
         self.assertEquals(len(self.actions_table.rows), 1)
         self.assertEquals(self.actions_table.first_row_action.text, "Sign petition to make Boston a sanctuary city")
@@ -48,12 +86,12 @@ class TestActionList(SeleniumTestCase):
         self.assertEquals(len(self.actions_table.rows), 1)
         self.assertEquals(self.actions_table.first_row_action.text, "Join the site")
         self.actions_table.select_priority("All")
-        self.assertEquals(len(self.actions_table.rows), 5)
-        self.assertEquals(self.actions_table.first_row_action.text, "An Action In Sacramento")
+        self.assertEquals(len(self.actions_table.rows), 12)
+        self.assertEquals(self.actions_table.first_row_action.text, "Anonymous Action")
 
     def test_filter_actions_by_location_for_user_with_state_and_district(self):
-        self.assertEquals(len(self.actions_table.rows), 5)
-        self.assertEquals(self.actions_table.first_row_action.text, "An Action In Sacramento")
+        self.assertEquals(len(self.actions_table.rows), 12)
+        self.assertEquals(self.actions_table.first_row_action.text, "Anonymous Action")
         # Sort by district
         self.actions_table.select_location("My District")
         self.assertEquals(len(self.actions_table.rows), 1)
@@ -69,8 +107,8 @@ class TestActionList(SeleniumTestCase):
         self.assertEquals(self.actions_table.first_row_action.text, "Join the site")
         # Back to all
         self.actions_table.select_location("Anywhere")
-        self.assertEquals(len(self.actions_table.rows), 5)
-        self.assertEquals(self.actions_table.first_row_action.text, "An Action In Sacramento")
+        self.assertEquals(len(self.actions_table.rows), 12)
+        self.assertEquals(self.actions_table.first_row_action.text, "Anonymous Action")
 
     # TODO add test for filter by deadline (will need a factory or something to generate
     # the right deadline data, the fixtures will quickly go out of date)
@@ -93,6 +131,10 @@ class TestActionDetail(SeleniumTestCase):
         self.assertEquals(self.action_page.priority.text, "Emergency priority")
         self.assertEquals(self.action_page.privacy.text, "Visible Sitewide")
         self.assertEquals(self.action_page.status.text, "Open for action")
+
+    def test_anonymous_action_detail(self):
+        self.action_page.go_to_detail_page(title="Anonymous Action")
+        self.assertEquals(self.action_page.creator.text, "Created anonymously")
 
     def test_action_tracking_display(self):
         self.action_page.display_tracker_link.click()
@@ -147,3 +189,22 @@ class TestActionDetail(SeleniumTestCase):
         self.assertEqual(self.action_page.accepted_trackers[0].text, "Willow")
         self.assertEquals(len(self.action_page.done_trackers), 2)
         self.assertEqual(self.action_page.done_trackers[0].text, "Buffy Summers")
+
+class TestShareAction(SeleniumTestCase):
+
+    def setUp(self):
+        super(TestShareAction, self).setUp()
+        self.action_page = BasicActionDetailPage(self.browser, root_uri=self.live_server_url)
+        self.action_page.log_in(default_user, default_password)
+
+    def test_share_public_action(self):
+        self.action_page.go_to_detail_page(title="Public Test Action")
+        self.assertIsNotNone(self.action_page.share)
+
+    def test_share_sitewide_action(self):
+        self.action_page.go_to_detail_page(title="Sitewide Test Action")
+        self.assertEqual(self.action_page.share, None)
+
+    def test_share_follows_action(self):
+        self.action_page.go_to_detail_page(title="Buffy Can See")
+        self.assertEqual(self.action_page.share, None)

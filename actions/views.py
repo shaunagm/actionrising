@@ -41,6 +41,7 @@ class ActionView(UserPassesTestMixin, generic.DetailView):
         if self.request.user.is_authenticated():
             context['par'] = self.request.user.profile.get_par_given_action(self.object)
         context['flag'] = get_user_flag_if_exists(self.object, self.request.user)
+        context['anonymous'] = self.get_object().anonymize
         return context
 
     def test_func(self):

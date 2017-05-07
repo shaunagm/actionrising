@@ -31,12 +31,13 @@ def filtered_list_view(model, user):
     model: a model like Profile, Action, or Slate
     user: the current authenticated user
     returns: [object]
-    Gets the objects of model that user is allowed to see'''
+    Gets the objects of model that user is allowed to see.'''
     if user.is_authenticated():
-        unconditional = model.objects.filter(privacy__in=[PrivacyChoices.public, PrivacyChoices.sitewide])
-        followed = [profile.pk for profile in user.profile.get_people_user_follows()]
-        visible_followed = [object for object in model.objects.filter(privacy=PrivacyChoices.follows)
-                                   if object.get_creator() is user or object.get_creator() in followed]
-        return model.default_sort(list(unconditional) + visible_followed)
+        objects = model.objects.all()
+        follows_user = [profile.get_creator() for profile in user.profile.get_followers()]
+        visible = [object for object in objects
+                   if object.current_privacy in [PrivacyChoices.public, PrivacyChoices.sitewide]
+                   or (object.get_creator() is user or object.get_creator() in follows_user)]
+        return model.default_sort(visible)
     else:
-        return list(model.objects.filter(privacy=PrivacyChoices.public).order_by(model.default_order_field()))
+        return list(model.objects.filter(current_privacy=PrivacyChoices.public).order_by(model.default_order_field()))

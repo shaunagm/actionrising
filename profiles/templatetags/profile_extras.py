@@ -14,6 +14,13 @@ def get_friendslist(context):
     return []
 
 @register.assignment_tag(takes_context=True)
+def get_following_list(context):
+    user = context['request'].user
+    if user.is_authenticated():
+        return [profile.user for profile in user.profile.get_people_user_follows()]
+    return []
+
+@register.assignment_tag(takes_context=True)
 def filtered_feed(context, action):
     viewer = context['request'].user
     actor_ok = check_privacy(action.actor.profile, viewer)

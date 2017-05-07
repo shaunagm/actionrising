@@ -126,6 +126,24 @@
     }
 },
 {
+    "model": "auth.user",
+    "pk": 308,
+    "fields": {
+        "password": "pbkdf2_sha256$30000$LFaiw90fHYjX$cOXd0WQNTJQV82ruk/aNRgwzMQbwpuiR5YOxkCNpBHc=",
+        "last_login": "2017-01-25T05:52:02.006Z",
+        "is_superuser": true,
+        "username": "vampire",
+        "first_name": "Vampire",
+        "last_name": "Jones",
+        "email": "shaunagm@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2016-12-02T15:01:21Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
     "model": "sessions.session",
     "pk": "2pkofjprw50cbttjsmxcj0o826eb61g9",
     "fields": {
@@ -318,6 +336,21 @@
 },
 {
     "model": "profiles.profile",
+    "pk": 309,
+    "fields": {
+        "user": [
+            "vampire"
+        ],
+        "verified": true,
+        "description": "",
+        "links": null,
+        "date_joined": "2016-11-22T04:14:02.912Z",
+        "privacy": "follows",
+        "current_privacy": "follows"
+    }
+},
+{
+    "model": "profiles.profile",
     "pk": 6,
     "fields": {
         "user": [
@@ -388,7 +421,7 @@
         "links": "",
         "date_joined": "2016-12-02T14:58:39Z",
         "privacy": "inherit",
-        "current_privacy": "follows"
+        "current_privacy": "sitewide"
     }
 },
 {
@@ -631,6 +664,182 @@
         "profile": 11,
         "slate": 10,
         "notify_of_additions": true
+    }
+},
+{
+    "model": "actions.action",
+    "pk": 300,
+    "fields": {
+        "slug": "public-test-action",
+        "title": "Public Test Action",
+        "creator": [
+            "thewitch"
+        ],
+        "anonymize": false,
+        "main_link": "www.fakelinktomoreinfo.com",
+        "description": "<p>Here&#39;s some instructions!</p>",
+        "privacy": "public",
+        "current_privacy": "public",
+        "status": "ready",
+        "has_deadline": false,
+        "deadline": null,
+        "priority": "emergency",
+        "date_created": "2017-04-22T04:14:02Z",
+        "duration": "unknown"
+    }
+},
+{
+    "model": "actions.action",
+    "pk": 301,
+    "fields": {
+        "slug": "sitewide-test-action",
+        "title": "Sitewide Test Action",
+        "creator": [
+            "thewitch"
+        ],
+        "anonymize": false,
+        "main_link": "www.fakelinktomoreinfo.com",
+        "description": "<p>Here&#39;s some instructions!</p>",
+        "privacy": "sitewide",
+        "current_privacy": "sitewide",
+        "status": "ready",
+        "has_deadline": false,
+        "deadline": null,
+        "priority": "emergency",
+        "date_created": "2017-04-22T04:14:02Z",
+        "duration": "unknown"
+    }
+},
+{
+    "model": "actions.action",
+    "pk": 302,
+    "fields": {
+        "slug": "follows-test-action",
+        "title": "Buffy Can See",
+        "creator": [
+            "thewitch"
+        ],
+        "anonymize": false,
+        "main_link": "www.fakelinktomoreinfo.com",
+        "description": "<p>Here&#39;s some instructions!</p>",
+        "privacy": "follows",
+        "current_privacy": "follows",
+        "status": "ready",
+        "has_deadline": false,
+        "deadline": null,
+        "priority": "emergency",
+        "date_created": "2017-04-22T04:14:02Z",
+        "duration": "unknown"
+    }
+},
+{
+    "model": "actions.action",
+    "pk": 303,
+    "fields": {
+        "slug": "invisible-test-action",
+        "title": "Buffy Cannot See",
+        "creator": [
+            "tara_m"
+        ],
+        "anonymize": false,
+        "main_link": "www.fakelinktomoreinfo.com",
+        "description": "<p>Here&#39;s some instructions!</p>",
+        "privacy": "follows",
+        "current_privacy": "follows",
+        "status": "ready",
+        "has_deadline": false,
+        "deadline": null,
+        "priority": "emergency",
+        "date_created": "2017-04-22T04:14:02Z",
+        "duration": "unknown"
+    }
+},
+{
+    "model": "actions.action",
+    "pk": 305,
+    "fields": {
+        "slug": "untrusted-action",
+        "title": "Do Bad Stuff",
+        "creator": [
+            "vampire"
+        ],
+        "anonymize": false,
+        "main_link": "www.fakelinktomoreinfo.com",
+        "description": "<p>Here&#39;s some instructions!</p>",
+        "privacy": "sitewide",
+        "current_privacy": "sitewide",
+        "status": "ready",
+        "has_deadline": false,
+        "deadline": null,
+        "priority": "emergency",
+        "date_created": "2017-04-22T04:14:02Z",
+        "duration": "unknown"
+    }
+},
+{
+    "model": "actions.action",
+    "pk": 310,
+    "fields": {
+        "slug": "friend-action",
+        "title": "Tara's Public Action",
+        "creator": [
+            "tara_m"
+        ],
+        "anonymize": false,
+        "main_link": "www.fakelinktomoreinfo.com",
+        "description": "<p>Here&#39;s some instructions!</p>",
+        "privacy": "public",
+        "current_privacy": "public",
+        "status": "ready",
+        "has_deadline": false,
+        "deadline": null,
+        "priority": "emergency",
+        "date_created": "2017-04-22T04:14:02Z",
+        "duration": "unknown"
+    }
+},
+{
+    "model": "actions.action",
+    "pk": 306,
+    "fields": {
+        "slug": "not-friend-action",
+        "title": "Faith's Public Action",
+        "creator": [
+            "5by5"
+        ],
+        "anonymize": false,
+        "main_link": "www.fakelinktomoreinfo.com",
+        "description": "<p>Here&#39;s some instructions!</p>",
+        "privacy": "public",
+        "current_privacy": "public",
+        "status": "ready",
+        "has_deadline": false,
+        "deadline": null,
+        "priority": "emergency",
+        "date_created": "2017-04-22T04:14:02Z",
+        "duration": "unknown"
+    }
+},
+{
+    "model": "actions.action",
+    "pk": 312,
+    "fields": {
+        "slug": "anon-action",
+        "title": "Anonymous Action",
+        "creator": [
+            "vampire"
+        ],
+        "anonymize": true,
+        "main_link": "www.fakelinktomoreinfo.com",
+        "description": "<p>Here&#39;s some instructions!</p>",
+        "privacy": "sitewide",
+        "current_privacy": "sitewide",
+        "status": "ready",
+        "has_deadline": false,
+        "deadline": null,
+        "priority": "emergency",
+        "date_created": "2017-04-22T04:14:02Z",
+        "duration": "unknown"
     }
 },
 {

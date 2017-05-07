@@ -104,9 +104,6 @@ class BasicActionListPage(BaseListPage):
     def return_to_default_actions_page(self):
         self.w.get(self.root_uri + "/actions/actions")
 
-    def go_to_public_actions_page(self):
-        self.w.get(self.root_uri + "/actions/public-actions")
-
     def go_to_default_actions_page_if_necessary(self):
         if not self.action_table:
             # This is a decent guess at where we want to be
@@ -175,6 +172,7 @@ class BasicActionDetailPage(BaseObjectDetailPage):
     mark_action_as_done_button = PageElement(id_="mark_as_done")
     commitment_button = PageElement(id_="commitment_btn")
     manage_action_links = MultiPageElement(css=".manage-action-links")
+    share = PageElement(css="span.share-popover")
 
     def go_to_detail_page(self, title=None):
         if title:
