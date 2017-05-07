@@ -10,10 +10,12 @@
       <h3>Access Settings</h3>
 
       {% if user.has_usable_password %}
-        <a href="{% url 'password_change' %}" class="btn btn-success" id="password-button">
+        <a href="{% url 'password_change' %}" class="btn btn-success password-button"
+          id="change-password">
           Change your password</a>
       {% else %}
-        <a href="{% url 'password_set' %}" class="btn btn-success" id="password-button">
+        <a href="{% url 'password_set' %}" class="btn btn-success password-button"
+          id="set-password">
           Set your password</a>
       {% endif %}
 

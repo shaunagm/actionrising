@@ -1,7 +1,7 @@
 <h4>Linked Accounts</h4>
 
 {% if not can_disconnect %}
-  <p>Want to disconnect from all accounts? <a href="{% url 'password_set' %}">
+  <p id="disconnect-warning">Want to disconnect from all accounts? <a href="{% url 'password_set' %}">
      Set your password</a> first.</p>
 {% endif %}
 
@@ -10,18 +10,19 @@
 <li><span class="account-type">Twitter</span>
 
   {% if twitter_login %}
-    <p>Connected as <a class="text-info" target="_blank"
+    <p>Connected as <a class="text-info" target="_blank" id="connected-twitter"
       href="https://twitter.com/{{ twitter_login.extra_data.access_token.screen_name }}/">
       @{{ twitter_login.extra_data.access_token.screen_name }}</a></p>
     {% if can_disconnect %}
       <form method="post" action="{% url 'social:disconnect' 'twitter' %}?next=/accounts/settings">
         {% csrf_token %}
-        <button type="submit">Disconnect from Twitter</button>
+        <button type="submit" id="disconnect-from-twitter">Disconnect from Twitter</button>
       </form>
     {% endif %}
   {% else %}
     <br />
-    <a class="btn btn-info" href="{% url 'social:begin' 'twitter' %}?next=/accounts/settings">
+    <a class="btn btn-info" href="{% url 'social:begin' 'twitter' %}?next=/accounts/settings"
+      id="connect-to-twitter">
       Connect to Twitter</a>
   {% endif %}
 
@@ -30,18 +31,19 @@
 <li><span class="account-type">Facebook</span>
 
   {% if facebook_login %}
-    <p>Connected as <a class="text-info" target="_blank"
+    <p>Connected as <a class="text-info" target="_blank" id="connected-facebook"
       href="https://facebook.com/{{ facebook_login.extra_data.id }}/">
       {{ facebook_login.user }}</a></p>
     {% if can_disconnect %}
       <form method="post" action="{% url 'social:disconnect' 'facebook' %}?next=/accounts/settings">
         {% csrf_token %}
-        <button type="submit">Disconnect from Facebook</button>
+        <button type="submit" id="disconnect-from-facebook">Disconnect from Facebook</button>
       </form>
     {% endif %}
   {% else %}
     <br />
-    <a class="btn btn-info" href="{% url 'social:begin' 'facebook' %}?next=/accounts/settings">
+    <a class="btn btn-info" href="{% url 'social:begin' 'facebook' %}?next=/accounts/settings"
+      id="connect-to-facebook">
       Connect to Facebook</a>
   {% endif %}
 
@@ -53,12 +55,13 @@
     {% if can_disconnect %}
       <form method="post" action="{% url 'social:disconnect' 'google-oauth2' %}?next=/accounts/settings">
         {% csrf_token %}
-        <button type="submit">Disconnect account</button>
+        <button type="submit" id="disconnect-from-google">Disconnect from Google</button>
       </form>
     {% endif %}
   {% else %}
     <br />
-    <a class="btn btn-info" href="{% url 'social:begin' 'google-oauth2' %}?next=/accounts/settings">
+    <a class="btn btn-info" href="{% url 'social:begin' 'google-oauth2' %}?next=/accounts/settings"
+      id="connect-to-google">
       Connect to Google</a>
   {% endif %}
 
