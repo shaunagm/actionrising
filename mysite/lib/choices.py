@@ -35,11 +35,11 @@ class ToDoStatusChoices(DjangoChoices):
     @classmethod
     def third_person(cls, status):
         return {
-            'suggested': 'Suggested to them',
-            'accepted': 'On their to do list',
-            'done': 'Action completed',
-            'closed': 'Action closed before they did it',
-            'rejected': 'This should never get used!'
+            'suggested': 'Suggested to',
+            'accepted': 'Tracking action',
+            'done': 'Completed action',
+            'closed': 'Closed action',
+            'rejected': 'Rejected action'
         }[status]
 
 class PriorityChoices(DjangoChoices):
