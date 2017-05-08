@@ -7,7 +7,7 @@ from django.db.models.signals import post_save
 from django.utils import timezone
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AnonymousUser
 from django.contrib.contenttypes.fields import GenericRelation
 
 from ckeditor.fields import RichTextField
@@ -68,6 +68,9 @@ class Action(models.Model):
         class_name = 'Action'
         return class_name
 
+    def named(self):
+        return not self.anonymize
+
     def get_creator(self):
         return self.creator
 
@@ -112,7 +115,7 @@ class Action(models.Model):
 
     def get_visible_creator(self):
         if self.anonymize:
-            return "Anonymous"
+            return AnonymousUser
         else:
             return self.creator
 
@@ -181,7 +184,10 @@ def action_handler(sender, instance, created, **kwargs):
     verb_to_use = "created" if created else "updated"
     # TODO: This is still going to be a problem if you change anonymity after creation,
     # we'll need to break some of the following links after anonymizing.
-    action.send(instance.get_visible_creator(), verb=verb_to_use, target=instance)
+    if instance.named():
+        action.send(instance.get_creator(), verb=verb_to_use, target=instance)
+    else:
+        action.send(instance, verb = 'was ' + verb_to_use)
 post_save.connect(action_handler, sender=Action)
 
 class ActionFilter(models.Model):

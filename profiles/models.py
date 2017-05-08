@@ -55,6 +55,9 @@ class Profile(models.Model):
     def get_profile(self):
         return self
 
+    def named(self):
+        return True
+
     def get_full_name(self):
         names = []
         if self.user.first_name not in [None, ""]:
@@ -461,6 +464,9 @@ class ProfileActionRelationship(models.Model):
             status_helpers.change_commitment_when_par_changes(self, orig.status, self.status)
         super(ProfileActionRelationship, self).save(*args, **kwargs)
 
+    def named(self):
+        return self.action.named()
+
     def get_cname(self):
         class_name = 'ProfileActionRelationship'
         return class_name
@@ -532,3 +538,6 @@ class ProfileSlateRelationship(models.Model):
 
     def is_visible_to(self, viewer):
         return self.profile.is_visible_to(viewer) and self.slate.is_visible_to(viewer)
+
+    def named(self):
+        return True

@@ -36,7 +36,7 @@ def filtered_list_view(model, user):
         follows_user = [profile.get_creator() for profile in user.profile.get_followers()]
         visible = [object for object in objects
                    if object.current_privacy in [PrivacyChoices.public, PrivacyChoices.sitewide]
-                   or (object.get_creator() is user or object.get_creator() in follows_user)]
+                   or (object.get_creator() is user or (object.named() and object.get_creator() in follows_user))]
         return model.default_sort(visible)
     else:
         return list(model.objects.filter(current_privacy=PrivacyChoices.public).order_by(model.default_order_field()))

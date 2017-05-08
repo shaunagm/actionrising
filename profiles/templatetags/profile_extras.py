@@ -25,5 +25,7 @@ def filtered_feed(context, action):
     viewer = context['request'].user
     actor_ok = check_privacy(action.actor.profile, viewer)
     target_ok = action.target is None or check_privacy(action.target, viewer)
-    object_ok = action.action_object is None or type(action.action_object) is Comment or check_privacy(action.action_object, viewer)
+    object_ok = action.action_object is None \
+        or type(action.action_object) is Comment \
+        or check_privacy(action.action_object, viewer)
     return action if actor_ok and target_ok and object_ok else None

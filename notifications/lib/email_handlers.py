@@ -90,9 +90,9 @@ def action_taken_email(recipient, actor, action):
 
     trackers = len(action.profileactionrelationship_set.all())
     if trackers == 1:
-        tracker_string = "%d person tracking it" % trackers['total_count']
+        tracker_string = "%d person tracking it" % trackers
     else:
-        tracker_string = "%d people tracking it" % trackers['total_count']
+        tracker_string = "%d people tracking it" % trackers
 
     ctx = {
         # Required fields

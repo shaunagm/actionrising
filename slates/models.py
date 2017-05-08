@@ -46,6 +46,9 @@ class Slate(models.Model):
         class_name = 'Slate'
         return class_name
 
+    def named(self):
+        return True
+
     def get_creator(self):
         return self.creator
 
@@ -139,6 +142,9 @@ class SlateActionRelationship(models.Model):
 
     def __unicode__(self):
         return "Relationship of slate: %s and action: %s " % (self.slate, self.action)
+
+    def named(self):
+        return self.action.named()
 
     def get_status(self):
         if self.action.status is ToDoStatusChoices.rejected:
