@@ -481,7 +481,7 @@ class TestTrackers(TestCase):
         new_dict = trackers.get_tracker_list_for_action(result, self.buffy)
         self.assertEqual(len(new_dict), 5)
         suggested_dict = new_dict[ToDoStatusChoices.suggested]
-        self.assertEqual(suggested_dict['status_display'], "Suggested to them")
+        self.assertEqual(suggested_dict['status_display'], "Suggested to")
 
     def test_get_tracker_list_for_slate(self):
         result = trackers.get_people_tracking(self.action)
