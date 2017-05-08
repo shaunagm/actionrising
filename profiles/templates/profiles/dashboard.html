@@ -9,9 +9,14 @@
    <div class="col-sm-6 col-sm-offset-3">
      <div class="alert alert-dismissible alert-success">
        <button type="button" class="close" data-dismiss="alert">&times;</button>
-       <p>Looks like you're new! You can get started by <strong><a href="{% url 'actions' %}">
-         finding actions</a></strong> or <strong><a href="{% url 'create_action' %}">
-         creating actions</a></strong>, and soon your dash will fill up with activity.</p>
+       <p>Looks like you're new! </p>
+
+         <p>You can get started by <a href="{% url 'actions' %}">
+         finding actions</a> or <a href="{% url 'create_action' %}">
+         creating actions</a>, and soon your dash will fill up with activity.</p>
+
+         <p>You can also <a href="{% url 'settings' %}">adjust your account settings</a> and
+         <a href="{% url 'edit_profile' user %}">add info to your profile</a>.</p>
      </div>
    </div>
 </div>
