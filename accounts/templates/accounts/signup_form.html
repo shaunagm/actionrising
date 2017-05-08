@@ -5,8 +5,11 @@
 {% block content %}
 
 <div class="row">
-  <div class="col-sm-10 col-sm-offset-2" id="form-explanation">
-    <h2>Join us</h2>
+  <div class="col-sm-10 col-sm-offset-2">
+    <h2>Join us!</h2>
+    <a href="{% url 'social:begin' 'facebook' %}?next=/" class="btn btn-info">Sign up with Facebook</a>
+    <a href="{% url 'social:begin' 'google-oauth2' %}?next=/" class="btn btn-info">Sign up with Google</a>
+    <h4>or, make an account with us directly:</h4>
   </div>
 </div>
 
@@ -18,7 +21,7 @@
       {% buttons %}
         <div class="col-md-10 col-md-offset-1">
           {% bootstrap_button "Cancel" button_type="link" button_class="btn-default" %}
-          {% bootstrap_button "Submit" button_type="submit" button_class="btn-primary" icon="star" %}
+          {% bootstrap_button "Submit" button_type="submit" button_class="btn-primary" name="signup" icon="star" %}
         </div>
       {% endbuttons %}
     </form>

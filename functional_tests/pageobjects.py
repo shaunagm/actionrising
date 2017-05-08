@@ -23,6 +23,9 @@ class LoginPage(PageObject):
     login = PageElement(css='form button')
     form = PageElement(tag_name='form')
     log_button = PageElement(class_name='log_button')
+    login_with_fb_button = PageElement(id_="login_with_fb")
+    login_with_google_button = PageElement(id_="login_with_google")
+    login_with_twitter_button = PageElement(id_="login_with_twitter")
 
     def go_to_login(self):
         self.w.get(self.root_uri)
@@ -334,3 +337,30 @@ class PhonescriptCreatePage(BasePage):
 
 class PhonescriptDetailPage(BasePage):
     script_panels = MultiPageElement(css=".script-panel")
+
+class AccountSettingsPage(BasePage):
+    disconnect_warning = PageElement(id_="disconnect-warning")
+    set_password_button = PageElement(id_="set-password")
+    change_password_button = PageElement(id_="change-password")
+    # social auth
+    connected_twitter = PageElement(id_="connected-twitter")
+    disconnect_from_twitter = PageElement(id_="disconnect-from-twitter")
+    connect_to_twitter = PageElement(id_="connect-to-twitter")
+    connected_facebook = PageElement(id_="connected-facebook")
+    disconnect_from_facebook = PageElement(id_="disconnect-from-facebook")
+    connect_to_facebook = PageElement(id_="connect-to-facebook")
+    connected_google = PageElement(id_="connected-google")
+    disconnect_from_google = PageElement(id_="disconnect-from-google")
+    connect_to_google = PageElement(id_="connect-to-google")
+
+    def go_to_settings_page(self):
+        self.w.get(self.root_uri + "/accounts/settings")
+
+class SignupPage(BasePage):
+    email = PageElement(id_="id_email")
+    username = PageElement(id_="id_username")
+    password = PageElement(id_="id_password")
+    signup_button = PageElement(name="signup")
+
+    def go_to_signup(self):
+        self.w.get(self.root_uri + "/accounts/sign-up")

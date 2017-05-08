@@ -42,6 +42,7 @@ urlpatterns = [
 
     # Third party apps
     url(r'^django-rq/', include('django_rq.urls')),
+    url(r'^oauth/', include('social_django.urls', namespace='social')),
     url('^activity/', include('actstream.urls')),
 
     # Index

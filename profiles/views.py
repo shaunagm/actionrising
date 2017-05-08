@@ -287,6 +287,3 @@ class DashboardView(LoginRequiredMixin, generic.TemplateView):
             context['created_actions'] or context['created_slates']):
             context['new_user'] = True
         return context
-
-class SettingsView(LoginRequiredMixin, generic.TemplateView):
-    template_name = 'profiles/settings.html'
