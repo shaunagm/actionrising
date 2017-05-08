@@ -2,7 +2,6 @@ import time
 
 from .base import SeleniumTestCase
 from .pageobjects import BasicActionListPage, BasicActionDetailPage
-from profiles.models import Profile, ProfileActionRelationship
 
 default_user = "buffysummers"
 default_password = "apocalypse"

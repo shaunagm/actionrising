@@ -238,10 +238,22 @@ class ActionEditPage(BasePage):
         select = Select(self.w.find_element_by_id('id_status'))
         select.select_by_visible_text(selection)
 
+class ProfileListPage(BaseListPage):
+    profiles_table = MultiPageElement(id_="users")
+    profile_tds = MultiPageElement(css="td")
+
+    def go_to_default_profiles_page(self):
+        self.w.get(self.root_uri + "/profiles/profiles")
+
+    def get_profiles(self):
+        return [profile.text for profile in self.profile_tds]
+
 class ProfilePage(BasePage):
     name = PageElement(id_="profile-username")
     actions_created = MultiPageElement(css="div#created-actions-div tbody tr .actiondetails")
     actions_tracked = MultiPageElement(css="div#tracked-actions-div tbody tr .actiondetails")
+    redirected_page = PageElement(css="#id_username")
+    location = PageElement(css="#location-info")
 
     def go_to_profile_page(self, username=None):
         user = User.objects.get(username=username)

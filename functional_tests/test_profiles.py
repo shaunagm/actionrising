@@ -1,5 +1,7 @@
+import time
 from .base import SeleniumTestCase
-from .pageobjects import ProfileListPage, ProfileDetailPage
+from .pageobjects import ProfileListPage, ProfilePage
+from mysite.settings import LOGIN_URL
 
 default_user = "buffysummers"
 default_password = "apocalypse"
@@ -30,10 +32,10 @@ class TestProfileList(SeleniumTestCase):
         super(TestProfileList, self).setUp()
         self.profiles_table = ProfileListPage(self.browser, root_uri=self.live_server_url)
         self.profiles_table.log_in(default_user, default_password)
-        self.profiles_table.return_to_default_actions_page()
+        self.profiles_table.go_to_default_profiles_page()
 
-    def test_display_actions(self):
-        self.assertTrue(self.actions_table.datatables_js_is_enabled())
+    def test_display_profiles(self):
+        self.assertTrue(self.profiles_table.datatables_js_is_enabled())
         profiles = self.profiles_table.get_profiles()
         # show all
         # public
@@ -49,39 +51,55 @@ class TestProfileDetail(SeleniumTestCase):
 
     def setUp(self):
         super(TestProfileDetail, self).setUp()
-        self.profile_page = ProfileDetailPage(self.browser, root_uri=self.live_server_url)
+        self.profile_page = ProfilePage(self.browser, root_uri=self.live_server_url)
         self.profile_page.log_in(default_user, default_password)
 
     def test_public_profile(self):
-        self.profile_page.go_to_detail_page(username="dru")
+        self.profile_page.go_to_profile_page(username="dru")
+        self.assertTrue('Drusilla' in self.profile_page.name.text)
+        self.assertTrue(len(self.profile_page.get_actions()) > 0)
+        self.assertIsNotNone(self.profile_page.location)
         # shows in full
 
     def test_sitewide_profile(self):
-        self.profile_page.go_to_detail_page(username="giles")
+        self.profile_page.go_to_profile_page(username="giles")
+        self.assertTrue('Giles' in self.profile_page.name.text)
+        self.assertTrue(len(self.profile_page.get_actions()) > 0)
         # shows in full
 
     def test_visible_protected_profile(self):
-        self.profile_page.go_to_detail_page(username="thewitch")
+        self.profile_page.go_to_profile_page(username="thewitch")
+        self.assertTrue('Willow' in self.profile_page.name.text)
+        self.assertTrue(len(self.profile_page.get_actions()) > 0)
+        self.assertIsNotNone(self.profile_page.location)
         # shows in full
 
     def test_restricted_profile(self):
-        self.profile_page.go_to_detail_page(username="tara_m")
+        self.profile_page.go_to_profile_page(username="tara_m")
+        self.assertTrue('login' in self.profile_page.w.current_url)
+        # self.assertFalse('Tara' in self.profile_page.name.text)
+        # self.assertIsNone(self.profile_page.location)
         # shows minimal
 
 
 class TestPublicProfileDetail(SeleniumTestCase):
+
     def setUp(self):
-        super(TestProfileDetail, self).setUp()
-        self.profile_page = ProfileDetailPage(self.browser, root_uri=self.live_server_url)
+        super(TestPublicProfileDetail, self).setUp()
+        self.profile_page = ProfilePage(self.browser, root_uri=self.live_server_url)
 
     def test_public_profile(self):
-        self.profile_page.go_to_detail_page(username="dru")
+        self.profile_page.go_to_profile_page(username="dru")
+        self.assertTrue('Drusilla' in self.profile_page.name.text)
+        self.assertIsNotNone(self.profile_page.location)
         # shows
 
     def test_sitewide_profile(self):
-        self.profile_page.go_to_detail_page(username="giles")
+        self.profile_page.go_to_profile_page(username="giles")
+        self.assertTrue('login' in self.profile_page.w.current_url)
         # redirects
 
     def test_restricted_profile(self):
-        self.profile_page.go_to_detail_page(username="thewitch")
+        self.profile_page.go_to_profile_page(username="thewitch")
+        self.assertTrue('login' in self.profile_page.w.current_url)
         # redirects
