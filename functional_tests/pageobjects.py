@@ -125,6 +125,7 @@ class BasicActionListPage(BaseListPage):
         return [action.text for action in self.action_tds]
 
 class SlateActionsListPage(BasicActionListPage):
+    action_tds = MultiPageElement(css=".main-list tbody tr > td.title")
 
     def go_to_detail_page(self, title=None):
         if title:
@@ -132,6 +133,9 @@ class SlateActionsListPage(BasicActionListPage):
         else:
             self.slate = Slate.objects.last()
         self.w.get(self.root_uri + self.slate.get_absolute_url())
+
+    def get_slates(self):
+        return [action.text for action in self.action_tds]
 
 class SlateListPage(BaseListPage):
     slates_table = MultiPageElement(id_="slates")

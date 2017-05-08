@@ -104,7 +104,9 @@ class TestSlateActionList(SeleniumTestCase):
 
     def test_slate_actions_button_filter(self):
         self.actions_table.friends_only.click()
-        self.assertEquals(len(self.actions_table.rows), 0)
+        actions = self.actions_table.get_actions()
+        self.assertFalse("Join the site" in actions)
+        self.assertFalse("Donate to Planned Parenthood" in actions)
 
     def test_slate_actions_dropdown_filter(self):
         # TODO: This breaks when run as a whole but not when run individually
