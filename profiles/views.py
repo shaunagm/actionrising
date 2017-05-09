@@ -91,6 +91,7 @@ class ToDoView(LoginRequiredMixin, generic.TemplateView):
 
 class ProfileSuggestedView(UserPassesTestMixin, generic.DetailView):
     template_name = 'profiles/suggested.html'
+    slug_field = 'username'
     model = User
 
     def test_func(self):
