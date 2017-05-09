@@ -20,13 +20,9 @@
   <div class="row collapse" id="SlateTrackerList">
     <div class="col-sm-12">
       <h4>Slates</h4>
-      {% for status, tracker_counts in tracker_data.slates_tracking_by_status %}
-        {% get_status_phrase status as status_phrase %}
-        <span class="status_span" id="slate_{{ status }}">
-          <b> {{ status_phrase }} </b>
-          {% include 'profiles/trackers/slate_by_status_include.html' with object=tracker_counts %}
-        </span>
-      {% endfor %}
+      <span class="status_span" id="slate_accepted">
+        {% include 'profiles/trackers/slate_by_status_include.html' with object=tracker_data.slates_tracking_by_privacy %}
+      </span>
     </div>
   </div>
 {% endif %}

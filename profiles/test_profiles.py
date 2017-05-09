@@ -540,15 +540,15 @@ class TestTrackers(TestCase):
         self.assertEqual(Trackers(self.slate0, self.buffy).people_phrase, '0 people')
         self.assertEqual(Trackers(self.slate2, self.buffy).people_phrase, '2 people')
 
-    def test_slates_phrase(self):
-        self.assertEqual(Trackers(self.action, self.buffy).slates_phrase, '1 slate')
-        self.assertEqual(Trackers(self.action0, self.buffy).slates_phrase, '0 slates')
-        self.assertEqual(Trackers(self.action2, self.buffy).slates_phrase, '2 slates')
+    def test_slate_phrase(self):
+        self.assertEqual(Trackers(self.action, self.buffy).slate_phrase, '1 slate')
+        self.assertEqual(Trackers(self.action0, self.buffy).slate_phrase, '0 slates')
+        self.assertEqual(Trackers(self.action2, self.buffy).slate_phrase, '2 slates')
 
     def test_people_tracking_by_status(self):
         pass #TODO
 
-    def test_slates_tracking_by_status(self):
+    def test_slates_tracking_by_privacy(self):
         pass #TODO do sars have statuses?
 
     def test_people_tracking_by_privacy(self):
