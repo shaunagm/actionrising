@@ -1,7 +1,7 @@
 from django import template
 from django.contrib.auth.models import User
 from django_comments.models import Comment
-from mysite.lib.privacy import check_privacy
+from mysite.lib.privacy import check_activity
 from mysite.lib.choices import ToDoStatusChoices
 from profiles.models import ProfileActionRelationship, Profile, Relationship
 
@@ -22,15 +22,10 @@ def get_following_list(context):
     return []
 
 @register.assignment_tag(takes_context=True)
-def filtered_feed(context, action):
+def filtered_feed(context, activity, own=False):
     viewer = context['request'].user
-    actor_ok = check_privacy(action.actor.profile, viewer)
-    target_ok = action.target is None or check_privacy(action.target, viewer)
-    object_ok = action.action_object is None \
-        or type(action.action_object) is Comment \
-        or check_privacy(action.action_object, viewer)
-    return action if actor_ok and target_ok and object_ok else None
+    return activity if check_activity(activity, viewer, own) else None
 
-@register.assignment_tag()
+@register.assignment_tag(takes_context=False)
 def get_status_phrase(status):
     return ToDoStatusChoices.third_person(status)

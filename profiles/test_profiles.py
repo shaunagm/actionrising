@@ -180,19 +180,28 @@ class TestRelationshipMethods(TestCase):
         self.assertTrue(self.relationship.current_profile_mutes_target(self.faith.profile))
         self.assertIsNone(self.relationship.current_profile_mutes_target(self.lorne.profile))
 
-    def test_toggle_following_for_current_profile(self): #TODO add privacy checks
+    def test_toggle_following_for_current_profile(self):
+        self.buffy.profile.current_privacy = PrivacyChoices.follows
+        self.buffy.profile.save()
+        self.faith.profile.current_privacy = PrivacyChoices.follows
+        self.faith.profile.save()
         # Starting with A (Buffy) not following B (Faith)
         self.assertFalse(self.relationship.A_follows_B)
+        self.assertFalse(check_privacy(self.buffy.profile, self.faith))
         # Toggle returns the new status, which is True - Buffy does now follow Faith
         self.assertTrue(self.relationship.toggle_following_for_current_profile(self.buffy.profile))
         # Confirm A now follows B
         self.assertTrue(self.relationship.A_follows_B)
+        self.assertTrue(check_privacy(self.buffy.profile, self.faith))
         # Confirm B does not follow A
         self.assertFalse(self.relationship.B_follows_A)
+        self.assertFalse(check_privacy(self.faith.profile, self.buffy))
         # Toggle back to not following
         self.assertFalse(self.relationship.toggle_following_for_current_profile(self.buffy.profile))
+        self.assertFalse(check_privacy(self.buffy.profile, self.faith))
         # Toggle the other direction - B (Faith) following A (Buffy)
         self.assertTrue(self.relationship.toggle_following_for_current_profile(self.faith.profile))
+        self.assertTrue(check_privacy(self.faith.profile, self.buffy))
         # Toggling in one direction should not effect the other direction
         self.assertTrue(self.relationship.toggle_following_for_current_profile(self.buffy.profile))
         # Trying to toggle someone not part of the relationship should return none
@@ -400,6 +409,8 @@ class TestProfileExtras(TestCase):
         assertEqual(get_status_phrase('suggested'), 'Suggested to')
 
     #TODO test filtered feed
+    def test_filtered_feed(self):
+        pass
 
 ################
 ### Test lib ###
@@ -547,52 +558,3 @@ class TestTrackers(TestCase):
         self.assertEqual(data['restricted_count'], 1)
         # buffy can see faith
         self.assertEqual(data['visible_list'], [self.faith_slate2])
-
-
-    # def test_get_people_tracking(self):
-    #     result = trackers.get_people_tracking(self.action) #TODO
-    #     self.assertEqual(list(result), [self.par])
-    #     result = trackers.get_people_tracking(self.slate) #TODO
-    #     self.assertEqual(list(result), [self.psr])
-    #     # Nothing for an action or slate with no connections
-    #     new_action = Action.objects.create(title="New Action", creator=self.buffy)
-    #     result = trackers.get_people_tracking(new_action) #TODO
-    #     self.assertEqual(list(result), [])
-    #     new_slate = Slate.objects.create(title="New Slate", creator=self.buffy)
-    #     result = trackers.get_people_tracking(new_slate) #TODO
-    #     self.assertEqual(list(result), [])
-
-    # def test_get_slate_tracking(self):
-    #     result = trackers.get_slate_tracking(self.action) #TODO
-    #     self.assertEqual(list(result), [self.sar])
-    #     # Nothing for an action with no connections
-    #     new_action = Action.objects.create(title="New Action", creator=self.buffy)
-    #     result = trackers.get_slate_tracking(new_action) #TODO
-    #     self.assertEqual(list(result), [])
-
-
-    # def test_get_tracker_list_for_action(self):
-    #     ProfileActionRelationship.objects.create(profile=self.vampire.profile, action=self.action)
-    #     result = trackers.get_slate_tracking(self.action) #TODO
-    #     new_dict = trackers.get_tracker_list_for_action(result, self.buffy) #TODO
-    #     self.assertEqual(len(new_dict), 5)
-    #     self.assertTrue(new_dict['has_people'])
-    #     self.assertEqual(new_dict['people_phrase'], '2 people')
-    #     self.assertTrue('buffysummers' in new_dict['people_tracker_list'])
-    #     # privacy restricted
-    #     self.assertFalse('vampire' in new_dict['people_tracker_list'])
-    #     suggested_dict = new_dict[ToDoStatusChoices.suggested]
-    #     self.assertEqual(suggested_dict['status_display'], "Suggested to")
-
-    # def test_get_tracker_list_for_slate(self):
-    #     ProfileSlateRelationship.objects.create(profile=self.vampire.profile, slate=self.slate)
-    #     result = trackers.get_people_tracking(self.action) #TODO
-    #     new_dict = trackers.get_tracker_list_for_slate(result, self.buffy) #TODO
-    #     self.assertTrue(new_dict['has_people'])
-    #     self.assertEqual(new_dict['people_phrase'], '2 people')
-    #     self.assertTrue('5by5' in new_dict['people_tracker_list'])
-    #     # privacy restricted
-    #     self.assertFalse('vampire' in new_dict['people_tracker_list'])
-    #     self.assertEqual(len(new_dict), 3)
-    #     self.assertIn("visible_list", new_dict.keys())
-    #     self.assertIn("restricted_count", new_dict.keys())

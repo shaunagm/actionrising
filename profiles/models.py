@@ -18,6 +18,7 @@ from actions.models import Action
 from slates.models import Slate
 from notifications.models import NotificationSettings, DailyActionSettings
 from mysite.lib.choices import (PrivacyChoices, PriorityChoices, StatusChoices, ToDoStatusChoices)
+from mysite.lib.privacy import privacy_tests
 from mysite.lib.utils import disable_for_loaddata
 from profiles.lib import status_helpers
 
@@ -231,7 +232,7 @@ class Profile(models.Model):
         return actions
 
     def is_visible_to(self, viewer):
-        return PrivacyChoices.privacy_tests[self.current_privacy](self, viewer)
+        return privacy_tests[self.current_privacy](self, viewer)
 
     def follows(self, other):
         return other in self.get_people_user_follows()

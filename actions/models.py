@@ -13,6 +13,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from ckeditor.fields import RichTextField
 from mysite.settings import PRODUCTION_DOMAIN
 from mysite.lib.choices import PrivacyChoices, PriorityChoices, StatusChoices, TimeChoices
+from mysite.lib.privacy import privacy_tests
 from mysite.lib.utils import disable_for_loaddata, slug_validator, slugify_helper
 from profiles.lib.status_helpers import open_pars_when_action_reopens, close_pars_when_action_closes
 
@@ -166,7 +167,7 @@ class Action(models.Model):
         return -1
 
     def is_visible_to(self, viewer):
-        return PrivacyChoices.privacy_tests[self.current_privacy](self, viewer)
+        return privacy_tests[self.current_privacy](self, viewer)
 
     @classmethod
     def default_order_field(self):

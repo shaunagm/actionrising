@@ -6,12 +6,6 @@ class PrivacyChoices(DjangoChoices):
     sitewide = ChoiceItem('sitewide', _('Visible Sitewide')) #sit
     follows = ChoiceItem('follows', _('Visible to Follows')) #fol
     inherit = ChoiceItem('inherit', _('Inherit')) #inh
-    privacy_tests = {
-        'public': lambda object, viewer: True,
-        'sitewide': lambda object, viewer: viewer.is_authenticated(),
-        'follows': lambda object, viewer: viewer.is_authenticated() and
-            (object.get_creator() == viewer or (object.named() and object.get_profile().follows(viewer.profile)))
-    }
 
     @classmethod
     def default_choices(cls):

@@ -4,8 +4,11 @@ from django.views import generic
 from django.contrib.auth.mixins import UserPassesTestMixin,  LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
-from mysite.lib.privacy import filter_list_for_privacy
+from mysite.lib.privacy import filtered_list_view
 from tags.models import Tag
+from actions.models import Action
+from slates.models import Slate
+from profiles.models import Profile
 
 class TagView(LoginRequiredMixin, generic.DetailView):
     template_name = 'tags/tag.html'
@@ -13,12 +16,9 @@ class TagView(LoginRequiredMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(TagView, self).get_context_data(**kwargs)
-        context['action_list'] = filter_list_for_privacy(self.object.actions.all(),
-            self.request.user)
-        context['slate_list'] = filter_list_for_privacy(self.object.actions.all(),
-            self.request.user)
-        context['profile_list'] = filter_list_for_privacy(self.object.actions.all(),
-            self.request.user)
+        context['action_list'] = filtered_list_view(Action, self.request.user)
+        context['slate_list'] = filtered_list_view(Slate, self.request.user)
+        context['profile_list'] = filtered_list_view(Profile, self.request.user)
         return context
 
 class TagListView(LoginRequiredMixin, generic.ListView):

@@ -4,6 +4,10 @@ from .base import SeleniumTestCase
 from .pageobjects import SlateDetailPage, SlateListPage, SlateActionsListPage
 from profiles.models import Profile, ProfileActionRelationship
 
+from actions.models import Action
+from django.contrib.auth.models import User
+from mysite.lib.privacy import check_privacy
+
 default_user = "buffysummers"
 default_password = "apocalypse"
 
@@ -95,9 +99,11 @@ class TestSlateActionList(SeleniumTestCase):
         # TODO: This breaks when run as a whole but not when run individually
         self.assertTrue(self.actions_table.datatables_js_is_enabled())
         self.assertEquals(len(self.actions_table.columns), 4)
-        self.assertEquals(len(self.actions_table.rows), 3)
+        actions = self.actions_table.get_actions()
+        self.assertTrue("Donate to Planned Parenthood" in actions)
+        self.assertTrue("Join the site" in actions)
+        self.assertTrue("Sign petition to make Boston a sanctuary city" in actions)
         self.assertEquals(self.actions_table.first_row_date.text, "Fri Dec 02")
-        self.assertEquals(self.actions_table.first_row_action.text, "Join the site")
         self.assertEquals(self.actions_table.first_row_tracker_count.text, "0")
         self.assertEquals(len(self.actions_table.labels), 3)
         # TODO: Add test of toggle notes

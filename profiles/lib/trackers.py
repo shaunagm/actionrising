@@ -18,7 +18,7 @@ class Trackers(object):
             _slates_tracking = self.get_slates_tracking() # don't display
             self.has_slates = len(_slates_tracking) > 0
             self.slates_phrase = self.get_tracker_phrase(len(_slates_tracking), 'slates')
-            self.slates_tracking_by_status = self.group_by_status_and_privacy(_slates_tracking)
+            self.slates_tracking_by_privacy = filter_list_for_privacy_annotated(_slates_tracking, self.user, include_anonymous=True)
         if isinstance(self.tracked, Slate):
             self.people_tracking_by_privacy = filter_list_for_privacy_annotated(_people_tracking, self.user, include_anonymous=True)
 
@@ -47,4 +47,4 @@ class Trackers(object):
         sorted_trackers = sorted(trackers, key = keyfunc)
         grouped_trackers = groupby(sorted_trackers, keyfunc)
         return {status: filter_list_for_privacy_annotated(list(group), self.user, include_anonymous=True)
-                for status, group in grouped_trackers}
+                for status, group in grouped_trackers}.iteritems

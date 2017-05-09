@@ -7,8 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 from flags.lib.flag_helpers import get_user_flag_if_exists
 from mysite.lib.choices import PrivacyChoices, StatusChoices
-from mysite.lib.privacy import (check_privacy, filter_list_for_privacy,
-    filter_list_for_privacy_annotated, filtered_list_view)
+from mysite.lib.privacy import check_privacy, filter_list_for_privacy_annotated, filtered_list_view
 from misc.models import RecommendationTracker
 from profiles.lib.trackers import Trackers
 from slates.models import Slate, SlateActionRelationship
@@ -25,7 +24,7 @@ class SlateView(UserPassesTestMixin, generic.DetailView):
         context['is_slate'] = True
         context['flag'] = get_user_flag_if_exists(self.object, self.request.user)
         annotated_list = filter_list_for_privacy_annotated(self.object.slateactionrelationship_set.all(),
-            self.request.user)
+            self.request.user, include_anonymous = True)
         context['actions'] = annotated_list['visible_list']
         context['hidden_actions'] = annotated_list['restricted_count']
         if self.request.user.is_authenticated():

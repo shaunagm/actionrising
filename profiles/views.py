@@ -10,7 +10,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
 from actstream.actions import follow, unfollow
-from mysite.lib.privacy import check_privacy, filter_list_for_privacy, filter_list_for_privacy_annotated, filtered_list_view
+from mysite.lib.privacy import check_privacy, filter_list_for_privacy_annotated, filtered_list_view
 from mysite.lib.choices import PrivacyChoices, ToDoStatusChoices
 from django.contrib.auth.models import User
 from profiles.models import (Profile, Relationship, ProfileActionRelationship,

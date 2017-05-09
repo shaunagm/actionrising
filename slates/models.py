@@ -15,6 +15,7 @@ from mysite.lib.choices import (PrivacyChoices, PriorityChoices, StatusChoices,
 from actions.models import Action
 from mysite.settings import PRODUCTION_DOMAIN
 from mysite.lib import choices
+from mysite.lib.privacy import privacy_tests
 from mysite.lib.utils import disable_for_loaddata, slug_validator, slugify_helper
 
 class Slate(models.Model):
@@ -100,7 +101,7 @@ class Slate(models.Model):
         return people
 
     def is_visible_to(self, viewer):
-        return PrivacyChoices.privacy_tests[self.current_privacy](self, viewer)
+        return privacy_tests[self.current_privacy](self, viewer)
 
     @classmethod
     def default_order_field(self):

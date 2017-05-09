@@ -77,7 +77,7 @@ class TestProfileDetail(SeleniumTestCase):
     def test_anonymous_action_by_friend(self):
         self.profile_page.go_to_profile_page(username="admin")
         # admin created this anonymously
-        self.assertFalse("Join the site" in self.profile_page.get_actions_created)
+        self.assertFalse("Join the site" in self.profile_page.actions_created)
 
     def test_restricted_profile(self):
         self.profile_page.go_to_profile_page(username="tara_m")
@@ -92,23 +92,26 @@ class TestFollowedActivity(SeleniumTestCase):
         self.feed = FollowedActivity(self.browser, root_uri=self.live_server_url)
         self.feed.log_in(default_user, default_password)
         self.feed.go_to_feed()
+        self.activity = self.feed.get_activity()
 
     def test_anonymous_action_by_friend(self):
-        self.assertFalse("created Join the site" in self.feed.get_activity())
-        self.assertFalse("admin created" in self.feed.get_activity())
+        self.assertFalse("admin created Join the site" in self.activity)
+        self.assertFalse("Join the site was created" in self.activity)
+        self.assertFalse("Join the site was updated" in self.activity)
+        self.assertFalse("Anonymous created Join the site" in self.activity)
 
     def test_restricted_relationships(self):
-        activity = self.feed.get_activity()
-        self.assertTrue("Buffy Can See" in activity)
-        self.assertTrue("admin" in activity)
-        self.assertTrue("thewitch" in activity)
+        self.assertTrue("thewitch updated Buffy Can See" in self.activity)
+        self.assertTrue("admin started following buffysummers" in self.activity)
+        self.assertTrue("thewitch started following admin" in self.activity)
         # privacy doesn't allow
-        self.assertFalse("Buffy Cannot See" in activity)
-        self.assertFalse("tara_m" in activity)
+        self.assertFalse("tara_m updated Buffy Cannot See" in self.activity)
 
     def test_following(self):
-        # buffy doesn't follow
-        self.assertFalse("vampire" in activity)
+        # buffy doesn't follow vampire
+        self.assertFalse("vampire updated Do Bad Stuff" in self.activity)
+        # buffy follows thewitch and Do Bad Stuff is sitewide
+        self.assertTrue("thewitch took on Do Bad Stuff" in self.activity)
 
 class TestPublicProfileDetail(SeleniumTestCase):
 

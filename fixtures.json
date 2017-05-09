@@ -3647,6 +3647,94 @@
     }
 },
 {
+    "model": "actstream.action",
+    "pk": 315,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "9",
+        "verb": "updated",
+        "description": null,
+        "target_content_type": [
+            "actions",
+            "action"
+        ],
+        "target_object_id": "302",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-06T17:19:36.859Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 316,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "12",
+        "verb": "updated",
+        "description": null,
+        "target_content_type": [
+            "actions",
+            "action"
+        ],
+        "target_object_id": "303",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-06T17:19:36.859Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 317,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "308",
+        "verb": "updated",
+        "description": null,
+        "target_content_type": [
+            "actions",
+            "action"
+        ],
+        "target_object_id": "305",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-06T17:19:36.859Z",
+        "public": true
+    }
+},
+{
+    "model": "actstream.action",
+    "pk": 318,
+    "fields": {
+        "actor_content_type": [
+            "auth",
+            "user"
+        ],
+        "actor_object_id": "9",
+        "verb": "took on",
+        "description": null,
+        "target_content_type": [
+            "actions",
+            "action"
+        ],
+        "target_object_id": "305",
+        "action_object_content_type": null,
+        "action_object_object_id": null,
+        "timestamp": "2017-01-06T17:19:36.859Z",
+        "public": true
+    }
+},
+{
     "model": "admin.logentry",
     "pk": 72,
     "fields": {

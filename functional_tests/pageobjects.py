@@ -137,7 +137,7 @@ class SlateActionsListPage(BasicActionListPage):
             self.slate = Slate.objects.last()
         self.w.get(self.root_uri + self.slate.get_absolute_url())
 
-    def get_slates(self):
+    def get_actions(self):
         return [action.text for action in self.action_tds]
 
 class SlateListPage(BaseListPage):
@@ -252,12 +252,13 @@ class ProfileListPage(BaseListPage):
         return [profile.text for profile in self.profile_tds]
 
 class FollowedActivity(BasePage):
+    activity_lines = MultiPageElement(css=".actstream-action")
 
     def go_to_feed(self):
-        self.w.get(self.root_uri + 'feed')
+        self.w.get(self.root_uri + '/profiles/feed')
 
     def get_activity(self):
-        return [activity.text for activity in MultiPageElement(css=".actstream-action")]
+        return [activity.text for activity in self.activity_lines]
 
 class ProfilePage(BasePage):
     name = PageElement(id_="profile-username")
@@ -277,7 +278,7 @@ class ProfilePage(BasePage):
         return [action.text for action in self.actions_tracked]
 
     def get_actions(self):
-        return self.get_created_actions(),self.get_tracked_actions()
+        return self.get_created_actions(), self.get_tracked_actions()
 
 class ToDoPage(BasicActionListPage):
     suggested_actions_link = PageElement(id_="suggested_actions_button")
