@@ -24,3 +24,4 @@ whitenoise==3.2.2
 sunlight==1.2.9
 geopy==1.11.0
 https://github.com/awatts/django-activity-stream/archive/ad4211199546fcbfe43e8f936c5d1265691c1ef4.zip
+factory_boy==2.8.1

@@ -1,25 +1,22 @@
-import datetime, mock
-
 from django.test import TestCase
-from django.core.exceptions import ObjectDoesNotExist
-from django.utils import timezone
-from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
-from profiles.models import Profile, ProfileActionRelationship
 
 from mysite.lib.choices import StatusChoices
 from mysite.lib.utils import slugify_helper
 from actions.models import Action
-from slates.models import Slate, SlateActionRelationship
+from slates.models import Slate
 from slates.forms import SlateForm
+from . import factories
+
 
 class TestSlateMethods(TestCase):
 
     def setUp(self):
-        self.buffy = User.objects.create(username="buffysummers")
-        self.action = Action.objects.create(title="Test Action", creator=self.buffy)
-        self.slate = Slate.objects.create(title="Test Slate", creator=self.buffy)
-        self.sar = SlateActionRelationship.objects.create(slate=self.slate, action=self.action)
+        self.sar = factories.SlateActionRelationship(
+            slate__title="Test Slate",
+            action__title="Test Action")
+        self.action = self.sar.action
+        self.slate = self.sar.slate
 
     def test_get_sar_given_action(self):
         sar = self.slate.get_sar_given_action(self.action)
@@ -41,6 +38,7 @@ class TestSlateMethods(TestCase):
     def test_slugify_helper(self):
         self.assertEqual(slugify_helper(Slate, "Test Slate"), "test-slate0")
         self.assertEqual(slugify_helper(Slate, "Test Different Slate"), "test-different-slate")
+
 
 class TestSlateViews(TestCase):
 

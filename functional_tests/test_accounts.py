@@ -12,6 +12,7 @@ facebook_test_user_email ="facebook_kobjffl_testuser@tfbnw.net"
 default_user = "buffysummers"
 default_password = "apocalypse"
 
+
 class TestSignupForm(SeleniumTestCase):
 
     def setUp(self):
