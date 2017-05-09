@@ -5,9 +5,8 @@ ActionRising
 
     The production version is hosted at `actionrising.com`_.
 
-This project uses Django version 1.10.3 and Python version 2.7. See
-documentation in the `docs` directory for a brief
-`technical overview`_ for contributors.
+This project uses Django version 1.10.3 and Python version 2.7.
+For contributor guidelines, see our `contributor overview`_.
 
 Setting up the site locally
 ---------------------------
@@ -82,7 +81,7 @@ Setting up the site locally
 
 .. _actionrising.com: https://actionrising.com
 .. _Clone: https://help.github.com/articles/cloning-a-repository/
-.. _technical overview: https://github.com/shaunagm/actionrising/blob/master/docs/technical_overview.md
+.. _contributor overview: https://github.com/shaunagm/actionrising/blob/master/CONTRIBUTING.md
 .. _virtualenv: https://virtualenv.pypa.io/en/stable/userguide/#usage
 .. _postgres: https://www.postgresql.org/download/
 .. _Postgres.App: http://postgresapp.com/
