@@ -7,7 +7,7 @@ from django.db.models.signals import post_save
 from django.utils import timezone
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.contrib.auth.models import User, AnonymousUser
+from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericRelation
 
 from ckeditor.fields import RichTextField
@@ -115,7 +115,7 @@ class Action(models.Model):
 
     def get_visible_creator(self):
         if self.anonymize:
-            return AnonymousUser
+            return "Anonymous"
         else:
             return self.creator
 

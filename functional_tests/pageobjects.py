@@ -251,6 +251,14 @@ class ProfileListPage(BaseListPage):
     def get_profiles(self):
         return [profile.text for profile in self.profile_tds]
 
+class FollowedActivity(BasePage):
+
+    def go_to_feed(self):
+        self.w.get(self.root_uri + 'feed')
+
+    def get_activity(self):
+        return [activity.text for activity in MultiPageElement(css=".actstream-action")]
+
 class ProfilePage(BasePage):
     name = PageElement(id_="profile-username")
     actions_created = MultiPageElement(css="div#created-actions-div tbody tr .actiondetails")
@@ -263,16 +271,10 @@ class ProfilePage(BasePage):
         self.w.get(self.root_uri + user.profile.get_absolute_url())
 
     def get_created_actions(self):
-        action_names = []
-        for action in self.actions_created:
-            action_names.append(action.text)
-        return action_names
+        return [action.text for action in self.actions_created]
 
     def get_tracked_actions(self):
-        action_names = []
-        for action in self.actions_tracked:
-            action_names.append(action.text)
-        return action_names
+        return [action.text for action in self.actions_tracked]
 
     def get_actions(self):
         return self.get_created_actions(),self.get_tracked_actions()

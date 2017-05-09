@@ -87,35 +87,47 @@ class PlayingWithPrivacySettings(SeleniumTestCase):
         self.action_edit_form.title = "A new action to take"
         self.browser.execute_script("return arguments[0].scrollIntoView();", self.action_edit_form.submit_button)
         self.action_edit_form.submit_button.click()
+
         # Go to action list
         self.actions_table = BasicActionListPage(self.browser, root_uri=self.live_server_url)
         self.actions_table.go_to_default_actions_page_if_necessary()
         self.assertIn("A new action to take", self.actions_table.get_actions())
-        # Edit action to change privacy setting
+
+        # Log in as unfollowed user, see action
+        self.actions_table.log_out()
+        self.actions_table.log_in("dru", "apocalypse")
+        self.actions_table.go_to_default_actions_page_if_necessary()
+        self.assertIn("A new action to take", self.actions_table.get_actions())
+
+        # Log in as creator, edit action to change privacy setting
+        self.actions_table.log_out()
+        self.actions_table.log_in(default_user, default_password)
         self.action_edit_form = ActionEditPage(self.browser, root_uri=self.live_server_url)
         self.action_edit_form.go_to_edit_page(title="A new action to take")
         self.action_edit_form.select_privacy("Visible to Follows")
         self.browser.execute_script("return arguments[0].scrollIntoView();", self.action_edit_form.submit_button)
         self.action_edit_form.submit_button.click()
+
         # Back to action list
-        self.actions_table = BasicActionListPage(self.browser, root_uri=self.live_server_url)
+        self.actions_table.go_to_default_actions_page_if_necessary()
+        self.assertIn("A new action to take", self.actions_table.get_actions())
+
+        # Log in as followed user and check default user's profile, see action
+        self.actions_table.log_out()
+        self.actions_table.log_in("giles", "apocalypse")
+        self.actions_table.go_to_default_actions_page_if_necessary()
+        self.assertIn("A new action to take", self.actions_table.get_actions())
+        self.profile_page = ProfilePage(self.browser, root_uri=self.live_server_url)
+        self.profile_page.go_to_profile_page(username=default_user)
+        self.assertIn("A new action to take", self.profile_page.get_created_actions())
+
+        # Log in as non-followed user and check default user's profile, no action
+        self.actions_table.log_out()
+        self.actions_table.log_in("dru", "apocalypse")
         self.actions_table.go_to_default_actions_page_if_necessary()
         self.assertNotIn("A new action to take", self.actions_table.get_actions())
-        # Log in as followed user and check default user's profile, see action
-        self.actions_table.log_out() # log out
-        self.actions_table.log_in("giles", "apocalypse")
-        self.profile_page = ProfilePage(self.browser, root_uri=self.live_server_url)
         self.profile_page.go_to_profile_page(username=default_user)
-        created_actions, tracked_actions = self.profile_page.get_actions()
-        self.assertIn("A new action to take", created_actions)
-        # Log in as non-followed user and check default user's profile, no action
-        # Log in as followed user and check default user's profile, see action
-        self.actions_table.log_out() # log out
-        self.actions_table.log_in("dru", "apocalypse")
-        self.profile_page = ProfilePage(self.browser, root_uri=self.live_server_url)
-        self.profile_page.go_to_profile_page(username=default_user)
-        created_actions, tracked_actions = self.profile_page.get_actions()
-        self.assertNotIn("A new action to take", created_actions)
+        self.assertNotIn("A new action to take", self.profile_page.get_created_actions())
 
 class MakeAndEditCommitment(SeleniumTestCase):
     # User tries to find an action to commit to.  Can't commit to a closed action.

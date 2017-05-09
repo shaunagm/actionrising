@@ -30,16 +30,16 @@ class ProfileView(UserPassesTestMixin, generic.DetailView):
 
     def test_func(self):
         obj = self.get_object()
-        #TODO test
         return check_privacy(obj.profile, self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super(ProfileView, self).get_context_data(**kwargs)
         if self.request.user.is_authenticated():
+            own = self.request.user is self.object
             context['created_actions'] = filter_list_for_privacy_annotated(
-                self.object.profile.get_most_recent_actions_created(), self.request.user)
+                self.object.profile.get_most_recent_actions_created(), self.request.user, include_anonymous = own)
             context['tracked_actions'] = filter_list_for_privacy_annotated(
-                self.object.profile.get_most_recent_actions_tracked(), self.request.user)
+                self.object.profile.get_most_recent_actions_tracked(), self.request.user, include_anonymous = own)
             obj = self.get_object()
             context['total_actions'] = obj.profile.profileactionrelationship_set.count()
             context['percent_finished'] = obj.profile.get_percent_finished()

@@ -526,6 +526,9 @@ class ProfileSlateRelationship(models.Model):
     slate = models.ForeignKey(Slate, on_delete=models.CASCADE)
     notify_of_additions = models.BooleanField(default=True)
 
+    def __unicode__(self):
+        return u'Relationship of profile %s and slate %s' % (self.profile, self.slate)
+
     def get_cname(self):
         class_name = 'ProfileSlateRelationship'
         return class_name

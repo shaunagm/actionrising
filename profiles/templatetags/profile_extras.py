@@ -2,6 +2,7 @@ from django import template
 from django.contrib.auth.models import User
 from django_comments.models import Comment
 from mysite.lib.privacy import check_privacy
+from mysite.lib.choices import ToDoStatusChoices
 from profiles.models import ProfileActionRelationship, Profile, Relationship
 
 register = template.Library()
@@ -29,3 +30,7 @@ def filtered_feed(context, action):
         or type(action.action_object) is Comment \
         or check_privacy(action.action_object, viewer)
     return action if actor_ok and target_ok and object_ok else None
+
+@register.assignment_tag()
+def get_status_phrase(status):
+    return ToDoStatusChoices.third_person(status)

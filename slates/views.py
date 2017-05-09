@@ -10,7 +10,7 @@ from mysite.lib.choices import PrivacyChoices, StatusChoices
 from mysite.lib.privacy import (check_privacy, filter_list_for_privacy,
     filter_list_for_privacy_annotated, filtered_list_view)
 from misc.models import RecommendationTracker
-from profiles.lib.trackers import get_tracker_data_for_slate
+from profiles.lib.trackers import Trackers
 from slates.models import Slate, SlateActionRelationship
 from slates.forms import SlateForm, SlateActionRelationshipForm
 
@@ -26,11 +26,11 @@ class SlateView(UserPassesTestMixin, generic.DetailView):
         context['flag'] = get_user_flag_if_exists(self.object, self.request.user)
         annotated_list = filter_list_for_privacy_annotated(self.object.slateactionrelationship_set.all(),
             self.request.user)
-        context['actions'] = annotated_list['public_list']
-        context['hidden_actions'] = annotated_list['anonymous_count']
+        context['actions'] = annotated_list['visible_list']
+        context['hidden_actions'] = annotated_list['restricted_count']
         if self.request.user.is_authenticated():
             context['psr'] = self.request.user.profile.get_psr_given_slate(self.object)
-        context['tracker_data'] = get_tracker_data_for_slate(self.object, self.request.user)
+        context['tracker_data'] = Trackers(self.object, self.request.user)
         context['tag_list'] = self.object.tags.all()
         return context
 

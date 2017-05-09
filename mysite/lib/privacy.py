@@ -18,12 +18,12 @@ def check_privacy(object, viewer):
 def filter_list_for_privacy(object_list, user):
     return [obj for obj in object_list if check_privacy(obj, user)]
 
-def filter_list_for_privacy_annotated(object_list, user):
-    public_list = [obj for obj in object_list if check_privacy(obj, user)]
-    anonymous_count = len(object_list) - len(public_list)
-    return {'anonymous_count': anonymous_count,
+def filter_list_for_privacy_annotated(object_list, user, include_anonymous = False):
+    visible_list = [obj for obj in object_list if check_privacy(obj, user) and (include_anonymous or obj.named())]
+    restricted_count = len(object_list) - len(visible_list)
+    return {'restricted_count': restricted_count,
             'total_count': len(object_list),
-            'public_list': public_list }
+            'visible_list': visible_list }
 
 def filtered_list_view(model, user):
     '''

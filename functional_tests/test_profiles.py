@@ -1,6 +1,6 @@
 import time
 from .base import SeleniumTestCase
-from .pageobjects import ProfileListPage, ProfilePage
+from .pageobjects import ProfileListPage, ProfilePage, FollowedActivity
 from mysite.settings import LOGIN_URL
 
 default_user = "buffysummers"
@@ -74,13 +74,41 @@ class TestProfileDetail(SeleniumTestCase):
         self.assertIsNotNone(self.profile_page.location)
         # shows in full
 
+    def test_anonymous_action_by_friend(self):
+        self.profile_page.go_to_profile_page(username="admin")
+        # admin created this anonymously
+        self.assertFalse("Join the site" in self.profile_page.get_actions_created)
+
     def test_restricted_profile(self):
         self.profile_page.go_to_profile_page(username="tara_m")
         self.assertTrue('login' in self.profile_page.w.current_url)
         # self.assertFalse('Tara' in self.profile_page.name.text)
         # self.assertIsNone(self.profile_page.location)
-        # shows minimal
 
+class TestFollowedActivity(SeleniumTestCase):
+
+    def setUp(self):
+        super(TestFollowedActivity, self).setUp()
+        self.feed = FollowedActivity(self.browser, root_uri=self.live_server_url)
+        self.feed.log_in(default_user, default_password)
+        self.feed.go_to_feed()
+
+    def test_anonymous_action_by_friend(self):
+        self.assertFalse("created Join the site" in self.feed.get_activity())
+        self.assertFalse("admin created" in self.feed.get_activity())
+
+    def test_restricted_relationships(self):
+        activity = self.feed.get_activity()
+        self.assertTrue("Buffy Can See" in activity)
+        self.assertTrue("admin" in activity)
+        self.assertTrue("thewitch" in activity)
+        # privacy doesn't allow
+        self.assertFalse("Buffy Cannot See" in activity)
+        self.assertFalse("tara_m" in activity)
+
+    def test_following(self):
+        # buffy doesn't follow
+        self.assertFalse("vampire" in activity)
 
 class TestPublicProfileDetail(SeleniumTestCase):
 
