@@ -12,7 +12,7 @@ def get_notificationsettings_url(recipient):
     return 'https://www.actionrising.com' + url_path
 
 def get_toggle_notify_url(target):
-    url_path = reverse('toggle_relationships', kwargs={'pk': target.pk, 'toggle_type': 'notify'})
+    url_path = reverse('toggle_relationships', kwargs={'slug': target.username, 'toggle_type': 'notify'})
     return 'https://www.actionrising.com' + url_path
 
 def get_toggle_notify_for_slate_url(target):
