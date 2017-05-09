@@ -1,13 +1,14 @@
 from unittest import skipIf
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.conf import settings
 from django.test import override_settings
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from mysite.settings import SKIP_FUNCTIONAL_TESTS, CHROMEDRIVER_PATH
 
-@skipIf(SKIP_FUNCTIONAL_TESTS, 'Skipping functional tests')
+
+@skipIf(settings.SKIP_FUNCTIONAL_TESTS, 'Skipping functional tests')
 @override_settings(DEBUG=True)
 class SeleniumTestCase(StaticLiveServerTestCase):
 
@@ -17,7 +18,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.browser = webdriver.Chrome(CHROMEDRIVER_PATH)
+        cls.browser = webdriver.Chrome(settings.CHROMEDRIVER_PATH)
         super(SeleniumTestCase, cls).setUpClass()
 
     def setUp(self):
