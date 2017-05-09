@@ -1,14 +1,14 @@
 import datetime, pytz
 from django.test import TestCase
-from django.core.exceptions import ObjectDoesNotExist
 from django.core import mail
-from django.utils import timezone
 from django.contrib.auth.models import User
 from commitments.models import Commitment
 from commitments.forms import CommitmentForm
-from profiles.models import ProfileActionRelationship, Relationship
+from profiles.models import Relationship
 from actions.models import Action
 from mysite.lib.choices import ToDoStatusChoices
+from profiles import factories as profile_factories
+from . import factories
 
 ###################
 ### Test models ###
@@ -17,12 +17,7 @@ from mysite.lib.choices import ToDoStatusChoices
 class TestCommitmentMethods(TestCase):
 
     def setUp(self):
-        self.buffy = User.objects.create(username="buffysummers")
-        self.action = Action.objects.create(title="Test Action", creator=self.buffy)
-        self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile,
-            action=self.action)
-        self.commitment = Commitment.objects.create(profile=self.buffy.profile,
-            action=self.action)
+        self.commitment = factories.Commitment()
 
     def test_days_past_start(self):
         self.assertEqual(self.commitment.days_past_start(), 0)
@@ -149,31 +144,28 @@ class TestCommitmentMethods(TestCase):
         self.assertEqual(self.commitment.status, "expired")
         self.assertEqual(len(mail.outbox), 0)
 
+
 class TestCommitmentInteractions(TestCase):
 
     def setUp(self):
-        self.buffy = User.objects.create(username="buffysummers")
-        self.action = Action.objects.create(title="Test Action", creator=self.buffy)
-        self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile,
-            action=self.action)
-        self.commitment = Commitment.objects.create(profile=self.buffy.profile,
-            action=self.action)
+        self.par = profile_factories.ProfileActionRelationship()
+        self.commitment = Commitment.objects.create(
+            profile=self.par.profile,
+            action=self.par.action)
 
     def test_closing_par_closes_commitment(self):
         self.assertEqual(self.commitment.status, "waiting")
         self.par.status = ToDoStatusChoices.closed
         self.par.save()
-        commitment = Commitment.objects.get(profile=self.buffy.profile,
-            action=self.action)
-        self.assertEqual(commitment.status, "removed")
+        self.commitment.refresh_from_db()
+        self.assertEqual(self.commitment.status, "removed")
 
     def test_finishing_par_closes_commitment(self):
         self.assertEqual(self.commitment.status, "waiting")
         self.par.status = ToDoStatusChoices.done
         self.par.save()
-        commitment = Commitment.objects.get(profile=self.buffy.profile,
-            action=self.action)
-        self.assertEqual(commitment.status, "completed")
+        self.commitment.refresh_from_db()
+        self.assertEqual(self.commitment.status, "completed")
 
 ##################
 ### Test forms ###
