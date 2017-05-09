@@ -63,18 +63,18 @@ related reports :mag_right:.
 Before creating bug reports, please check [this list](#before-submitting-a-bug-report)
 as you might find out that you don't need to create one. When you are
 creating a bug report, please
-[include as many details as possible](#how-do-i-submit-a-good-bug-report). 
+[include as many details as possible](#how-do-i-submit-a-good-bug-report).
 Fill out an issue report as thoroughly as possible.
 
 #### Before Submitting A Bug Report
 
 * **Check the documentation.** You might be able to find the cause of the
-problem and fix things yourself. Most importantly, check if you can reproduce
-the problem in the latest version of ActionRising
+  problem and fix things yourself. Most importantly, check if you can reproduce
+  the problem in the latest version of ActionRising
 
 * **Perform a search of the issues** to see if the problem has already been
-reported. If it has, add a comment to the existing issue instead of opening a
-new one.
+  reported. If it has, add a comment to the existing issue instead of opening a
+  new one.
 
 #### How Do I Submit A (Good) Bug Report?
 
