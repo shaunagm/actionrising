@@ -17,6 +17,9 @@ htmlcov
 # Pycharm
 .idea/*
 
+# Vim
+*.sw[op]
+
 # Static files
 mysite/staticfiles/*
 
