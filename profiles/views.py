@@ -10,7 +10,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
 from actstream.actions import follow, unfollow
-from mysite.lib.privacy import check_privacy, filter_list_for_privacy_annotated, filtered_list_view
+from mysite.lib.privacy import check_privacy, apply_check_privacy
 from mysite.lib.choices import PrivacyChoices, ToDoStatusChoices
 from django.contrib.auth.models import User
 from profiles.models import (Profile, Relationship, ProfileActionRelationship,
@@ -35,11 +35,15 @@ class ProfileView(UserPassesTestMixin, generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProfileView, self).get_context_data(**kwargs)
         if self.request.user.is_authenticated():
-            own = self.request.user is self.object
-            context['created_actions'] = filter_list_for_privacy_annotated(
-                self.object.profile.get_most_recent_actions_created(), self.request.user, include_anonymous = own)
-            context['tracked_actions'] = filter_list_for_privacy_annotated(
-                self.object.profile.get_most_recent_actions_tracked(), self.request.user, include_anonymous = own)
+            own = self.request.user == self.object
+            context['created_actions'] = apply_check_privacy(
+                self.object.profile.get_most_recent_actions_created(),
+                self.request.user,
+                include_anonymous = own)
+            context['tracked_actions'] = apply_check_privacy(
+                self.object.profile.get_most_recent_actions_tracked(),
+                self.request.user,
+                include_anonymous = own)
             obj = self.get_object()
             context['total_actions'] = obj.profile.profileactionrelationship_set.count()
             context['percent_finished'] = obj.profile.get_percent_finished()

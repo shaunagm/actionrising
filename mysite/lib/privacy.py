@@ -46,6 +46,9 @@ def check_privacy(object, viewer, follows_user = None):
     viewable = object.profile if type(object) is User else object
     return viewable.is_visible_to(viewer, follows_user)
 
+def check_anonymity(object, include_anonymous):
+    return include_anonymous or not(hasattr(object, 'named')) or object.named()
+
 def filter_list_for_privacy_annotated(object_list, user, include_anonymous = False):
     '''
     object_list: list of objects like Actions, Slates, etc
@@ -56,15 +59,16 @@ def filter_list_for_privacy_annotated(object_list, user, include_anonymous = Fal
         total_count: total number of objects
         visible_list: list of objects user can see'''
     visible_list = [obj for obj in object_list
-                    if check_privacy(obj, user) and (include_anonymous or obj.named())]
+                    if check_privacy(obj, user) and check_anonymity(obj, include_anonymous)]
     return {'restricted_count': len(object_list) - len(visible_list),
             'total_count': len(object_list),
             'visible_list': visible_list }
 
-def apply_check_privacy(objects, user):
+def apply_check_privacy(objects, user, include_anonymous = True):
     '''Efficiently applies check_privacy to a list of objects.'''
     follows_user = user.profile.get_followers()
-    return [object for object in objects if check_privacy(object, user, follows_user)]
+    return [object for object in objects if
+            check_privacy(object, user, follows_user) and check_anonymity(object, include_anonymous)]
 
 def filtered_list_view(model, user):
     '''
@@ -84,8 +88,7 @@ def check_activity(activity, viewer, own):
     own: boolean - should be True when the activity feed is of your own activity; determines
         whether you should see activity involving anonymized actions.
     Returns boolean - whether viewer should see this activity based on privacy and anonymity'''
-    accessible = lambda object: check_privacy(object, viewer) and (
-        own or isinstance(object, User) or object.named())
+    accessible = lambda object: check_privacy(object, viewer) and check_anonymity(object, own)
     actor_ok = accessible(activity.actor)
     target_ok = activity.target is None or accessible(activity.target)
     object_ok = activity.action_object is None or \
