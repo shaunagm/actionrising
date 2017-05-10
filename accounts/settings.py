@@ -1,5 +1,9 @@
-OPTIONS = {
-    'libraries: {
-        'constants': 'constants'
-     }
-}
+TEMPLATES = [
+    {
+        'OPTIONS': {
+            'libraries: {
+                'constants': 'constants'
+            }
+        }
+    }
+]
