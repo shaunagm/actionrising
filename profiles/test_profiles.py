@@ -80,12 +80,6 @@ class TestProfileMethods(TestCase):
         self.assertEqual(list(self.buffy.profile.get_suggested_actions()), [self.par])
         self.assertEqual(self.buffy.profile.get_suggested_actions_count(), 1)
 
-    def test_follows(self):
-        self.assertFalse(self.buffy.profile.follows(self.faith.profile))
-        self.assertTrue(self.faith.profile.follows(self.buffy.profile))
-        self.assertFalse(self.buffy.profile.follows(self.lorne.profile))
-        self.assertFalse(self.lorne.profile.follows(self.buffy.profile))
-
     def test_is_visible(self):
         self.assertTrue(self.faith.profile.is_visible_to(self.buffy))
         self.assertFalse(self.buffy.profile.is_visible_to(self.faith))
@@ -505,18 +499,23 @@ class TestTrackers(TestCase):
         # buffy tracks action
         ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action)
         # slate tracks action
-        SlateActionRelationship.objects.create(slate=self.slate, action=self.action, status='suggested')
+        SlateActionRelationship.objects.create(slate=self.slate, action=self.action)
         # faith tracks slate
         ProfileSlateRelationship.objects.create(profile=self.faith.profile, slate=self.slate)
 
         self.action0 = Action.objects.create(slug="test-action0", title="Test Action 0", creator=self.faith)
         self.slate0 = Slate.objects.create(slug="test-slate0", creator=self.faith, title="Test Slate 0")
+        self.private_slate = Slate.objects.create(slug="private-slate", creator=self.vampire, title="Private Slate")
+        self.private_slate.privacy = PrivacyChoices.follows
+        self.private_slate.save()
 
         self.action2 = Action.objects.create(slug="test-action2", title="Test Action 2", creator=self.faith)
         self.buffy_action2 = ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action2)
-        self.vampire_action2 = ProfileActionRelationship.objects.create(profile=self.vampire.profile, action=self.action2)
-        self.slate_action2 = SlateActionRelationship.objects.create(slate=self.slate, action=self.action2, status='suggested')
-        self.slate0_action2 = SlateActionRelationship.objects.create(slate=self.slate0, action=self.action2, status='suggested')
+        self.buffy_action2.status = ToDoStatusChoices.suggested
+        self.buffy_action2.save()
+        self.vampire_action2 = ProfileActionRelationship.objects.create(profile=self.vampire.profile, action=self.action2, status=ToDoStatusChoices.accepted)
+        self.slate_action2 = SlateActionRelationship.objects.create(slate=self.slate, action=self.action2)
+        self.private_slate_action2 = SlateActionRelationship.objects.create(slate=self.private_slate, action=self.action2)
 
         self.slate2 = Slate.objects.create(slug="test-slate2", creator=self.faith, title="Test Slate 2")
         self.faith_slate2 = ProfileSlateRelationship.objects.create(profile=self.faith.profile, slate=self.slate2)
@@ -546,10 +545,23 @@ class TestTrackers(TestCase):
         self.assertEqual(Trackers(self.action2, self.buffy).slate_phrase, '2 slates')
 
     def test_people_tracking_by_status(self):
-        pass #TODO
+        data_iterator = Trackers(self.action2, self.buffy).people_tracking_by_status
+        data = dict(data_iterator())
+        self.assertEqual(len(data.keys()), 2)
+        self.assertEqual(data['suggested']['total_count'], 1)
+        self.assertEqual(data['suggested']['restricted_count'], 0)
+        self.assertEqual(data['suggested']['visible_list'], [self.buffy_action2])
+        self.assertEqual(data['accepted']['total_count'], 1)
+        self.assertEqual(data['accepted']['restricted_count'], 1)
+        self.assertEqual(data['accepted']['visible_list'], [])
 
     def test_slates_tracking_by_privacy(self):
-        pass #TODO do sars have statuses?
+        data = Trackers(self.action2, self.buffy).slates_tracking_by_privacy
+        self.assertEqual(data['total_count'], 2)
+        # buffy can't see vampire's slate
+        self.assertEqual(data['restricted_count'], 1)
+        # buffy can see faith's slate
+        self.assertEqual(data['visible_list'], [self.slate_action2])
 
     def test_people_tracking_by_privacy(self):
         data = Trackers(self.slate2, self.buffy).people_tracking_by_privacy

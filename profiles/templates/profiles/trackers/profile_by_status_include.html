@@ -6,9 +6,9 @@
 
 {% if object.restricted_count > 0 %}
   <span class="tracker_span">
-    {% ifnotequal object.restricted_count object.list.total_count %}
+    {% ifnotequal object.restricted_count object.total_count %}
       and
     {% endifnotequal %}
-    {{ object.list.restricted_count }} anonymous tracker{{ object.list.restricted_count|pluralize }}
+    {{ object.restricted_count }} anonymous tracker{{ object.restricted_count|pluralize }}
   </span>
 {% endif %}

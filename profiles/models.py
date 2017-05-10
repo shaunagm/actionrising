@@ -120,7 +120,8 @@ class Profile(models.Model):
 
     def filter_connected_profiles(self, predicate):
         '''Helper for getting profiles with a particular kind of relationship to self.
-        predicate: function from Relationship to boolean.'''
+        predicate: function taking a Relationship object and returning boolean. Used to filter Relationships.
+        Returns the Profiles (besides self) associated with the Relationships that predicate is true of.'''
         profile_pks = [profile.pk for profile in self.get_connected_people()
                        if predicate(self.get_relationship(profile))]
         return Profile.objects.filter(pk__in=profile_pks)
@@ -187,12 +188,6 @@ class Profile(models.Model):
         relationships = [(profile, self.get_relationship(profile)) for profile in self.get_connected_people()]
         return [profile.user for (profile, rel) in relationships
                 if rel.current_profile_follows_target(self) and not rel.current_profile_mutes_target(self)]
-        # people = []
-        # for person in self.get_connected_people():
-        #     rel = self.get_relationship(person)
-        #     if rel.current_profile_follows_target(self) and not rel.current_profile_mutes_target(self):
-        #         people.append(person.user)
-        # return people
 
     def get_percent_finished(self):
         total_count = 0
@@ -231,24 +226,12 @@ class Profile(models.Model):
                     actions.append(sar.action)
         return actions
 
-    def is_visible_to(self, viewer):
-        return privacy_tests[self.current_privacy](self, viewer)
-
-    def follows(self, other):
-        return other in self.get_people_user_follows()
-
-    @classmethod
-    def default_order_field(self):
-        return '-date_joined'
+    def is_visible_to(self, viewer, follows_user = None):
+        return privacy_tests[self.current_privacy](self, viewer, follows_user)
 
     @classmethod
     def default_sort(self, items):
         return sorted(items, key = lambda x: getattr(x, 'date_joined'), reverse = True)
-
-    @classmethod
-    def status_filter(self):
-        return []
-
 
     # Add methods to save and access links as json objects
 
@@ -506,8 +489,8 @@ class ProfileActionRelationship(models.Model):
             suggesters.append(suggester)
         self.set_suggesters(suggesters)
 
-    def is_visible_to(self, viewer):
-        return self.profile.is_visible_to(viewer) and self.action.is_visible_to(viewer)
+    def is_visible_to(self, viewer, follows_user = None):
+        return self.profile.is_visible_to(viewer, follows_user) and self.action.is_visible_to(viewer, follows_user)
 
 # I think we just want to track PAR & PSR for now.
 @disable_for_loaddata
@@ -540,8 +523,8 @@ class ProfileSlateRelationship(models.Model):
     def get_profile(self):
         return self.profile
 
-    def is_visible_to(self, viewer):
-        return self.profile.is_visible_to(viewer) and self.slate.is_visible_to(viewer)
+    def is_visible_to(self, viewer, follows_user = None):
+        return self.profile.is_visible_to(viewer, follows_user) and self.slate.is_visible_to(viewer, follows_user)
 
     def named(self):
         return True

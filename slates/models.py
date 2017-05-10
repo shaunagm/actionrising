@@ -100,12 +100,8 @@ class Slate(models.Model):
                 people.append(psr.profile.user)
         return people
 
-    def is_visible_to(self, viewer):
-        return privacy_tests[self.current_privacy](self, viewer)
-
-    @classmethod
-    def default_order_field(self):
-        return 'date_created'
+    def is_visible_to(self, viewer, follows_user = None):
+        return privacy_tests[self.current_privacy](self, viewer, follows_user)
 
     @classmethod
     def default_sort(self, items):
@@ -153,8 +149,8 @@ class SlateActionRelationship(models.Model):
         else:
             return self.get_status_display()
 
-    def is_visible_to(self, viewer):
-        return self.action.is_visible_to(viewer) and self.slate.is_visible_to(viewer)
+    def is_visible_to(self, viewer, follows_user = None):
+        return self.action.is_visible_to(viewer, follows_user) and self.slate.is_visible_to(viewer, follows_user)
 
 @disable_for_loaddata
 def sar_handler(sender, instance, created, **kwargs):

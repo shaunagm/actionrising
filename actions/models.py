@@ -166,12 +166,8 @@ class Action(models.Model):
                 return float((self.deadline - now).seconds)/float(86400)
         return -1
 
-    def is_visible_to(self, viewer):
-        return privacy_tests[self.current_privacy](self, viewer)
-
-    @classmethod
-    def default_order_field(self):
-        return 'date_created'
+    def is_visible_to(self, viewer, follows_user = None):
+        return privacy_tests[self.current_privacy](self, viewer, follows_user)
 
     @classmethod
     def default_sort(self, items):
