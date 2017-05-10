@@ -4,6 +4,7 @@ from django.core.management.base import BaseCommand, CommandError
 from actions.models import Action
 from notifications.lib import email_handlers
 from mysite.lib.choices import StatusChoices
+from constants import constants_dict
 
 class Command(BaseCommand):
 
@@ -15,10 +16,11 @@ class Command(BaseCommand):
                     action.status = StatusChoices.finished
                     action.save()
                 else:
-                    if action.get_days_til_close_action() == 47:  # 3 day warning
+                    deadline = constants_table['ACTION_DEFAULT_CLOSE_DEADLINE']
+                    if action.get_days_til_close_action() == deadline - 3:  # 3 day warning
                         if action.creator.email:
                             email_handlers.close_action_warning_email(action.creator.profile, action)
-                    if action.get_days_til_close_action() > 49:  # close
+                    if action.get_days_til_close_action() >= deadline:  # close
                         action.status =  StatusChoices.finished
                         action.save()
                         if action.creator.email:

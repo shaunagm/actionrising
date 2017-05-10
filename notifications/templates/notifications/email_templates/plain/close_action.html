@@ -1,9 +1,12 @@
-Your action, {{ action.title }}, has been closed automatically after 50 days.
+{% load constants %}
+Your action, {{ action.title }}, has been closed automatically after
+{{ constants 'ACTION_DEFAULT_CLOSE_DEADLINE' }} days.
 
 To reopen it, click here: {{ action.get_keep_open_url_with_domain }}
 
 You can also edit the action and add a deadline.  Actions with deadlines are closed
-when the action has passed, rather than after 50 days.
+when the action has passed, rather than after 
+{{ constants 'ACTION_DEFAULT_CLOSE_DEADLINE' }} days.
 
 To edit the action and add a deadline, click here: {{ action.get_edit_url_with_domain }}
 

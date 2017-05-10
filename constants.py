@@ -6,7 +6,7 @@ the constant is only used locally, please define it locally for clarity.
 
 CONSTANTS
 
-Constants are stored in the `constants_dict` dictionary. The alternative
+Constants are stored in the `constants_table` dictionary. The alternative
 approach, `getattr`, risks unfortunate injection attacks.
 
 Constant names should be descriptive and in ALL CAPS.
@@ -30,8 +30,10 @@ from django import template
 register = template.Library()
 
 
-constants_dict = {}
-
 @register.simple_tag
 def constants(constant_name):
-    return constants_dict[constant_name]
+    return constants_table[constant_name]
+
+constants_table = {
+    'ACTION_DEFAULT_CLOSE_DEADLINE': 50
+}

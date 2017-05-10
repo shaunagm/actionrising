@@ -1,3 +1,4 @@
+{% load constants %}
 {% extends "notifications/email_templates/html/base.html" %}
 
 {% block email_content %}
@@ -31,7 +32,7 @@
 
       <p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">
         You can also edit the action and add a deadline.  Actions with deadlines are closed
-        when the action has passed, rather than after 50 days.</p>
+        when the action has passed, rather than after {{ constants 'ACTION_DEFAULT_CLOSE_DEADLINE' }} days.</p>
 
         <p style="font-family:sans-serif;font-size:18px;font-weight:bold;margin:0;Margin-left:25px;Margin-bottom:15px;">
           <a href="{{ action.get_edit_url_with_domain }}">Edit your action</a>
