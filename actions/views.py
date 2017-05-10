@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 
 from flags.lib.flag_helpers import get_user_flag_if_exists
 from mysite.lib.choices import PrivacyChoices, StatusChoices
-from mysite.lib.privacy import check_privacy, filtered_list_view
+from mysite.lib.privacy import check_privacy, apply_check_privacy
 from profiles.lib.trackers import Trackers
 from tags.lib import tag_helpers
 from actions.models import Action, ActionFilter
@@ -55,8 +55,9 @@ class ActionListView(generic.ListView):
         context = super(ActionListView, self).get_context_data(**kwargs)
         if self.request.user.is_authenticated():
             context['your_filters'] = self.request.user.actionfilter_set.all().order_by('date_created')
-        context['object_list'] = [object for object in filtered_list_view(Action, self.request.user)
-                                  if object.status in [StatusChoices.ready, StatusChoices.finished]]
+        visible_actions = [action for action in apply_check_privacy(Action.objects.all(), self.request.user, include_anonymous = True)
+                           if action.status in [StatusChoices.ready, StatusChoices.finished]]
+        context['object_list'] = sorted(visible_actions, key = lambda x: getattr(x, 'date_created'))
         return context
 
 class ActionCreateView(LoginRequiredMixin, generic.edit.CreateView):

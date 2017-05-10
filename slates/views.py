@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 from flags.lib.flag_helpers import get_user_flag_if_exists
 from mysite.lib.choices import PrivacyChoices, StatusChoices
-from mysite.lib.privacy import check_privacy, filter_list_for_privacy_annotated, filtered_list_view
+from mysite.lib.privacy import check_privacy, apply_check_privacy, filter_list_for_privacy_annotated
 from misc.models import RecommendationTracker
 from profiles.lib.trackers import Trackers
 from slates.models import Slate, SlateActionRelationship
@@ -44,8 +44,9 @@ class SlateListView(generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super(SlateListView, self).get_context_data(**kwargs)
-        context['object_list'] = [object for object in filtered_list_view(Slate, self.request.user)
-                                  if object.status in [StatusChoices.ready, StatusChoices.finished]]
+        visible_slates = [slate for slate in apply_check_privacy(Slate.objects.all(), self.request.user, include_anonymous = True)
+                          if slate.status in [StatusChoices.ready, StatusChoices.finished]]
+        context['object_list'] = sorted(visible_slates, key = lambda slate: getattr(slate, 'date_created'))
         return context
 
 class SlateCreateView(LoginRequiredMixin, generic.edit.CreateView):
