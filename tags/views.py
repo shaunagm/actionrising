@@ -16,7 +16,7 @@ class TagView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(TagView, self).get_context_data(**kwargs)
-        context['action_list'] = apply_check_privacy(self.object.actions.all(), self.request.user, include_anonmyous = True)
+        context['action_list'] = apply_check_privacy(self.object.actions.all(), self.request.user, include_anonymous = True)
         context['slate_list'] = apply_check_privacy(self.object.slates.all(), self.request.user, include_anonymous = True)
         context['profile_list'] = apply_check_privacy(self.object.profiles.all(), self.request.user, include_anonymous = True)
         return context
