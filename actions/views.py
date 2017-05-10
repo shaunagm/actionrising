@@ -132,6 +132,7 @@ def process_filter_wizard_forms(request):
         form.update_filter(actionfilter, request)
     return actionfilter
 
+@login_required
 def filter_wizard_view(request):
     if request.method == 'POST':
         actionfilter = process_filter_wizard_forms(request)
