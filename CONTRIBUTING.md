@@ -215,7 +215,36 @@ to your issue.  This will make it easier for people to notice that you're stuck,
 ### Issue and Pull Request Labels
 
 This section lists the labels we use to help us track and manage issues and
-pull requests. Please open an issue if you have suggestions for new labels.
+pull requests.  We are not terribly consistent about using labels, but we try.
+If you have a request for a new label, ask in the #general channel in Slack.
+
+__Issue domain/type__:
+* [Architecture](https://github.com/shaunagm/actionrising/labels/architecture): how the codebase is constructed
+* [Design](https://github.com/shaunagm/actionrising/labels/design): user experience and how the site appears
+* [DevOps](https://github.com/shaunagm/actionrising/labels/devops): dependencies, settings, integrations, etc
+* [Docs](https://github.com/shaunagm/actionrising/labels/docs): documentation
+* [Tests](https://github.com/shaunagm/actionrising/labels/tests): testing of any kind
+
+__Category of issue__:
+* [Bug](https://github.com/shaunagm/actionrising/labels/bug): errors and problems
+* [Enhancement](https://github.com/shaunagm/actionrising/labels/enhancement): improvements and new features
+
+__State of issue__:
+* Statuses:
+  * [Triage](https://github.com/shaunagm/actionrising/labels/status%3A%20triage): needs someone to put it in one of the other statuses
+  * [Accepted](https://github.com/shaunagm/actionrising/labels/status%3A%20accepted): we are working on or plan to work on this issue
+  * [Blocked](https://github.com/shaunagm/actionrising/labels/status%3A%20blocked): someone is working on this and needs help!
+  * [Declined](https://github.com/shaunagm/actionrising/labels/status%3A%20declined): we have decided not to work on this issue
+* Priority:
+  * [Urgent](https://github.com/shaunagm/actionrising/labels/priority%3A%20urgent)
+  * [High](https://github.com/shaunagm/actionrising/labels/priority%3A%20high)
+  * [Low](https://github.com/shaunagm/actionrising/labels/priority%3A%20low)
+
+__Misc Labels__:
+* [Refactoring](https://github.com/shaunagm/actionrising/labels/refactoring): for issues that
+primarily deal with refactoring (rewriting and hopefully improving) part of the codebase
+* [hypothetically-bite-sized](https://github.com/shaunagm/actionrising/labels/hypothetically%20bite-sized): should be a small task to work on (warning: it may be more complicated than it looks!)
+* [Needs more thought](https://github.com/shaunagm/actionrising/labels/needs%20more%20thought): a proposed feature or change that needs continued thought & discussion
 
 *This Contributing guide is inspired by the `CONTRIBUTING.md` developed by the
 Atom community.*
