@@ -19,6 +19,15 @@ class TestSignupForm(SeleniumTestCase):
         self.signuppage = SignupPage(self.browser, root_uri=self.live_server_url)
         self.signuppage.go_to_signup()
 
+    def test_password(self):
+        self.signuppage.email = "angel@sunnydale.edu"
+        self.signuppage.username = "angel"
+        self.signuppage.password = "randompassword111"
+        self.signuppage.signup_button.click()
+
+        angel = User.objects.get(username="angel")
+        self.assertTrue(angel.check_password("randompassword111"))
+
     def test_reject_duplicate_email(self):
         self.signuppage.email = "buffy@sunnydale.edu"
         self.signuppage.username = "another_test_user"
