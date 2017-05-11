@@ -264,7 +264,7 @@ def manage_suggested_action(request, slug, type):
     except ObjectDoesNotExist: # If the action slug got borked
         return HttpResponseRedirect(reverse('index'))
     manage_suggested_action_helper(par, type)
-    return HttpResponseRedirect(reverse('suggested', kwargs={'pk':request.user.pk}))
+    return HttpResponseRedirect(reverse('suggested', kwargs={'slug':request.user.username}))
 
 class DashboardView(LoginRequiredMixin, generic.TemplateView):
     template_name = "profiles/dashboard.html"
