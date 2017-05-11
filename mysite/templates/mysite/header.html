@@ -18,8 +18,8 @@
           <li><a href="{% url 'actions' %}">Actions</a></li>
           <li><a href="{% url 'follow-users-and-slates' %}">Community</a></li>
         {% else %}
-          <li><a href="{% url 'public-actions' %}">Actions</a></li>
-          <li><a href="{% url 'public-slates' %}">Community</a></li>
+          <li><a href="{% url 'actions' %}">Actions</a></li>
+          <li><a href="{% url 'slates' %}">Community</a></li>
         {% endif %}
 
         <li><a href="{% url 'create_action' %}">Create Action</a></li>

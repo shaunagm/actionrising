@@ -4,24 +4,24 @@ from django.views import generic
 from django.contrib.auth.mixins import UserPassesTestMixin,  LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
-from mysite.lib.privacy import filter_list_for_privacy
+from mysite.lib.privacy import apply_check_privacy
 from tags.models import Tag
+from actions.models import Action
+from slates.models import Slate
+from profiles.models import Profile
 
-class TagView(LoginRequiredMixin, generic.DetailView):
+class TagView(generic.DetailView):
     template_name = 'tags/tag.html'
     model = Tag
 
     def get_context_data(self, **kwargs):
         context = super(TagView, self).get_context_data(**kwargs)
-        context['action_list'] = filter_list_for_privacy(self.object.actions.all(),
-            self.request.user)
-        context['slate_list'] = filter_list_for_privacy(self.object.actions.all(),
-            self.request.user)
-        context['profile_list'] = filter_list_for_privacy(self.object.actions.all(),
-            self.request.user)
+        context['action_list'] = apply_check_privacy(self.object.actions.all(), self.request.user, include_anonymous = True)
+        context['slate_list'] = apply_check_privacy(self.object.slates.all(), self.request.user, include_anonymous = True)
+        context['profile_list'] = apply_check_privacy(self.object.profiles.all(), self.request.user, include_anonymous = True)
         return context
 
-class TagListView(LoginRequiredMixin, generic.ListView):
+class TagListView(generic.ListView):
     template_name = "tags/tags.html"
     model = Tag
 
