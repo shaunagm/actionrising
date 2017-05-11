@@ -59,7 +59,7 @@ class PluginConf(object):
         return form
 
     def add_plugin_field_data(self, form):
-        if hasattr(form, "location_object"):
+        if hasattr(form, "location_object") and form.location_object:
             for field in self.get_fields(form):
                 form.fields[field].initial = getattr(form.location_object, field)
         return form
@@ -71,9 +71,10 @@ class PluginConf(object):
 
     def process_plugin_fields(self, form, instance):
         location_object = self.get_or_create_plugin_object(form, instance)
-        for field in self.get_fields(form):
-            setattr(location_object, field, form.cleaned_data[field])
-        location_object.save()
+        if location_object:
+            for field in self.get_fields(form):
+                setattr(location_object, field, form.cleaned_data[field])
+            location_object.save()
 
     def get_filter_form(self, request):
         form = self.forms["FilterForm"]

@@ -47,6 +47,7 @@ class SignUpForm(ModelForm):
     def save(self, commit=True):
         instance = super(SignUpForm, self).save(commit=False)
         instance.is_active = False
+        instance.set_password(self.cleaned_data['password'])
         instance.save()
 
         # Send notification email with one-time token
