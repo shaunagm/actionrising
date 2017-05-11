@@ -456,12 +456,23 @@ class ProfileActionRelationship(models.Model):
             return json.loads(self.suggested_by)
         return []
 
+    def fetch_suggesters(self):
+        return User.objects.filter(username__in=self.get_suggesters())
+
+    def format_suggesters(self, suggesters):
+        suggester_html = ["<a href='{0}'> {1} </a>".format(suggester.profile.get_absolute_url(), suggester.username)
+                          for suggester in suggesters]
+        return ' ,'.join(suggester_html)
+
+    def get_suggester_html(self):
+        last = self.format_suggesters([self.last_suggester])
+        if len(self.get_suggesters()) > 1:
+            return "{0} and others suggest".format(last)
+        else:
+            return "{0} suggests".format(last)
+
     def get_suggesters_html(self):
-        suggesters = ""
-        for user in self.get_suggesters():
-            user_obj = User.objects.get(username=user)
-            suggesters += "<a href='" + user_obj.profile.get_absolute_url() + "'>" + user_obj.username + "</a>, "
-        return suggesters[0:-2]
+        return self.format_suggesters(self.fetch_suggesters())
 
     def set_suggesters(self, suggesters):
         self.suggested_by = json.dumps(suggesters)

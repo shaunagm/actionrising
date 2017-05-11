@@ -277,6 +277,7 @@ class DashboardView(LoginRequiredMixin, generic.TemplateView):
         context['followed_slates'] = self.request.user.profile.profileslaterelationship_set.all()
         context['created_actions'] =  self.request.user.action_set.all()
         context['created_slates'] = self.request.user.slate_set.all()
+        context['suggested_pars'] = self.request.user.profile.get_suggested_actions()
         # If none of the above is filled out, include alert.
         if not (context['open_actions'] or context['your_friends'] or
             context['your_filters'] or context['followed_slates'] or
