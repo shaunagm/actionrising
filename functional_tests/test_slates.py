@@ -1,12 +1,5 @@
-import time
-
 from .base import SeleniumTestCase
 from .pageobjects import SlateDetailPage, SlateListPage, SlateActionsListPage
-from profiles.models import Profile, ProfileActionRelationship
-
-from actions.models import Action
-from django.contrib.auth.models import User
-from mysite.lib.privacy import check_privacy
 
 default_user = "buffysummers"
 default_password = "apocalypse"
@@ -77,7 +70,6 @@ class TestSlateDetail(SeleniumTestCase):
         self.wait_helper()
         self.slate_info.info_tab.click()
         self.wait_helper("info")
-        time.sleep(4)
         # TODO: No idea why creator.text is returning none here
         self.assertEquals(self.slate_info.creator.text, "Created by buffysummers")
         self.assertEquals(self.slate_info.description.text, "Indescribable.")
@@ -131,7 +123,6 @@ class TestSlateActionList(SeleniumTestCase):
         self.assertEquals(self.actions_table.first_row_action.text, "Join the site")
         self.actions_table.select_priority("All")
         self.wait_helper()
-        time.sleep(4)
         self.assertEquals(len(self.actions_table.rows), 3)
         self.assertEquals(self.actions_table.first_row_action.text, "Join the site")
 

@@ -1,4 +1,3 @@
-import time, sys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
@@ -8,9 +7,11 @@ from django.contrib.auth.models import User
 from actions.models import Action
 from slates.models import Slate
 
+
 def wait_helper(browser, id="actionrisingbody"):
+    """ make sure element is visible on page """
     element = WebDriverWait(browser, 15).until(
-        EC.presence_of_element_located((By.ID, id))
+        EC.visibility_of_element_located((By.ID, id))
     )
     if not element:
         raise Exception("Page didn't load after 15 seconds")

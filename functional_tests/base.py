@@ -33,9 +33,10 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         cls.browser.quit()
         super(SeleniumTestCase, cls).tearDownClass()
 
-    def wait_helper(cls, id="actionrisingbody"):
-        element = WebDriverWait(cls.browser, 15).until(
-            EC.presence_of_element_located((By.ID, id))
+    def wait_helper(self, id="actionrisingbody"):
+        """ Make sure element is visible on page """
+        element = WebDriverWait(self.browser, 15).until(
+            EC.visibility_of_element_located((By.ID, id))
         )
         if not element:
             raise Exception("Page didn't load after 15 seconds")
