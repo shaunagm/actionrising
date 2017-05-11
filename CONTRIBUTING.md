@@ -176,7 +176,7 @@ Unsure where to begin contributing to ActionRising?  Join us on the [ActionRisin
 Slack](https://actionrising.slack.com/)!  You can request an invite from
 actionrisingsite@gmail.com.  Once you're on the Slack, @shauna and @presley are
 especially good people to ask for help, but we're all very friendly.  You can also
-look through our [issues labeled 'hypothetically-bite-sized](https://github.com/shaunagm/actionrising/issues?q=is%3Aopen+is%3Aissue+label%3A%22hypothetically+bite-sized%22) but we prefer you say hi before getting started.
+look through our [issues labeled hypothetically-bite-sized](https://github.com/shaunagm/actionrising/issues?q=is%3Aopen+is%3Aissue+label%3A%22hypothetically+bite-sized%22) but we prefer you say hi before getting started.
 
 Once you've picked an issue to work on, we'll assign it to you and add it to our
 [kanban board](https://github.com/shaunagm/actionrising/projects/7), which we use to
@@ -184,7 +184,7 @@ coordinate our efforts and minimize things like merge conflicts and duplicated w
 
 If you run into trouble while working on an issue, please reach out via the slack
 and by mentioning people using @ in the Github issue you're working on.  You can also
-add a [blocked label](https://github.com/shaunagm/actionrising/labels/status%3A%20blocked)
+ask an admin to add a [blocked label](https://github.com/shaunagm/actionrising/labels/status%3A%20blocked)
 to your issue.  This will make it easier for people to notice that you're stuck, and help you.
 
 ### Pull Requests
