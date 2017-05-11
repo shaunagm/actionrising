@@ -14,17 +14,18 @@
    <div class="panel-body">
      {% if suggested_pars %}
         <div class="suggested-section">
-          <h4>Suggested Actions</h4>
-          <a href="{% url 'suggested' request.user.username %}" title="See details in new page" class="extra-padding-left">↱</a>
+          <h4>Suggested to you
+          <a href="{% url 'suggested' request.user.username %}" title="See details in new page" ><span class="material-icons">open_in_new</span></a>
+          </h4>
           {% for par in suggested_pars %}
-            {{ par.get_suggester_html|safe }}
-            <a href="{{ par.action.get_robust_url }}">{{ par.action.title }}</a>
             <a href="{% url 'manage_suggested_action' slug=par.action.slug type='accept' %}">
-              <span class="label label-success">Accept</span>
+              <i class="fa fa-plus accept" aria-hidden="true" title="Take on"></i>
             </a>
             <a href="{% url 'manage_suggested_action' slug=par.action.slug type='reject' %}">
-              <span class="label label-danger">Reject</span>
+              <i class="fa fa-times decline" aria-hidden="true" title="Decline"></i>
             </a>
+            {{ par.get_suggester_html|safe }}
+            <a href="{{ par.action.get_robust_url }}">{{ par.action.title }}</a>
           {% endfor %}
         </div>
      {% endif %}
