@@ -1,17 +1,14 @@
-import datetime, mock
+import datetime
 
 from django.test import TestCase
-from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
-from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
-from profiles.models import Profile, ProfileActionRelationship
+from django.forms.widgets import HiddenInput
 
 from mysite.lib.choices import PrivacyChoices, StatusChoices
-from mysite.lib.utils import slugify_helper
-from actions.models import Action
 from actions.forms import ActionForm
 from tags.models import Tag
+from profiles import factories as profile_factories
 
 
 ###################
@@ -21,17 +18,16 @@ from tags.models import Tag
 class TestActionMethods(TestCase):
 
     def setUp(self):
-        self.buffy = User.objects.create(username="buffysummers")
-        self.faith = User.objects.create(username="faithlehane")
-        self.action = Action.objects.create(title="Test Action", creator=self.buffy)
-        self.tag_one = Tag.objects.create(name="Test Tag One", kind="topic")
-        self.tag_two = Tag.objects.create(name="Test Tag Two", kind="type")
-        self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action)
+        self.par = profile_factories.ProfileActionRelationship(action__title="Test Action")
+        self.action = self.par.action
+        self.buffy = self.action.creator
 
     def test_get_tags(self):
-        self.action.tags.add(self.tag_one)
-        self.action.tags.add(self.tag_two)
-        self.assertEqual(list(self.action.get_tags()), [self.tag_one, self.tag_two])
+        tag_one = Tag.objects.create(name="Test Tag One", kind="topic")
+        tag_two = Tag.objects.create(name="Test Tag Two", kind="type")
+        self.action.tags.add(tag_one)
+        self.action.tags.add(tag_two)
+        self.assertEqual(list(self.action.get_tags()), [tag_one, tag_two])
 
     def test_get_creator(self):
         self.assertEqual(self.action.get_visible_creator(), self.buffy)
@@ -61,6 +57,7 @@ class TestActionMethods(TestCase):
         self.action.save()
         self.assertEqual(self.action.get_days_til_deadline(), -1)
 
+
 class TestActionForms(TestCase):
 
     def setUp(self):
@@ -81,6 +78,5 @@ class TestActionForms(TestCase):
         self.assertEqual(form_inherited_privacy, "Your Default (Currently 'Visible Sitewide')")
 
     def test_action_status_is_hidden_on_create(self):
-        from django.forms.widgets import HiddenInput
         initial_form = ActionForm(user=self.buffy, formtype="create")
         self.assertEqual(type(initial_form.fields['status'].widget), HiddenInput)
