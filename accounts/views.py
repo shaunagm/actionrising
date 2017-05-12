@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import login
 from django.contrib.auth.models import User
@@ -19,7 +19,7 @@ class SignUpView(generic.edit.CreateView):
     model = User
     form_class = SignUpForm
     template_name = "accounts/signup_form.html"
-    success_url = "/accounts/sent"
+    success_url = reverse_lazy("sent-invite")
 
 class SentView(generic.TemplateView):
     template_name = "accounts/sent_invite.html"
