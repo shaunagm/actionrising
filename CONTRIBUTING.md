@@ -66,6 +66,8 @@ If you have any questions, or want to talk about potential features more informa
 
 #### I want to make a (non-urgent) change
 
+_Note: this guide assumes you've set the main repository as the remote named `upstream` and your personal fork as the remote named `origin`._
+
 Before making a change, you’ll want to check in with the community. To do this, look at the __in progress__ and __code review__ columns of the [kanban board](https://github.com/shaunagm/actionrising/projects/7) to see if anyone else is doing work that might overlap with with yours. If you find anyone, reach out to make sure your work doesn’t conflict! The best way to do this is to @ them on the issue you’re addressing or on an empty pull request. When in doubt, just @ everyone who has an issue in the ‘in progress’ and ‘code review’ columns. You should also always make sure to @ shauna, the project owner.  (A lot of small changes will just be @ing Shauna, which is totally fine.)
 
 Once you get the go-ahead to start developing, you’ll want to make a feature branch:
@@ -78,8 +80,10 @@ When your work is done, you can then submit a pull request against the `develop`
 
 If `develop` has changed while you were making your feature, you may need to "rebase" your branch.  This is especially likely for large changes that are done over days or weeks.  To rebase, do the following:
 
-    git fetch origin            # Gets most recent version from origin
-    git rebase origin/develop   # Rebases onto develop branch
+    git fetch upstream            # Gets most recent version from upstream
+    git rebase upstream/develop   # Rebases onto develop branch
+
+Then push to your fork and submit a PR via the Github interface as usual.
 
 For big changes, you may want to test on [stage](https://act-now-staging.herokuapp.com/). You can ask Shauna or Presley to do this for you, or if you think you’ll be sticking around and contributing again, we can set up a staging ground (“sandbox”) for you.
 
@@ -87,6 +91,8 @@ _If you run into trouble while working on an issue, please reach out via the sla
 to your issue.  This will make it easier for people to notice that you're stuck, and help you._
 
 #### I want to fix an urgent bug
+
+_Note: this guide assumes you've set the main repository as the remote named `upstream` and your personal fork as the remote named `origin`._
 
 Sometimes, a change can’t wait to go through the above process. It needs to be fixed right away.
 
@@ -98,12 +104,11 @@ If you want to go ahead and fix the bug, make a hotfix branch:
 
 If you’re a regular contributor with your own sandbox, you can test your changes there.  Once you’re ready, submit a pull request against `master` (__not__ `develop`):
 
-    git fetch origin            # Gets most recent version from origin
-    git rebase origin/master    # Rebases onto master branch
+    git fetch upstream                # Gets most recent version from origin, just in case
+    git rebase upstream/master        # Rebases onto master branch
+    git push origin hotfix-mybugname  # Pushes to your fork
 
-(There won't usually be any changes to master for you to worry about with a hotfix, but it's a good habit to have, and there might be changes if multiple people are working on hotfixes simultaneously.)
-
-Shauna will test first against stage, and then, if that looks good, push it live to production.  She’ll also take care of merging your hotfix into `develop` as well.  
+You can then submit your pull request through the Github UI. Shauna will test first against stage, and then, if that looks good, push it live to production.  She’ll also take care of merging your hotfix into `develop` as well.  
 
 Our practice is, when we find a bug, to make sure we add the tests that would have caught it.  So, many bugs will get a [tests label](https://github.com/shaunagm/actionrising/labels/tests) and remain open in the issue tracker after they've been fixed. You are very welcome to write and add these tests, which can be contributed as part of the hotfix (if you write them at the same time as your fix) or as part of a regular contribution (if you write the tests later).  You can also leave them for another community member to write if you only have time to do the fix itself.
 
