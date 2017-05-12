@@ -12,24 +12,6 @@
   </div>
   <div id="openactions" class="panel-collapse">
    <div class="panel-body">
-     {% if suggested_pars %}
-        <div class="suggested-section">
-          <h4>Suggested to you
-          <a href="{% url 'suggested' request.user.username %}" title="See details in new page" ><span class="material-icons">open_in_new</span></a>
-          </h4>
-          {% for par in suggested_pars %}
-            <a href="{% url 'manage_suggested_action' slug=par.action.slug type='accept' %}">
-              <i class="fa fa-plus accept" aria-hidden="true" title="Take on"></i>
-            </a>
-            <a href="{% url 'manage_suggested_action' slug=par.action.slug type='reject' %}">
-              <i class="fa fa-times decline" aria-hidden="true" title="Decline"></i>
-            </a>
-            {{ par.get_suggester_html|safe }}
-            <a href="{{ par.action.get_robust_url }}">{{ par.action.title }}</a>
-            <br/>
-          {% endfor %}
-        </div>
-     {% endif %}
      {% for par in open_actions %}
          <a href="{{ par.action.get_absolute_url}}">{{ par.action.title }}</a> <br />
      {% empty %}

@@ -25,6 +25,10 @@
 <div class="row">
 
    <div class="col-sm-4">
+     {% if suggested_pars %}
+       {% include 'profiles/dash_panels/suggested_actions.html' %}
+     {% endif %}
+
      {% include 'profiles/dash_panels/open_actions.html' %}
    </div>
 
