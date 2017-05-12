@@ -80,19 +80,19 @@ class ToDoView(LoginRequiredMixin, generic.TemplateView):
         context['suggested_actions'] = self.request.user.profile.get_suggested_actions_count()
         return context
 
-class ProfileSuggestedView(UserPassesTestMixin, generic.DetailView):
+
+class ProfileSuggestedView(generic.DetailView):
     template_name = 'profiles/suggested.html'
-    slug_field = 'username'
     model = User
 
-    def test_func(self):
-        obj = self.get_object()
-        return obj == self.request.user  # No access unless this is you
+    def get_object(self, queryset=None):
+        return self.request.user
 
     def get_context_data(self, **kwargs):
         context = super(ProfileSuggestedView, self).get_context_data(**kwargs)
         context['actions'] = self.object.profile.get_suggested_actions()
         return context
+
 
 class ProfileSearchView(generic.ListView):
     template_name = 'profiles/profiles.html'
@@ -260,7 +260,7 @@ def manage_suggested_action(request, slug, type):
     except ObjectDoesNotExist: # If the action slug got borked
         return HttpResponseRedirect(reverse('index'))
     manage_suggested_action_helper(par, type)
-    return HttpResponseRedirect(reverse('suggested', kwargs={'slug':request.user.username}))
+    return HttpResponseRedirect(reverse('suggested'))
 
 class DashboardView(LoginRequiredMixin, generic.TemplateView):
     template_name = "profiles/dashboard.html"
