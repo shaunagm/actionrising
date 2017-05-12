@@ -483,7 +483,7 @@ class ProfileActionRelationship(models.Model):
     def get_suggester_html(self):
         last = self.format_suggesters([self.last_suggester])
         if len(self.get_suggesters()) > 1:
-            return "{0} and others suggest".format(last)
+            return "{0} and <a href={1}>others</a> suggest".format(last, reverse('suggested', kwargs={'slug': self.profile.user }))
         else:
             return "{0} suggests".format(last)
 

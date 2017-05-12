@@ -1,26 +1,26 @@
 <div class="panel panel-primary">
   <div class="panel-heading">
     <h3 class="panel-title">
-      <a data-toggle="collapse" href="#openactions">
+      <a data-toggle="collapse" href="#suggested-actions">
         Suggested Actions
       </a>
-      <a href="{% url 'to_do' %}" title="Open in new page" class="extra-padding-left">↱</a>
-      <a data-toggle="collapse" href="#openactions" title="Collapse">
+      <a href="{% url 'suggested' slug=request.user.username %}" title="Open in new page" class="extra-padding-left">↱</a>
+      <a data-toggle="collapse" href="#suggested-actions" title="Collapse">
         <div class="float-right">▲</div>
       </a>
     </h3>
   </div>
-  <div id="openactions" class="panel-collapse">
+  <div id="suggested-actions" class="panel-collapse">
     <div class="panel-body">
       <ul class="suggestion">
         {% for par in suggested_pars %}
           <li class="suggested-action">
             <div class="act-on-suggestion">
               <a href="{% url 'manage_suggested_action' slug=par.action.slug type='accept' %}">
-                <i class="fa fa-plus accept-suggestion" aria-hidden="true" title="Accept"></i>
+                <i class="fa fa-plus accept-suggestion" title="Add to To Do list"></i>
               </a>
               <a href="{% url 'manage_suggested_action' slug=par.action.slug type='reject' %}">
-                <i class="fa fa-times decline-suggestion" aria-hidden="true" title="Decline"></i>
+                <i class="fa fa-times decline-suggestion" title="Decline suggested action"></i>
               </a>
             </div>
             <div>
