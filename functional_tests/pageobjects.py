@@ -107,6 +107,9 @@ class BasicActionListPage(BaseListPage):
     def return_to_default_actions_page(self):
         self.w.get(self.root_uri + "/actions/actions")
 
+    def go_to_public_actions_page(self):
+        self.w.get(self.root_uri + "/actions/public-actions")
+
     def go_to_default_actions_page_if_necessary(self):
         if not self.action_table:
             # This is a decent guess at where we want to be
@@ -125,10 +128,12 @@ class BasicActionListPage(BaseListPage):
                 link.click()
 
     def get_actions(self):
-        return [action.text for action in self.action_tds]
+        actions = []
+        for action in self.action_tds:
+            actions.append(action.text)
+        return actions
 
 class SlateActionsListPage(BasicActionListPage):
-    action_tds = MultiPageElement(css=".main-list tbody tr > td.title")
 
     def go_to_detail_page(self, title=None):
         if title:
@@ -137,23 +142,15 @@ class SlateActionsListPage(BasicActionListPage):
             self.slate = Slate.objects.last()
         self.w.get(self.root_uri + self.slate.get_absolute_url())
 
-    def get_actions(self):
-        return [action.text for action in self.action_tds]
-
 class SlateListPage(BaseListPage):
     slates_table = MultiPageElement(id_="slates")
     first_row_date = PageElement(css=".odd > td.date")
     first_row_slate = PageElement(css=".odd > td.title")
     first_row_creator = PageElement(css=".odd > td.creator")
     first_row_action_count = PageElement(css=".odd > td.size")
-    slate_tds = MultiPageElement(css=".main-list tbody tr > td.title")
 
     def go_to_default_slates_page(self):
         self.w.get(self.root_uri + "/slates/slates")
-
-    def get_slates(self):
-        return [slate.text for slate in self.slate_tds]
-
 
 class BaseObjectDetailPage(BasePage):
     creator = PageElement(id_="created_by")
@@ -181,7 +178,6 @@ class BasicActionDetailPage(BaseObjectDetailPage):
     mark_action_as_done_button = PageElement(id_="mark_as_done")
     commitment_button = PageElement(id_="commitment_btn")
     manage_action_links = MultiPageElement(css=".manage-action-links")
-    share = PageElement(css="span.share-popover")
 
     def go_to_detail_page(self, title=None):
         if title:
@@ -241,44 +237,29 @@ class ActionEditPage(BasePage):
         select = Select(self.w.find_element_by_id('id_status'))
         select.select_by_visible_text(selection)
 
-class ProfileListPage(BaseListPage):
-    profiles_table = MultiPageElement(id_="users")
-    profile_tds = MultiPageElement(css="td")
-
-    def go_to_default_profiles_page(self):
-        self.w.get(self.root_uri + "/profiles/profiles")
-
-    def get_profiles(self):
-        return [profile.text for profile in self.profile_tds]
-
-class FollowedActivity(BasePage):
-    activity_lines = MultiPageElement(css=".actstream-action")
-
-    def go_to_feed(self):
-        self.w.get(self.root_uri + '/profiles/feed')
-
-    def get_activity(self):
-        return [activity.text for activity in self.activity_lines]
-
 class ProfilePage(BasePage):
     name = PageElement(id_="profile-username")
     actions_created = MultiPageElement(css="div#created-actions-div tbody tr .actiondetails")
     actions_tracked = MultiPageElement(css="div#tracked-actions-div tbody tr .actiondetails")
-    redirected_page = PageElement(css="#id_username")
-    location = PageElement(css="#location-info")
 
     def go_to_profile_page(self, username=None):
         user = User.objects.get(username=username)
         self.w.get(self.root_uri + user.profile.get_absolute_url())
 
     def get_created_actions(self):
-        return [action.text for action in self.actions_created]
+        action_names = []
+        for action in self.actions_created:
+            action_names.append(action.text)
+        return action_names
 
     def get_tracked_actions(self):
-        return [action.text for action in self.actions_tracked]
+        action_names = []
+        for action in self.actions_tracked:
+            action_names.append(action.text)
+        return action_names
 
     def get_actions(self):
-        return self.get_created_actions(), self.get_tracked_actions()
+        return self.get_created_actions(),self.get_tracked_actions()
 
 class ToDoPage(BasicActionListPage):
     suggested_actions_link = PageElement(id_="suggested_actions_button")

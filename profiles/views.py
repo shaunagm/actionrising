@@ -10,7 +10,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
 from actstream.actions import follow, unfollow
-from mysite.lib.privacy import check_privacy, apply_check_privacy
+from mysite.lib.privacy import check_privacy, filter_list_for_privacy, filter_list_for_privacy_annotated
 from mysite.lib.choices import PrivacyChoices, ToDoStatusChoices
 from django.contrib.auth.models import User
 from profiles.models import (Profile, Relationship, ProfileActionRelationship,
@@ -35,21 +35,16 @@ class ProfileView(UserPassesTestMixin, generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProfileView, self).get_context_data(**kwargs)
         if self.request.user.is_authenticated():
-            own = self.request.user == self.object
-            context['created_actions'] = apply_check_privacy(
-                self.object.profile.get_most_recent_actions_created(),
-                self.request.user,
-                include_anonymous = own)
-            context['tracked_actions'] = apply_check_privacy(
-                self.object.profile.get_most_recent_actions_tracked(),
-                self.request.user,
-                include_anonymous = own)
+            context['created_actions'] = filter_list_for_privacy_annotated(
+                self.object.profile.get_most_recent_actions_created(), self.request.user)
+            context['tracked_actions'] = filter_list_for_privacy_annotated(
+                self.object.profile.get_most_recent_actions_tracked(), self.request.user)
             obj = self.get_object()
             context['total_actions'] = obj.profile.profileactionrelationship_set.count()
             context['percent_finished'] = obj.profile.get_percent_finished()
             context['action_streak_current'] = obj.profile.get_action_streak()
             current_profile = self.request.user.profile
-            relationship = current_profile.get_relationship(obj.profile)
+            relationship = current_profile.get_relationship_given_profile(obj.profile)
             if relationship:
                 context['follows'] = relationship.current_profile_follows_target(current_profile)
                 context['mutes'] = relationship.current_profile_mutes_target(current_profile)
@@ -107,17 +102,13 @@ class ProfileSuggestedView(UserPassesTestMixin, generic.DetailView):
         context['actions'] = self.object.profile.get_suggested_actions()
         return context
 
-class ProfileSearchView(generic.ListView):
+class ProfileSearchView(LoginRequiredMixin, generic.ListView):
     template_name = 'profiles/profiles.html'
     model = User
 
     def get_context_data(self, **kwargs):
         context = super(ProfileSearchView, self).get_context_data(**kwargs)
-        if self.request.user.is_authenticated():
-            context['object_list'] = [profile.user for profile in Profile.objects.all()]
-        else:
-            context['object_list'] = [profile.user for profile in
-                                      Profile.objects.filter(current_privacy=PrivacyChoices.public)]
+        context['object_list'] = [profile.user for profile in Profile.objects.filter(current_privacy__in=[PrivacyChoices.public, PrivacyChoices.sitewide])]
         return context
 
 class FeedView(LoginRequiredMixin, generic.TemplateView):
@@ -127,7 +118,7 @@ class ActivityView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'profiles/activity.html'
 
 def toggle_relationships_helper(toggle_type, current_profile, target_profile):
-    relationship = current_profile.get_relationship(target_profile)
+    relationship = current_profile.get_relationship_given_profile(target_profile)
     if not relationship:
         relationship = Relationship.objects.create(person_A=current_profile, person_B=target_profile)
     if toggle_type == 'follow':

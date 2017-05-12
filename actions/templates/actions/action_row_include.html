@@ -9,7 +9,7 @@
     <td class="deadline">{{ action.get_days_til_deadline }}</td>
     <td class="priority">{{ action.get_priority_display }}</td>
     <td class="active">{{ action.is_active }}</td>
-    <td class="friend">{% if action.get_visible_creator in following_list %} True {% endif %} </td>
+    <td class="friend">{% if action.get_creator in friendlist %} True {% endif %} </td>
     <td class="notes">{{ rel.notes }}</td>
     <td class="duration">{{ action.get_duration_display }}</td>
     {% include "slates/manage_action_include.html" %}

@@ -72,7 +72,4 @@ class RecommendationTracker(models.Model):
 
     def retrieve_slates(self):
         # Handpick for now, while there are so few slates
-        if self.get_slates():
-            return [slate for slate in Slate.objects.filter(pk__in=self.get_slates())]
-        else:
-            return []
+        return [slate for slate in Slate.objects.filter(pk__in=self.get_slates())]

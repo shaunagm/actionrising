@@ -34,12 +34,10 @@ class TestActionMethods(TestCase):
         self.assertEqual(list(self.action.get_tags()), [self.tag_one, self.tag_two])
 
     def test_get_creator(self):
-        self.assertEqual(self.action.get_visible_creator(), self.buffy)
         self.assertEqual(self.action.get_creator(), self.buffy)
         self.action.anonymize = True
         self.action.save()
-        self.assertEqual(self.action.get_visible_creator(), "Anonymous")
-        self.assertEqual(self.action.get_creator(), self.buffy)
+        self.assertEqual(self.action.get_creator(), "Anonymous")
 
     def test_get_robust_url(self):
         self.assertEqual(self.action.get_robust_url(), '/actions/action/test-action')
