@@ -19,6 +19,7 @@ DATABASES = {
 EMAIL_HOST = 'smtp.sparkpostmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_PASSWORD =  os.environ['SPARKPOST_API_KEY']
+EMAILS_FAIL_SILENTLY = False
 
 # SETTING 4: DEBUG
 DEBUG = False

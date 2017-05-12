@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.core.urlresolvers import reverse
 
-from mysite.settings import NOTIFY_EMAIL
+from mysite.settings import NOTIFY_EMAIL, EMAILS_FAIL_SILENTLY
 
 def get_notificationsettings_url(recipient):
     url_path = reverse('manage_notifications', kwargs={'pk': recipient.user.notificationsettings.pk})
@@ -58,7 +58,8 @@ def follow_notification_email(recipient, follower):
     }
     plain_message = render_to_string('notifications/email_templates/plain/follow.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/follow.html', ctx)
-    sent =  send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    sent =  send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email],
+        html_message=html_message, fail_silently=EMAILS_FAIL_SILENTLY)
     if sent:
         log_sent_mail(subject, plain_message, recipient.user.email)
     else:
@@ -77,7 +78,8 @@ def follow_slate_notification_email(recipient, follower, slate):
     }
     plain_message = render_to_string('notifications/email_templates/plain/follow_slate.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/follow_slate.html', ctx)
-    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email],
+        html_message=html_message, fail_silently=EMAILS_FAIL_SILENTLY)
     if sent:
         log_sent_mail(subject, plain_message, recipient.user.email)
     else:
@@ -106,7 +108,8 @@ def action_taken_email(recipient, actor, action):
     }
     plain_message = render_to_string('notifications/email_templates/plain/actiontaken.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/actiontaken.html', ctx)
-    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email],
+        html_message=html_message, fail_silently=EMAILS_FAIL_SILENTLY)
     if sent:
         log_sent_mail(subject, plain_message, recipient.user.email)
     else:
@@ -129,7 +132,8 @@ def suggested_action_email(recipient, suggester, action):
 
     plain_message = render_to_string('notifications/email_templates/plain/suggestedaction.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/suggestedaction.html', ctx)
-    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email],
+        html_message=html_message, fail_silently=EMAILS_FAIL_SILENTLY)
     if sent:
         log_sent_mail(subject, plain_message, recipient.user.email)
     else:
@@ -158,7 +162,8 @@ def add_slate_email(recipient, actor, action, slate):
 
     plain_message = render_to_string('notifications/email_templates/plain/addslate.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/addslate.html', ctx)
-    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email],
+        html_message=html_message, fail_silently=EMAILS_FAIL_SILENTLY)
     if sent:
         log_sent_mail(subject, plain_message, recipient.user.email)
     else:
@@ -181,7 +186,8 @@ def comment_email(recipient, actor, action, comment):
 
     plain_message = render_to_string('notifications/email_templates/plain/comment.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/comment.html', ctx)
-    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email],
+        html_message=html_message, fail_silently=EMAILS_FAIL_SILENTLY)
     if sent:
         log_sent_mail(subject, plain_message, recipient.user.email)
     else:
@@ -202,7 +208,8 @@ def followed_user_creates_email(recipient, actor, created_object):
     }
     plain_message = render_to_string('notifications/email_templates/plain/followed_user_created.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/followed_user_created.html', ctx)
-    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email],
+        html_message=html_message, fail_silently=EMAILS_FAIL_SILENTLY)
     if sent:
         log_sent_mail(subject, plain_message, recipient.user.email)
     else:
@@ -223,7 +230,8 @@ def followed_slate_updated_email(recipient, action, slate):
     }
     plain_message = render_to_string('notifications/email_templates/plain/followed_slate_updated.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/followed_slate_updated.html', ctx)
-    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email],
+        html_message=html_message, fail_silently=EMAILS_FAIL_SILENTLY)
     if sent:
         log_sent_mail(subject, plain_message, recipient.user.email)
     else:
@@ -248,7 +256,8 @@ def daily_action_email(recipient, action):
 
     plain_message = render_to_string('notifications/email_templates/plain/dailyaction.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/dailyaction.html', ctx)
-    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email],
+        html_message=html_message, fail_silently=EMAILS_FAIL_SILENTLY)
     if sent:
         log_sent_mail(subject, plain_message, recipient.user.email)
     else:
@@ -273,7 +282,8 @@ def close_action_warning_email(recipient, action):
 
     plain_message = render_to_string('notifications/email_templates/plain/close_action_warning.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/close_action_warning.html', ctx)
-    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email],
+        html_message=html_message, fail_silently=EMAILS_FAIL_SILENTLY)
     if sent:
         log_sent_mail(subject, plain_message, recipient.user.email)
     else:
@@ -293,7 +303,8 @@ def close_action_email(recipient, action):
 
     plain_message = render_to_string('notifications/email_templates/plain/close_action.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/close_action.html', ctx)
-    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email],
+        html_message=html_message, fail_silently=EMAILS_FAIL_SILENTLY)
     if sent:
         log_sent_mail(subject, plain_message, recipient.user.email)
     else:
@@ -325,7 +336,8 @@ def hold_accountable_email(recipient, commitment):
 
     plain_message = render_to_string('notifications/email_templates/plain/hold_accountable.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/hold_accountable.html', ctx)
-    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email], html_message=html_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient.user.email],
+        html_message=html_message, fail_silently=EMAILS_FAIL_SILENTLY)
     if sent:
         log_sent_mail(subject, plain_message, recipient.user.email)
     else:
@@ -351,7 +363,8 @@ def hold_accountable_email_nonuser(recipient_email, commitment):
 
     plain_message = render_to_string('notifications/email_templates/plain/hold_accountable_nonuser.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/hold_accountable_nonuser.html', ctx)
-    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient_email], html_message=html_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient_email],
+        html_message=html_message, fail_silently=EMAILS_FAIL_SILENTLY)
     if sent:
         log_sent_mail(subject, plain_message, recipient_email)
     else:
@@ -375,7 +388,8 @@ def request_email(user, confirmation_url):
 
     plain_message = render_to_string('notifications/email_templates/plain/request.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/request.html', ctx)
-    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [user.email], html_message=html_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [user.email],
+        html_message=html_message, fail_silently=EMAILS_FAIL_SILENTLY)
     if sent:
         log_sent_mail(subject, plain_message, user.email)
     else:
@@ -403,7 +417,8 @@ def nonuser_email(recipient_email, notifier, message, instance):
 
     plain_message = render_to_string('notifications/email_templates/plain/nonuser.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/nonuser.html', ctx)
-    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient_email], html_message=html_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient_email],
+        html_message=html_message, fail_silently=EMAILS_FAIL_SILENTLY)
     if sent:
         log_sent_mail(subject, plain_message, recipient_email)
     else:
@@ -427,7 +442,8 @@ def send_generic_email(recipient_email, generic_email):
 
     plain_message = render_to_string('notifications/email_templates/plain/generic_email.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/generic_email.html', ctx)
-    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient_email], html_message=html_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [recipient_email],
+        html_message=html_message, fail_silently=EMAILS_FAIL_SILENTLY)
     if sent:
         log_sent_mail(subject, plain_message, recipient_email)
     else:
@@ -439,7 +455,8 @@ def send_generic_email(recipient_email, generic_email):
 #######################
 
 def generic_admin_email(subject, plain_message):
-    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, ["actionrisingsite@gmail.com"], html_message=plain_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, ["actionrisingsite@gmail.com"],
+        html_message=plain_message, fail_silently=EMAILS_FAIL_SILENTLY)
     if sent:
         log_sent_mail(subject, plain_message, "actionrisingsite@gmail.com")
     else:
@@ -451,7 +468,7 @@ def flag_email(instance):
     plain_message = "https://www.actionrising.com/admin/flags/flag/" + str(instance.pk)
     html_message = "<a href='https://www.actionrising.com/admin/flags/flag/" + str(instance.pk) + "/change'>Click here</a>"
     sent = send_mail(subject, plain_message, NOTIFY_EMAIL, ['actionrisingsite@gmail.com'],
-        fail_silently=False, html_message=html_message)
+        html_message=html_message, fail_silently=EMAILS_FAIL_SILENTLY)
     if sent:
         log_sent_mail(subject, plain_message, "actionrisingsite@gmail.com")
     else:
