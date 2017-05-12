@@ -17,13 +17,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 if os.environ.get("AR_SITE_TYPE") and os.environ.get("AR_SITE_TYPE") == "PRODUCTION":
     from production_settings import (SECRET_KEY, DEBUG, CHROMEDRIVER_PATH, DATABASES,
-        EMAIL_HOST, EMAIL_PORT, EMAIL_HOST_PASSWORD)
+        EMAIL_HOST, EMAIL_PORT, EMAIL_HOST_PASSWORD, EMAILS_FAIL_SILENTLY)
 elif os.environ.get("AR_SITE_TYPE") and os.environ.get("AR_SITE_TYPE") == "STAGING":
     from staging_settings import (SECRET_KEY, DEBUG, CHROMEDRIVER_PATH, DATABASES,
-        EMAIL_HOST, EMAIL_PORT, EMAIL_HOST_PASSWORD)
+        EMAIL_HOST, EMAIL_PORT, EMAIL_HOST_PASSWORD, EMAILS_FAIL_SILENTLY)
 else:
     from local_settings import (SECRET_KEY, DEBUG, CHROMEDRIVER_PATH, DATABASES,
-        EMAIL_HOST, EMAIL_PORT, EMAIL_HOST_PASSWORD)
+        EMAIL_HOST, EMAIL_PORT, EMAIL_HOST_PASSWORD, EMAILS_FAIL_SILENTLY)
 
 
 SEND_BROKEN_LINK_EMAILS = True
