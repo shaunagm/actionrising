@@ -70,7 +70,7 @@ Before making a change, you’ll want to check in with the community. To do this
 
 Once you get the go-ahead to start developing, you’ll want to make a feature branch:
 
-`git checkout -b feature-myfeaturename develop`
+    git checkout -b feature-myfeaturename develop
 
 (It's not really important what you call your feature branch, but if you remember to prefix it with feature- it makes our housekeeping a little easier.)
 
@@ -78,8 +78,8 @@ When your work is done, you can then submit a pull request against the `develop`
 
 If `develop` has changed while you were making your feature, you may need to "rebase" your branch.  This is especially likely for large changes that are done over days or weeks.  To rebase, do the following:
 
-    `git fetch origin            # Gets most recent version from origin`
-    `git rebase origin/develop   # Rebases onto develop branch`
+    git fetch origin            # Gets most recent version from origin
+    git rebase origin/develop   # Rebases onto develop branch
 
 For big changes, you may want to test on [stage](https://act-now-staging.herokuapp.com/). You can ask Shauna or Presley to do this for you, or if you think you’ll be sticking around and contributing again, we can set up a staging ground (“sandbox”) for you.
 
@@ -94,12 +94,12 @@ If you find an urgent bug, report the issue on Github and @ Shauna on the issue.
 
 If you want to go ahead and fix the bug, make a hotfix branch:
 
-`git checkout -b hotfix-mybugname master`
+    git checkout -b hotfix-mybugname master
 
 If you’re a regular contributor with your own sandbox, you can test your changes there.  Once you’re ready, submit a pull request against `master` (__not__ `develop`):
 
-    `git fetch origin            # Gets most recent version from origin`
-    `git rebase origin/master    # Rebases onto master branch`
+    git fetch origin            # Gets most recent version from origin
+    git rebase origin/master    # Rebases onto master branch
 
 (There won't usually be any changes to master for you to worry about with a hotfix, but it's a good habit to have, and there might be changes if multiple people are working on hotfixes simultaneously.)
 
@@ -135,27 +135,27 @@ _Note: this is based off of [this guide](http://nvie.com/posts/a-successful-git-
 
 Once you're ready to make a new release, create a branch with the new version number. We use 1.2 as an example version number.
 
-`git checkout -b release-1.2 develop`
+    git checkout -b release-1.2 develop
 
 Bugfixes for issues found during release testing may be added to this branch, but new features must go to `develop`.
 
 The release should be tested with the automated test suite (both unit and functional) and should also be tested manually on stage.  Once the tests pass, continue:
 
-`git checkout master`
-`git merge --no-ff release-1.2`
-`git tag -a 1.2`
+    git checkout master
+    git merge --no-ff release-1.2
+    git tag -a 1.2
 
 This merges the release into master and tags it with the release #.  It can then be pushed
 to production (Heroku).
 
 The release may include bug fixes, and needs to be merged back into develop as well:
 
-`git checkout develop`
-`git merge --no-ff release-1.2`
+    git checkout develop
+    git merge --no-ff release-1.2
 
 If merge conflicts are introduced, fix them and commit. Finally, delete the release branch:
 
-`git branch -d release-1.2`
+    git branch -d release-1.2
 
 #### Hotfix Guide
 
@@ -167,12 +167,12 @@ Push the change to stage and, if it works, onto production.  If this does not su
 
 Once the issue is successfully resolved, merge the hotfixes into the current `release` branch, if one exists, or if not, onto `develop`:
 
-    `git checkout release-1.2` OR `git checkout develop`
-    `git merge --no-ff hotfix-*`
+    git checkout release-1.2 # or git checkout develop
+    git merge --no-ff hotfix-*
 
 Finally, delete the branch:
 
-`git branch -d hotfix-*`
+    git branch -d hotfix-*
 
 ### Miscellaneous Guides
 
