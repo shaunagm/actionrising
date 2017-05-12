@@ -1,28 +1,27 @@
 {% include 'profiles/trackers/tracker_summary_include.html' %}
-{% load profile_extras %}
 
 {% if tracker_data.has_people %}
-  <div class="row collapse" id="PeopleTrackerList">
-    <div class="col-sm-12">
-      <h4>People</h4>
-      {% for status, tracker_counts in tracker_data.people_tracking_by_status %}
-        {% get_status_phrase status as status_phrase %}
-        <span class="status_span" id="profile_{{ status }}">
-          <b> {{ status_phrase }} </b>
-          {% include 'profiles/trackers/profile_by_status_include.html' with object=tracker_counts %}
-        </span>
-      {% endfor %}
-     </div>
-  </div>
+    <div class="row collapse" id="PeopleTrackerList">
+       <div class="col-sm-12">
+          <h4>People</h4>
+          {% for status_key, status_value in tracker_data.people_tracker_list.items %}
+              <span class="status_span" id="profile_{{ status_key }}">
+                  {% include 'profiles/trackers/profile_by_status_include.html' with object=status_value %}
+              </span>
+          {% endfor %}
+       </div>
+    </div>
 {% endif %}
 
 {% if tracker_data.has_slates %}
-  <div class="row collapse" id="SlateTrackerList">
-    <div class="col-sm-12">
-      <h4>Slates</h4>
-      <span class="status_span" id="slate_accepted">
-        {% include 'profiles/trackers/slate_by_status_include.html' with object=tracker_data.slates_tracking_by_privacy %}
-      </span>
+    <div class="row collapse" id="SlateTrackerList">
+       <div class="col-sm-12">
+         <h4>Slates</h4>
+         {% for status_key, status_value in tracker_data.slate_tracker_list.items %}
+            <span class="status_span" id="slate_{{ status_key }}">
+                {% include 'profiles/trackers/slate_by_status_include.html' with object=status_value %}
+            </span>
+         {% endfor %}
+       </div>
     </div>
-  </div>
 {% endif %}

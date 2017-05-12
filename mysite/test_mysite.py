@@ -8,7 +8,8 @@ from tags.models import Tag
 
 from mysite.lib.utils import slugify_helper
 from mysite.lib.choices import PrivacyChoices
-from mysite.lib.privacy import check_privacy, get_global_privacy_default
+from mysite.lib.privacy import (check_for_ownership, get_global_privacy_default,
+    check_privacy)
 
 ##################
 ### Test utils ###
@@ -20,12 +21,37 @@ class TestPrivacyUtils(TestCase):
         self.buffy = User.objects.create(username="buffysummers")
         self.faith = User.objects.create(username="faithlehane")
         self.anon = AnonymousUser()
-        self.action = Action.objects.create(slug="test-action", creator=self.faith, title='myaction')
-        self.slate = Slate.objects.create(slug="test-slate", creator=self.faith, title='myslate')
+        self.action = Action.objects.create(slug="test-action", creator=self.faith)
+        self.slate = Slate.objects.create(slug="test-slate", creator=self.faith)
         self.par = ProfileActionRelationship(profile=self.faith.profile, action=self.action)
-        self.par.save()
         self.sar = SlateActionRelationship(slate=self.slate, action=self.action)
-        self.sar.save()
+
+    def test_check_for_ownership_profile(self):
+        self.assertFalse(check_for_ownership(self.faith.profile, self.buffy))
+        self.assertTrue(check_for_ownership(self.faith.profile, self.faith))
+        self.assertFalse(check_for_ownership(self.faith.profile, self.anon))
+
+    def test_check_for_ownership_action(self):
+        self.assertFalse(check_for_ownership(self.action, self.buffy))
+        self.assertTrue(check_for_ownership(self.action, self.faith))
+        self.assertFalse(check_for_ownership(self.action, self.anon))
+
+    def test_check_for_ownership_slate(self):
+        self.assertFalse(check_for_ownership(self.slate, self.buffy))
+        self.assertTrue(check_for_ownership(self.slate, self.faith))
+        self.assertFalse(check_for_ownership(self.slate, self.anon))
+
+    def test_check_for_ownership_par(self):
+        # The owner of the profile in the PAR 'owns' the PAR
+        self.assertFalse(check_for_ownership(self.par, self.buffy))
+        self.assertTrue(check_for_ownership(self.par, self.faith))
+        self.assertFalse(check_for_ownership(self.par, self.anon))
+
+    def test_check_for_ownership_sar(self):
+        # The creator of the slate 'owns' the SAR
+        self.assertFalse(check_for_ownership(self.sar, self.buffy))
+        self.assertTrue(check_for_ownership(self.sar, self.faith))
+        self.assertFalse(check_for_ownership(self.sar, self.anon))
 
     def test_get_global_privacy_default_when_unchanged(self):
         self.assertEqual(get_global_privacy_default(self.faith.profile), PrivacyChoices.public)
@@ -35,28 +61,23 @@ class TestPrivacyUtils(TestCase):
         self.assertEqual(get_global_privacy_default(self.sar), PrivacyChoices.public)
 
     def test_get_global_privacy_default_when_changed(self):
-        self.buffy.profile.privacy_defaults.global_default = PrivacyChoices.public
-        self.buffy.profile.privacy_defaults.save()
-        self.faith.profile.privacy_defaults.global_default = PrivacyChoices.sitewide
+        self.faith.profile.privacy_defaults.global_default = PrivacyChoices.public
         self.faith.profile.privacy_defaults.save()
-        self.assertEqual(get_global_privacy_default(self.faith.profile), PrivacyChoices.sitewide)
-        self.assertEqual(get_global_privacy_default(self.buffy.profile), PrivacyChoices.public)
-        self.assertEqual(get_global_privacy_default(self.action), PrivacyChoices.sitewide)
-        self.assertEqual(get_global_privacy_default(self.slate), PrivacyChoices.sitewide)
-        self.assertEqual(get_global_privacy_default(self.par), PrivacyChoices.sitewide)
-        self.assertEqual(get_global_privacy_default(self.sar), PrivacyChoices.sitewide)
+        self.assertEqual(get_global_privacy_default(self.faith.profile), PrivacyChoices.public)
+        self.assertEqual(get_global_privacy_default(self.action), PrivacyChoices.public)
+        self.assertEqual(get_global_privacy_default(self.slate), PrivacyChoices.public)
+        self.assertEqual(get_global_privacy_default(self.par), PrivacyChoices.public)
+        self.assertEqual(get_global_privacy_default(self.sar), PrivacyChoices.public)
 
     def test_check_privacy_of_action(self):
         # The global default is public, so before changes, Buffy & anon should have access
         self.assertTrue(check_privacy(self.action, self.buffy))
         self.assertTrue(check_privacy(self.action, self.anon))
-        # Now we set the global default to sitewide
+        # Now we set the global default to public and everyone can access
         self.faith.profile.privacy_defaults.global_default = PrivacyChoices.sitewide
         self.faith.profile.privacy_defaults.save()
-        action = Action.objects.get(title='myaction')
-        self.assertEqual(action.current_privacy, PrivacyChoices.sitewide)
-        self.assertTrue(check_privacy(action, self.buffy))
-        self.assertFalse(check_privacy(action, self.anon))
+        self.assertTrue(check_privacy(self.action, self.buffy))
+        self.assertFalse(check_privacy(self.action, self.anon))
         # Now let's make access more open on the individual objects
         self.action.privacy = PrivacyChoices.public
         self.action.save()
@@ -99,9 +120,8 @@ class TestPrivacyUtils(TestCase):
         # Now we set the global default to sitewide and only Buffy can access
         self.faith.profile.privacy_defaults.global_default = PrivacyChoices.sitewide
         self.faith.profile.privacy_defaults.save()
-        sar = SlateActionRelationship.objects.first()
-        self.assertTrue(check_privacy(sar, self.buffy))
-        self.assertFalse(check_privacy(sar, self.anon))
+        self.assertTrue(check_privacy(self.sar, self.buffy))
+        self.assertFalse(check_privacy(self.sar, self.anon))
         # If we change action to public and slate to sitewide, only Buffy can access
         self.sar.slate.privacy = PrivacyChoices.sitewide
         self.sar.slate.save()

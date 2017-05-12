@@ -4,6 +4,7 @@ from slates import views
 
 urlpatterns = [
     url(r'^slates/?$', views.SlateListView.as_view(), name='slates'),
+    url(r'^public-slates/?$', views.PublicSlateListView.as_view(), name='public-slates'),
     url(r'^slate/(?P<slug>[-\w]+)$', views.SlateView.as_view(), name='slate'),
     url(r'^slate-create/?$', views.SlateCreateView.as_view(), name='create_slate'),
     url(r'^slate-edit/(?P<slug>[-\w]+)$', views.SlateEditView.as_view(), name='edit_slate'),

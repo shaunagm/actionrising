@@ -18,7 +18,6 @@ from actions.models import Action
 from slates.models import Slate
 from notifications.models import NotificationSettings, DailyActionSettings
 from mysite.lib.choices import (PrivacyChoices, PriorityChoices, StatusChoices, ToDoStatusChoices)
-from mysite.lib.privacy import privacy_tests
 from mysite.lib.utils import disable_for_loaddata
 from profiles.lib import status_helpers
 
@@ -49,15 +48,6 @@ class Profile(models.Model):
     def get_cname(self):
         class_name = 'Profile'
         return class_name
-
-    def get_creator(self):
-        return self.user
-
-    def get_profile(self):
-        return self
-
-    def named(self):
-        return True
 
     def get_full_name(self):
         names = []
@@ -97,13 +87,14 @@ class Profile(models.Model):
     def get_user_privacy(self):
         return self.privacy_defaults.global_default
 
-    def get_relationship(self, other):
-        return self.get_relationship_with(other) or other.get_relationship_with(self)
-
-    def get_relationship_with(self, other):
-        '''Helper for get_relationship - looks for relationship unidirectionally.'''
-        rel = Relationship.objects.filter(person_A=self, person_B=other)
-        return rel[0] if rel else None
+    def get_relationship_given_profile(self, profile):
+        rel = Relationship.objects.filter(person_A=self, person_B=profile)
+        if rel:
+            return rel[0]
+        rel = Relationship.objects.filter(person_A=profile, person_B=self)
+        if rel:
+            return rel[0]
+        return None
 
     def get_par_given_action(self, action):
         try:
@@ -118,23 +109,31 @@ class Profile(models.Model):
         except:
             return None
 
-    def filter_connected_profiles(self, predicate):
-        '''Helper for getting profiles with a particular kind of relationship to self.
-        predicate: function taking a Relationship object and returning boolean. Used to filter Relationships.
-        Returns the Profiles (besides self) associated with the Relationships that predicate is true of.'''
-        profile_pks = [profile.pk for profile in self.get_connected_people()
-                       if predicate(self.get_relationship(profile))]
-        return Profile.objects.filter(pk__in=profile_pks)
-
     def get_followers(self):
-        return self.filter_connected_profiles(lambda rel: rel.target_follows_current_profile(self))
+        followers = []
+        # This should be something like for rel in self.relationship_set.all()
+        # but it doesn't seem to work
+        for person in self.get_connected_people():
+            rel = self.get_relationship_given_profile(person)
+            if rel.target_follows_current_profile(self):
+                followers.append(person.pk)
+        return Profile.objects.filter(pk__in=followers)
 
     def get_people_user_follows(self):
-        return self.filter_connected_profiles(lambda rel: rel.current_profile_follows_target(self))
+        people_followed = []
+        for person in self.get_connected_people():
+            rel = self.get_relationship_given_profile(person)
+            if rel.current_profile_follows_target(self):
+                people_followed.append(person.pk)
+        return Profile.objects.filter(pk__in=people_followed)
 
     def get_people_to_notify(self):
-        profiles = self.filter_connected_profiles(lambda rel: rel.target_notified_of_current_profile(self))
-        return [profile.user for profile in profiles]
+        notify = []
+        for person in self.get_connected_people():
+            rel = self.get_relationship_given_profile(person)
+            if rel.target_notified_of_current_profile(self):
+                notify.append(person.pk)
+        return [profile.user for profile in Profile.objects.filter(pk__in=notify)]
 
     def get_most_recent_actions_created(self):
         actions = self.user.action_set.filter(status__in=[StatusChoices.ready, StatusChoices.finished]).order_by('-date_created')
@@ -166,28 +165,27 @@ class Profile(models.Model):
     def get_connected_people(self):
         for_a = [rel.person_B for rel in Relationship.objects.filter(person_A=self)]
         for_b = [rel.person_A for rel in Relationship.objects.filter(person_B=self)]
-        return for_a + for_b
+        return list(chain(for_a, for_b))
 
     def get_list_of_relationships(self):
         people = []
         for person in self.get_connected_people():
-            rel = self.get_relationship(person)
+            rel = self.get_relationship_given_profile(person)
             you_follow = rel.current_profile_follows_target(self)
             follows_you = rel.target_follows_current_profile(self)
             muted = rel.current_profile_mutes_target(self)
             profile = rel.get_other(self)
-            people.append({
-                'profile': profile,
-                'mutual': follows_you and you_follow,
-                'follows_you': follows_you,
-                'you_follow': you_follow,
-                'muted': muted})
+            people.append({'profile': profile, 'mutual': follows_you and you_follow,
+                'follows_you': follows_you, 'you_follow': you_follow, 'muted': muted})
         return people
 
     def get_people_tracking(self):
-        relationships = [(profile, self.get_relationship(profile)) for profile in self.get_connected_people()]
-        return [profile.user for (profile, rel) in relationships
-                if rel.current_profile_follows_target(self) and not rel.current_profile_mutes_target(self)]
+        people = []
+        for person in self.get_connected_people():
+            rel = self.get_relationship_given_profile(person)
+            if rel.current_profile_follows_target(self) and not rel.current_profile_mutes_target(self):
+                people.append(person.user)
+        return people
 
     def get_percent_finished(self):
         total_count = 0
@@ -225,13 +223,6 @@ class Profile(models.Model):
                 if sar.action.status == StatusChoices.ready:
                     actions.append(sar.action)
         return actions
-
-    def is_visible_to(self, viewer, follows_user = None):
-        return privacy_tests[self.current_privacy](self, viewer, follows_user)
-
-    @classmethod
-    def default_sort(self, items):
-        return sorted(items, key = lambda x: getattr(x, 'date_joined'), reverse = True)
 
     # Add methods to save and access links as json objects
 
@@ -419,12 +410,14 @@ class PrivacyDefaults(models.Model):
         return class_name
 
     def save_dependencies(self):
-        self.profile.refresh_current_privacy()
+        self.profile.current_privacy = self.global_default
+        self.profile.save()
         for slate in self.profile.user.slate_set.all():
-            slate.refresh_current_privacy()
+            slate.current_privacy = self.global_default
+            slate.save()
         for action in self.profile.user.action_set.all():
-            action.refresh_current_privacy()
-
+            action.current_privacy = self.global_default
+            action.save()
 
 class ProfileActionRelationship(models.Model):
     """Stores relationship between a profile and an action"""
@@ -448,18 +441,9 @@ class ProfileActionRelationship(models.Model):
             status_helpers.change_commitment_when_par_changes(self, orig.status, self.status)
         super(ProfileActionRelationship, self).save(*args, **kwargs)
 
-    def named(self):
-        return self.action.named()
-
     def get_cname(self):
         class_name = 'ProfileActionRelationship'
         return class_name
-
-    def get_creator(self):
-        return self.profile.get_creator()
-
-    def get_profile(self):
-        return self.profile
 
     def get_status(self):
         if self.action.status == StatusChoices.withdrawn:
@@ -489,9 +473,6 @@ class ProfileActionRelationship(models.Model):
             suggesters.append(suggester)
         self.set_suggesters(suggesters)
 
-    def is_visible_to(self, viewer, follows_user = None):
-        return self.profile.is_visible_to(viewer, follows_user) and self.action.is_visible_to(viewer, follows_user)
-
 # I think we just want to track PAR & PSR for now.
 @disable_for_loaddata
 def par_handler(sender, instance, created, **kwargs):
@@ -510,21 +491,6 @@ class ProfileSlateRelationship(models.Model):
     slate = models.ForeignKey(Slate, on_delete=models.CASCADE)
     notify_of_additions = models.BooleanField(default=True)
 
-    def __unicode__(self):
-        return u'Relationship of profile %s and slate %s' % (self.profile, self.slate)
-
     def get_cname(self):
         class_name = 'ProfileSlateRelationship'
         return class_name
-
-    def get_creator(self):
-        return self.profile.get_creator()
-
-    def get_profile(self):
-        return self.profile
-
-    def is_visible_to(self, viewer, follows_user = None):
-        return self.profile.is_visible_to(viewer, follows_user) and self.slate.is_visible_to(viewer, follows_user)
-
-    def named(self):
-        return True

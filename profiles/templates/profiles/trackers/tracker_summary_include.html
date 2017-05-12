@@ -1,24 +1,19 @@
 <div class="row">
-  <div class="col-sm-12">
-    <p>Tracked by
-      {% if tracker_data.has_people %}
-        <a id="display_people_trackers" data-toggle="collapse" href="#PeopleTrackerList" aria-expanded="false" aria-controls="PeopleTrackerList">
-          {{ tracker_data.people_phrase }}
-        </a>
-      {% else %}
-        {{ tracker_data.people_phrase }}
-      {% endif %}
-      {% ifequal object.get_cname "Action" %}
-        {% if tracker_data.has_slates %}
-          and
-          <a id="display_slate_trackers" data-toggle="collapse" href="#SlateTrackerList" aria-expanded="false" aria-controls="SlateTrackerList">
-            {{ tracker_data.slate_phrase }}
-          </a>
-        {% else %}
+   <div class="col-sm-12">
+     <p>This {{ object.get_cname }} has
+       {% if tracker_data.has_people %}
+           <a id="display_people_trackers" data-toggle="collapse" href="#PeopleTrackerList" aria-expanded="false" aria-controls="PeopleTrackerList">
+             {{ tracker_data.people_phrase }}</a>
+       {% else %}
+             {{ tracker_data.people_phrase }}
+       {% endif %}
+       {% if tracker_data.has_slates %}
+          and <a id="display_slate_trackers" data-toggle="collapse" href="#SlateTrackerList" aria-expanded="false" aria-controls="SlateTrackerList">
+            {{ tracker_data.slate_phrase }}</a>
+       {% elif tracker_data.slate_tracker_list %}
           <!-- This is for actions with 0 slates, not slates with no slates -->
           and {{ tracker_data.slate_phrase }}
-        {% endif %}
-      {% endifequal %}
-    </p>
-  </div>
+       {% endif %}
+       tracking it.</p>
+   </div>
 </div>

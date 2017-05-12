@@ -1,24 +1,25 @@
 <div class="extra-padding-top">
 
- {% include 'profiles/trackers/tracker_summary_include.html' %}
+    {% include 'profiles/trackers/tracker_summary_include.html' %}
 
-  <div class="row collapse" id="PeopleTrackerList">
-    <div class="col-sm-12">
-      <h4>People</h4>
+    <div class="row collapse" id="PeopleTrackerList">
+       <div class="col-sm-12">
+          <h4>People</h4>
 
-      {% for tracker in tracker_data.people_tracking_by_privacy.visible_list %}
-        <span class="tracker_span">
-          <a href="{{ tracker.profile.get_absolute_url }}">{{ tracker.profile }}</a>
-        </span>
-      {% endfor %}
+          {% for tracker in tracker_data.people_tracker_list.public_list %}
+            <span class="tracker_span">
+              <a href="{{ tracker.profile.get_absolute_url }}">{{ tracker.profile }}</a>
+            </span>
+          {% endfor %}
 
-      {% if tracker_data.people_tracking_by_privacy.restricted_count > 0 %}
-        {% ifnotequal tracker_data.people_tracking_by_privacy.restricted_count tracker_data.people_tracking_by_privacy.total_count %}
-          and
-        {% endifnotequal %}
-        {{ tracker_data.people_tracking_by_privacy.restricted_count }} anonymous tracker{{ tracker_data.people_tracking_by_privacy.restricted_count|pluralize }}
-      {% endif %}
+          {% if tracker_data.people_tracker_list.anonymous_count > 0 %}
+              {% ifnotequal tracker_data.people_tracker_list.anonymous_count tracker_data.people_tracker_list.total_count %}
+                and
+              {% endifnotequal %}
+              {{ tracker_data.people_tracker_list.anonymous_count }} anonymous
+                  tracker{{ tracker_data.people_tracker_list.anonymous_count|pluralize }}
+          {% endif %}
 
+       </div>
     </div>
-  </div>
 </div>
