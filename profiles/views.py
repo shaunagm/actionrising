@@ -56,30 +56,17 @@ class ProfileView(UserPassesTestMixin, generic.DetailView):
                 context['notified_of'] = relationship.current_profile_notified_of_target(current_profile)
         return context
 
-class ProfileEditView(UserPassesTestMixin, generic.UpdateView):
+
+class ProfileEditView(generic.UpdateView):
     model = Profile
     form_class = ProfileForm
-    slug_field = 'user'
 
     def get_object(self, queryset=None):
-        slug = self.kwargs.get(self.slug_url_kwarg, None)
-        if slug:
-            user = User.objects.get(username=slug)
-            return Profile.objects.get(user=user)
-        else:
-            raise Http404(_(u"No user supplied to profile edit view"))
-
-    def test_func(self):
-        obj = self.get_object()
-        return obj.user == self.request.user
-
-    def get_form_kwargs(self):
-        form_kws = super(ProfileEditView, self).get_form_kwargs()
-        form_kws["user"] = self.request.user
-        return form_kws
+        return self.request.user.profile
 
     def get_success_url(self, **kwargs):
         return self.object.get_absolute_url()
+
 
 class ToDoView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'profiles/todo.html'
