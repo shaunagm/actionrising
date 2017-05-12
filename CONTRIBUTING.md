@@ -44,9 +44,9 @@ Most ideas for new features, user feedback, and bugs get added as issues to our 
 
 Every month or so, we get together to plan out the next [milestone](https://github.com/shaunagm/actionrising/milestones). These meetings are announced on the Slack and on the [contributor slate](https://actionrising.com/slates/slate/contribute-to-actionrising). During these meetings we touch base on what our priorities are, as specified in our [project roadmap](https://github.com/shaunagm/actionrising/wiki/ActionRising-Roadmap-(v.-2)).  With an eye to our priorities, we go through existing issues and grab the ones we think we’ll get to in the next month.  Sometimes we’ll add new issues as well!  We put those issues in the ‘to do’ section of our project kanban board.
 
-The [kanban board](https://github.com/shaunagm/actionrising/projects/7) is another major tool for keeping track of who is doing what. Regardless of whether you participate in the milestone process, if you’re working on an issue, you should make sure it’s on the kanban board. You should also use the kanban board to find people whose work might conflict with yours and check in wit them.  See ["I want to make a (non-urgent) change"](#i-want-to-make-a-non-urgent-change) for details.
+The [kanban board](https://github.com/shaunagm/actionrising/projects/7) is another major tool for keeping track of who is doing what. Regardless of whether you participate in the milestone process, if you’re working on an issue, you should make sure it’s on the kanban board. You should also use the kanban board to find people whose work might conflict with yours and check in with them.  See ["I want to make a (non-urgent) change"](#i-want-to-make-a-non-urgent-change) for details.
 
-We use [this git branching model](http://nvie.com/posts/a-successful-git-branching-model/) for our workflow. Quick summary: we have two main branches, `master` and `develop`. `Master` is the branch that’s live on our production site. `Develop` has all the accepted features & bugfixes we want to eventually merge into `master`. Periodically (we aim for once a week) we make a release, merge  develop into master, and push those changes to the product site.  It’s more complicated than that, but you don't have to sweat the details. Just follow the instructions below for various kinds of contributions and, of course, you can always ask for help.
+We use [this git branching model](http://nvie.com/posts/a-successful-git-branching-model/) for our workflow. Quick summary: we have two main branches, `master` and `develop`. `Master` is the branch that’s live on our production site. `Develop` has all the accepted features & bugfixes we want to eventually merge into `master`. Periodically (we aim for once a week) we make a release, merge  develop into master, and push those changes to the production site.  It’s more complicated than that, but you don't have to sweat the details. Just follow the instructions below for various kinds of contributions and, of course, you can always ask for help.
 
 ## Ways to Contribute
 
@@ -66,7 +66,7 @@ If you have any questions, or want to talk about potential features more informa
 
 #### I want to make a (non-urgent) change
 
-Before making a change, you’ll want to check in with the community. To do this, look at the __in progress__ and __code review__ columns of the [kanban board](https://github.com/shaunagm/actionrising/projects/7) to see if anyone else is doing work that might overlap with what yours. If you find anyone, reach out to make sure your work doesn’t conflict! The best way to do this is to @ them on the issue you’re addressing or on an empty pull request. When in doubt, just @ everyone who has an issue in the ‘in progress’ and ‘code review’ columns. You should also always make sure to @ shauna, the project owner.  (A lot of small changes will just be @ing Shauna, which is totally fine.)
+Before making a change, you’ll want to check in with the community. To do this, look at the __in progress__ and __code review__ columns of the [kanban board](https://github.com/shaunagm/actionrising/projects/7) to see if anyone else is doing work that might overlap with with yours. If you find anyone, reach out to make sure your work doesn’t conflict! The best way to do this is to @ them on the issue you’re addressing or on an empty pull request. When in doubt, just @ everyone who has an issue in the ‘in progress’ and ‘code review’ columns. You should also always make sure to @ shauna, the project owner.  (A lot of small changes will just be @ing Shauna, which is totally fine.)
 
 Once you get the go-ahead to start developing, you’ll want to make a feature branch:
 
@@ -144,6 +144,7 @@ The release should be tested with the automated test suite (both unit and functi
     git checkout master
     git merge --no-ff release-1.2
     git tag -a 1.2
+    git push --tags
 
 This merges the release into master and tags it with the release #.  It can then be pushed
 to production (Heroku).
