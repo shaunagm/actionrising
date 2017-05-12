@@ -40,7 +40,7 @@ Note: by participating in our community, you implicitly agree to abide by our [C
 
 The ActionRising community coordinates development in a few major ways:  
 
-Most ideas for new features, user feedback, and bugs get added as issues to our [issue tracker](https://github.com/shaunagm/actionrising/issues). Don’t be afraid to add your ideas as a new issue!  Community admins review issues as they’re added. If there’s an important bug, we’ll label it as and try to fix it right away.  Otherwise, it’ll probably sit around for a little while as folks discuss it. Eventually it will get an ‘accepted’ label, or it will be labeled ‘rejected’ and closed.
+Most ideas for new features, user feedback, and bugs get added as issues to our [issue tracker](https://github.com/shaunagm/actionrising/issues). Don’t be afraid to add your ideas as a new issue!  Community admins review issues as they’re added. If there’s an important bug, we’ll label it as urgent and try to fix it right away.  Otherwise, it’ll probably sit around for a little while as folks discuss it. Eventually it will get an ‘accepted’ label, or it will be labeled ‘rejected’ and closed.
 
 Every month or so, we get together to plan out the next [milestone](https://github.com/shaunagm/actionrising/milestones). These meetings are announced on the Slack and on the [contributor slate](https://actionrising.com/slates/slate/contribute-to-actionrising). During these meetings we touch base on what our priorities are, as specified in our [project roadmap](https://github.com/shaunagm/actionrising/wiki/ActionRising-Roadmap-(v.-2)).  With an eye to our priorities, we go through existing issues and grab the ones we think we’ll get to in the next month.  Sometimes we’ll add new issues as well!  We put those issues in the ‘to do’ section of our project kanban board.
 
@@ -78,8 +78,8 @@ When your work is done, you can then submit a pull request against the `develop`
 
 If `develop` has changed while you were making your feature, you may need to "rebase" your branch.  This is especially likely for large changes that are done over days or weeks.  To rebase, do the following:
 
-`git fetch origin            # Gets most recent version from origin`
-`git rebase origin/develop   # Rebases onto develop branch`
+    `git fetch origin            # Gets most recent version from origin`
+    `git rebase origin/develop   # Rebases onto develop branch`
 
 For big changes, you may want to test on [stage](https://act-now-staging.herokuapp.com/). You can ask Shauna or Presley to do this for you, or if you think you’ll be sticking around and contributing again, we can set up a staging ground (“sandbox”) for you.
 
@@ -98,8 +98,8 @@ If you want to go ahead and fix the bug, make a hotfix branch:
 
 If you’re a regular contributor with your own sandbox, you can test your changes there.  Once you’re ready, submit a pull request against `master` (__not__ `develop`):
 
-`git fetch origin            # Gets most recent version from origin`
-`git rebase origin/master    # Rebases onto master branch`
+    `git fetch origin            # Gets most recent version from origin`
+    `git rebase origin/master    # Rebases onto master branch`
 
 (There won't usually be any changes to master for you to worry about with a hotfix, but it's a good habit to have, and there might be changes if multiple people are working on hotfixes simultaneously.)
 
@@ -112,18 +112,6 @@ Our practice is, when we find a bug, to make sure we add the tests that would ha
 We don’t yet have a documentation structure set up, so the best way to get involved with this is to @ shauna on slack, and we can chat about where we are in the process and how you can help.
 
 ## Guides
-
-[Guides](#guides)
-  * [Styleguides](#styleguides)
-    * [Git Commit Messages](#git-commit-messages)
-    * [Documentation Styleguide](#documentation-styleguide)
-  * [Admin guides](#admin-gudies)
-    * [Release guide](#release-guide)
-    * [Hotfix guide](#hotfix-guide)
-  * [Miscellaneous guides](#miscellaneous-guides)
-    * [Issue and Pull Request Labels](#issue-and-pull-request-labels)
-    * [guidelines for reporting an issue](#guidelines-for-reporting-an-issue)
-    * [guidelines for requesting a feature](#guidelines-for-requesting-a-feature)
 
 ### Styleguides
 
@@ -179,8 +167,8 @@ Push the change to stage and, if it works, onto production.  If this does not su
 
 Once the issue is successfully resolved, merge the hotfixes into the current `release` branch, if one exists, or if not, onto `develop`:
 
-`git checkout release-1.2` OR `git checkout develop`
-`git merge --no-ff hotfix-*`
+    `git checkout release-1.2` OR `git checkout develop`
+    `git merge --no-ff hotfix-*`
 
 Finally, delete the branch:
 
