@@ -28,7 +28,7 @@ class TestSlateMethods(TestCase):
         self.assertEqual(sar.pk, self.sar.pk)
 
     def test_get_robust_url(self):
-        self.assertEqual(self.slate.get_robust_url(), '/slates/slate/test-slate')
+        self.assertEqual(self.slate.get_robust_url(), '/slates/slate/test-slate/')
 
     def test_is_active(self):
         self.slate.status = StatusChoices.ready
