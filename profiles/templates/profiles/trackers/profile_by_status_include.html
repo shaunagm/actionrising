@@ -1,20 +1,14 @@
-{% if object.list.total_count > 0 %}
+{% for tracker in object.visible_list %}
+  <span class="tracker_span">
+    <a href="{{ tracker.profile.get_absolute_url }}">{{ tracker.profile.get_name }}</a>
+  </span>
+{% endfor %}
 
-    <b> {{ object.status_display }} </b>:
-
-    {% for tracker in object.list.public_list %}
-      <span class="tracker_span">
-        <a href="{{ tracker.profile.get_absolute_url }}">{{ tracker.profile.get_name }}</a>
-      </span>
-    {% endfor %}
-
-    {% if object.list.anonymous_count > 0 %}
-      <span class="tracker_span">
-        {% ifnotequal object.list.anonymous_count object.list.total_count %}
-          and
-        {% endifnotequal %}
-        {{ object.list.anonymous_count }} anonymous tracker{{ object.list.anonymous_count|pluralize }}
-      </span>
-    {% endif %}
-
+{% if object.restricted_count > 0 %}
+  <span class="tracker_span">
+    {% ifnotequal object.restricted_count object.total_count %}
+      and
+    {% endifnotequal %}
+    {{ object.restricted_count }} anonymous tracker{{ object.restricted_count|pluralize }}
+  </span>
 {% endif %}

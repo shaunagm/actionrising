@@ -14,7 +14,7 @@
      {% load profile_extras %}
      {% activity_stream 'actor' user  %}
      {% for action in stream|slice:":15" %}
-       {% filtered_feed action as filtered_action %}
+       {% filtered_feed action own=True as filtered_action %}
        {% if filtered_action %}
           {% include 'profiles/feed_include.html' %}
        {% endif %}
