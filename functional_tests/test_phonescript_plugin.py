@@ -1,5 +1,3 @@
-import time
-
 from .base import SeleniumTestCase
 from .pageobjects import PhonescriptCreatePage, PhonescriptDetailPage
 
@@ -35,5 +33,4 @@ class TestPhonescriptActionDetail(SeleniumTestCase):
         # Should probably add test to check that it's got one default and two constituent scripts here
 
     # def test_logged_out_user(self):
-    #     time.sleep(90)
     #     pass
