@@ -595,7 +595,7 @@ class TestProfilePrivacy(TestCase):
         self.profile.save()
 
         self.assertEqual(self.profile.privacy, PrivacyChoices.inherit)
-        self.assertEqual(self.profile.current_privacy, self.profile.privacy_defaults.global_default)
+        self.assertEqual(self.profile.current_privacy, PrivacyChoices.public)
 
     def test_update_to_inherit_privacy(self):
         self.profile.privacy = PrivacyChoices.follows
@@ -607,7 +607,7 @@ class TestProfilePrivacy(TestCase):
         self.profile.save()
 
         self.assertEqual(self.profile.privacy, PrivacyChoices.inherit)
-        self.assertEqual(self.profile.current_privacy, self.profile.privacy_defaults.global_default)
+        self.assertEqual(self.profile.current_privacy, PrivacyChoices.public)
 
 
 class TestUpdatePrivacyDefaults(TestCase):
