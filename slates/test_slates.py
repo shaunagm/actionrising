@@ -71,7 +71,7 @@ class TestSlatePrivacy(TestCase):
     def test_inherit_privacy(self):
         slate = self.buffy.slate_set.create(privacy=PrivacyChoices.inherit)
         self.assertEqual(slate.privacy, PrivacyChoices.inherit)
-        self.assertEqual(slate.current_privacy, self.buffy.profile.privacy_defaults.global_default)
+        self.assertEqual(slate.current_privacy, PrivacyChoices.public)
 
     def test_update_to_inherit_privacy(self):
         slate = self.buffy.slate_set.create(privacy=PrivacyChoices.follows)
@@ -81,7 +81,7 @@ class TestSlatePrivacy(TestCase):
         slate.save()
 
         self.assertEqual(slate.privacy, PrivacyChoices.inherit)
-        self.assertEqual(slate.current_privacy, self.buffy.profile.privacy_defaults.global_default)
+        self.assertEqual(slate.current_privacy, PrivacyChoices.public)
 
 
 class TestCreateSlate(TestCase):
