@@ -1,5 +1,6 @@
 from django.conf.urls import url
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.forms import AdminPasswordChangeForm
 
 from accounts import views
 
@@ -10,6 +11,8 @@ urlpatterns = [
     url(r'sent/$', views.SentView.as_view(), name='sent-invite'),
     url(r'^confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         views.confirmation, name='sign-up-confirmation'),
+    url(r'^password_set/$', auth_views.password_change, { 'password_change_form': AdminPasswordChangeForm,
+        'template_name': 'accounts/password_reset/change.html'}, name='password_set'),
 
     # Login/logout
     url(r'^login/$', auth_views.login, {'template_name': 'accounts/login.html'}, name='login'),
@@ -32,5 +35,6 @@ urlpatterns = [
         name='password_reset_complete'),
 
     # Account settings page
+    url(r'^settings/$', views.SettingsView.as_view(), name='settings'),
 
 ]

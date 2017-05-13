@@ -10,7 +10,7 @@ from actstream.models import Action, following, followers
 from django_comments.models import Comment
 from mysite.settings import NOTIFY_EMAIL
 from mysite.lib.utils import disable_for_loaddata
-from mysite.lib.privacy import check_privacy, check_privacy_given_setting
+from mysite.lib.privacy import check_privacy
 from notifications.models import Notification
 from actions.models import Action as ActionRisingAction # TODO: Fix name collision
 from slates.models import Slate
@@ -50,8 +50,7 @@ def send_take_action_notification(instance):
     actor = instance.actor
     recipient = instance.target.creator
     action = instance.target
-    privacy_access = check_privacy_given_setting(actor.profile.get_user_privacy(),
-        actor.profile, recipient)
+    privacy_access = check_privacy(actor.profile, recipient)
     if (recipient != actor and recipient.email and privacy_access and recipient.notificationsettings.if_actions_followed):
         notification = Notification.objects.create(user=recipient, event=instance)
         sent = email_handlers.action_taken_email(recipient.profile, actor.profile, action)
@@ -88,8 +87,7 @@ def send_notification_to_action_creator(instance):
     actor = instance.actor
     action = instance.action_object
     slate = instance.target
-    privacy_access = check_privacy_given_setting(actor.profile.get_user_privacy(),
-        actor.profile, recipient) and check_privacy(slate, recipient)
+    privacy_access = check_privacy(actor.profile, recipient) and check_privacy(slate, recipient)
     if (recipient != actor and privacy_access and recipient.email and recipient.notificationsettings.if_my_actions_added_to_slate):
         notification = Notification.objects.create(user=recipient, event=instance)
         sent = email_handlers.add_slate_email(recipient.profile, actor.profile, action, slate)

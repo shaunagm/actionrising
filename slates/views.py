@@ -7,10 +7,9 @@ from django.contrib.auth.decorators import login_required
 
 from flags.lib.flag_helpers import get_user_flag_if_exists
 from mysite.lib.choices import PrivacyChoices, StatusChoices
-from mysite.lib.privacy import (check_privacy, filter_list_for_privacy,
-    filter_list_for_privacy_annotated)
+from mysite.lib.privacy import check_privacy, apply_check_privacy, filter_list_for_privacy_annotated
 from misc.models import RecommendationTracker
-from profiles.lib.trackers import get_tracker_data_for_slate
+from profiles.lib.trackers import Trackers
 from slates.models import Slate, SlateActionRelationship
 from slates.forms import SlateForm, SlateActionRelationshipForm
 
@@ -25,12 +24,12 @@ class SlateView(UserPassesTestMixin, generic.DetailView):
         context['is_slate'] = True
         context['flag'] = get_user_flag_if_exists(self.object, self.request.user)
         annotated_list = filter_list_for_privacy_annotated(self.object.slateactionrelationship_set.all(),
-            self.request.user)
-        context['actions'] = annotated_list['public_list']
-        context['hidden_actions'] = annotated_list['anonymous_count']
+            self.request.user, include_anonymous = True)
+        context['actions'] = annotated_list['visible_list']
+        context['hidden_actions'] = annotated_list['restricted_count']
         if self.request.user.is_authenticated():
             context['psr'] = self.request.user.profile.get_psr_given_slate(self.object)
-        context['tracker_data'] = get_tracker_data_for_slate(self.object, self.request.user)
+        context['tracker_data'] = Trackers(self.object, self.request.user)
         context['tag_list'] = self.object.tags.all()
         return context
 
@@ -38,16 +37,17 @@ class SlateView(UserPassesTestMixin, generic.DetailView):
         obj = self.get_object()
         return check_privacy(obj, self.request.user)
 
-class SlateListView(LoginRequiredMixin, generic.ListView):
+class SlateListView(generic.ListView):
     # Note: templates can likely be refactored to use same template as TopicListView
     template_name = "slates/slates.html"
     model = Slate
-    queryset = Slate.objects.filter(status__in=[StatusChoices.ready, StatusChoices.finished]).filter(current_privacy__in=[PrivacyChoices.public, PrivacyChoices.sitewide])
 
-class PublicSlateListView(generic.ListView):
-    template_name = "slates/slates.html"
-    model = Slate
-    queryset = Slate.objects.filter(status__in=[StatusChoices.ready, StatusChoices.finished]).filter(current_privacy=PrivacyChoices.public)
+    def get_context_data(self, **kwargs):
+        context = super(SlateListView, self).get_context_data(**kwargs)
+        visible_slates = [slate for slate in apply_check_privacy(Slate.objects.all(), self.request.user, include_anonymous = True)
+                          if slate.status in [StatusChoices.ready, StatusChoices.finished]]
+        context['object_list'] = sorted(visible_slates, key = lambda slate: getattr(slate, 'date_created'))
+        return context
 
 class SlateCreateView(LoginRequiredMixin, generic.edit.CreateView):
     model = Slate
@@ -112,4 +112,8 @@ class FollowUsersAndSlates(LoginRequiredMixin, generic.TemplateView):
         context['created_slates'] = self.request.user.slate_set.all()
         context['followed_slates'] = self.request.user.profile.profileslaterelationship_set.all()
         context['friends'] = self.request.user.profile.get_list_of_relationships()
+        rectracker = RecommendationTracker.objects.first()
+        if rectracker:
+            context['users'] = rectracker.retrieve_users()
+            context['slates'] = rectracker.retrieve_slates()
         return context

@@ -13,6 +13,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from ckeditor.fields import RichTextField
 from mysite.settings import PRODUCTION_DOMAIN
 from mysite.lib.choices import PrivacyChoices, PriorityChoices, StatusChoices, TimeChoices
+from mysite.lib.privacy import privacy_tests
 from mysite.lib.utils import disable_for_loaddata, slug_validator, slugify_helper
 from profiles.lib.status_helpers import open_pars_when_action_reopens, close_pars_when_action_closes
 
@@ -68,6 +69,15 @@ class Action(models.Model):
         class_name = 'Action'
         return class_name
 
+    def named(self):
+        return not self.anonymize
+
+    def get_creator(self):
+        return self.creator
+
+    def get_profile(self):
+        return self.creator.profile
+
     def get_absolute_url(self):
         return reverse('action', kwargs={'slug': self.slug})
 
@@ -104,7 +114,7 @@ class Action(models.Model):
             self.current_privacy = self.privacy
         self.save()
 
-    def get_creator(self):
+    def get_visible_creator(self):
         if self.anonymize:
             return "Anonymous"
         else:
@@ -156,17 +166,20 @@ class Action(models.Model):
                 return float((self.deadline - now).seconds)/float(86400)
         return -1
 
+    def is_visible_to(self, viewer, follows_user = None):
+        return privacy_tests[self.current_privacy](self, viewer, follows_user)
+
 @disable_for_loaddata
 def action_handler(sender, instance, created, **kwargs):
     if not created and (timezone.now() - instance.date_created).seconds < 600:
         return  # Don't show updated if the action was created in the last ten minutes
     verb_to_use = "created" if created else "updated"
-    if instance.get_creator() == "Anonymous":
-        # TODO: This is still going to be a problem if you change anonymity after creation,
-        # we'll need to break some of the following links after anonymizing.
-        action.send(instance, verb="was "+verb_to_use)
+    # TODO: This is still going to be a problem if you change anonymity after creation,
+    # we'll need to break some of the following links after anonymizing.
+    if instance.named():
+        action.send(instance.get_creator(), verb=verb_to_use, target=instance)
     else:
-        action.send(instance.creator, verb=verb_to_use, target=instance)
+        action.send(instance, verb = 'was ' + verb_to_use)
 post_save.connect(action_handler, sender=Action)
 
 class ActionFilter(models.Model):

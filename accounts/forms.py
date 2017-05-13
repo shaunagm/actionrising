@@ -1,6 +1,6 @@
 import re
 
-from django.forms import ModelForm, CharField, PasswordInput
+from django.forms import ModelForm, CharField, PasswordInput, TextInput
 from django.contrib.auth.models import User
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
@@ -17,10 +17,15 @@ class SignUpForm(ModelForm):
     class Meta:
         model = User
         fields = ['email', 'username', 'password']
+        widgets = {
+            'username': TextInput(
+                attrs={'placeholder': "Characters, numbers, hyphens and dashes only"}),
+            }
 
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args, **kwargs)
         self.fields['email'].required = True
+        self.fields['username'].help_text = None
 
     def clean_email(self):
         '''Makes sure email is unique'''
@@ -34,14 +39,15 @@ class SignUpForm(ModelForm):
         username = self.cleaned_data['username']
         if User.objects.filter(username__iexact=username).exists():
             raise ValidationError("This username is already taken.")
-        if not re.match(r'^[\w.@+-]+$', username):
+        if not re.match(r'^[\w_-]+$', username):
             raise ValidationError("Enter a valid username. This value may contain only " \
-                + "letters, numbers, and @/./+/-/_ characters.")
+                + "letters, numbers, hyphens and dashes.")
         return username
 
     def save(self, commit=True):
         instance = super(SignUpForm, self).save(commit=False)
         instance.is_active = False
+        instance.set_password(self.cleaned_data['password'])
         instance.save()
 
         # Send notification email with one-time token

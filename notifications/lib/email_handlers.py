@@ -5,14 +5,13 @@ from django.template.loader import render_to_string
 from django.core.urlresolvers import reverse
 
 from mysite.settings import NOTIFY_EMAIL
-from mysite.lib.privacy import filter_list_for_privacy_annotated
 
 def get_notificationsettings_url(recipient):
     url_path = reverse('manage_notifications', kwargs={'pk': recipient.user.notificationsettings.pk})
     return 'https://www.actionrising.com' + url_path
 
 def get_toggle_notify_url(target):
-    url_path = reverse('toggle_relationships', kwargs={'pk': target.pk, 'toggle_type': 'notify'})
+    url_path = reverse('toggle_relationships', kwargs={'slug': target.username, 'toggle_type': 'notify'})
     return 'https://www.actionrising.com' + url_path
 
 def get_toggle_notify_for_slate_url(target):
@@ -39,7 +38,7 @@ def follow_notification_email(recipient, follower):
 
     subject = "%s is now following you on ActionRising" % follower
 
-    relationship = recipient.get_relationship_given_profile(follower)
+    relationship = recipient.get_relationship(follower)
     if relationship.current_profile_follows_target(recipient):
         follow_status = "You now follow each other."
         follows = True
@@ -89,11 +88,11 @@ def action_taken_email(recipient, actor, action):
 
     subject = "%s is taking one of your actions on ActionRising" % actor
 
-    trackers = filter_list_for_privacy_annotated(action.profileactionrelationship_set.all(), recipient.user)
-    if trackers['total_count'] > 1:
-        tracker_string = "%d people tracking it" % trackers['total_count']
+    trackers = len(action.profileactionrelationship_set.all())
+    if trackers == 1:
+        tracker_string = "%d person tracking it" % trackers
     else:
-        tracker_string = "%d person tracking it" % trackers['total_count']
+        tracker_string = "%d people tracking it" % trackers
 
     ctx = {
         # Required fields

@@ -4,9 +4,32 @@ from .base import SeleniumTestCase
 from .pageobjects import SlateDetailPage, SlateListPage, SlateActionsListPage
 from profiles.models import Profile, ProfileActionRelationship
 
+from actions.models import Action
+from django.contrib.auth.models import User
+from mysite.lib.privacy import check_privacy
+
 default_user = "buffysummers"
 default_password = "apocalypse"
 
+# high stakes slate is public
+# how to prevent apocalyse is sitewide
+
+class TestPublicSlateList(SeleniumTestCase):
+
+    def setUp(self):
+        super(TestPublicSlateList, self).setUp()
+        self.slates_table = SlateListPage(self.browser, root_uri=self.live_server_url)
+        self.slates_table.go_to_default_slates_page()
+        self.slates = self.slates_table.get_slates()
+
+    def test_public_slate_shows(self):
+        self.assertTrue("High stakes slate of actions" in self.slates)
+
+    def test_sitewide_slate_hidden(self):
+        self.assertFalse("How to prevent an apocalypse" in self.slates)
+
+    def test_protected_slate_hidden(self):
+        self.assertFalse("Slate Buffy Can See" in self.slates)
 
 class TestSlateList(SeleniumTestCase):
 
@@ -20,11 +43,15 @@ class TestSlateList(SeleniumTestCase):
     def test_display_slates(self):
         self.assertTrue(self.slates_table.datatables_js_is_enabled())
         self.assertEquals(len(self.slates_table.columns), 5)
-        self.assertEquals(len(self.slates_table.rows), 3)
         self.assertEquals(self.slates_table.first_row_date.text, "Fri Dec 02")
-        self.assertEquals(self.slates_table.first_row_slate.text, "High stakes slate of actions")
-        self.assertEquals(self.slates_table.first_row_creator.text, "dru")
-        self.assertEquals(self.slates_table.first_row_action_count.text, "3")
+        self.assertEquals(self.slates_table.first_row_slate.text, "Slate Buffy Can See")
+        self.assertEquals(self.slates_table.first_row_creator.text, "thewitch")
+        self.assertEquals(self.slates_table.first_row_action_count.text, "0")
+        slates = self.slates_table.get_slates()
+        self.assertTrue("High stakes slate of actions" in slates)
+        self.assertTrue("How to prevent an apocalypse" in slates)
+        self.assertTrue("Slate Buffy Can See" in slates)
+        self.assertFalse("Slate Buffy Cannot See" in slates)
 
     # def test_filter_slates_by_status(self):
     #     self.slates_table.active_only.click()
@@ -33,8 +60,12 @@ class TestSlateList(SeleniumTestCase):
 
     def test_filter_slates_by_friends(self):
         self.slates_table.friends_only.click()
-        self.assertEquals(len(self.slates_table.rows), 1)
-        self.assertEquals(self.slates_table.first_row_slate.text, "How to prevent an apocalypse")
+        slates = self.slates_table.get_slates()
+        self.assertEquals(len(self.slates_table.rows), 2)
+        self.assertTrue("Slate Buffy Can See" in slates)
+        self.assertTrue("How to prevent an apocalypse" in slates)
+        self.assertFalse("High stakes slate of actions" in slates)
+        self.assertFalse("Slate Buffy Cannot See" in slates)
 
 class TestSlateDetail(SeleniumTestCase):
 
@@ -68,18 +99,20 @@ class TestSlateActionList(SeleniumTestCase):
         # TODO: This breaks when run as a whole but not when run individually
         self.assertTrue(self.actions_table.datatables_js_is_enabled())
         self.assertEquals(len(self.actions_table.columns), 4)
-        self.assertEquals(len(self.actions_table.rows), 3)
+        actions = self.actions_table.get_actions()
+        self.assertTrue("Donate to Planned Parenthood" in actions)
+        self.assertTrue("Join the site" in actions)
+        self.assertTrue("Sign petition to make Boston a sanctuary city" in actions)
         self.assertEquals(self.actions_table.first_row_date.text, "Fri Dec 02")
-        self.assertEquals(self.actions_table.first_row_action.text, "Join the site")
         self.assertEquals(self.actions_table.first_row_tracker_count.text, "0")
         self.assertEquals(len(self.actions_table.labels), 3)
         # TODO: Add test of toggle notes
 
     def test_slate_actions_button_filter(self):
         self.actions_table.friends_only.click()
-        self.assertEquals(len(self.actions_table.rows), 1)
-        self.assertEquals(self.actions_table.first_row_action.text, "Donate to Planned Parenthood")
-        self.actions_table.friends_only.click()
+        actions = self.actions_table.get_actions()
+        self.assertFalse("Join the site" in actions)
+        self.assertFalse("Donate to Planned Parenthood" in actions)
 
     def test_slate_actions_dropdown_filter(self):
         # TODO: This breaks when run as a whole but not when run individually
