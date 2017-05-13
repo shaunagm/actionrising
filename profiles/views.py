@@ -57,7 +57,7 @@ class ProfileView(UserPassesTestMixin, generic.DetailView):
         return context
 
 
-class ProfileEditView(generic.UpdateView):
+class ProfileEditView(LoginRequiredMixin, generic.UpdateView):
     model = Profile
     form_class = ProfileForm
 
@@ -81,7 +81,7 @@ class ToDoView(LoginRequiredMixin, generic.TemplateView):
         return context
 
 
-class ProfileSuggestedView(generic.DetailView):
+class ProfileSuggestedView(LoginRequiredMixin, generic.DetailView):
     template_name = 'profiles/suggested.html'
     model = User
 
