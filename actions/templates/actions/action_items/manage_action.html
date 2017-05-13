@@ -16,7 +16,7 @@
              Suggest to friends</a>
            <a class="manage-action-links" href="{% url 'manage_action_for_profile' object.slug %}">
              Edit notes, priority</a>
-           <a class="manage-action-links" href="{% url 'toggle_action_for_profile' object.slug 'remove' %}">
+           <a id="remove-from-todos" class="manage-action-links" href="{% url 'toggle_action_for_profile' object.slug 'remove' %}">
              Remove from todos</a>
          </ul>
        </div>
