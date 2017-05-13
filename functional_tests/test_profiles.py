@@ -81,9 +81,11 @@ class TestProfileDetail(SeleniumTestCase):
 
     def test_restricted_profile(self):
         self.profile_page.go_to_profile_page(username="tara_m")
-        self.assertTrue('login' in self.profile_page.w.current_url)
-        # self.assertFalse('Tara' in self.profile_page.name.text)
-        # self.assertIsNone(self.profile_page.location)
+        self.assertFalse('login' in self.profile_page.w.current_url)
+        self.assertFalse('Tara' in self.profile_page.name.text)
+        self.assertTrue('tara_m' in self.profile_page.name.text)
+        self.assertIsNone(self.profile_page.location)
+        # shows minimal profile
 
 class TestFollowedActivity(SeleniumTestCase):
 
@@ -120,17 +122,21 @@ class TestPublicProfileDetail(SeleniumTestCase):
         self.profile_page = ProfilePage(self.browser, root_uri=self.live_server_url)
 
     def test_public_profile(self):
+        # shows in full
         self.profile_page.go_to_profile_page(username="dru")
         self.assertTrue('Drusilla' in self.profile_page.name.text)
         self.assertIsNotNone(self.profile_page.location)
-        # shows
 
     def test_sitewide_profile(self):
+        # minimal profile shows
         self.profile_page.go_to_profile_page(username="giles")
-        self.assertTrue('login' in self.profile_page.w.current_url)
-        # redirects
+        self.assertFalse('Rupert' in self.profile_page.name.text)
+        self.assertTrue('giles' in self.profile_page.name.text)
+        self.assertFalse('login' in self.profile_page.w.current_url)
 
     def test_restricted_profile(self):
+        # minimal profile shows
         self.profile_page.go_to_profile_page(username="thewitch")
-        self.assertTrue('login' in self.profile_page.w.current_url)
-        # redirects
+        self.assertFalse('Willow' in self.profile_page.name.text)
+        self.assertTrue('thewitch' in self.profile_page.name.text)
+        self.assertFalse('login' in self.profile_page.w.current_url)
