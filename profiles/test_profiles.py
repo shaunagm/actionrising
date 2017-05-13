@@ -570,3 +570,41 @@ class TestTrackers(TestCase):
         self.assertEqual(data['restricted_count'], 1)
         # buffy can see faith
         self.assertEqual(data['visible_list'], [self.faith_slate2])
+
+
+class TestProfilePrivacy(TestCase):
+    def setUp(self):
+        super(TestProfilePrivacy, self).setUp()
+        self.buffy = User.objects.create(username="buffysummers")
+        self.profile = self.buffy.profile
+
+    def test_default(self):
+        # default to the PrivacyDefaults default
+        self.assertEqual(self.profile.privacy, PrivacyChoices.inherit)
+        self.assertEqual(self.profile.current_privacy, PrivacyChoices.public)
+
+    def test_concrete_privacy(self):
+        self.profile.privacy = PrivacyChoices.follows
+        self.profile.save()
+
+        self.assertEqual(self.profile.privacy, PrivacyChoices.follows)
+        self.assertEqual(self.profile.current_privacy, PrivacyChoices.follows)
+
+    def test_inherit_privacy(self):
+        self.profile.privacy = PrivacyChoices.inherit
+        self.profile.save()
+
+        self.assertEqual(self.profile.privacy, PrivacyChoices.inherit)
+        self.assertEqual(self.profile.current_privacy, self.profile.privacy_defaults.global_default)
+
+    def test_update_to_inherit_privacy(self):
+        self.profile.privacy = PrivacyChoices.follows
+        self.profile.save()
+
+        self.assertEqual(self.profile.privacy, PrivacyChoices.follows)
+
+        self.profile.privacy = PrivacyChoices.inherit
+        self.profile.save()
+
+        self.assertEqual(self.profile.privacy, PrivacyChoices.inherit)
+        self.assertEqual(self.profile.current_privacy, self.profile.privacy_defaults.global_default)

@@ -1,13 +1,8 @@
-import datetime, mock
-
 from django.test import TestCase
-from django.core.exceptions import ObjectDoesNotExist
-from django.utils import timezone
-from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
-from profiles.models import Profile, ProfileActionRelationship
+from django.core.urlresolvers import reverse
 
-from mysite.lib.choices import StatusChoices
+from mysite.lib.choices import StatusChoices, PrivacyChoices
 from mysite.lib.utils import slugify_helper
 from actions.models import Action
 from slates.models import Slate, SlateActionRelationship
@@ -61,3 +56,51 @@ class TestSlateForms(TestCase):
         form_inherited_privacy = initial_form.fields['privacy'].choices[0][1]
         user_privacy = self.buffy.profile.privacy_defaults.get_global_default_display()
         self.assertEqual(form_inherited_privacy, user_privacy)
+
+
+class TestSlatePrivacy(TestCase):
+    def setUp(self):
+        super(TestSlatePrivacy, self).setUp()
+        self.buffy = User.objects.create(username="buffysummers")
+
+    def test_concrete_privacy(self):
+        slate = self.buffy.slate_set.create(privacy=PrivacyChoices.follows)
+        self.assertEqual(slate.privacy, PrivacyChoices.follows)
+        self.assertEqual(slate.current_privacy, PrivacyChoices.follows)
+
+    def test_inherit_privacy(self):
+        slate = self.buffy.slate_set.create(privacy=PrivacyChoices.inherit)
+        self.assertEqual(slate.privacy, PrivacyChoices.inherit)
+        self.assertEqual(slate.current_privacy, self.buffy.profile.privacy_defaults.global_default)
+
+    def test_update_to_inherit_privacy(self):
+        slate = self.buffy.slate_set.create(privacy=PrivacyChoices.follows)
+        self.assertEqual(slate.privacy, PrivacyChoices.follows)
+
+        slate.privacy = PrivacyChoices.inherit
+        slate.save()
+
+        self.assertEqual(slate.privacy, PrivacyChoices.inherit)
+        self.assertEqual(slate.current_privacy, self.buffy.profile.privacy_defaults.global_default)
+
+
+class TestCreateSlate(TestCase):
+    def setUp(self):
+        super(TestCreateSlate, self).setUp()
+        self.buffy = User.objects.create(username="buffysummers")
+
+    def test_create_slate(self):
+        self.client.force_login(self.buffy)
+        resp = self.client.post(reverse("create_slate"), {
+            'title': "My new slate",
+            'description': "It's gonna be good",
+            'status': StatusChoices.ready,
+            'privacy': PrivacyChoices.follows,
+            'actions': [],
+        })
+
+        self.assertEqual(resp.status_code, 302)
+        slate = Slate.objects.get()
+        self.assertRedirects(resp, slate.get_robust_url())
+
+        self.assertEqual(slate.privacy, PrivacyChoices.follows)

@@ -4,7 +4,7 @@ import json, datetime, ast
 from random import shuffle
 from itertools import chain
 
-from actstream import action
+import actstream
 from django.db import models
 from django.db.models.signals import post_save
 from django.core.urlresolvers import reverse
@@ -42,8 +42,7 @@ class Profile(models.Model):
         return self.user.username
 
     def save(self, *args, **kwargs):
-        if self.pk and self.privacy != PrivacyChoices.inherit and self.privacy != self.current_privacy:
-            self.current_privacy = self.privacy
+        self.refresh_current_privacy()
         super(Profile, self).save(*args, **kwargs)
 
     def get_cname(self):
@@ -88,11 +87,12 @@ class Profile(models.Model):
         return PRODUCTION_DOMAIN + reverse('suggested', kwargs={'slug': self.user })
 
     def refresh_current_privacy(self):
-        if self.privacy == PrivacyChoices.inherit:
+        if not self.pk:
+            self.current_privacy = PrivacyChoices.public  # default for new users
+        elif self.privacy == PrivacyChoices.inherit:
             self.current_privacy = self.privacy_defaults.global_default
         else:
             self.current_privacy = self.privacy
-        self.save()
 
     def get_user_privacy(self):
         return self.privacy_defaults.global_default
@@ -420,10 +420,15 @@ class PrivacyDefaults(models.Model):
 
     def save_dependencies(self):
         self.profile.refresh_current_privacy()
+        self.profile.save()
+
         for slate in self.profile.user.slate_set.all():
             slate.refresh_current_privacy()
+            slate.save()
+
         for action in self.profile.user.action_set.all():
             action.refresh_current_privacy()
+            action.save()
 
 
 class ProfileActionRelationship(models.Model):
@@ -497,11 +502,11 @@ class ProfileActionRelationship(models.Model):
 def par_handler(sender, instance, created, **kwargs):
     if created:
         if instance.status == ToDoStatusChoices.suggested:
-            action.send(instance.last_suggester, verb='suggested action', action_object=instance.action, target=instance.profile.user)
+            actstream.action.send(instance.last_suggester, verb='suggested action', action_object=instance.action, target=instance.profile.user)
         else:
-            action.send(instance.profile.user, verb='is taking action', target=instance.action)
+            actstream.action.send(instance.profile.user, verb='is taking action', target=instance.action)
     if instance.status == ToDoStatusChoices.done:
-        action.send(instance.profile.user, verb='completed action', target=instance.action)
+        actstream.action.send(instance.profile.user, verb='completed action', target=instance.action)
 post_save.connect(par_handler, sender=ProfileActionRelationship)
 
 class ProfileSlateRelationship(models.Model):
