@@ -99,7 +99,7 @@ class TestActionPrivacy(TestCase):
     def test_inherit_privacy(self):
         action = self.buffy.action_set.create(privacy=PrivacyChoices.inherit)
         self.assertEqual(action.privacy, PrivacyChoices.inherit)
-        self.assertEqual(action.current_privacy, self.buffy.profile.privacy_defaults.global_default)
+        self.assertEqual(action.current_privacy, PrivacyChoices.public)
 
     def test_update_to_inherit_privacy(self):
         action = self.buffy.action_set.create(privacy=PrivacyChoices.follows)
@@ -109,4 +109,4 @@ class TestActionPrivacy(TestCase):
         action.save()
 
         self.assertEqual(action.privacy, PrivacyChoices.inherit)
-        self.assertEqual(action.current_privacy, self.buffy.profile.privacy_defaults.global_default)
+        self.assertEqual(action.current_privacy, PrivacyChoices.public)

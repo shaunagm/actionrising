@@ -425,15 +425,12 @@ class PrivacyDefaults(models.Model):
         return class_name
 
     def save_dependencies(self):
-        self.profile.refresh_current_privacy()
         self.profile.save()
 
         for slate in self.profile.user.slate_set.all():
-            slate.refresh_current_privacy()
             slate.save()
 
         for action in self.profile.user.action_set.all():
-            action.refresh_current_privacy()
             action.save()
 
 

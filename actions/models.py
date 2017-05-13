@@ -52,9 +52,6 @@ class Action(models.Model):
 
     def save(self, *args, **kwargs):
         # If action is being created
-        if not self.pk:
-            self.slug = slugify_helper(Action, self.title)
-
         self.refresh_current_privacy()
 
         if self.pk:
@@ -63,6 +60,8 @@ class Action(models.Model):
                 close_pars_when_action_closes(self)
             if orig.status != StatusChoices.ready and self.status == StatusChoices.ready:
                 open_pars_when_action_reopens(self)
+        else:
+            self.slug = slugify_helper(Action, self.title)
         super(Action, self).save(*args, **kwargs)
 
     def get_cname(self):

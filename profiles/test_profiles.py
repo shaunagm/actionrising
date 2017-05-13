@@ -175,9 +175,9 @@ class TestRelationshipMethods(TestCase):
         self.assertIsNone(self.relationship.current_profile_mutes_target(self.lorne.profile))
 
     def test_toggle_following_for_current_profile(self):
-        self.buffy.profile.current_privacy = PrivacyChoices.follows
+        self.buffy.profile.privacy = PrivacyChoices.follows
         self.buffy.profile.save()
-        self.faith.profile.current_privacy = PrivacyChoices.follows
+        self.faith.profile.privacy = PrivacyChoices.follows
         self.faith.profile.save()
         # Starting with A (Buffy) not following B (Faith)
         self.assertFalse(self.relationship.A_follows_B)
@@ -608,3 +608,26 @@ class TestProfilePrivacy(TestCase):
 
         self.assertEqual(self.profile.privacy, PrivacyChoices.inherit)
         self.assertEqual(self.profile.current_privacy, self.profile.privacy_defaults.global_default)
+
+
+class TestUpdatePrivacyDefaults(TestCase):
+
+    def test_update_default(self):
+        buffy = User.objects.create(username="buffysummers")
+        action = buffy.action_set.create(privacy=PrivacyChoices.inherit)
+        slate = buffy.slate_set.create(privacy=PrivacyChoices.inherit)
+
+        self.assertEqual(action.current_privacy, PrivacyChoices.public)
+        self.assertEqual(slate.current_privacy, PrivacyChoices.public)
+
+        buffy.profile.privacy_defaults.global_default = PrivacyChoices.follows
+        buffy.profile.privacy_defaults.save()
+
+        action.refresh_from_db()
+        self.assertEqual(action.current_privacy, PrivacyChoices.follows)
+
+        slate.refresh_from_db()
+        self.assertEqual(slate.current_privacy, PrivacyChoices.follows)
+
+        buffy.profile.refresh_from_db()
+        self.assertEqual(buffy.profile.current_privacy, PrivacyChoices.follows)
