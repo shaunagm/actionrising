@@ -87,10 +87,13 @@ class Profile(models.Model):
         return PRODUCTION_DOMAIN + reverse('suggested', kwargs={'slug': self.user })
 
     def refresh_current_privacy(self):
-        if self.privacy == PrivacyChoices.inherit:
-            self.current_privacy = self.privacy_defaults.global_default
-        else:
-            self.current_privacy = self.privacy
+        try:
+            if self.privacy == PrivacyChoices.inherit:
+                self.current_privacy = self.privacy_defaults.global_default
+            else:
+                self.current_privacy = self.privacy
+        except PrivacyDefaults.DoesNotExist:
+            PrivacyDefaults._meta.get_field('global_default').get_default()
 
     def get_user_privacy(self):
         return self.privacy_defaults.global_default
@@ -239,15 +242,8 @@ class Profile(models.Model):
 @disable_for_loaddata
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        profile = Profile(user=instance)
-        privacy = PrivacyDefaults(profile=profile)
-
-        profile.save()
-
-        # though profile gets an id after save, django still wants us to update
-        # the profile_id manually
-        privacy.profile_id = profile.id
-        privacy.save()
+        profile = Profile.objects.create(user=instance)
+        PrivacyDefaults.objects.create(profile=profile)  # trick into treating this as reverse one-to-one
 
         NotificationSettings.objects.create(user=instance)
         DailyActionSettings.objects.create(user=instance)
