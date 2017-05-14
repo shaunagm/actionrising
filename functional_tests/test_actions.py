@@ -146,13 +146,13 @@ class TestActionDetail(SeleniumTestCase):
         self.action_page.manage_action_button.click()  # add to todo list
         self.action_page.manage_action_button.click()  # click manage
         self.wait_helper("manage-action-list")
+        self.action_page.manage_action_button.click()  # close list for now
         # Logged in user should now appear in accepted trackers
         self.action_page.display_tracker_link.click()
         self.wait_helper("profile_accepted")
         self.assertEquals(len(self.action_page.accepted_trackers), 2)
         self.assertEqual(self.action_page.accepted_trackers[0].text, "Buffy Summers")
         # Now test remove action
-        self.wait_helper("remove-from-todos")
         self.action_page.select_manage_action_option("Remove from todos")
         self.wait_helper()
         self.action_page.display_tracker_link.click()
