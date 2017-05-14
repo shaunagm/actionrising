@@ -262,7 +262,7 @@ class FollowedActivity(BasePage):
 
 class ProfilePage(BasePage):
     name = PageElement(id_="profile-username")
-    activity = MultiPageElement(css="actstream-action")
+    activity = MultiPageElement(css=".actstream-action")
     redirected_page = PageElement(css="#id_username")
     location = PageElement(css=".profile-location")
     # other person's profile
@@ -279,7 +279,10 @@ class ProfilePage(BasePage):
         return [action.text for action in self.created_content]
 
     def get_tracked_actions(self):
-        return [action.text for action in self.actions_tracked]
+        return [action.text for action in self.tracked_actions]
+
+    def get_activity(self):
+        return [act.text for act in self.activity]
 
     def get_friends(self):
         return [friend.text for friend in self.friends]
