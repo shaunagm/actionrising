@@ -23,31 +23,28 @@ from profiles.forms import ProfileForm, ProfileActionRelationshipForm
 def index(request):
     return HttpResponseRedirect(reverse('profiles'))
 
-class ProfileView(UserPassesTestMixin, generic.DetailView):
+class ProfileView(generic.DetailView):
     template_name = 'profiles/profile.html'
     slug_field = 'username'
     model = User
 
-    def test_func(self):
-        obj = self.get_object()
-        return check_privacy(obj.profile, self.request.user)
-
     def get_context_data(self, **kwargs):
         context = super(ProfileView, self).get_context_data(**kwargs)
+        obj = self.get_object()
+        own = self.request.user == obj
+        context['visible_to_user'] = check_privacy(obj.profile, self.request.user)
+        context['created_actions'] = apply_check_privacy(
+            self.object.profile.get_most_recent_actions_created(),
+            self.request.user,
+            include_anonymous = own)
+        context['tracked_actions'] = apply_check_privacy(
+            self.object.profile.get_most_recent_actions_tracked(),
+            self.request.user,
+            include_anonymous = own)
+        context['total_actions'] = obj.profile.profileactionrelationship_set.count()
+        context['percent_finished'] = obj.profile.get_percent_finished()
+        context['action_streak_current'] = obj.profile.get_action_streak()
         if self.request.user.is_authenticated():
-            own = self.request.user == self.object
-            context['created_actions'] = apply_check_privacy(
-                self.object.profile.get_most_recent_actions_created(),
-                self.request.user,
-                include_anonymous = own)
-            context['tracked_actions'] = apply_check_privacy(
-                self.object.profile.get_most_recent_actions_tracked(),
-                self.request.user,
-                include_anonymous = own)
-            obj = self.get_object()
-            context['total_actions'] = obj.profile.profileactionrelationship_set.count()
-            context['percent_finished'] = obj.profile.get_percent_finished()
-            context['action_streak_current'] = obj.profile.get_action_streak()
             current_profile = self.request.user.profile
             relationship = current_profile.get_relationship(obj.profile)
             if relationship:
