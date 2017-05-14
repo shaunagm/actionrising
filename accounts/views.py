@@ -9,6 +9,7 @@ from django.utils.encoding import force_text
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from social_django.models import UserSocialAuth
+from notifications.lib.email_handlers import generic_admin_email
 
 from accounts.lib.tokens import account_activation_token
 from accounts.forms import SignUpForm
@@ -34,6 +35,11 @@ def confirmation(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
+
+        #Notify admin of signup
+        message = "Name: %s, Email: %s" % ( user.username, user.email)
+        generic_admin_email("New user on ActionRising", message)
+
         login(request, user, backend='mysite.lib.backends.CustomModelBackend')
         return redirect('index')
     else:
