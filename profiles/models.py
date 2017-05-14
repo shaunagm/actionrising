@@ -79,13 +79,13 @@ class Profile(models.Model):
         return PRODUCTION_DOMAIN + self.get_absolute_url()
 
     def get_edit_url(self):
-        return reverse('edit_profile', kwargs={'slug': self.user.username })
+        return reverse('edit_profile')
 
     def get_edit_url_with_domain(self):
         return PRODUCTION_DOMAIN + self.get_edit_url()
 
     def get_suggestion_url_with_domain(self):
-        return PRODUCTION_DOMAIN + reverse('suggested', kwargs={'slug': self.user })
+        return PRODUCTION_DOMAIN + reverse('suggested')
 
     def refresh_current_privacy(self):
         if self.privacy == PrivacyChoices.inherit:

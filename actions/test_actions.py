@@ -42,7 +42,7 @@ class TestActionMethods(TestCase):
         self.assertEqual(self.action.get_creator(), self.buffy)
 
     def test_get_robust_url(self):
-        self.assertEqual(self.action.get_robust_url(), '/actions/action/test-action')
+        self.assertEqual(self.action.get_robust_url(), '/actions/action/test-action/')
 
     def test_is_active(self):
         self.action.status = StatusChoices.ready
