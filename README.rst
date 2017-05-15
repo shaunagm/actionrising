@@ -74,7 +74,7 @@ Setting up the site locally
 
     python manage.py collectstatic
 
-  Then you can run::
+   Then you can run::
 
      python manage.py test
 
