@@ -15,17 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-if os.environ.get("AR_SITE_TYPE") and os.environ.get("AR_SITE_TYPE") == "PRODUCTION":
-    from production_settings import (SECRET_KEY, DEBUG, CHROMEDRIVER_PATH, DATABASES,
-        EMAIL_HOST, EMAIL_PORT, EMAIL_HOST_PASSWORD)
-elif os.environ.get("AR_SITE_TYPE") and os.environ.get("AR_SITE_TYPE") == "STAGING":
-    from staging_settings import (SECRET_KEY, DEBUG, CHROMEDRIVER_PATH, DATABASES,
-        EMAIL_HOST, EMAIL_PORT, EMAIL_HOST_PASSWORD)
-else:
-    from local_settings import (SECRET_KEY, DEBUG, CHROMEDRIVER_PATH, DATABASES,
-        EMAIL_HOST, EMAIL_PORT, EMAIL_HOST_PASSWORD)
-
-
 SEND_BROKEN_LINK_EMAILS = True
 MANAGERS = (('Admin', 'actionrisingsite@gmail.com'),)
 
@@ -141,11 +130,6 @@ USE_TZ = True
 LOGIN_REDIRECT_URL = '/profiles/dashboard'
 LOGIN_URL = '/accounts/login/'
 LOGOUT_URL = '/accounts/logout/'
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.10/howto/static-files/
-
-STATIC_URL = '/static/'
-
 
 # Bootstrap customizations
 
@@ -154,13 +138,8 @@ BOOTSTRAP3 = {
     'horizontal_field_class': 'col-md-10',
 }
 
-# Update database configuration with $DATABASE_URL.
-import dj_database_url
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
-
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.9/howto/static-files/
+# https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
@@ -309,3 +288,16 @@ CACHES = {
         'LOCATION': 'my_cache_table',
     }
 }
+
+
+if os.environ.get("AR_SITE_TYPE") and os.environ.get("AR_SITE_TYPE") == "PRODUCTION":
+    from production_settings import *
+elif os.environ.get("AR_SITE_TYPE") and os.environ.get("AR_SITE_TYPE") == "STAGING":
+    from staging_settings import *
+else:
+    from local_settings import *
+
+# Update database configuration with $DATABASE_URL.
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)

@@ -37,11 +37,8 @@ DATABASES = {
     }
 }
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # SETTING 3: SPARKPOST_API_KEY
-# Use these settings if you won't be interacting with email.
-EMAIL_HOST = 'localhost'
-EMAIL_PORT = 1025
-EMAIL_HOST_PASSWORD = ''
 # If you do want to interact with emails, contact Shauna to get the API
 # key and set it via venv/bin/activate or directly below.
 # EMAIL_HOST = 'smtp.sparkpostmail.com'

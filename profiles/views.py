@@ -54,30 +54,17 @@ class ProfileView(generic.DetailView):
                 context['notified_of'] = relationship.current_profile_notified_of_target(current_profile)
         return context
 
-class ProfileEditView(UserPassesTestMixin, generic.UpdateView):
+
+class ProfileEditView(LoginRequiredMixin, generic.UpdateView):
     model = Profile
     form_class = ProfileForm
-    slug_field = 'user'
 
     def get_object(self, queryset=None):
-        slug = self.kwargs.get(self.slug_url_kwarg, None)
-        if slug:
-            user = User.objects.get(username=slug)
-            return Profile.objects.get(user=user)
-        else:
-            raise Http404(_(u"No user supplied to profile edit view"))
-
-    def test_func(self):
-        obj = self.get_object()
-        return obj.user == self.request.user
-
-    def get_form_kwargs(self):
-        form_kws = super(ProfileEditView, self).get_form_kwargs()
-        form_kws["user"] = self.request.user
-        return form_kws
+        return self.request.user.profile
 
     def get_success_url(self, **kwargs):
         return self.object.get_absolute_url()
+
 
 class ToDoView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'profiles/todo.html'
@@ -91,19 +78,19 @@ class ToDoView(LoginRequiredMixin, generic.TemplateView):
         context['suggested_actions'] = self.request.user.profile.get_suggested_actions_count()
         return context
 
-class ProfileSuggestedView(UserPassesTestMixin, generic.DetailView):
+
+class ProfileSuggestedView(LoginRequiredMixin, generic.DetailView):
     template_name = 'profiles/suggested.html'
-    slug_field = 'username'
     model = User
 
-    def test_func(self):
-        obj = self.get_object()
-        return obj == self.request.user  # No access unless this is you
+    def get_object(self, queryset=None):
+        return self.request.user
 
     def get_context_data(self, **kwargs):
         context = super(ProfileSuggestedView, self).get_context_data(**kwargs)
         context['actions'] = self.object.profile.get_suggested_actions()
         return context
+
 
 class ProfileSearchView(generic.ListView):
     template_name = 'profiles/profiles.html'
@@ -271,7 +258,7 @@ def manage_suggested_action(request, slug, type):
     except ObjectDoesNotExist: # If the action slug got borked
         return HttpResponseRedirect(reverse('index'))
     manage_suggested_action_helper(par, type)
-    return HttpResponseRedirect(reverse('suggested', kwargs={'slug':request.user.username}))
+    return HttpResponseRedirect(reverse('suggested'))
 
 class DashboardView(LoginRequiredMixin, generic.TemplateView):
     template_name = "profiles/dashboard.html"

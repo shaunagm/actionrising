@@ -52,17 +52,16 @@ class Action(models.Model):
 
     def save(self, *args, **kwargs):
         # If action is being created
-        if not self.pk:
-            self.slug = slugify_helper(Action, self.title)
-            self.current_privacy = self.creator.profile.privacy_defaults.global_default
-        if self.privacy != PrivacyChoices.inherit and self.privacy != self.current_privacy:
-            self.current_privacy = self.privacy
+        self.refresh_current_privacy()
+
         if self.pk:
             orig = Action.objects.get(pk=self.pk)
             if orig.status == StatusChoices.ready and self.status != StatusChoices.ready:
                 close_pars_when_action_closes(self)
             if orig.status != StatusChoices.ready and self.status == StatusChoices.ready:
                 open_pars_when_action_reopens(self)
+        else:
+            self.slug = slugify_helper(Action, self.title)
         super(Action, self).save(*args, **kwargs)
 
     def get_cname(self):
@@ -112,7 +111,6 @@ class Action(models.Model):
             self.current_privacy = self.creator.profile.privacy_defaults.global_default
         else:
             self.current_privacy = self.privacy
-        self.save()
 
     def get_visible_creator(self):
         if self.anonymize:

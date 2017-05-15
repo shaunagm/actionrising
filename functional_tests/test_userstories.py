@@ -1,10 +1,7 @@
-import time
-
 from .base import SeleniumTestCase
 from .pageobjects import (BasicActionListPage, ActionEditPage, ProfilePage, ToDoPage,
-    BasicActionDetailPage, ManageActionPage, CommitmentPage, LoggedOutLandingPage,
+    BasicActionDetailPage, ManageActionPage, LoggedOutLandingPage,
     SlateDetailPage)
-from profiles.models import Profile, ProfileActionRelationship
 
 default_user = "buffysummers"
 default_password = "apocalypse"
@@ -192,7 +189,6 @@ class LoggedOutUser(SeleniumTestCase):
         self.action_page.go_to_detail_page(title="Sign petition to make Boston a sanctuary city")
         self.action_page.display_slate_tracker_link.click()
         self.wait_helper("slate_accepted")
-        time.sleep(3)
         self.assertEquals(self.action_page.accepted_slate_trackers[0].text, "High stakes slate of actions")
         self.assertEquals(len(self.action_page.accepted_slate_trackers), 1)
         self.slate_info = SlateDetailPage(self.browser, root_uri=self.live_server_url)
