@@ -73,7 +73,7 @@ class TestSlateDetail(SeleniumTestCase):
         # TODO: No idea why creator.text is returning none here
         self.assertEquals(self.slate_info.creator.text, "Created by buffysummers")
         self.assertEquals(self.slate_info.description.text, "Indescribable.")
-        self.assertEquals(self.slate_info.privacy.text, "Visible Sitewide")
+        self.assertEquals(self.slate_info.privacy.text, "Visible sitewide")
         self.assertEquals(self.slate_info.status.text, "Open for action")
 
 class TestSlateActionList(SeleniumTestCase):
