@@ -243,7 +243,7 @@ def manage_suggested_action_helper(par, type):
     if type == 'accept':
         par.status = ToDoStatusChoices.accepted
         par.date_accepted = datetime.datetime.now(tz=pytz.utc)
-    if type == 'reject':
+    if type == 'decline':
         par.status = ToDoStatusChoices.rejected
     par.save()
     return par

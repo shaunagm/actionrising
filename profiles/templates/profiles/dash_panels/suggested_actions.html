@@ -4,7 +4,7 @@
       <a data-toggle="collapse" href="#suggested-actions">
         Suggested Actions
       </a>
-      <a href="{% url 'suggested' slug=request.user.username %}" title="Open in new page" class="extra-padding-left">↱</a>
+      <a href="{% url 'suggested' %}" title="Open in new page" class="extra-padding-left">↱</a>
       <a data-toggle="collapse" href="#suggested-actions" title="Collapse">
         <div class="float-right">▲</div>
       </a>
@@ -19,7 +19,7 @@
               <a href="{% url 'manage_suggested_action' slug=par.action.slug type='accept' %}">
                 <i class="fa fa-plus accept-suggestion" title="Add to To Do list"></i>
               </a>
-              <a href="{% url 'manage_suggested_action' slug=par.action.slug type='reject' %}">
+              <a href="{% url 'manage_suggested_action' slug=par.action.slug type='decline' %}">
                 <i class="fa fa-times decline-suggestion" title="Decline suggested action"></i>
               </a>
             </div>
@@ -30,6 +30,6 @@
           </li>
         {% endfor %}
       </ul>
-   </div>
- </div>
+    </div>
+  </div>
 </div>

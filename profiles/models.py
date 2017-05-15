@@ -158,7 +158,7 @@ class Profile(models.Model):
         return [par for par in pars if par.action.status == StatusChoices.ready]
 
     def get_suggested_actions(self):
-        pars = ProfileActionRelationship.objects.filter(profile=self, status=ToDoStatusChoices.suggested)
+        pars = ProfileActionRelationship.objects.filter(profile=self, status=ToDoStatusChoices.suggested).order_by('-date_accepted')
         return [par for par in pars if par.action.status == StatusChoices.ready]
 
     def get_suggested_actions_count(self):
@@ -502,7 +502,7 @@ class ProfileActionRelationship(models.Model):
         suggesters = self.get_suggesters()
         if suggester not in suggesters:
             suggesters.append(suggester)
-        self.set_suggesters(suggesters)
+            self.set_suggesters(suggesters)
 
     def is_visible_to(self, viewer, follows_user = None):
         return self.profile.is_visible_to(viewer, follows_user) and self.action.is_visible_to(viewer, follows_user)
