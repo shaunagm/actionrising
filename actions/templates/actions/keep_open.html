@@ -1,3 +1,4 @@
+{% load constants %}
 {% extends "mysite/base.html" %}
 
 {% block title %} Open {{ action.title }} | ActionRising{% endblock %}
@@ -9,7 +10,7 @@
 
         <h4>You have chosen to keep action <a href="{{ action.get_absolute_url }}">
           {{ action.title }}</a> open.  It is scheduled to close again in
-          50 days.</h4>
+          {{ constants 'ACTION_DEFAULT_CLOSE_DEADLINE' }} days.</h4>
 
       </div>
     </div>
