@@ -53,7 +53,7 @@
         <div class="row">
            <div class="col-sm-12 extra-margin-row">
              <div class="well" id="description">
-                {{ action.description|safe }}
+                {{ action.description|bleach }}
              </div>
              {% block action_plugin_addon %}
              {% endblock action_plugin_addon %}
