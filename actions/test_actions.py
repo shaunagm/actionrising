@@ -78,7 +78,7 @@ class TestActionForms(TestCase):
         initial_form = ActionForm(user=self.buffy, formtype="create")
         form_inherited_privacy = initial_form.fields['privacy'].choices[3][1]
         # This is an issue with the privacy utils
-        self.assertEqual(form_inherited_privacy, "Your Default (Currently 'Visible Sitewide')")
+        self.assertEqual(form_inherited_privacy, "Your Default (Currently 'Visible sitewide')")
 
     def test_action_status_is_hidden_on_create(self):
         from django.forms.widgets import HiddenInput

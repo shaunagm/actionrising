@@ -101,7 +101,7 @@ class PlayingWithPrivacySettings(SeleniumTestCase):
         self.actions_table.log_in(default_user, default_password)
         self.action_edit_form = ActionEditPage(self.browser, root_uri=self.live_server_url)
         self.action_edit_form.go_to_edit_page(title="A new action to take")
-        self.action_edit_form.select_privacy("Visible to Follows")
+        self.action_edit_form.select_privacy("Visible to follows")
         self.browser.execute_script("return arguments[0].scrollIntoView();", self.action_edit_form.submit_button)
         self.action_edit_form.submit_button.click()
 
