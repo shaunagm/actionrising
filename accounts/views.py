@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import login
 from django.contrib.auth.models import User
@@ -9,6 +9,7 @@ from django.utils.encoding import force_text
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from social_django.models import UserSocialAuth
+from notifications.lib.email_handlers import generic_admin_email
 
 from accounts.lib.tokens import account_activation_token
 from accounts.forms import SignUpForm
@@ -19,7 +20,7 @@ class SignUpView(generic.edit.CreateView):
     model = User
     form_class = SignUpForm
     template_name = "accounts/signup_form.html"
-    success_url = "/accounts/sent"
+    success_url = reverse_lazy("sent-invite")
 
 class SentView(generic.TemplateView):
     template_name = "accounts/sent_invite.html"
@@ -34,6 +35,11 @@ def confirmation(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
+
+        #Notify admin of signup
+        message = "Name: %s, Email: %s" % ( user.username, user.email)
+        generic_admin_email("New user on ActionRising", message)
+
         login(request, user, backend='mysite.lib.backends.CustomModelBackend')
         return redirect('index')
     else:

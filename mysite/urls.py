@@ -22,9 +22,9 @@ from mysite import views
 urlpatterns = [
 
     # Site info pages
-    url(r'^learn-more/?$', views.LearnMoreView.as_view(), name='learn-more'),
+    url(r'^learn-more/$', views.LearnMoreView.as_view(), name='learn-more'),
     url(r'^privacy-policy$', views.PrivacyPolicyView.as_view(), name='privacy-policy'),
-    url(r'^about/?$', views.about, name='about'),
+    url(r'^about/$', views.about, name='about'),
 
     # Links to apps
     url(r'^actions/', include('actions.urls')),
