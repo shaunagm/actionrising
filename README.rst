@@ -70,7 +70,11 @@ Setting up the site locally
 #. Open site in browser (see command line output of previous step for correct
    link, usually something like `http://127.0.0.1:8000`__).
 
-#. Remember to run the tests and make sure they're passing before you make any changes::
+#. Remember to run the tests and make sure they're passing before you make any changes. The first time you run the tests (and any time the static files have been updated), you will first need to run::
+
+    python manage.py collectstatic
+
+  Then you can run::
 
      python manage.py test
 
