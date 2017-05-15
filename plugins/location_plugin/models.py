@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 
-from geopy.geocoders import GoogleV3
 from datetime import datetime
 
 from django.db import models
@@ -95,13 +94,3 @@ def filter_queryset_by_location(field_data, queryset, user):
     actions = get_actions_given_location(location, field_data)
     action_ids = [action.id for action in actions]
     return results.filter(id__in=action_ids)
-
-def get_timezone_given_user(user):
-    ctype = ContentType.objects.get_for_model(user.profile)
-    location = Location.objects.filter(content_type=ctype, object_id=user.profile.pk).first()
-    if location and location.lat and location.lon:
-        geocoder = GoogleV3()
-        tz = geocoder.timezone([location.lat, location.lon])
-        if tz:
-            return tz.zone
-    return None
