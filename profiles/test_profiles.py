@@ -649,6 +649,7 @@ class TestEditProfiles(TestCase):
         form = resp.context['form']
         self.assertEqual(form.initial['first_name'], "Buffy")
         self.assertEqual(form.initial['last_name'], "Summers")
+        self.assertEqual(form.initial['privacy_default'], PrivacyChoices.public)
 
     def test_save(self):
         resp = self.client.post(reverse("edit_profile"), {
