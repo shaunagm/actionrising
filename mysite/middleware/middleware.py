@@ -1,4 +1,4 @@
-import pytz
+import pytz, traceback
 
 from django.utils import timezone
 from django.utils.deprecation import MiddlewareMixin
@@ -31,4 +31,4 @@ class TimezoneMiddleware(MiddlewareMixin):
                     request.session['timezone_status'] = "Failed"
                     timezone.deactivate()
         except:
-            print("Error calculating timezone")
+            traceback.print_exc()

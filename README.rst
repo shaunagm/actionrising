@@ -53,7 +53,7 @@ Setting up the site locally
    models change). If you get an import error, double check `local_settings.py`
    and make sure you are using python2.7 for your virtualenv.::
 
-    python manage.py migrate
+    python manage.py migrate --run-syncdb
 
 #. Load the test fixtures to get some fake data::
 

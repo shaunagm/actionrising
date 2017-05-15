@@ -42,7 +42,7 @@ class TestActionMethods(TestCase):
         self.assertEqual(self.action.get_creator(), self.buffy)
 
     def test_get_robust_url(self):
-        self.assertEqual(self.action.get_robust_url(), '/actions/action/test-action')
+        self.assertEqual(self.action.get_robust_url(), '/actions/action/test-action/')
 
     def test_is_active(self):
         self.action.status = StatusChoices.ready
@@ -84,3 +84,29 @@ class TestActionForms(TestCase):
         from django.forms.widgets import HiddenInput
         initial_form = ActionForm(user=self.buffy, formtype="create")
         self.assertEqual(type(initial_form.fields['status'].widget), HiddenInput)
+
+
+class TestActionPrivacy(TestCase):
+    def setUp(self):
+        super(TestActionPrivacy, self).setUp()
+        self.buffy = User.objects.create(username="buffysummers")
+
+    def test_concrete_privacy(self):
+        action = self.buffy.action_set.create(privacy=PrivacyChoices.follows)
+        self.assertEqual(action.privacy, PrivacyChoices.follows)
+        self.assertEqual(action.current_privacy, PrivacyChoices.follows)
+
+    def test_inherit_privacy(self):
+        action = self.buffy.action_set.create(privacy=PrivacyChoices.inherit)
+        self.assertEqual(action.privacy, PrivacyChoices.inherit)
+        self.assertEqual(action.current_privacy, PrivacyChoices.public)
+
+    def test_update_to_inherit_privacy(self):
+        action = self.buffy.action_set.create(privacy=PrivacyChoices.follows)
+        self.assertEqual(action.privacy, PrivacyChoices.follows)
+
+        action.privacy = PrivacyChoices.inherit
+        action.save()
+
+        self.assertEqual(action.privacy, PrivacyChoices.inherit)
+        self.assertEqual(action.current_privacy, PrivacyChoices.public)

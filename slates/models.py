@@ -37,10 +37,8 @@ class Slate(models.Model):
     def save(self, *args, **kwargs):
         if not self.pk:
             self.slug = slugify_helper(Slate, self.title)
-            self.current_privacy = self.creator.profile.privacy_defaults.global_default
-        else:
-            if self.privacy != PrivacyChoices.inherit and self.privacy != self.current_privacy:
-                self.current_privacy = self.privacy
+
+        self.refresh_current_privacy()
         super(Slate, self).save(*args, **kwargs)
 
     def get_cname(self):
@@ -91,7 +89,6 @@ class Slate(models.Model):
             self.current_privacy = self.creator.profile.privacy_defaults.global_default
         else:
             self.current_privacy = self.privacy
-        self.save()
 
     def get_people_to_notify(self):
         people = []

@@ -91,7 +91,6 @@ class TestActionList(SeleniumTestCase):
         # Sort by district
         self.actions_table.select_location("My District")
         self.assertEquals(len(self.actions_table.rows), 1)
-        time.sleep(4)
         self.assertEquals(self.actions_table.first_row_action.text, "Sign petition to make Boston a sanctuary city")
         # Sort by state
         self.actions_table.select_location("My State")
@@ -135,7 +134,6 @@ class TestActionDetail(SeleniumTestCase):
     def test_action_tracking_display(self):
         self.action_page.display_tracker_link.click()
         self.wait_helper("profile_accepted")
-        time.sleep(4)
         self.assertEquals(len(self.action_page.suggested_trackers), 1)
         self.assertEqual(self.action_page.suggested_trackers[0].text, "Faith Lehane")
         self.assertEquals(len(self.action_page.accepted_trackers), 1)
@@ -145,12 +143,13 @@ class TestActionDetail(SeleniumTestCase):
 
     def test_take_action(self):
         self.wait_helper()
-        self.action_page.manage_action_button.click()
+        self.action_page.manage_action_button.click()  # add to todo list
+        self.action_page.manage_action_button.click()  # click manage
         self.wait_helper("manage-action-list")
+        self.action_page.manage_action_button.click()  # close list for now
         # Logged in user should now appear in accepted trackers
         self.action_page.display_tracker_link.click()
         self.wait_helper("profile_accepted")
-        time.sleep(4)
         self.assertEquals(len(self.action_page.accepted_trackers), 2)
         self.assertEqual(self.action_page.accepted_trackers[0].text, "Buffy Summers")
         # Now test remove action
@@ -158,7 +157,6 @@ class TestActionDetail(SeleniumTestCase):
         self.wait_helper()
         self.action_page.display_tracker_link.click()
         self.wait_helper("profile_accepted")
-        time.sleep(4)
         self.assertEquals(len(self.action_page.accepted_trackers), 1)
         self.assertEqual(self.action_page.accepted_trackers[0].text, "Willow")
 
@@ -168,7 +166,6 @@ class TestActionDetail(SeleniumTestCase):
         self.wait_helper()
         self.action_page.display_tracker_link.click()
         self.wait_helper("profile_accepted")
-        time.sleep(4)
         self.assertEquals(len(self.action_page.accepted_trackers), 2)
         # Logged in user should now appear in accepted trackers but not done trackers
         self.assertEqual(self.action_page.accepted_trackers[0].text, "Buffy Summers")
@@ -180,7 +177,6 @@ class TestActionDetail(SeleniumTestCase):
         # Logged in user should now appear in done trackers but not accepted trackers
         self.action_page.display_tracker_link.click()
         self.wait_helper("profile_accepted")
-        time.sleep(4)
         self.assertEquals(len(self.action_page.accepted_trackers), 1)
         self.assertEqual(self.action_page.accepted_trackers[0].text, "Willow")
         self.assertEquals(len(self.action_page.done_trackers), 2)
