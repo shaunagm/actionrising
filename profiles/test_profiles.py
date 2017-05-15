@@ -1,4 +1,4 @@
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -631,3 +631,39 @@ class TestUpdatePrivacyDefaults(TestCase):
 
         buffy.profile.refresh_from_db()
         self.assertEqual(buffy.profile.current_privacy, PrivacyChoices.follows)
+
+
+class TestEditProfiles(TestCase):
+    def setUp(self):
+        super(TestEditProfiles, self).setUp()
+        self.buffy = User.objects.create(
+            first_name="Buffy",
+            last_name="Summers",
+            username="buffysummers")
+        self.client.force_login(self.buffy)
+
+    def test_initial(self):
+        resp = self.client.get(reverse("edit_profile"))
+        self.assertEqual(resp.status_code, 200)
+
+        form = resp.context['form']
+        self.assertEqual(form.initial['first_name'], "Buffy")
+        self.assertEqual(form.initial['last_name'], "Summers")
+
+    def test_save(self):
+        resp = self.client.post(reverse("edit_profile"), {
+            "first_name": "Dinnah",
+            "last_name": "Saur",
+            "description": "Rawr",
+            "privacy": PrivacyChoices.inherit,
+            "privacy_default": PrivacyChoices.follows,
+        })
+
+        self.assertEqual(resp.status_code, 302)
+
+        saved_buffy = User.objects.get(pk=self.buffy.pk)
+        self.assertEqual(saved_buffy.first_name, "Dinnah")
+        self.assertEqual(saved_buffy.last_name, "Saur")
+        self.assertEqual(saved_buffy.profile.description, "Rawr")
+        self.assertEqual(saved_buffy.profile.privacy_defaults.global_default,
+                         PrivacyChoices.follows)
