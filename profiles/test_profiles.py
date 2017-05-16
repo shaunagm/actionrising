@@ -12,9 +12,13 @@ from profiles.models import (Profile, Relationship, ProfileActionRelationship,
 from profiles.templatetags.profile_extras import get_friendslist
 from profiles.views import (toggle_relationships_helper, toggle_par_helper,
     manage_action_helper, mark_as_done_helper, manage_suggested_action_helper)
-from profiles.lib import status_helpers
-from profiles.lib.trackers import Trackers
 from mysite.lib.privacy import check_privacy
+from profiles.lib import status_helpers, trackers
+from profiles.lib.trackers import Trackers
+from actions import factories as action_factories
+from accounts import factories as account_factories
+from slates import factories as slate_factories
+from . import factories
 
 ###################
 ### Test models ###
@@ -167,7 +171,7 @@ class TestRelationshipMethods(TestCase):
         self.assertFalse(self.relationship.target_mutes_current_profile(self.faith.profile))
         self.assertIsNone(self.relationship.target_mutes_current_profile(self.lorne.profile))
 
-    def test_current_profile_accountable_to_target(self):
+    def test_current_profile_accountable_to_target_2(self):
         self.relationship.B_mutes_A = True
         self.relationship.save()
         self.assertFalse(self.relationship.current_profile_mutes_target(self.buffy.profile))
@@ -313,12 +317,13 @@ class TestProfileActionRelationshipView(TestCase):
 class TestManageActionView(TestCase):
 
     def setUp(self):
-        self.buffy = User.objects.create(username="buffysummers")
-        self.faith = User.objects.create(username="faithlehane")
-        self.lorne = User.objects.create(username="lorne")
-        self.action = Action.objects.create(slug="test-action", creator=self.faith)
-        self.slate = Slate.objects.create(slug="test-slate", creator=self.faith, title="Test Slate")
-        self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action)
+        self.lorne = account_factories.User()
+
+        self.par = factories.ProfileActionRelationship()
+        self.action = self.par.action
+        self.buffy = self.par.profile.user
+        self.slate = slate_factories.Slate()
+
         class MockForm(object):
             cleaned_data = {'priority': PriorityChoices.high, 'status': ToDoStatusChoices.done, 'privacy': PrivacyChoices.public,
                 'profiles': [self.lorne.profile], 'slates': [self.slate], 'notes': "A note"}
@@ -343,6 +348,7 @@ class TestManageActionView(TestCase):
         sar = SlateActionRelationship.objects.get(slate=self.slate, action=self.action)
         self.assertEqual(sar.slate, self.slate)
 
+
 class TestMarkAsDoneView(TestCase):
 
     def setUp(self):
@@ -357,14 +363,11 @@ class TestMarkAsDoneView(TestCase):
         par = mark_as_done_helper(self.buffy.profile, self.action, "accepted")
         self.assertEqual(par.status, ToDoStatusChoices.accepted)
 
+
 class TestManageSuggestedActionView(TestCase):
 
     def setUp(self):
-        self.buffy = User.objects.create(username="buffysummers")
-        self.faith = User.objects.create(username="faithlehane")
-        self.action = Action.objects.create(slug="test-action", creator=self.buffy)
-        self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile,
-            action=self.action, last_suggester=self.faith, status=ToDoStatusChoices.suggested)
+        self.par = factories.ProfileActionRelationship(status=ToDoStatusChoices.suggested)
 
     def test_manage_suggested_action_helper_accept(self):
         self.assertEqual(self.par.status, ToDoStatusChoices.suggested)
@@ -383,16 +386,22 @@ class TestManageSuggestedActionView(TestCase):
 class TestProfileExtras(TestCase):
 
     def setUp(self):
-        self.buffy = User.objects.create(username="buffysummers")
-        self.faith = User.objects.create(username="faithlehane")
-        self.relationship = Relationship.objects.create(person_A=self.buffy.profile,
-            person_B=self.faith.profile)
-        self.action = Action.objects.create(slug="test-action", title="Test Action", creator=self.buffy)
-        self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action)
-        self.faith_par = ProfileActionRelationship.objects.create(profile=self.faith.profile, action=self.action)
+        self.relationship = factories.RelationShip(
+            person_A__user__username="buffysummers",
+            person_B__user__username="faithlehane")
+        self.buffy = self.relationship.person_A.user
+        self.faith = self.relationship.person_B.user
+
+        par = factories.ProfileActionRelationship(
+            action__creator=self.buffy,
+            profile=self.buffy.profile)
+        factories.ProfileActionRelationship(
+            action=par.action,
+            profile=self.faith.profile)
+
         class MockRequest(object):
             user = self.buffy
-        self.context = {'request': MockRequest(), 'action': self.action}
+        self.context = {'request': MockRequest(), 'action': par.action}
 
     def test_get_friendslist(self):
         self.assertEqual(get_friendslist(self.context), [self.faith])
