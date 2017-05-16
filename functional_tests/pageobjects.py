@@ -263,23 +263,30 @@ class FollowedActivity(BasePage):
 
 class ProfilePage(BasePage):
     name = PageElement(id_="profile-username")
-    actions_created = MultiPageElement(css="div#created-actions-div tbody tr .actiondetails")
-    actions_tracked = MultiPageElement(css="div#tracked-actions-div tbody tr .actiondetails")
+    activity = MultiPageElement(css=".actstream-action")
     redirected_page = PageElement(css="#id_username")
-    location = PageElement(css="#location-info")
+    location = PageElement(css=".profile-location")
+    # other person's profile
+    friends = MultiPageElement(css="#friends a")
+    # own profile
+    tracked_actions = MultiPageElement(css="#tracked-actions a")
+    created_content = MultiPageElement(css="#created-content a")
 
     def go_to_profile_page(self, username=None):
         user = User.objects.get(username=username)
         self.w.get(self.root_uri + user.profile.get_absolute_url())
 
-    def get_created_actions(self):
-        return [action.text for action in self.actions_created]
+    def get_created_content(self):
+        return [action.text for action in self.created_content]
 
     def get_tracked_actions(self):
-        return [action.text for action in self.actions_tracked]
+        return [action.text for action in self.tracked_actions]
 
-    def get_actions(self):
-        return self.get_created_actions(), self.get_tracked_actions()
+    def get_activity(self):
+        return [act.text for act in self.activity]
+
+    def get_friends(self):
+        return [friend.text for friend in self.friends]
 
 class ToDoPage(BasicActionListPage):
     suggested_actions_link = PageElement(id_="suggested_actions_button")

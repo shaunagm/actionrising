@@ -22,6 +22,19 @@ def get_following_list(context):
     return []
 
 @register.assignment_tag(takes_context=True)
+def others_filtered_feed(context, activity):
+    viewer = context['request'].user
+    if check_activity(activity, viewer, own=False):
+        names = [item.username for item in [activity.actor, activity.target, activity.action_object] if type(item) == User]
+        if viewer.username not in names:
+            return activity
+    return []
+
+@register.simple_tag
+def is_own_profile(user, object):
+    return object == user
+
+@register.assignment_tag(takes_context=True)
 def filtered_feed(context, activity, own=False):
     viewer = context['request'].user
     return activity if check_activity(activity, viewer, own) else None

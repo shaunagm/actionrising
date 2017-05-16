@@ -501,11 +501,12 @@ class ProfileActionRelationship(models.Model):
 def par_handler(sender, instance, created, **kwargs):
     if created:
         if instance.status == ToDoStatusChoices.suggested:
-            actstream.action.send(instance.last_suggester, verb='suggested action', action_object=instance.action, target=instance.profile.user)
+            actstream.action.send(instance.last_suggester, verb='suggested', action_object=instance.action, target=instance.profile.user)
         else:
-            actstream.action.send(instance.profile.user, verb='is taking action', target=instance.action)
+            actstream.action.send(instance.profile.user, verb='took on', target=instance.action)
     if instance.status == ToDoStatusChoices.done:
-        actstream.action.send(instance.profile.user, verb='completed action', target=instance.action)
+        actstream.action.send(instance.profile.user, verb='completed', target=instance.action)
+
 post_save.connect(par_handler, sender=ProfileActionRelationship)
 
 class ProfileSlateRelationship(models.Model):

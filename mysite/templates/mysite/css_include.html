@@ -13,7 +13,10 @@
     }
 
     .extra-margin-row { margin-top: 10px; margin-bottom: 10px; }
-    .basic-info, #location-info { font-size: 12px; }
+    .basic-info, #location-info {
+      font-size: 14px;
+      margin: 10px 0;
+    }
     #manage-action-button { margin-bottom: 15px; }
     .text-emphasis { font-weight: bold; color: #5bc0de; font-size:108%; }
 
@@ -57,7 +60,87 @@
     footer a { color: white; }
     footer span { padding-left: 10px; padding-right: 15px;}
 
-    .float-right { float: right; }
+    .material-icons {
+      font-size: 20px;
+    }
+
+    .profile-action-items {
+      padding-bottom: 13px;
+    }
+
+    .profile-personal {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+    }
+
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+      margin-right: 20px;
+    }
+    .profile-info span {
+      padding-right: 5px;
+    }
+    .profile-description {
+      flex: 2;
+    }
+
+    .stats-flex {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    .stats-flex h4 {
+      display: inline-block;
+    }
+
+    .stats-flex .badge {
+      background-color: #df691a;
+      border-radius: 16px;
+      padding: 4px 8px;
+      font-size: 16px;
+      font-weight: bold;
+      margin-right: 20px;
+    }
+
+    .progress {
+      background-color: lightgray;
+      flex: .9;
+      margin-bottom: 0;
+    }
+
+    .progress .progress-bar {
+      min-width: 2em;
+    }
+
+    .panel-heading [data-toggle="collapse"]:after
+    {
+        font-family: 'Glyphicons Halflings';
+        content: "\e072"; /* "play" icon */
+        float: right;
+        font-size: 16px;
+        line-height: 22px;
+        margin-left: 10px;
+
+        /* rotate "play" icon from > (right arrow) to down arrow */
+        -webkit-transform: rotate(-90deg);
+        -moz-transform:    rotate(-90deg);
+        -ms-transform:     rotate(-90deg);
+        -o-transform:      rotate(-90deg);
+        transform:         rotate(-90deg);
+    }
+    .panel-heading [data-toggle="collapse"].collapsed:after
+    {
+        margin-left: 10px;
+        /* rotate "play" icon from > (right arrow) to ^ (up arrow) */
+        -webkit-transform: rotate(90deg);
+        -moz-transform:    rotate(90deg);
+        -ms-transform:     rotate(90deg);
+        -o-transform:      rotate(90deg);
+        transform:         rotate(90deg);
+    }
 
     .nav-tabs {
       border-bottom: 1px solid #4e5d6c;
@@ -65,6 +148,18 @@
 
     span.new-filter {
       padding-left: 20px;
+    }
+
+    p.search-all a {
+      text-decoration: underline;
+    }
+
+    .well a {
+      color: #f0ad4e;
+    }
+
+    a.btn {
+      color: white;
     }
 
     /*Form styles*/
@@ -176,6 +271,8 @@
     .center-text i {padding-right: 0px;}
 
     .center-text a { color: #f0ad4e; }
+
+    .float-right {float: right;}
 
 
     #anonymous-landing-content .center-text a, .filterformdiv .center-text a { color: white; }

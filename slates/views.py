@@ -109,6 +109,9 @@ class FollowUsersAndSlates(LoginRequiredMixin, generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(FollowUsersAndSlates, self).get_context_data(**kwargs)
+        context['created_slates'] = self.request.user.slate_set.all()
+        context['followed_slates'] = self.request.user.profile.profileslaterelationship_set.all()
+        context['friends'] = self.request.user.profile.get_list_of_relationships()
         rectracker = RecommendationTracker.objects.first()
         if rectracker:
             context['users'] = rectracker.retrieve_users()

@@ -2943,7 +2943,7 @@
             "user"
         ],
         "actor_object_id": "14",
-        "verb": "is taking action",
+        "verb": "took on",
         "description": null,
         "target_content_type": [
             "actions",
@@ -3576,7 +3576,7 @@
             "user"
         ],
         "actor_object_id": "8",
-        "verb": "is taking action",
+        "verb": "took on",
         "description": null,
         "target_content_type": [
             "actions",

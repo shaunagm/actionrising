@@ -2,33 +2,40 @@
 
 {% load static %}
 
-{% block title %} Find Users and Slates to Follow | ActionRising{% endblock %}
+{% block title %} Users and Slates | ActionRising{% endblock %}
 
 {% block content %}
 
-    <div class="row">
-       <div class="col-sm-10 col-sm-offset-1">
-         <h2>Find Users & Slates to Follow</h2>
-         <p>To follow a slate or user, look for a link like this just below the name/title:
-           <img src="{% static 'images/follow_screenshot.png' %}"></p>
-         <p>When you follow a slate or user, their activity will show up on your feed.
-           You'll also get emails when a user you follow creates an action or a slate
-           you follow gets an action added to it.  If you find the emails annoying, you
-           can turn them off in <a href="{% url 'settings' %}">your settings</a>.</p>
-       </div>
+  <div class="row">
+    <div class="col-sm-4 col-sm-offset-1">
+
+      <h4>Your Community</h4>
+
+      {% if created_slates %}
+        {% include 'profiles/dash_panels/slates_you_edit.html' %}
+      {% endif %}
+
+      {% include 'profiles/dash_panels/slates_you_follow.html' with search=True %}
+
+      {% include 'profiles/dash_panels/your_connections.html' with search=True object=request.user %}
+
     </div>
 
-    <div class="row">
-       <div class="col-sm-5 col-sm-offset-1">
-         <h2>Busy Users</h2>
-         <p>Don't see what you want?  Search <a href="{% url 'profiles' %}">all users</a>.</p>
-         {% include 'profiles/profile_list_include.html' with object_list=users  %}
-       </div>
-       <div class="col-sm-5">
-         <h2>Recommended Slates</h2>
-         <p>Don't see what you want?  Search <a href="{% url 'slates' %}">all slates</a>.</p>
-         {% include 'slates/slate_list_limited_include.html' with object_list=slates %}
-       </div>
+    <div class="col-sm-6">
+      <h4> ActionRising Activity </h4>
+      <div class="well activity">
+        {% load activity_tags %}
+        {% load profile_extras %}
+
+        {% activity_stream 'model' user  %}
+        {% for action in stream|slice:":1000" %}
+          {% others_filtered_feed action as filtered_action %}
+          {% if filtered_action %}
+            {% include 'profiles/feed_include.html' with user=user  %}
+          {% endif %}
+        {% endfor %}
+      </div>
     </div>
+  </div>
 
 {% endblock content %}
