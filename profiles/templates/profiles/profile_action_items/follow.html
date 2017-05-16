@@ -1,5 +1,5 @@
 <div class="action-item">
-  <a href="{% url 'toggle_relationships' slug=object.username toggle_type='follow' %}">
+  <a href="{% url 'toggle_relationships' slug=object.user.username toggle_type='follow' %}">
     {% if follows %}
         <i class="fa fa-times" aria-hidden="true"></i>
         Unfollow user

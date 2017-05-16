@@ -1,6 +1,6 @@
 {% extends "mysite/base.html" %}
 
-{% block title %} {{ object.username }} | ActionRising{% endblock %}
+{% block title %} {{ object.user.username }} | ActionRising{% endblock %}
 
 {% block content %}
 
@@ -8,10 +8,10 @@
     <div class="row">
        <div class="col-sm-10 col-sm-offset-1">
          <h2 id="profile-username">
-           {% if object.profile.get_full_name %}
-              {{ object.profile.get_full_name }} ({{ object.username }})
+           {% if object.get_full_name %}
+              {{ object.get_full_name }} ({{ object.user.username }})
            {% else %}
-              {{ object.username }}
+              {{ object.user.username }}
            {% endif %}
          </h2>
        </div>
@@ -21,7 +21,7 @@
        <div class="col-sm-10 col-sm-offset-1 profile-action-items">
           {% if request.user.is_authenticated %}
               {% include "profiles/profile_action_items/edit.html" %}
-              {% ifnotequal object.username request.user.username %}
+              {% ifnotequal object.user request.user %}
                   {% include "profiles/profile_action_items/follow.html" %}
                   {% include "profiles/profile_action_items/notify.html" %}
                   {% include "profiles/profile_action_items/mute.html" %}
@@ -32,15 +32,15 @@
 
     <div class="row">
        <div class="col-sm-10 col-sm-offset-1">
-         {% if object.profile.description %}
-          <h4>{{ object.profile.description|safe }}</h4>
+         {% if object.description %}
+          <h4>{{ object.description|safe }}</h4>
          {% endif %}
        </div>
     </div>
 
     <div class="row">
        <div class="col-sm-10 col-sm-offset-1">
-          {% include "mysite/basic_info_include.html" with object=object.profile %}
+          {% include "mysite/basic_info_include.html" with object=object %}
 
           {% load plugin_templatetags %}
           {% get_plugin_templates "profile_instance" %}
@@ -72,7 +72,7 @@
     <div class="row">
       <div class="col-sm-10 col-sm-offset-1">
         <h2 id="profile-username">
-          {{ object.username }}
+          {{ object.user.username }}
         </h2>
       </div>
     </div>
@@ -80,8 +80,8 @@
     <div class="row">
       <div class="col-sm-10 col-sm-offset-1">
         <div>
-          {% if object.profile.current_privacy %}
-            <i id="privacy-info" class="fa fa-eye" aria-hidden="true"> {{ object.profile.get_current_privacy_display }} </i>
+          {% if object.current_privacy %}
+            <i id="privacy-info" class="fa fa-eye" aria-hidden="true"> {{ object.get_current_privacy_display }} </i>
             <br/>
           {% endif %}
         </div>

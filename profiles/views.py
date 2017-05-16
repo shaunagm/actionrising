@@ -25,28 +25,27 @@ def index(request):
 
 class ProfileView(generic.DetailView):
     template_name = 'profiles/profile.html'
-    slug_field = 'username'
-    model = User
+    slug_field = 'user__username'
+    model = Profile
 
     def get_context_data(self, **kwargs):
         context = super(ProfileView, self).get_context_data(**kwargs)
-        obj = self.get_object()
-        own = self.request.user == obj
-        context['visible_to_user'] = check_privacy(obj.profile, self.request.user)
+        own = self.request.user == self.object.user
+        context['visible_to_user'] = check_privacy(self.object, self.request.user)
         context['created_actions'] = apply_check_privacy(
-            self.object.profile.get_most_recent_actions_created(),
+            self.object.get_most_recent_actions_created(),
             self.request.user,
-            include_anonymous = own)
+            include_anonymous=own)
         context['tracked_actions'] = apply_check_privacy(
-            self.object.profile.get_most_recent_actions_tracked(),
+            self.object.get_most_recent_actions_tracked(),
             self.request.user,
-            include_anonymous = own)
-        context['total_actions'] = obj.profile.profileactionrelationship_set.count()
-        context['percent_finished'] = obj.profile.get_percent_finished()
-        context['action_streak_current'] = obj.profile.get_action_streak()
+            include_anonymous=own)
+        context['total_actions'] = self.object.profileactionrelationship_set.count()
+        context['percent_finished'] = self.object.get_percent_finished()
+        context['action_streak_current'] = self.object.get_action_streak()
         if self.request.user.is_authenticated():
             current_profile = self.request.user.profile
-            relationship = current_profile.get_relationship(obj.profile)
+            relationship = current_profile.get_relationship(self.object)
             if relationship:
                 context['follows'] = relationship.current_profile_follows_target(current_profile)
                 context['mutes'] = relationship.current_profile_mutes_target(current_profile)
