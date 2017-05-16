@@ -17,6 +17,9 @@ from mysite.lib.privacy import privacy_tests
 from mysite.lib.utils import disable_for_loaddata, slug_validator, slugify_helper
 from profiles.lib.status_helpers import open_pars_when_action_reopens, close_pars_when_action_closes
 
+DEFAULT_ACTION_DURATION = 50
+DAYS_WARNING_BEFORE_CLOSURE = 3
+
 class Action(models.Model):
     """ Stores a single action """
 
@@ -28,7 +31,6 @@ class Action(models.Model):
     main_link = models.CharField(max_length=300, blank=True, null=True)
     description = RichTextField(max_length=4000, blank=True, null=True)
     date_created = models.DateTimeField(default=timezone.now)
-    # default default is H == 'Unknown or variable'
     duration = models.CharField(max_length=10, choices=TimeChoices.choices, default=TimeChoices.unknown)
     priority = models.CharField(max_length=10, choices=PriorityChoices.choices, default=PriorityChoices.medium)
 
@@ -38,7 +40,7 @@ class Action(models.Model):
 
     # Status info
     status = models.CharField(max_length=10, choices=StatusChoices.choices, default=StatusChoices.ready)
-    has_deadline = models.BooleanField(default=False)
+    never_expires = models.BooleanField(default=False)
     deadline = models.DateTimeField(blank=True, null=True)
     keep_open = models.BooleanField(default=False) # User can keep action open if no deadline
     keep_open_date = models.DateTimeField(blank=True, null=True)
@@ -141,28 +143,48 @@ class Action(models.Model):
         # Added for conveniences' sake in vet_actions function
         return self.get_status_display()
 
+    def days_til_deadline(self):
+        if self.deadline:
+            return (self.deadline - datetime.datetime.now(timezone.utc)).days
+
+    def days_til_close(self):
+        if self.keep_open:
+            days_open = (datetime.datetime.now(timezone.utc) - self.keep_open_date).days
+        else:
+            days_open = (datetime.datetime.now(timezone.utc) - self.date_created).days
+        return DEFAULT_ACTION_DURATION - days_open
+
+    def close_action_if_deadline_passed(self):
+        if self.deadline and self.days_til_deadline() < 0:
+            self.status = StatusChoices.finished
+            self.save()
+            return True
+
+    def close_action_with_no_deadline(self):
+        if not self.deadline and self.days_til_close() < 0:
+            self.status = StatusChoices.finished
+            self.save()
+            return True
+
+    def close_action_if_ready(self):
+        '''Closes action if conditionals met, returns True if action was closed'''
+        if not self.never_expires:
+            if self.close_action_if_deadline_passed():
+                return True
+            if self.close_action_with_no_deadline():
+                return True
+        return False
+
+    def send_warning(self):
+        if self.days_til_close() == DAYS_WARNING_BEFORE_CLOSURE:
+            return True
+        return False
+
     def keep_action_open(self):
         self.keep_open = True
         self.status = StatusChoices.ready
         self.keep_open_date = datetime.datetime.now(timezone.utc)
         self.save()
-
-    def get_days_til_close_action(self):
-        now = datetime.datetime.now(timezone.utc)
-        if self.keep_open:      # if creator has decided to keep action open
-            return (now - self.keep_open_date).days
-        else:
-            return (now - self.date_created).days
-
-    def get_days_til_deadline(self):
-        now = datetime.datetime.now(timezone.utc)
-        if (self.deadline) and (self.deadline > now):
-            days = (self.deadline - now).days
-            if days > 0:
-                return days
-            else:
-                return float((self.deadline - now).seconds)/float(86400)
-        return -1
 
     def is_visible_to(self, viewer, follows_user = None):
         return privacy_tests[self.current_privacy](self, viewer, follows_user)
