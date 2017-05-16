@@ -23,31 +23,28 @@ from profiles.forms import ProfileForm, ProfileActionRelationshipForm
 def index(request):
     return HttpResponseRedirect(reverse('profiles'))
 
-class ProfileView(UserPassesTestMixin, generic.DetailView):
+class ProfileView(generic.DetailView):
     template_name = 'profiles/profile.html'
     slug_field = 'username'
     model = User
 
-    def test_func(self):
-        obj = self.get_object()
-        return check_privacy(obj.profile, self.request.user)
-
     def get_context_data(self, **kwargs):
         context = super(ProfileView, self).get_context_data(**kwargs)
+        obj = self.get_object()
+        own = self.request.user == obj
+        context['visible_to_user'] = check_privacy(obj.profile, self.request.user)
+        context['created_actions'] = apply_check_privacy(
+            self.object.profile.get_most_recent_actions_created(),
+            self.request.user,
+            include_anonymous = own)
+        context['tracked_actions'] = apply_check_privacy(
+            self.object.profile.get_most_recent_actions_tracked(),
+            self.request.user,
+            include_anonymous = own)
+        context['total_actions'] = obj.profile.profileactionrelationship_set.count()
+        context['percent_finished'] = obj.profile.get_percent_finished()
+        context['action_streak_current'] = obj.profile.get_action_streak()
         if self.request.user.is_authenticated():
-            own = self.request.user == self.object
-            context['created_actions'] = apply_check_privacy(
-                self.object.profile.get_most_recent_actions_created(),
-                self.request.user,
-                include_anonymous = own)
-            context['tracked_actions'] = apply_check_privacy(
-                self.object.profile.get_most_recent_actions_tracked(),
-                self.request.user,
-                include_anonymous = own)
-            obj = self.get_object()
-            context['total_actions'] = obj.profile.profileactionrelationship_set.count()
-            context['percent_finished'] = obj.profile.get_percent_finished()
-            context['action_streak_current'] = obj.profile.get_action_streak()
             current_profile = self.request.user.profile
             relationship = current_profile.get_relationship(obj.profile)
             if relationship:
@@ -56,30 +53,17 @@ class ProfileView(UserPassesTestMixin, generic.DetailView):
                 context['notified_of'] = relationship.current_profile_notified_of_target(current_profile)
         return context
 
-class ProfileEditView(UserPassesTestMixin, generic.UpdateView):
+
+class ProfileEditView(LoginRequiredMixin, generic.UpdateView):
     model = Profile
     form_class = ProfileForm
-    slug_field = 'user'
 
     def get_object(self, queryset=None):
-        slug = self.kwargs.get(self.slug_url_kwarg, None)
-        if slug:
-            user = User.objects.get(username=slug)
-            return Profile.objects.get(user=user)
-        else:
-            raise Http404(_(u"No user supplied to profile edit view"))
-
-    def test_func(self):
-        obj = self.get_object()
-        return obj.user == self.request.user
-
-    def get_form_kwargs(self):
-        form_kws = super(ProfileEditView, self).get_form_kwargs()
-        form_kws["user"] = self.request.user
-        return form_kws
+        return self.request.user.profile
 
     def get_success_url(self, **kwargs):
         return self.object.get_absolute_url()
+
 
 class ToDoView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'profiles/todo.html'
@@ -93,19 +77,19 @@ class ToDoView(LoginRequiredMixin, generic.TemplateView):
         context['suggested_actions'] = self.request.user.profile.get_suggested_actions_count()
         return context
 
-class ProfileSuggestedView(UserPassesTestMixin, generic.DetailView):
+
+class ProfileSuggestedView(LoginRequiredMixin, generic.DetailView):
     template_name = 'profiles/suggested.html'
-    slug_field = 'username'
     model = User
 
-    def test_func(self):
-        obj = self.get_object()
-        return obj == self.request.user  # No access unless this is you
+    def get_object(self, queryset=None):
+        return self.request.user
 
     def get_context_data(self, **kwargs):
         context = super(ProfileSuggestedView, self).get_context_data(**kwargs)
         context['actions'] = self.object.profile.get_suggested_actions()
         return context
+
 
 class ProfileSearchView(generic.ListView):
     template_name = 'profiles/profiles.html'
@@ -273,7 +257,7 @@ def manage_suggested_action(request, slug, type):
     except ObjectDoesNotExist: # If the action slug got borked
         return HttpResponseRedirect(reverse('index'))
     manage_suggested_action_helper(par, type)
-    return HttpResponseRedirect(reverse('suggested', kwargs={'slug':request.user.username}))
+    return HttpResponseRedirect(reverse('suggested'))
 
 class DashboardView(LoginRequiredMixin, generic.TemplateView):
     template_name = "profiles/dashboard.html"

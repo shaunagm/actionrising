@@ -1,4 +1,4 @@
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -179,9 +179,9 @@ class TestRelationshipMethods(TestCase):
         self.assertIsNone(self.relationship.current_profile_mutes_target(self.lorne.profile))
 
     def test_toggle_following_for_current_profile(self):
-        self.buffy.profile.current_privacy = PrivacyChoices.follows
+        self.buffy.profile.privacy = PrivacyChoices.follows
         self.buffy.profile.save()
-        self.faith.profile.current_privacy = PrivacyChoices.follows
+        self.faith.profile.privacy = PrivacyChoices.follows
         self.faith.profile.save()
         # Starting with A (Buffy) not following B (Faith)
         self.assertFalse(self.relationship.A_follows_B)
@@ -579,3 +579,101 @@ class TestTrackers(TestCase):
         self.assertEqual(data['restricted_count'], 1)
         # buffy can see faith
         self.assertEqual(data['visible_list'], [self.faith_slate2])
+
+
+class TestProfilePrivacy(TestCase):
+    def setUp(self):
+        super(TestProfilePrivacy, self).setUp()
+        self.buffy = User.objects.create(username="buffysummers")
+        self.profile = self.buffy.profile
+
+    def test_default(self):
+        # default to the PrivacyDefaults default
+        self.assertEqual(self.profile.privacy, PrivacyChoices.inherit)
+        self.assertEqual(self.profile.current_privacy, PrivacyChoices.public)
+
+    def test_concrete_privacy(self):
+        self.profile.privacy = PrivacyChoices.follows
+        self.profile.save()
+
+        self.assertEqual(self.profile.privacy, PrivacyChoices.follows)
+        self.assertEqual(self.profile.current_privacy, PrivacyChoices.follows)
+
+    def test_inherit_privacy(self):
+        self.profile.privacy = PrivacyChoices.inherit
+        self.profile.save()
+
+        self.assertEqual(self.profile.privacy, PrivacyChoices.inherit)
+        self.assertEqual(self.profile.current_privacy, PrivacyChoices.public)
+
+    def test_update_to_inherit_privacy(self):
+        self.profile.privacy = PrivacyChoices.follows
+        self.profile.save()
+
+        self.assertEqual(self.profile.privacy, PrivacyChoices.follows)
+
+        self.profile.privacy = PrivacyChoices.inherit
+        self.profile.save()
+
+        self.assertEqual(self.profile.privacy, PrivacyChoices.inherit)
+        self.assertEqual(self.profile.current_privacy, PrivacyChoices.public)
+
+
+class TestUpdatePrivacyDefaults(TestCase):
+
+    def test_update_default(self):
+        buffy = User.objects.create(username="buffysummers")
+        action = buffy.action_set.create(privacy=PrivacyChoices.inherit)
+        slate = buffy.slate_set.create(privacy=PrivacyChoices.inherit)
+
+        self.assertEqual(action.current_privacy, PrivacyChoices.public)
+        self.assertEqual(slate.current_privacy, PrivacyChoices.public)
+
+        buffy.profile.privacy_defaults.global_default = PrivacyChoices.follows
+        buffy.profile.privacy_defaults.save()
+
+        action.refresh_from_db()
+        self.assertEqual(action.current_privacy, PrivacyChoices.follows)
+
+        slate.refresh_from_db()
+        self.assertEqual(slate.current_privacy, PrivacyChoices.follows)
+
+        buffy.profile.refresh_from_db()
+        self.assertEqual(buffy.profile.current_privacy, PrivacyChoices.follows)
+
+
+class TestEditProfiles(TestCase):
+    def setUp(self):
+        super(TestEditProfiles, self).setUp()
+        self.buffy = User.objects.create(
+            first_name="Buffy",
+            last_name="Summers",
+            username="buffysummers")
+        self.client.force_login(self.buffy)
+
+    def test_initial(self):
+        resp = self.client.get(reverse("edit_profile"))
+        self.assertEqual(resp.status_code, 200)
+
+        form = resp.context['form']
+        self.assertEqual(form.initial['first_name'], "Buffy")
+        self.assertEqual(form.initial['last_name'], "Summers")
+        self.assertEqual(form.initial['privacy_default'], PrivacyChoices.public)
+
+    def test_save(self):
+        resp = self.client.post(reverse("edit_profile"), {
+            "first_name": "Dinnah",
+            "last_name": "Saur",
+            "description": "Rawr",
+            "privacy": PrivacyChoices.inherit,
+            "privacy_default": PrivacyChoices.follows,
+        })
+
+        self.assertEqual(resp.status_code, 302)
+
+        saved_buffy = User.objects.get(pk=self.buffy.pk)
+        self.assertEqual(saved_buffy.first_name, "Dinnah")
+        self.assertEqual(saved_buffy.last_name, "Saur")
+        self.assertEqual(saved_buffy.profile.description, "Rawr")
+        self.assertEqual(saved_buffy.profile.privacy_defaults.global_default,
+                         PrivacyChoices.follows)

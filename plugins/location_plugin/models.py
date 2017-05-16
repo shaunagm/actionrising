@@ -99,7 +99,7 @@ def filter_queryset_by_location(field_data, queryset, user):
 def get_timezone_given_user(user):
     ctype = ContentType.objects.get_for_model(user.profile)
     location = Location.objects.filter(content_type=ctype, object_id=user.profile.pk).first()
-    if location:
+    if location and location.lat and location.lon:
         geocoder = GoogleV3()
         tz = geocoder.timezone([location.lat, location.lon])
         if tz:

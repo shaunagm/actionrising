@@ -25,17 +25,39 @@
 
      <p>Some notes about how we implement privacy, for those who want the nitty gritty details:
        <ul>
-         <li>If you change your default privacy setting, this will change the settings
-          of all past actions, slates, etc that were not overridden.</li>
-         <li>When multiple privacy settings are in play, we err on the side of privacy.
-          So, for instance, if we're trying to decide whether to display the fact that
-          person A is taking action B, we check both the privacy settings of person A
-          and action B.  Unless the viewer has access to both person A and action B, they
-          will not see anything displayed.</i>
-          <li>You can also choose to make an action "anonymous".  This prevents the action
-          from naming you as the creator or linking back to your profile, but it is not
-          'truly' anonymous.  You'll still be able to edit your anonymous action and see
-          it in your lists of created actions.</li>
+         <li>
+           Even if you have everything set to follows-only, other people will
+           be able to see that your username exists. We do it this way so that
+           your friends can find you and two people with protected profiles can
+           follow each other. Contact us if you have a need for a truly secret
+           profile.
+         </li>
+         <li>
+           If you change your default privacy setting, this will change
+           the settings of all past actions, slates, etc that were not overridden.
+         </li>
+         <li>
+           Privacy changes apply to the past in activity feeds. When you give someone
+           access to your profile, by making it less restricted or by following them,
+           their feed will contain your past activity; when you revoke access, your past
+           activity will disappear from their feed.
+         <li>
+           In activity feeds, we err on the side of privacy, so if you can see
+           person A but not action B, you won't see the fact that A started
+           tracking B. In other situations, you may see a username for a person
+           who's profile you're not allowed to see. If a person with a
+           restricted profile creates a public action, anyone can see the
+           action and that they created it. (But see below about anonymous
+           actions!) If a person whose profile you can see follows or is
+           followed by a person whose profile you can't see, you can see their
+           connection.
+         </li>
+         <li>You can also choose to make an action
+           "anonymous".  This prevents the action from naming you as the
+           creator or linking back to your profile, but it is not 'truly'
+           anonymous.  You'll still be able to edit your anonymous action and
+           see it in your lists of created actions.
+         </li>
        </ul>
      </p>
 
