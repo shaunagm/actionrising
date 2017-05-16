@@ -23,12 +23,15 @@ class ProfileForm(ModelForm):
         model = Profile
         fields = ['description', 'privacy']
 
-    def __init__(self, *args, **kwargs):
-        super(ProfileForm, self).__init__(*args, **kwargs)
+    def __init__(self, initial, instance, **kwargs):
+        initial.setdefault('first_name', instance.user.first_name)
+        initial.setdefault('last_name', instance.user.last_name)
+        initial.setdefault('privacy_default', instance.privacy_defaults.global_default)
+
+        super(ProfileForm, self).__init__(initial=initial, instance=instance, **kwargs)
 
         # Set privacy
         self.fields['privacy_default'].help_text = 'This setting will apply to all actions and slates you create unless you override them individually.'
-        self.fields['privacy_default'].initial = self.instance.privacy_defaults.global_default
         self.fields['privacy'].choices = PrivacyChoices.personalized(get_global_privacy_default(self.instance, "decorated"))
 
         # Set plugin fields
