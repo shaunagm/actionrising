@@ -18,7 +18,7 @@
      {% if search %}
        <p class="search-all"><a href={% url 'profiles' %}>Search All Users</a></p>
      {% endif %}
-     {% include 'profiles/friend_list_include.html' with object_list=friends %}
+     {% include 'profiles/friends_include.html' with object_list=friends %}
    </div>
  </div>
 </div>

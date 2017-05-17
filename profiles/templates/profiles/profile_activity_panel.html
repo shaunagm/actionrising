@@ -26,7 +26,7 @@
      {% for action in stream|slice:":15" %}
        {% filtered_feed action own=True as filtered_action %}
        {% if filtered_action %}
-          {% include 'profiles/feed_include.html' %}
+          {% include 'profiles/activity_include.html' %}
         {% endif %}
       {% empty %}
         {% if own %}

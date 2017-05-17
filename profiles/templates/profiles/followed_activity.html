@@ -14,11 +14,11 @@
      {% for action in stream|slice:":1000" %}
        {% filtered_feed action as filtered_action %}
        {% if filtered_action %}
-          {% include 'profiles/feed_include.html' %}
+          {% include 'profiles/activity_include.html' %}
        {% endif %}
      {% empty %}
        Your feed is empty because you do not follow enough slates or users.
-       <a href="{% url 'follow-users-and-slates' %}">Find some to follow.</a>
+       <a href="{% url 'community' %}">Find some to follow.</a>
      {% endfor %}
    </div>
 </div>

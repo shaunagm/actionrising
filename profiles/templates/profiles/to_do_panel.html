@@ -2,7 +2,7 @@
 
   <div class="panel-heading">
     <h3 class="panel-title">
-      <span data-toggle="collapse" href="#openactions">
+      <span data-toggle="collapse" href="#to-do">
         Your To Do List
       </span>
       <a href="{% url 'to_do' %}" title="Open in new page" class="float-right">
@@ -11,7 +11,7 @@
     </h3>
   </div>
 
-  <div id="openactions" class="panel-collapse collapse in">
+  <div id="to-do" class="panel-collapse collapse in">
    <div class="panel-body to-do">
      {% for par in open_actions %}
        <a href="{{ par.action.get_absolute_url}}">{{ par.action.title }}</a> <br />
