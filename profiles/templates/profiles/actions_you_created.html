@@ -1,0 +1,30 @@
+{% load profile_extras %}
+{% is_own_profile request.user object as own %}
+
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <span data-toggle="collapse" href="#created-actions">
+        {% if own %}
+          Actions You Created
+        {% else %}
+          Actions {{ object.username }} Created
+        {% endif %}
+      </span>
+    </h3>
+  </div>
+  <div id="created-actions" class="panel-collapse collapse in">
+    <div class="panel-body">
+      {% for action in created_actions %}
+        <a href="{{ action.get_absolute_url }}">{{ action }}</a><br />
+      {% empty %}
+        {% if own %}
+          You haven't created any actions yet.
+          <a href="{% url 'create_action' %}">Make one</a>.
+        {% else %}
+          {{ object.username }} hasn't created any actions yet.
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
