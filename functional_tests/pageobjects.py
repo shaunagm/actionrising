@@ -270,14 +270,14 @@ class ProfilePage(BasePage):
     friends = MultiPageElement(css="#friends a")
     # own profile
     tracked_actions = MultiPageElement(css="#tracked-actions a")
-    created_content = MultiPageElement(css="#created-content a")
+    created_actions = MultiPageElement(css="#created-actions a")
 
     def go_to_profile_page(self, username=None):
         user = User.objects.get(username=username)
         self.w.get(self.root_uri + user.profile.get_absolute_url())
 
-    def get_created_content(self):
-        return [action.text for action in self.created_content]
+    def get_created_actions(self):
+        return [action.text for action in self.created_actions]
 
     def get_tracked_actions(self):
         return [action.text for action in self.tracked_actions]
