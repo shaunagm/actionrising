@@ -122,6 +122,16 @@ class TestProfileMethods(TestCase):
         self.assertTrue(self.sar.get_creator() == self.faith)
         self.assertFalse(self.sar.get_creator() == self.anon)
 
+    def test_get_percent_finished(self):
+        self.assertEqual(self.buffy.profile.get_percent_finished(), 0.0)
+        self.action2 = Action.objects.create(slug="test-action2", title="Test Action 2", creator=self.buffy)
+        self.action3 = Action.objects.create(slug="test-action3", title="Test Action 3", creator=self.buffy)
+        ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action2)
+        ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action3)
+        self.par.status = ToDoStatusChoices.done
+        self.par.save()
+        self.assertEqual(self.buffy.profile.get_percent_finished(), 33.3)
+
 class TestRelationshipMethods(TestCase):
 
     def setUp(self):
