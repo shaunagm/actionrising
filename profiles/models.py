@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+from __future__ import division, unicode_literals
 
 import json, datetime, ast
 from random import shuffle
@@ -199,7 +199,7 @@ class Profile(models.Model):
                 finished_count += 1
         if total_count == 0:
             return 0
-        return float(finished_count)/float(total_count)*100
+        return round(finished_count/total_count*100, 1)
 
     def get_action_streak(self):
         streak_length = 0
