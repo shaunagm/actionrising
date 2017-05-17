@@ -9,7 +9,7 @@ class Command(BaseCommand):
         try:
             actions = Action.objects.filter(status=StatusChoices.ready)
             for action in actions:
-                closed = action.close_action_if_ready()
+                closed = action.close_action()
                 email_handlers.close_action_emails(action, closed)
             print("Actions marked as finished")
         except:
