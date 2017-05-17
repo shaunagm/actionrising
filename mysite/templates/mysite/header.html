@@ -16,7 +16,7 @@
 
         {% if request.user.is_authenticated %}
           <li><a href="{% url 'actions' %}">Actions</a></li>
-          <li><a href="{% url 'follow-users-and-slates' %}">Community</a></li>
+          <li><a href="{% url 'community' %}">Community</a></li>
         {% else %}
           <li><a href="{% url 'actions' %}">Actions</a></li>
           <li><a href="{% url 'slates' %}">Community</a></li>
