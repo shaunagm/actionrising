@@ -13,9 +13,6 @@ STATES = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DC", "DE", "FL", "GA",
     "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]
 
 def geocode(location):
-    if 'test' in sys.argv:
-        return None
-
     try:
         geocoder = GoogleV3()
         geocoded_location = geocoder.geocode(location)
@@ -42,7 +39,7 @@ def find_congressional_district(lat, lon):
 
 def populate_location_and_district(instance):
 
-    if instance.location == "":  # User is likely deleting their location
+    if instance.location in ["", None]:  # User is likely deleting their location
         instance.lat, instance.lon, instance.state, instance.district = None, None, None, None
         instance.save()
         return

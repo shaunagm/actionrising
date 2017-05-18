@@ -183,6 +183,7 @@ class BasicActionDetailPage(BaseObjectDetailPage):
     commitment_button = PageElement(id_="commitment_btn")
     manage_action_links = MultiPageElement(css=".manage-action-links")
     share = PageElement(css="span.share-popover")
+    deadline = PageElement(id_="deadline-info")
 
     def go_to_detail_page(self, title=None):
         if title:
@@ -266,6 +267,7 @@ class ProfilePage(BasePage):
     activity = MultiPageElement(css=".actstream-action")
     redirected_page = PageElement(css="#id_username")
     location = PageElement(css=".profile-location")
+    edit_page_button = PageElement(id_="edit-profile")
     # other person's profile
     friends = MultiPageElement(css="#friends a")
     # own profile
@@ -287,6 +289,12 @@ class ProfilePage(BasePage):
 
     def get_friends(self):
         return [friend.text for friend in self.friends]
+
+class EditProfilePage(BasePage):
+    first_name = PageElement(id_="id_first_name")
+    last_name = PageElement(id_="id_last_name")
+    location = PageElement(id_="id_location")
+    submit_button = PageElement(css=".profile-submit-button")
 
 class ToDoPage(BasicActionListPage):
     suggested_actions_link = PageElement(id_="suggested_actions_button")

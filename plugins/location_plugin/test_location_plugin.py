@@ -51,18 +51,20 @@ class TestTimezoneMiddleware(TestCase):
     def test_get_location(self):
         # Set location for user
         ctype = ContentType.objects.get_for_model(self.request.user.profile)
-        Location.objects.filter(content_type=ctype, object_id=self.request.user.profile.pk). \
-            update(location="Chicago, IL", lat="41.881832", lon="-87.623177")
+        location = Location.objects.get(content_type=ctype, object_id=self.request.user.profile.pk)
+        location.location = "Chicago, IL"
+        location.save()
         # Get location
         loc = self.tm.get_location(self.request.user)
         self.assertIsInstance(loc, Location)
-        self.assertEqual(str(loc.lat), "41.881832")
+        self.assertEqual(str(loc.lat)[:4], "41.8")
 
     def test_get_timezone(self):
         # Set location for user
         ctype = ContentType.objects.get_for_model(self.request.user.profile)
-        Location.objects.filter(content_type=ctype, object_id=self.request.user.profile.pk). \
-            update(location="Chicago, IL", lat="41.881832", lon="-87.623177")
+        location = Location.objects.get(content_type=ctype, object_id=self.request.user.profile.pk)
+        location.location = "Chicago, IL"
+        location.save()
         # Get timezone
         loc = self.tm.get_location(self.request.user)
         tz = self.tm.get_timezone(loc)
@@ -76,8 +78,9 @@ class TestTimezoneMiddleware(TestCase):
     def test_middleware_uses_default_tz_when_no_referer(self):
         # Set location for test user
         ctype = ContentType.objects.get_for_model(self.request.user.profile)
-        Location.objects.filter(content_type=ctype, object_id=self.request.user.profile.pk). \
-            update(location="Chicago, IL", lat="41.881832", lon="-87.623177")
+        location = Location.objects.get(content_type=ctype, object_id=self.request.user.profile.pk)
+        location.location = "Chicago, IL"
+        location.save()
         # Test with middleware
         self.assertIsNone(self.tm.process_request(self.request))
         self.assertEqual(timezone.get_current_timezone().zone, 'America/New_York')
@@ -85,8 +88,9 @@ class TestTimezoneMiddleware(TestCase):
     def test_middleware_uses_default_tz_when_non_editprofile_referer(self):
         # Set location for test user
         ctype = ContentType.objects.get_for_model(self.request.user.profile)
-        Location.objects.filter(content_type=ctype, object_id=self.request.user.profile.pk). \
-            update(location="Chicago, IL", lat="41.881832", lon="-87.623177")
+        location = Location.objects.get(content_type=ctype, object_id=self.request.user.profile.pk)
+        location.location = "Chicago, IL"
+        location.save()
         # Test with middleware
         self.request.META['HTTP_REFERER'] = "http://www.actionrising.com/actions/edit"
         self.assertIsNone(self.tm.process_request(self.request))
@@ -101,8 +105,9 @@ class TestTimezoneMiddleware(TestCase):
     def test_middleware_sets_timezone_for_referrer_with_location(self):
         # Set location for test user
         ctype = ContentType.objects.get_for_model(self.request.user.profile)
-        Location.objects.filter(content_type=ctype, object_id=self.request.user.profile.pk). \
-            update(location="Chicago, IL", lat="41.881832", lon="-87.623177")
+        location = Location.objects.get(content_type=ctype, object_id=self.request.user.profile.pk)
+        location.location = "Chicago, IL"
+        location.save()
         # Test with middleware
         self.request.META['HTTP_REFERER'] = "http://www.actionrising.com/profiles/edit"
         self.assertIsNone(self.tm.process_request(self.request))
@@ -111,16 +116,17 @@ class TestTimezoneMiddleware(TestCase):
     def test_middleware_removes_timezone_for_referrer_when_location_removed(self):
         # Set location for test user
         ctype = ContentType.objects.get_for_model(self.request.user.profile)
-        Location.objects.filter(content_type=ctype, object_id=self.request.user.profile.pk). \
-            update(location="Chicago, IL", lat="41.881832", lon="-87.623177")
+        location = Location.objects.get(content_type=ctype, object_id=self.request.user.profile.pk)
+        location.location = "Chicago, IL"
+        location.save()
         # Test with middleware
         self.request.META['HTTP_REFERER'] = "http://www.actionrising.com/profiles/edit"
         self.assertIsNone(self.tm.process_request(self.request))
         self.assertEqual(timezone.get_current_timezone().zone, "America/Chicago")
         # Remove location
         ctype = ContentType.objects.get_for_model(self.request.user.profile)
-        Location.objects.filter(content_type=ctype, object_id=self.request.user.profile.pk). \
-            update(location=None, lat=None, lon=None)
+        location.location = ""
+        location.save()
         # Test with middleware
         self.request.META['HTTP_REFERER'] = "http://www.actionrising.com/profiles/edit"
         self.assertIsNone(self.tm.process_request(self.request))
