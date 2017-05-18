@@ -63,8 +63,8 @@ class Action(models.Model):
             if orig.status != StatusChoices.ready and self.status == StatusChoices.ready:
                 open_pars_when_action_reopens(self)
 
-            deadline_removed = self.deadline is None and orig.deadline is not None
-            self.set_close_date(deadline_removed)
+            if self.deadline != orig.deadline or self.never_expires != orig.never_expires:
+                self.set_close_date()
 
         else:
             self.slug = slugify_helper(Action, self.title)
@@ -149,12 +149,12 @@ class Action(models.Model):
         # Added for conveniences' sake in vet_actions function
         return self.get_status_display()
 
-    def set_close_date(self, deadline_removed=False):
+    def set_close_date(self):
         if self.never_expires:
             self.close_date = None
         elif self.deadline:
             self.close_date = self.deadline
-        elif not self.close_date or deadline_removed:
+        else:
             self.close_date = self.date_created + datetime.timedelta(days=DEFAULT_ACTION_DURATION)
 
     def days_until(self, date):

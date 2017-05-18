@@ -307,8 +307,7 @@ def close_action_emails(action, closed=False):
         close_action_email(action.creator.profile, action)
         message = "<a href='%s'>%s</a>" % (action.get_keep_open_url_with_domain(), action.title)
         generic_admin_email("Action closed", message)
-        return
-    if action.send_warning():
+    elif action.send_warning():
         close_action_warning_email(action.creator.profile, action)
 
 #############################
