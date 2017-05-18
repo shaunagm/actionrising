@@ -2,7 +2,7 @@ from django import forms
 from datetimewidget.widgets import DateTimeWidget
 from django.forms.widgets import HiddenInput
 
-from actions.models import Action
+from actions.models import Action, DEFAULT_ACTION_DURATION
 from tags.lib import tag_helpers
 from tags.models import Tag
 from mysite.lib.choices import PrivacyChoices, TimeChoices
@@ -20,9 +20,12 @@ class ActionForm(forms.ModelForm):
     class Meta:
         model = Action
         fields = ['title', 'anonymize', 'description', 'privacy', 'priority', 'duration',
-            'status', 'deadline', 'slates']
+            'status', 'deadline', 'never_expires', 'slates']
         widgets = {
             'deadline': DateTimeWidget(options={'format': 'mm/dd/yyyy HH:mm'}, bootstrap_version=3),
+        }
+        labels = {
+            'never_expires': 'This action never expires. (Actions with no deadline otherwise expire automatically after ' + str(DEFAULT_ACTION_DURATION) + ' days.)'
         }
         help_texts = {
             'anonymize': 'Show "anonymous" as creator. (Note: this changes the display only, and you can change your mind and choose to show your username later.)',

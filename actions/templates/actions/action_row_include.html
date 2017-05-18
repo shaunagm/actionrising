@@ -6,7 +6,7 @@
       {{ action.date_created|date:"D M d"}}</td>
     <td class="tags">{% include "tags/label_include.html" with object_list=action.get_tags %}</td>
     <td class="trackers">{{ action.profile_set.count }}</td>
-    <td class="deadline">{{ action.get_days_til_deadline }}</td>
+    <td class="deadline">{{ action.days_until_deadline }}</td>
     <td class="priority">{{ action.get_priority_display }}</td>
     <td class="active">{{ action.is_active }}</td>
     <td class="friend">{% if action.get_visible_creator in following_list %} True {% endif %} </td>
