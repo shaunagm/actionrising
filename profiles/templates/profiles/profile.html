@@ -63,7 +63,9 @@
       <div class="col-sm-5 col-sm-offset-1" id="created-actions-div">
         {% ifequal request.user object %}
           {% include 'actions/actions_you_tracked.html' %}
-          {% include 'profiles/content_you_created.html' %}
+          {% include 'profiles/actions_you_created.html' %}
+          {% include 'profiles/dash_panels/actions_you_tracked.html' %}
+          {% include 'profiles/actions_you_created.html' %}
         {% else %}
           {% include 'profiles/friends_panel.html' %}
         {% endifequal %}

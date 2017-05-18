@@ -28,7 +28,7 @@ class TestAddAndFollowAction(SeleniumTestCase):
         # Go to profile page and see action is only listed in 'created', not 'tracked'
         self.profile_page = ProfilePage(self.browser, root_uri=self.live_server_url)
         self.profile_page.go_to_profile_page(username=default_user)
-        self.assertIn("A new action to take", self.profile_page.get_created_content())
+        self.assertIn("A new action to take", self.profile_page.get_created_actions())
         self.assertNotIn("A new action to take", self.profile_page.get_tracked_actions())
 
         # Check todo list
@@ -43,7 +43,7 @@ class TestAddAndFollowAction(SeleniumTestCase):
         # Check profile page again
         self.profile_page = ProfilePage(self.browser, root_uri=self.live_server_url)
         self.profile_page.go_to_profile_page(username=default_user)
-        self.assertIn("A new action to take", self.profile_page.get_created_content())
+        self.assertIn("A new action to take", self.profile_page.get_created_actions())
         self.assertIn("A new action to take", self.profile_page.get_tracked_actions())
 
         # Now it's in the todo list too
