@@ -27,5 +27,10 @@
   {% endif %}
 
   <br />
-
+{% empty %}
+  {% if own %}
+    <p>You haven't followed anyone yet. <a href="{% url 'profiles' %}">Find some people to follow!</a></p>
+  {% else %}
+    <p>{{ object.username }} hasn't followed anyone yet.
+  {% endif %}
 {% endfor %}
