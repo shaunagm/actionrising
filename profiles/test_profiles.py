@@ -18,6 +18,7 @@ from profiles.lib.trackers import Trackers
 from actions import factories as action_factories
 from accounts import factories as account_factories
 from slates import factories as slate_factories
+import datetime
 from . import factories
 
 ###################
@@ -124,13 +125,38 @@ class TestProfileMethods(TestCase):
 
     def test_get_percent_finished(self):
         self.assertEqual(self.buffy.profile.get_percent_finished(), 0.0)
-        self.action2 = Action.objects.create(slug="test-action2", title="Test Action 2", creator=self.buffy)
-        self.action3 = Action.objects.create(slug="test-action3", title="Test Action 3", creator=self.buffy)
-        ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action2)
-        ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action3)
+        action2 = Action.objects.create(slug="test-action2", title="Test Action 2", creator=self.buffy)
+        action3 = Action.objects.create(slug="test-action3", title="Test Action 3", creator=self.buffy)
+        ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=action2)
+        ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=action3)
         self.par.status = ToDoStatusChoices.done
         self.par.save()
         self.assertEqual(self.buffy.profile.get_percent_finished(), 33.3)
+
+    def test_get_action_streak(self):
+        self.assertEqual(self.buffy.profile.get_action_streak(), 0)
+        # streak of 1: today
+        self.par.status = ToDoStatusChoices.done
+        self.par.date_finished = datetime.datetime.now()
+        self.par.save()
+        self.assertEqual(self.buffy.profile.get_action_streak(), 1)
+        # streak of 2: today, yesterday
+        yesterday = datetime.datetime.now() - datetime.timedelta(1)
+        day_before = yesterday - datetime.timedelta(1)
+        action2 = Action.objects.create(slug="test-action2", title="Test Action 2", creator=self.buffy)
+        par2 = ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=action2)
+        par2.status = ToDoStatusChoices.done
+        par2.date_finished = yesterday
+        par2.save()
+        self.assertEqual(self.buffy.profile.get_action_streak(), 2)
+        # streak of 1: today
+        par2.date_finished = day_before
+        par2.save()
+        self.assertEqual(self.buffy.profile.get_action_streak(), 1)
+        # streak of 2: yesterday, day before (maybe today will continue the streak)
+        self.par.date_finished = yesterday
+        self.par.save()
+        self.assertEqual(self.buffy.profile.get_action_streak(), 2)
 
 class TestRelationshipMethods(TestCase):
 
