@@ -110,7 +110,7 @@ class TestActionMethods(TestCase):
         action.description = "Let's change things up!"
         action.save()
         self.assertEqual(action.close_date, date + datetime.timedelta(days=DEFAULT_ACTION_DURATION))
-        
+
     def test_days_until(self):
         future_date = datetime.datetime.now(timezone.utc) + datetime.timedelta(days=21)
         self.assertEqual(self.action.days_until(future_date), 20)
@@ -126,6 +126,10 @@ class TestActionMethods(TestCase):
         self.action.deadline = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=30)
         self.action.save()
         self.assertEqual(self.action.days_until_deadline(), -31)
+        # Test setting never_expires turns it to none
+        self.action.never_expires = True
+        self.action.save()
+        self.assertIsNone(self.action.days_until_deadline())
 
     def test_close_action_set_to_never_expire(self):
         # Test recent action

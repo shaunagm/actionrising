@@ -161,7 +161,7 @@ class Action(models.Model):
         return (date - datetime.datetime.now(timezone.utc)).days
 
     def days_until_deadline(self):
-        if self.deadline:
+        if self.deadline and not self.never_expires:
             return self.days_until(self.deadline)
 
     def close_action(self):
