@@ -67,7 +67,7 @@ class ProfileEditView(LoginRequiredMixin, generic.UpdateView):
 
 
 class ToDoView(LoginRequiredMixin, generic.TemplateView):
-    template_name = 'profiles/todo.html'
+    template_name = 'profiles/to_do.html'
 
     def get_context_data(self, **kwargs):
         context = super(ToDoView, self).get_context_data(**kwargs)
@@ -106,7 +106,7 @@ class ProfileSearchView(generic.ListView):
         return context
 
 class FeedView(LoginRequiredMixin, generic.TemplateView):
-    template_name = 'profiles/feed.html'
+    template_name = 'profiles/followed_activity.html'
 
 class ActivityView(LoginRequiredMixin, generic.TemplateView):
     template_name = 'profiles/activity.html'

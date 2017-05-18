@@ -153,7 +153,7 @@ class TestActionDetail(SeleniumTestCase):
         self.assertEquals(len(self.action_page.accepted_trackers), 2)
         self.assertEqual(self.action_page.accepted_trackers[0].text, "Buffy Summers")
         # Now test remove action
-        self.action_page.select_manage_action_option("Remove from todos")
+        self.action_page.select_manage_action_option("Remove from To Do list")
         self.wait_helper()
         self.action_page.display_tracker_link.click()
         self.wait_helper("profile_accepted")

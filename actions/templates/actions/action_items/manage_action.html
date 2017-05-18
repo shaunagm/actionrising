@@ -17,7 +17,7 @@
            <a class="manage-action-links" href="{% url 'manage_action_for_profile' object.slug %}">
              Edit notes, priority</a>
            <a id="remove-from-todos" class="manage-action-links" href="{% url 'toggle_action_for_profile' object.slug 'remove' %}">
-             Remove from todos</a>
+             Remove from your To Do list</a>
          </ul>
        </div>
 
@@ -26,7 +26,7 @@
        <div class="action-item">
            <a id="manage-action-button" href="{% url 'toggle_action_for_profile' object.slug 'add' %}">
                <i class="fa fa-plus" aria-hidden="true"></i>
-               Add to your todo list</a>
+               Add to your To Do list</a>
        </div>
 
     {% endif %}
