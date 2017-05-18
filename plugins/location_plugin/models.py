@@ -37,6 +37,11 @@ class Location(models.Model):
             return self.district
         return None
 
+    def get_district_number(self):
+        if self.district:
+            return self.district.split("-")[1]
+        return None
+
     def get_state(self):
         if self.state:
             return self.state
