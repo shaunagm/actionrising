@@ -202,15 +202,15 @@ class Profile(models.Model):
         return round(finished_count/total_count*100, 1)
 
     def get_action_streak(self):
+        dates = set([action.date_finished.date() for action
+                     in self.profileactionrelationship_set.all() if action.date_finished])
+        today = datetime.date.today()
+        # today doesn't break your streak
+        most_recent_day = today if today in dates else today - datetime.timedelta(days=1)
         streak_length = 0
-        today = datetime.datetime.now().date()
-        dates = [action.date_finished.date() for action in self.profileactionrelationship_set.all() if action.date_finished]
-        while True:
-            if today in dates:
-                streak_length += 1
-                today = today - datetime.timedelta(days=1)
-            else:
-                break
+        while most_recent_day in dates:
+            streak_length += 1
+            most_recent_day -= datetime.timedelta(days=1)
         return streak_length
 
     def get_friends_actions(self):
