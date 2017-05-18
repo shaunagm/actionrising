@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 
 from django.contrib.auth.models import User, AnonymousUser
+from django.utils import timezone
 from actions.models import Action
 from slates.models import Slate, SlateActionRelationship
 from commitments.models import Commitment
@@ -136,12 +137,13 @@ class TestProfileMethods(TestCase):
     def test_get_action_streak(self):
         self.assertEqual(self.buffy.profile.get_action_streak(), 0)
         # streak of 1: today
+        today = datetime.datetime.now(timezone.utc)
         self.par.status = ToDoStatusChoices.done
-        self.par.date_finished = datetime.datetime.now()
+        self.par.date_finished = today
         self.par.save()
         self.assertEqual(self.buffy.profile.get_action_streak(), 1)
         # streak of 2: today, yesterday
-        yesterday = datetime.datetime.now() - datetime.timedelta(1)
+        yesterday = today - datetime.timedelta(1)
         day_before = yesterday - datetime.timedelta(1)
         action2 = Action.objects.create(slug="test-action2", title="Test Action 2", creator=self.buffy)
         par2 = ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=action2)
