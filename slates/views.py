@@ -8,7 +8,6 @@ from django.contrib.auth.decorators import login_required
 from flags.lib.flag_helpers import get_user_flag_if_exists
 from mysite.lib.choices import PrivacyChoices, StatusChoices
 from mysite.lib.privacy import check_privacy, apply_check_privacy, filter_list_for_privacy_annotated
-from misc.models import RecommendationTracker
 from profiles.lib.trackers import Trackers
 from slates.models import Slate, SlateActionRelationship
 from slates.forms import SlateForm, SlateActionRelationshipForm
@@ -112,8 +111,4 @@ class FollowUsersAndSlates(LoginRequiredMixin, generic.TemplateView):
         context['created_slates'] = self.request.user.slate_set.all()
         context['followed_slates'] = self.request.user.profile.profileslaterelationship_set.all()
         context['friends'] = self.request.user.profile.get_list_of_relationships()
-        rectracker = RecommendationTracker.objects.first()
-        if rectracker:
-            context['users'] = rectracker.retrieve_users()
-            context['slates'] = rectracker.retrieve_slates()
         return context
