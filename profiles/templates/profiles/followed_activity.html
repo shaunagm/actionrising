@@ -7,7 +7,7 @@
 
 <div class="row">
    <div class="col-sm-10 col-sm-offset-1">
-     <h2>Your Feed</h2>
+     <h2>Activity You Follow</h2>
      {% load activity_tags %}
      {% load profile_extras %}
      {% activity_stream 'user' user  %}
@@ -17,8 +17,7 @@
           {% include 'profiles/activity_include.html' %}
        {% endif %}
      {% empty %}
-       Your feed is empty because you do not follow enough slates or users.
-       <a href="{% url 'community' %}">Find some to follow.</a>
+       Nothing yet - <a href="{% url 'community' %}">Find some people and slates to follow!</a>
      {% endfor %}
    </div>
 </div>
