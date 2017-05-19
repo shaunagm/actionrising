@@ -22,7 +22,7 @@ class ActionForm(forms.ModelForm):
         fields = ['title', 'anonymize', 'description', 'privacy', 'priority', 'duration',
             'status', 'deadline', 'never_expires', 'slates']
         widgets = {
-            'deadline': DateTimeWidget(options={'format': 'mm/dd/yyyy HH:mm'}, bootstrap_version=3),
+            'deadline': DateTimeWidget(bootstrap_version=3),
         }
         labels = {
             'never_expires': 'This action never expires. (Actions with no deadline otherwise expire automatically after ' + str(DEFAULT_ACTION_DURATION) + ' days.)'
