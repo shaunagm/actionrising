@@ -29,7 +29,7 @@ class ActionForm(forms.ModelForm):
         }
         help_texts = {
             'anonymize': 'Show "anonymous" as creator. (Note: this changes the display only, and you can change your mind and choose to show your username later.)',
-            'deadline': 'MM/DD/YYYY HH:MM:SS (hours, minutes and seconds optional, defaults to midnight)'
+            'deadline': 'Day/Month/Year Hour:Minute'
             }
 
     def __init__(self, user, formtype, *args, **kwargs):
