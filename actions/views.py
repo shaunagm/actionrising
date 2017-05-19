@@ -102,6 +102,7 @@ class ActionEditView(UserPassesTestMixin, generic.edit.UpdateView):
         form_kws["formtype"] = "update"
         return form_kws
 
+
 @login_required
 def keep_actions_open_view(request, pk):
     action = Action.objects.get(pk=pk)
