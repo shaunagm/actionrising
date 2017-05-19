@@ -8,157 +8,190 @@ from actions.models import Action
 from slates.models import Slate, SlateActionRelationship
 from commitments.models import Commitment
 from mysite.lib.choices import StatusChoices, ToDoStatusChoices, PriorityChoices, PrivacyChoices
-from profiles.models import (Profile, Relationship, ProfileActionRelationship,
+from profiles.models import (Relationship, ProfileActionRelationship,
     ProfileSlateRelationship)
 from profiles.templatetags.profile_extras import get_friendslist
 from profiles.views import (toggle_relationships_helper, toggle_par_helper,
     manage_action_helper, mark_as_done_helper, manage_suggested_action_helper)
 from mysite.lib.privacy import check_privacy
-from profiles.lib import status_helpers, trackers
 from profiles.lib.trackers import Trackers
 from actions import factories as action_factories
 from accounts import factories as account_factories
 from slates import factories as slate_factories
-import datetime
 from . import factories
 
 ###################
 ### Test models ###
 ###################
 
+
+class TestProfileFactory(TestCase):
+    """ The profile factory has to set attributes on the profile in an awkward
+    way due to creating the profile in post_save signal. These test confirm
+    that it is created correctly """
+
+    def test_override(self):
+        self.assertTrue(factories.Profile(verified=True).verified)
+        self.assertFalse(factories.Profile(verified=False).verified)
+
+
 class TestProfileMethods(TestCase):
 
     def setUp(self):
-        self.buffy = User.objects.create(username="buffysummers")
-        self.buffy.profile.current_privacy = 'follows'
-        self.buffy.save()
-        self.faith = User.objects.create(username="faithlehane")
-        self.faith.profile.current_privacy = 'follows'
-        self.faith.save()
-        self.relationship = Relationship.objects.create(person_A=self.buffy.profile,
-            person_B=self.faith.profile)
-        self.relationship.B_follows_A = True
-        self.relationship.save()
-        self.lorne = User.objects.create(username="lorne") # Relationshipless
-        self.willow = User.objects.create(username="willow")
-        self.willow.profile.current_privacy = 'sitewide'
-        self.willow.save()
-        self.action = Action.objects.create(slug="test-action", title="Test Action", creator=self.buffy)
-        self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action)
-        self.slate = Slate.objects.create(slug="test-slate", title="Test Slate", creator=self.faith)
-        self.sar = SlateActionRelationship.objects.create(slate=self.slate, action=self.action)
+        super(TestProfileMethods, self).setUp()
         self.anon = AnonymousUser()
 
     def test_get_relationship(self):
-        relationship = self.buffy.profile.get_relationship(self.faith.profile)
-        self.assertEqual(relationship, self.relationship)
+        relationship = factories.Relationship()
+        self.assertEqual(
+            relationship,
+            relationship.person_A.get_relationship(relationship.person_B))
 
     def test_get_relationship_given_own_profile(self):
-        relationship = self.buffy.profile.get_relationship(self.buffy.profile)
-        self.assertIsNone(relationship)
+        profile = factories.Profile()
+        self.assertIsNone(profile.get_relationship(profile))
 
     def test_get_relationship_when_no_relationship_exists(self):
-        relationship = self.buffy.profile.get_relationship(self.lorne.profile)
-        self.assertIsNone(relationship)
+        profile1, profile2 = factories.Profile.create_batch(2)
+        self.assertIsNone(profile1.get_relationship(profile2))
 
     def test_get_followers(self):
-        self.assertEqual(list(self.buffy.profile.get_followers()), [self.faith.profile])
-        self.assertEqual(list(self.faith.profile.get_followers()), [])
-        self.assertEqual(list(self.lorne.profile.get_followers()), [])
+        relationship = factories.Relationship(B_follows_A=True)
+        profile_A = relationship.person_A
+        profile_B = relationship.person_B
+
+        self.assertEqual(list(profile_A.get_followers()), [profile_B])
+        self.assertEqual(list(profile_B.get_followers()), [])
+
+        profile_C = factories.Profile()
+        self.assertEqual(list(profile_C.get_followers()), [])
 
     def test_get_people_user_follows(self):
-        self.assertEqual(list(self.buffy.profile.get_people_user_follows()), [])
-        self.assertEqual(list(self.lorne.profile.get_people_user_follows()), [])
-        self.assertEqual(list(self.faith.profile.get_people_user_follows()), [self.buffy.profile])
+        relationship = factories.Relationship(B_follows_A=True)
+        profile_A = relationship.person_A
+        profile_B = relationship.person_B
+        self.assertEqual(list(profile_B.get_people_user_follows()), [profile_A])
+        self.assertEqual(list(profile_A.get_people_user_follows()), [])
+
+        profile_C = factories.Profile()
+        self.assertEqual(list(profile_C.get_people_user_follows()), [])
 
     def test_get_par_given_action(self):
-        par = self.buffy.profile.get_par_given_action(self.action)
-        self.assertEqual(par.profile, self.buffy.profile)
-        self.assertEqual(par.action, self.action)
-        self.assertEqual(par.pk, self.par.pk)
+        par = factories.ProfileActionRelationship()
+        self.assertEqual(
+            par,
+            par.profile.get_par_given_action(par.action))
 
     def test_get_open_actions(self):
-        self.assertEqual(self.buffy.profile.get_open_actions(), [self.action])
+        par = factories.ProfileActionRelationship()
+        self.assertEqual(
+            [par.action],
+            par.profile.get_open_actions())
 
     def test_get_suggested_actions(self):
-        self.par.status = ToDoStatusChoices.suggested
-        self.par.save()
-        self.assertEqual(list(self.buffy.profile.get_suggested_actions()), [self.par])
-        self.assertEqual(self.buffy.profile.get_suggested_actions_count(), 1)
+        par = factories.ProfileActionRelationship(
+            status=ToDoStatusChoices.suggested)
 
-    def test_is_visible(self):
-        self.assertTrue(self.faith.profile.is_visible_to(self.buffy))
-        self.assertFalse(self.buffy.profile.is_visible_to(self.faith))
-        self.assertTrue(self.lorne.profile.is_visible_to(self.buffy))
-        self.assertTrue(self.lorne.profile.is_visible_to(self.anon))
-        self.assertTrue(self.willow.profile.is_visible_to(self.buffy))
-        self.assertFalse(self.willow.profile.is_visible_to(self.anon))
+        self.assertEqual(
+            [par],
+            par.profile.get_suggested_actions())
+
+    def test_is_visible_follows(self):
+        relationship = factories.Relationship(
+            person_A__privacy=PrivacyChoices.follows,
+            person_B__privacy=PrivacyChoices.follows,
+            A_follows_B=True)
+        self.assertTrue(relationship.person_A.is_visible_to(relationship.person_B.user))
+        self.assertFalse(relationship.person_B.is_visible_to(relationship.person_A.user))
+
+    def test_is_visible_public(self):
+        profile1 = factories.Profile(privacy=PrivacyChoices.public)
+        profile2 = factories.Profile()
+
+        self.assertTrue(profile1.is_visible_to(profile2.user))
+        self.assertTrue(profile1.is_visible_to(self.anon))
+
+    def test_is_visible_sitewide(self):
+        profile1 = factories.Profile(privacy=PrivacyChoices.sitewide)
+        profile2 = factories.Profile()
+
+        self.assertTrue(profile1.is_visible_to(profile2.user))
+        self.assertFalse(profile1.is_visible_to(self.anon))
 
     def test_default_privacy(self):
-        self.assertEqual(self.lorne.profile.current_privacy, 'public')
+        profile = factories.Profile()
+        self.assertEqual(profile.current_privacy, PrivacyChoices.public)
 
     def test_profile_creator(self):
-        self.assertFalse(self.faith.profile.get_creator() == self.buffy)
-        self.assertTrue(self.faith.profile.get_creator() == self.faith)
-        self.assertFalse(self.faith.profile.get_creator() == self.anon)
+        profile = factories.Profile()
+        self.assertEqual(profile.get_creator(), profile.user)
 
     def test_action_creator(self):
-        self.assertFalse(self.action.get_creator() == self.faith)
-        self.assertTrue(self.action.get_creator() == self.buffy)
-        self.assertFalse(self.action.get_creator() == self.anon)
+        action = action_factories.Action()
+        self.assertEqual(action.get_creator(), action.creator)
 
     def test_slate_creator(self):
-        self.assertFalse(self.slate.get_creator() == self.buffy)
-        self.assertTrue(self.slate.get_creator() == self.faith)
-        self.assertFalse(self.slate.get_creator() == self.anon)
+        slate = slate_factories.Slate()
+        self.assertEqual(slate.get_creator(), slate.creator)
 
     def test_par_creator(self):
         # The owner of the profile in the PAR 'owns' the PAR
-        self.assertFalse(self.par.get_creator() == self.faith)
-        self.assertTrue(self.par.get_creator() == self.buffy)
-        self.assertFalse(self.par.get_creator() == self.anon)
+        par = factories.ProfileActionRelationship()
+        self.assertEqual(par.get_creator(), par.profile.user)
 
     def test_sar_creator(self):
         # The creator of the slate 'owns' the SAR
-        self.assertFalse(self.sar.get_creator() == self.buffy)
-        self.assertTrue(self.sar.get_creator() == self.faith)
-        self.assertFalse(self.sar.get_creator() == self.anon)
+        sar = slate_factories.SlateActionRelationship()
+        self.assertEqual(sar.get_creator(), sar.slate.creator)
 
     def test_get_percent_finished(self):
-        self.assertEqual(self.buffy.profile.get_percent_finished(), 0.0)
-        action2 = Action.objects.create(slug="test-action2", title="Test Action 2", creator=self.buffy)
-        action3 = Action.objects.create(slug="test-action3", title="Test Action 3", creator=self.buffy)
-        ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=action2)
-        ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=action3)
-        self.par.status = ToDoStatusChoices.done
-        self.par.save()
-        self.assertEqual(self.buffy.profile.get_percent_finished(), 33.3)
+        profile = factories.Profile()
+        self.assertEqual(profile.get_percent_finished(), 0.0)
+
+        factories.ProfileActionRelationship(profile=profile, status=ToDoStatusChoices.done)
+        factories.ProfileActionRelationship.create_batch(2, profile=profile)
+
+        self.assertEqual(profile.get_percent_finished(), 33.3)
+
+
+class TestStreak(TestCase):
+    def setUp(self):
+        super(TestStreak, self).setUp()
+        self.profile = factories.Profile()
 
     def test_get_action_streak(self):
-        self.assertEqual(self.buffy.profile.get_action_streak(), 0)
+        self.assertEqual(self.profile.get_action_streak(), 0)
         # streak of 1: today
-        today = datetime.datetime.now(timezone.utc)
-        self.par.status = ToDoStatusChoices.done
-        self.par.date_finished = today
-        self.par.save()
-        self.assertEqual(self.buffy.profile.get_action_streak(), 1)
-        # streak of 2: today, yesterday
-        yesterday = today - datetime.timedelta(1)
-        day_before = yesterday - datetime.timedelta(1)
-        action2 = Action.objects.create(slug="test-action2", title="Test Action 2", creator=self.buffy)
-        par2 = ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=action2)
-        par2.status = ToDoStatusChoices.done
-        par2.date_finished = yesterday
-        par2.save()
-        self.assertEqual(self.buffy.profile.get_action_streak(), 2)
-        # streak of 1: today
-        par2.date_finished = day_before
-        par2.save()
-        self.assertEqual(self.buffy.profile.get_action_streak(), 1)
-        # streak of 2: yesterday, day before (maybe today will continue the streak)
-        self.par.date_finished = yesterday
-        self.par.save()
-        self.assertEqual(self.buffy.profile.get_action_streak(), 2)
+
+        today = timezone.now()
+        day = timezone.timedelta(days=1)
+
+        factories.ProfileActionRelationship(
+            profile=self.profile,
+            date_finished=today,
+            status=ToDoStatusChoices.done
+        )
+
+        self.assertEqual(self.profile.get_action_streak(), 1)
+
+        par = factories.ProfileActionRelationship(
+            profile=self.profile,
+            date_finished=today - day,
+            status=ToDoStatusChoices.done
+        )
+
+        self.assertEqual(self.profile.get_action_streak(), 2)
+
+        par.date_finished = today - 2 * day
+        par.save()
+
+        self.assertEqual(self.profile.get_action_streak(), 1)
+
+        par.date_finished = today - day
+        par.save()
+
+        self.assertEqual(self.profile.get_action_streak(), 2)
+
 
 class TestRelationshipMethods(TestCase):
 
@@ -424,7 +457,7 @@ class TestManageSuggestedActionView(TestCase):
 class TestProfileExtras(TestCase):
 
     def setUp(self):
-        self.relationship = factories.RelationShip(
+        self.relationship = factories.Relationship(
             person_A__user__username="buffysummers",
             person_B__user__username="faithlehane")
         self.buffy = self.relationship.person_A.user
