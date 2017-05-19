@@ -1,16 +1,17 @@
 import datetime
 
-from django.test import TestCase
+from django.test import TestCase, SimpleTestCase
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.forms.widgets import HiddenInput
 
 from mysite.lib.choices import PrivacyChoices, StatusChoices
-from actions.forms import ActionForm
-from actions.models import DEFAULT_ACTION_DURATION, DAYS_WARNING_BEFORE_CLOSURE
 from tags.models import Tag
 from profiles import factories as profile_factories
-from actions import factories as action_factories
+from .forms import ActionForm
+from .models import DEFAULT_ACTION_DURATION, DAYS_WARNING_BEFORE_CLOSURE
+from . import factories as action_factories
+from .fields import MidnightSplitDateTimeField
 
 
 ###################
@@ -229,3 +230,22 @@ class TestActionPrivacy(TestCase):
 
         self.assertEqual(action.privacy, PrivacyChoices.inherit)
         self.assertEqual(action.current_privacy, PrivacyChoices.public)
+
+
+class TestSplitDateTimeField(SimpleTestCase):
+    def test_parse(self):
+        now = timezone.now().replace(second=0, microsecond=0)
+
+        valid = {
+            (now.strftime("%Y-%m-%d"), now.strftime("%I:%M %p")): now,
+            (now.strftime("%Y-%m-%d"), now.strftime("%H:%M")): now,
+            (now.strftime("%Y-%m-%d"), ""): now.replace(hour=0, minute=0),
+        }
+
+        invalid = {
+            ("2017-05-32", ""): ['Enter a valid date.'],
+            ("2017-05-30", "25 AM"): ['Enter a valid time.'],
+        }
+
+        self.assertFieldOutput(MidnightSplitDateTimeField,
+            valid=valid, invalid=invalid, empty_value=None)

@@ -1,7 +1,9 @@
-import time
+from django.core.urlresolvers import reverse
 
+from actions import factories as action_factories
+from actions.models import Action
 from .base import SeleniumTestCase
-from .pageobjects import BasicActionListPage, BasicActionDetailPage
+from .pageobjects import BasicActionListPage, BasicActionDetailPage, ActionForm
 
 default_user = "buffysummers"
 default_password = "apocalypse"
@@ -200,3 +202,24 @@ class TestShareAction(SeleniumTestCase):
     def test_share_follows_action(self):
         self.action_page.go_to_detail_page(title="Buffy Can See")
         self.assertEqual(self.action_page.share, None)
+
+
+class TestCreateAction(SeleniumTestCase):
+
+    def setUp(self):
+        super(TestCreateAction, self).setUp()
+        self.page = ActionForm(self.browser, root_uri=self.live_server_url)
+        self.page.log_in(default_user, default_password)
+
+    def test_create(self):
+        action = action_factories.Action.build(due=True)
+        self.page.get(reverse("create_action"))
+
+        self.page.title = action.title
+        self.page.deadline_date = action.deadline.strftime("%m/%d/%Y")
+        self.page.deadline_time = action.deadline.strftime("%I:%M%p")
+
+        self.page.deadline_time.submit()
+
+        saved_action = Action.objects.get(title=action.title)
+        self.assertEqual(saved_action.deadline, action.deadline)

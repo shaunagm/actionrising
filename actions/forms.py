@@ -1,6 +1,4 @@
 from django import forms
-from datetimewidget.widgets import DateTimeWidget
-from django.forms.widgets import HiddenInput
 
 from actions.models import Action, DEFAULT_ACTION_DURATION
 from tags.lib import tag_helpers
@@ -10,9 +8,8 @@ from mysite.lib.privacy import get_global_privacy_default
 from plugins import plugin_helpers
 from slates.models import Slate, SlateActionRelationship
 
-class SlateChoiceField(forms.ModelMultipleChoiceField):
-   def label_from_instance(self, obj):
-        return obj.title
+from .fields import SlateChoiceField, MidnightSplitDateTimeField
+
 
 class ActionForm(forms.ModelForm):
     slates = SlateChoiceField(queryset=Slate.objects.all(), label="Add to your slates", required=False)
@@ -21,16 +18,17 @@ class ActionForm(forms.ModelForm):
         model = Action
         fields = ['title', 'anonymize', 'description', 'privacy', 'priority', 'duration',
             'status', 'deadline', 'never_expires', 'slates']
-        widgets = {
-            'deadline': DateTimeWidget(options={'format': 'mm/dd/yyyy HH:mm'}, bootstrap_version=3),
+
+        field_classes = {
+            'deadline': MidnightSplitDateTimeField,
         }
+
         labels = {
             'never_expires': 'This action never expires. (Actions with no deadline otherwise expire automatically after ' + str(DEFAULT_ACTION_DURATION) + ' days.)'
         }
         help_texts = {
             'anonymize': 'Show "anonymous" as creator. (Note: this changes the display only, and you can change your mind and choose to show your username later.)',
-            'deadline': 'MM/DD/YYYY HH:MM:SS (hours, minutes and seconds optional, defaults to midnight)'
-            }
+        }
 
     def __init__(self, user, formtype, *args, **kwargs):
         super(ActionForm, self).__init__(*args, **kwargs)
@@ -39,7 +37,7 @@ class ActionForm(forms.ModelForm):
         self.formtype = formtype
 
         if self.formtype == "create":
-            self.fields['status'].widget = HiddenInput()
+            self.fields['status'].widget = forms.HiddenInput()
 
         # Set privacy
         self.fields['privacy'].choices = PrivacyChoices.personalized(get_global_privacy_default(user.profile, "decorated"))

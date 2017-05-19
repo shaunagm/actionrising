@@ -375,3 +375,19 @@ class SignupPage(BasePage):
 
     def go_to_signup(self):
         self.w.get(self.root_uri + "/accounts/sign-up")
+
+
+class ActionForm(BasePage):
+    title = PageElement(id_="id_title")
+    anonymize = PageElement(id_="id_anonymize")
+    # description = PageElement(id_="id_description")  # wysiwyg screwing up selenium
+    privacy = PageElement(id_="id_privacy")
+    priority = PageElement(id_="id_priority")
+    duration = PageElement(id_="id_duration")
+    status = PageElement(id_="id_status")
+
+    deadline_date = PageElement(id_="id_deadline_0")
+    deadline_time = PageElement(id_="id_deadline_1")
+
+    never_expires = PageElement(id_="id_never_expires")
+    slates = PageElement(id_="id_slates")
