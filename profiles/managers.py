@@ -52,7 +52,6 @@ class FilteredManager(ActionManager):
         for act in feed:
             for obj in (act.actor, act.target, act.action_object):
                 if obj not in visible_objects:
-                    print obj, 'not in', visible_objects
                     break
             else:
                 visible_actions.append(act.id)
