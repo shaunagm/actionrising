@@ -22,7 +22,8 @@ class SlateView(UserPassesTestMixin, generic.DetailView):
         context['can_edit_actions'] = True if self.object.creator == self.request.user else False
         context['is_slate'] = True
         context['flag'] = get_user_flag_if_exists(self.object, self.request.user)
-        annotated_list = filter_list_for_privacy_annotated(self.object.slateactionrelationship_set.all(),
+        annotated_list = filter_list_for_privacy_annotated(
+            self.object.slateactionrelationship_set.all().order_by("action__date_created"),
             self.request.user, include_anonymous = True)
         context['actions'] = annotated_list['visible_list']
         context['hidden_actions'] = annotated_list['restricted_count']
@@ -42,7 +43,7 @@ class SlateListView(generic.ListView):
     model = Slate
     queryset = Slate.objects\
         .filter(status__in=[StatusChoices.ready, StatusChoices.finished])\
-        .order_by("date_created")
+        .order_by("-date_created")
 
     def get_context_data(self, **kwargs):
         context = super(SlateListView, self).get_context_data(**kwargs)
