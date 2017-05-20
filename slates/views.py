@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin,  LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
 from flags.lib.flag_helpers import get_user_flag_if_exists
-from mysite.lib.choices import PrivacyChoices, StatusChoices
+from mysite.lib.choices import StatusChoices
 from mysite.lib.privacy import check_privacy, apply_check_privacy, filter_list_for_privacy_annotated
 from profiles.lib.trackers import Trackers
 from slates.models import Slate, SlateActionRelationship
@@ -40,12 +40,16 @@ class SlateListView(generic.ListView):
     # Note: templates can likely be refactored to use same template as TopicListView
     template_name = "slates/slates.html"
     model = Slate
+    queryset = Slate.objects\
+        .filter(status__in=[StatusChoices.ready, StatusChoices.finished])\
+        .order_by("date_created")
 
     def get_context_data(self, **kwargs):
         context = super(SlateListView, self).get_context_data(**kwargs)
-        visible_slates = [slate for slate in apply_check_privacy(Slate.objects.all(), self.request.user, include_anonymous = True)
-                          if slate.status in [StatusChoices.ready, StatusChoices.finished]]
-        context['object_list'] = sorted(visible_slates, key = lambda slate: getattr(slate, 'date_created'))
+        context['object_list'] = apply_check_privacy(
+            self.get_queryset(),
+            self.request.user,
+            include_anonymous=True)
         return context
 
 class SlateCreateView(LoginRequiredMixin, generic.edit.CreateView):
