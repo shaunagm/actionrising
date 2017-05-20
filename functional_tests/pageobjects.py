@@ -29,10 +29,13 @@ class LoginPage(PageObject):
     login_with_twitter_button = PageElement(id_="login_with_twitter")
 
     def go_to_login(self):
-        self.w.get(self.root_uri)
-        wait_helper(self.w) # Wait until the page is loaded to click "login"
         if self.log_button:
             self.log_button.click()
+        else:
+            self.w.get(self.root_uri)
+            wait_helper(self.w) # Wait until the page is loaded to click "login"
+            self.go_to_login()
+
 
     def log_in(self, username, password):
         self.go_to_login()
@@ -303,7 +306,6 @@ class ToDoPage(BasicActionListPage):
     manage_button_first_row = PageElement(css="span.glyphicon-wrench")
 
     def go_to_todo_page(self, username=None):
-        user = User.objects.get(username=username)
         self.w.get(self.root_uri + "/profiles/todo/")
 
     def get_notes(self):
