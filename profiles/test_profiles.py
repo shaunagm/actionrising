@@ -1,9 +1,14 @@
+import mock
 from django.test import TestCase
+from django.test.utils import CaptureQueriesContext
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
-
+from django.db import connection
 from django.contrib.auth.models import User, AnonymousUser
 from django.utils import timezone
+
+from actstream.models import Action as Actstream
+
 from actions.models import Action
 from slates.models import Slate, SlateActionRelationship
 from commitments.models import Commitment
@@ -493,12 +498,6 @@ class TestProfileExtras(TestCase):
         self.relationship.delete()
         self.assertEqual(get_friendslist(self.context), [])
 
-    def get_status_phrase(self):
-        assertEqual(get_status_phrase('suggested'), 'Suggested to')
-
-    #TODO test filtered feed
-    def test_filtered_feed(self):
-        pass
 
 ################
 ### Test lib ###
@@ -762,3 +761,156 @@ class TestEditProfiles(TestCase):
         self.assertEqual(saved_buffy.profile.description, "Rawr")
         self.assertEqual(saved_buffy.profile.privacy_defaults.global_default,
                          PrivacyChoices.follows)
+
+
+@mock.patch("profiles.managers.apply_check_privacy", autospec=True)
+class TestOthersActionFeed(TestCase):
+    """ make sure that the feed of others' actions on Actions is accurate """
+
+    def setUp(self):
+        self.action = action_factories.Action()
+        self.assertTrue(self.action.target_actions.exists())
+
+    def test_exclude_my_action(self, apply_check_privacy):
+        user = self.action.creator
+        apply_check_privacy.return_value = []
+
+        stream = Actstream.objects.others(user)
+        self.assertEqual(
+            apply_check_privacy.call_args_list,
+            [mock.call([], user, True),  # actions
+             mock.call([], user, True),  # slates
+             mock.call([], user, True)  # users
+             ])
+
+        self.assertFalse(stream)
+
+    def test_show_others_public_action(self, apply_check_privacy):
+        profile = factories.Profile()
+        user = profile.user
+        apply_check_privacy.side_effect = [[self.action], [], [self.action.creator]]
+
+        stream = Actstream.objects.others(user)
+        self.assertEqual(
+            apply_check_privacy.call_args_list,
+            [mock.call([self.action], user, True),  # actions
+             mock.call([], user, True),  # slates
+             mock.call([self.action.creator], user, True)  # users
+             ])
+
+        self.assertTrue(stream)
+
+    def test_hide_private_actions(self, apply_check_privacy):
+        profile = factories.Profile()
+        user = profile.user
+        apply_check_privacy.return_value = []
+
+        stream = Actstream.objects.others(user)
+        self.assertEqual(
+            apply_check_privacy.call_args_list,
+            [mock.call([self.action], user, True),  # actions
+             mock.call([], user, True),  # slates
+             mock.call([self.action.creator], user, True)  # users
+             ])
+
+        self.assertFalse(stream)
+
+
+@mock.patch("profiles.managers.apply_check_privacy", autospec=True)
+class TestOthersSlateFeed(TestCase):
+    """ make sure that the feed of others' actions on Slates is accurate """
+
+    def setUp(self):
+        self.slate = slate_factories.Slate()
+        self.assertTrue(self.slate.target_actions.exists())
+
+    def test_exclude_my_slate(self, apply_check_privacy):
+        user = self.slate.creator
+        apply_check_privacy.return_value = []
+
+        stream = Actstream.objects.others(user)
+        self.assertEqual(
+            apply_check_privacy.call_args_list,
+            [mock.call([], user, True),  # actions
+             mock.call([], user, True),  # slates
+             mock.call([], user, True)  # users
+             ])
+
+        self.assertFalse(stream)
+
+    def test_show_others_public_slate(self, apply_check_privacy):
+        profile = factories.Profile()
+        user = profile.user
+        apply_check_privacy.side_effect = [[], [self.slate], [self.slate.creator]]
+
+        stream = Actstream.objects.others(user)
+        self.assertEqual(
+            apply_check_privacy.call_args_list,
+            [mock.call([], user, True),  # actions
+             mock.call([self.slate], user, True),  # slates
+             mock.call([self.slate.creator], user, True)  # users
+             ])
+
+        self.assertTrue(stream)
+
+    def test_hide_private_slate(self, apply_check_privacy):
+        profile = factories.Profile()
+        user = profile.user
+        apply_check_privacy.return_value = []
+
+        stream = Actstream.objects.others(user)
+        self.assertEqual(
+            apply_check_privacy.call_args_list,
+            [mock.call([], user, True),  # actions
+             mock.call([self.slate], user, True),  # slates
+             mock.call([self.slate.creator], user, True)  # users
+             ])
+
+        self.assertFalse(stream)
+
+
+class ProfileOthersFeed(TestCase):
+    def make_data(self):
+        actstream_count = Actstream.objects.count()
+
+        # mine
+        action_factories.Action.create_batch(5, creator=self.profile.user)
+        slate_factories.Slate.create_batch(5, creator=self.profile.user)
+        self.assertEqual(Actstream.objects.count(), actstream_count + 10)
+
+        # already following
+        factories.ProfileSlateRelationship.create_batch(5, profile=self.profile)
+        factories.ProfileActionRelationship.create_batch(5, profile=self.profile)
+        self.assertEqual(Actstream.objects.count(), actstream_count + 25)
+
+        # public
+        action_factories.Action.create_batch(5)
+        slate_factories.Slate.create_batch(5)
+        self.assertEqual(Actstream.objects.count(), actstream_count + 35)
+
+        # private
+        action_factories.Action.create_batch(5, privacy=PrivacyChoices.follows)
+        slate_factories.Slate.create_batch(5, privacy=PrivacyChoices.follows)
+        self.assertEqual(Actstream.objects.count(), actstream_count + 45)
+
+        # private but visible
+        action_factories.VisibleUnfollowedAction.create_batch(5)
+        slate_factories.VisibleUnfollowedSlate.create_batch(5)
+        self.assertEqual(Actstream.objects.count(), actstream_count + 55)
+
+    def test_profile(self):
+        self.profile = factories.Profile()
+        user = self.profile.user
+
+        self.make_data()
+
+        with CaptureQueriesContext(connection) as original_queries:
+            self.assertEqual(Actstream.objects.others(user).count(), 20)
+
+        self.make_data()
+
+        with CaptureQueriesContext(connection) as final_queries:
+            self.assertEqual(Actstream.objects.others(user).count(), 40)
+
+        # something other than ContentType is being cached but the number goes down
+        self.assertTrue(len(final_queries) < len(original_queries))
