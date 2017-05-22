@@ -1,15 +1,16 @@
-from __future__ import unicode_literals
+from __future__ import division, unicode_literals
 
-import json, datetime, ast
-from random import shuffle
-from itertools import chain
+import json, datetime
 
 import actstream
 from django.db import models
+from django.db.models import Q
 from django.db.models.signals import post_save
 from django.core.urlresolvers import reverse
+from django.utils.functional import cached_property
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
 
 from ckeditor.fields import RichTextField
 from mysite.settings import PRODUCTION_DOMAIN
@@ -103,21 +104,13 @@ class Profile(models.Model):
 
     def get_relationship_with(self, other):
         '''Helper for get_relationship - looks for relationship unidirectionally.'''
-        rel = Relationship.objects.filter(person_A=self, person_B=other)
-        return rel[0] if rel else None
+        return Relationship.objects.filter(person_A=self, person_B=other).first()
 
     def get_par_given_action(self, action):
-        try:
-            par = ProfileActionRelationship.objects.get(profile=self, action=action)
-            return par
-        except:
-            return None
+        return self.profileactionrelationship_set.filter(action=action).first()
 
     def get_psr_given_slate(self, slate):
-        try:
-            return ProfileSlateRelationship.objects.get(profile=self, slate=slate)
-        except:
-            return None
+        return self.profileslaterelationship_set.filter(slate=slate).first()
 
     def filter_connected_profiles(self, predicate):
         '''Helper for getting profiles with a particular kind of relationship to self.
@@ -127,52 +120,60 @@ class Profile(models.Model):
                        if predicate(self.get_relationship(profile))]
         return Profile.objects.filter(pk__in=profile_pks)
 
+    @cached_property
     def get_followers(self):
-        return self.filter_connected_profiles(lambda rel: rel.target_follows_current_profile(self))
+        return Profile.objects.filter(
+            Q(relationship_A__person_B=self, relationship_A__A_follows_B=True) |
+            Q(relationship_B__person_A=self, relationship_B__B_follows_A=True))
 
     def get_people_user_follows(self):
-        return self.filter_connected_profiles(lambda rel: rel.current_profile_follows_target(self))
+        return Profile.objects.filter(
+            Q(relationship_A__person_B=self, relationship_A__B_follows_A=True) |
+            Q(relationship_B__person_A=self, relationship_B__A_follows_B=True))
 
     def get_people_to_notify(self):
         profiles = self.filter_connected_profiles(lambda rel: rel.target_notified_of_current_profile(self))
         return [profile.user for profile in profiles]
 
     def get_most_recent_actions_created(self):
-        actions = self.user.action_set.filter(status__in=[StatusChoices.ready, StatusChoices.finished]).order_by('-date_created')
-        if len(actions) > 5:
-            return actions[:5]
-        return actions
+        return self.user.action_set\
+            .filter(status__in=[StatusChoices.ready, StatusChoices.finished])\
+            .order_by('-date_created')[:5]
 
     def get_most_recent_actions_tracked(self):
-        actions = [par.action for par in self.profileactionrelationship_set.all() if par.action.status in [StatusChoices.ready, StatusChoices.finished]]
-        if len(actions) > 5:
-            return actions[:5]
-        return actions
+        return Action.objects.filter(
+                profileactionrelationship__profile=self,
+                profileactionrelationship__status=ToDoStatusChoices.accepted,
+                status__in=[StatusChoices.ready, StatusChoices.finished])\
+            .order_by('-profileactionrelationship__date_accepted')[:5]
 
     def get_open_actions(self):
-        actions = [par.action for par in self.profileactionrelationship_set.filter(status=ToDoStatusChoices.accepted)]
-        return [action for action in actions if action.status == StatusChoices.ready]
+        return Action.objects.filter(
+            profileactionrelationship__profile=self,
+            profileactionrelationship__status=ToDoStatusChoices.accepted,
+            status=StatusChoices.ready)
 
     def get_open_pars(self):
-        pars = ProfileActionRelationship.objects.filter(profile=self, status=ToDoStatusChoices.accepted)
-        return [par for par in pars if par.action.status == StatusChoices.ready]
+        return self.profileactionrelationship_set.filter(
+            status=ToDoStatusChoices.accepted,
+            action__status=StatusChoices.ready)
 
     def get_suggested_actions(self):
-        pars = ProfileActionRelationship.objects.filter(profile=self, status=ToDoStatusChoices.suggested)
-        return [par for par in pars if par.action.status == StatusChoices.ready]
+        return self.profileactionrelationship_set.filter(
+            status=ToDoStatusChoices.suggested,
+            action__status=StatusChoices.ready)
 
     def get_suggested_actions_count(self):
-        return len(self.get_suggested_actions())
+        return self.get_suggested_actions().count()
 
     def get_connected_people(self):
-        for_a = [rel.person_B for rel in Relationship.objects.filter(person_A=self)]
-        for_b = [rel.person_A for rel in Relationship.objects.filter(person_B=self)]
-        return for_a + for_b
+        return Profile.objects.filter(Q(relationship_A__person_B=self) | Q(relationship_B__person_A=self))
 
     def get_list_of_relationships(self):
+        relationships = Relationship.objects.filter(Q(person_A=self) | Q(person_B=self))
+
         people = []
-        for person in self.get_connected_people():
-            rel = self.get_relationship(person)
+        for rel in relationships:
             you_follow = rel.current_profile_follows_target(self)
             follows_you = rel.target_follows_current_profile(self)
             muted = rel.current_profile_mutes_target(self)
@@ -199,18 +200,18 @@ class Profile(models.Model):
                 finished_count += 1
         if total_count == 0:
             return 0
-        return float(finished_count)/float(total_count)*100
+        return round(finished_count/total_count*100, 1)
 
     def get_action_streak(self):
+        dates = set([action.date_finished.date() for action
+                     in self.profileactionrelationship_set.all() if action.date_finished])
+        today = datetime.date.today()
+        # today doesn't break your streak
+        most_recent_day = today if today in dates else today - datetime.timedelta(days=1)
         streak_length = 0
-        today = datetime.datetime.now().date()
-        dates = [action.date_finished.date() for action in self.profileactionrelationship_set.all() if action.date_finished]
-        while True:
-            if today in dates:
-                streak_length += 1
-                today = today - datetime.timedelta(days=1)
-            else:
-                break
+        while most_recent_day in dates:
+            streak_length += 1
+            most_recent_day -= datetime.timedelta(days=1)
         return streak_length
 
     def get_friends_actions(self):
@@ -249,9 +250,8 @@ def create_user_profile(sender, instance, created, **kwargs):
         DailyActionSettings.objects.create(user=instance)
         # Add Location creation here, since signals aren't working for some reason
         from plugins.location_plugin.models import Location
-        from django.contrib.contenttypes.models import ContentType
         ctype = ContentType.objects.get_for_model(Profile)
-        location = Location.objects.create(content_type=ctype, object_id=profile.pk)
+        Location.objects.create(content_type=ctype, object_id=profile.pk)
 post_save.connect(create_user_profile, sender=User)
 
 class Relationship(models.Model):
@@ -501,11 +501,12 @@ class ProfileActionRelationship(models.Model):
 def par_handler(sender, instance, created, **kwargs):
     if created:
         if instance.status == ToDoStatusChoices.suggested:
-            actstream.action.send(instance.last_suggester, verb='suggested action', action_object=instance.action, target=instance.profile.user)
+            actstream.action.send(instance.last_suggester, verb='suggested', action_object=instance.action, target=instance.profile.user)
         else:
-            actstream.action.send(instance.profile.user, verb='is taking action', target=instance.action)
+            actstream.action.send(instance.profile.user, verb='took on', target=instance.action)
     if instance.status == ToDoStatusChoices.done:
-        actstream.action.send(instance.profile.user, verb='completed action', target=instance.action)
+        actstream.action.send(instance.profile.user, verb='completed', target=instance.action)
+
 post_save.connect(par_handler, sender=ProfileActionRelationship)
 
 class ProfileSlateRelationship(models.Model):

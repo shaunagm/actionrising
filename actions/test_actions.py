@@ -1,17 +1,16 @@
-import datetime, mock
+import datetime
 
 from django.test import TestCase
-from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
-from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
-from profiles.models import Profile, ProfileActionRelationship
+from django.forms.widgets import HiddenInput
 
 from mysite.lib.choices import PrivacyChoices, StatusChoices
-from mysite.lib.utils import slugify_helper
-from actions.models import Action
 from actions.forms import ActionForm
+from actions.models import DEFAULT_ACTION_DURATION, DAYS_WARNING_BEFORE_CLOSURE
 from tags.models import Tag
+from profiles import factories as profile_factories
+from actions import factories as action_factories
 
 
 ###################
@@ -21,17 +20,20 @@ from tags.models import Tag
 class TestActionMethods(TestCase):
 
     def setUp(self):
-        self.buffy = User.objects.create(username="buffysummers")
-        self.faith = User.objects.create(username="faithlehane")
-        self.action = Action.objects.create(title="Test Action", creator=self.buffy)
-        self.tag_one = Tag.objects.create(name="Test Tag One", kind="topic")
-        self.tag_two = Tag.objects.create(name="Test Tag Two", kind="type")
-        self.par = ProfileActionRelationship.objects.create(profile=self.buffy.profile, action=self.action)
+        self.par = profile_factories.ProfileActionRelationship(action__title="Test Action")
+        self.action = self.par.action
+        self.buffy = self.action.creator
+        old_date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=80)
+        self.old_action = action_factories.Action(date_created=old_date)
+        closing_soon_date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=40)
+        self.closing_soon_action = action_factories.Action(date_created=closing_soon_date)
 
     def test_get_tags(self):
-        self.action.tags.add(self.tag_one)
-        self.action.tags.add(self.tag_two)
-        self.assertEqual(list(self.action.get_tags()), [self.tag_one, self.tag_two])
+        tag_one = Tag.objects.create(name="Test Tag One", kind="topic")
+        tag_two = Tag.objects.create(name="Test Tag Two", kind="type")
+        self.action.tags.add(tag_one)
+        self.action.tags.add(tag_two)
+        self.assertEqual(list(self.action.get_tags()), [tag_one, tag_two])
 
     def test_get_creator(self):
         self.assertEqual(self.action.get_visible_creator(), self.buffy)
@@ -52,14 +54,132 @@ class TestActionMethods(TestCase):
         self.action.save()
         self.assertFalse(self.action.is_active())
 
-    def test_get_days_til_deadline(self):
-        self.assertEqual(self.action.get_days_til_deadline(), -1)
+    def test_set_close_date_when_action_created_with_never_expires(self):
+        date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=30)
+        action = action_factories.Action(date_created=date, never_expires=True)
+        self.assertIsNone(action.close_date)
+
+    def test_set_close_date_when_action_created_with_deadline(self):
+        date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=30)
+        deadline = datetime.datetime.now(timezone.utc) + datetime.timedelta(days=5)
+        action = action_factories.Action(date_created=date, deadline=deadline)
+        self.assertEqual(action.close_date, deadline)
+
+    def test_set_close_date_when_action_created_with_never_expires_and_deadline(self):
+        date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=30)
+        deadline = datetime.datetime.now(timezone.utc) + datetime.timedelta(days=5)
+        action = action_factories.Action(date_created=date, deadline=deadline, never_expires=True)
+        self.assertIsNone(action.close_date)
+
+    def test_set_close_date_when_action_created_with_neither_never_expires_or_deadline(self):
+        date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=30)
+        action = action_factories.Action(date_created=date)
+        self.assertEqual(action.close_date, date + datetime.timedelta(days=DEFAULT_ACTION_DURATION))
+
+    def test_set_close_date_on_action_update_never_expires_added(self):
+        self.closing_soon_action.never_expires = True
+        self.closing_soon_action.save()
+        self.assertIsNone(self.closing_soon_action.close_date)
+
+    def test_set_close_date_on_action_update_never_expires_removed(self):
+        date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=30)
+        action = action_factories.Action(date_created=date, never_expires=True)
+        action.never_expires = False
+        action.save()
+        self.assertEqual(action.close_date, date + datetime.timedelta(days=DEFAULT_ACTION_DURATION))
+
+    def test_set_close_date_on_action_update_deadline_removed(self):
+        date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=30)
+        deadline = datetime.datetime.now(timezone.utc) + datetime.timedelta(days=5)
+        action = action_factories.Action(date_created=date, deadline=deadline)
+        action.deadline = None
+        action.save()
+        self.assertEqual(action.close_date, date + datetime.timedelta(days=DEFAULT_ACTION_DURATION))
+
+    def test_set_close_date_on_action_update_deadline_added(self):
+        date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=30)
+        action = action_factories.Action(date_created=date)
+        deadline = datetime.datetime.now(timezone.utc) + datetime.timedelta(days=5)
+        action.deadline = deadline
+        action.save()
+        self.assertEqual(action.close_date, deadline)
+
+    def test_set_close_date_on_action_update_no_deadline_info_changed(self):
+        date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=30)
+        action = action_factories.Action(date_created=date)
+        action.description = "Let's change things up!"
+        action.save()
+        self.assertEqual(action.close_date, date + datetime.timedelta(days=DEFAULT_ACTION_DURATION))
+
+    def test_days_until(self):
+        future_date = datetime.datetime.now(timezone.utc) + datetime.timedelta(days=21)
+        self.assertEqual(self.action.days_until(future_date), 20)
+
+    def test_days_until_deadline(self):
+        # Test default action with no deadline returns none
+        self.assertEqual(self.action.days_until_deadline(), None)
+        # Test future deadline returns correct number of days
         self.action.deadline = datetime.datetime.now(timezone.utc) + datetime.timedelta(days=21)
         self.action.save()
-        self.assertEqual(self.action.get_days_til_deadline(), 20)
+        self.assertEqual(self.action.days_until_deadline(), 20)
+        # Test past deadline returns correct number of days (though this really shouldn't get called)
         self.action.deadline = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=30)
         self.action.save()
-        self.assertEqual(self.action.get_days_til_deadline(), -1)
+        self.assertEqual(self.action.days_until_deadline(), -31)
+        # Test setting never_expires turns it to none
+        self.action.never_expires = True
+        self.action.save()
+        self.assertIsNone(self.action.days_until_deadline())
+
+    def test_close_action_set_to_never_expire(self):
+        # Test recent action
+        self.action.never_expires = True
+        self.action.save()
+        self.assertFalse(self.action.close_action())
+        # Test old action that would otherwise close
+        self.old_action.never_expires = True
+        self.old_action.save()
+        self.assertFalse(self.old_action.close_action())
+
+    def test_close_action_with_deadline_in_past(self):
+        self.action.deadline = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=21)
+        self.action.save()
+        self.assertTrue(self.action.close_action())
+
+    def test_close_action_with_deadline_in_future(self):
+        self.action.deadline = datetime.datetime.now(timezone.utc) + datetime.timedelta(days=21)
+        self.action.save()
+        self.assertFalse(self.action.close_action())
+
+    def test_close_action_with_no_deadline(self):
+        self.assertTrue(self.old_action.close_action())
+        self.assertFalse(self.action.close_action())
+
+    def test_close_action_with_no_deadline_after_keep_open(self):
+        self.old_action.keep_action_open()
+        self.assertFalse(self.old_action.close_action())
+
+    def test_send_warning(self):
+        # Setup
+        days_back = DEFAULT_ACTION_DURATION - DAYS_WARNING_BEFORE_CLOSURE
+        warning_date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=days_back-1)
+        warning_action = action_factories.Action(date_created=warning_date)
+        # Send warning if no deadline set
+        self.assertIsNone(warning_action.deadline)
+        self.assertTrue(warning_action.send_warning())
+        # Don't send if no deadline set
+        warning_action.deadline = datetime.datetime.now(timezone.utc) + datetime.timedelta(days=3)
+        warning_action.save()
+        self.assertFalse(warning_action.send_warning())
+
+    def test_keep_action_open(self):
+        # Confirm initial close date
+        initial_close_date = self.closing_soon_action.date_created + datetime.timedelta(days=DEFAULT_ACTION_DURATION)
+        self.assertEqual(self.closing_soon_action.close_date.date(), initial_close_date.date())
+        # Run keep_action_open() and check new date
+        self.closing_soon_action.keep_action_open()
+        new_date = datetime.datetime.now(timezone.utc) + datetime.timedelta(days=DEFAULT_ACTION_DURATION)
+        self.assertEqual(self.closing_soon_action.close_date.date(), new_date.date())
 
 class TestActionForms(TestCase):
 
@@ -78,10 +198,9 @@ class TestActionForms(TestCase):
         initial_form = ActionForm(user=self.buffy, formtype="create")
         form_inherited_privacy = initial_form.fields['privacy'].choices[3][1]
         # This is an issue with the privacy utils
-        self.assertEqual(form_inherited_privacy, "Your Default (Currently 'Visible Sitewide')")
+        self.assertEqual(form_inherited_privacy, "Your Default (Currently 'Visible sitewide')")
 
     def test_action_status_is_hidden_on_create(self):
-        from django.forms.widgets import HiddenInput
         initial_form = ActionForm(user=self.buffy, formtype="create")
         self.assertEqual(type(initial_form.fields['status'].widget), HiddenInput)
 

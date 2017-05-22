@@ -26,7 +26,7 @@
       <div class="tab-content">
         <div class="tab-pane active" id="all" role="tabpanel">
           <h2>Actions</h2>
-          {% include "actions/action_list_include.html" with object_list=object_list %}
+          {% include "actions/action_list_include.html" with object_list=object_list create_filter=True %}
         </div>
         {% for filter in your_filters|slice:":5" %}
           <div class="tab-pane" id="filter-{{ forloop.counter }}" role="tabpanel">

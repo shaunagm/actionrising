@@ -28,9 +28,9 @@ class TestAddAndFollowAction(SeleniumTestCase):
         # Go to profile page and see action is only listed in 'created', not 'tracked'
         self.profile_page = ProfilePage(self.browser, root_uri=self.live_server_url)
         self.profile_page.go_to_profile_page(username=default_user)
-        created_actions, tracked_actions = self.profile_page.get_actions()
-        self.assertIn("A new action to take", created_actions)
-        self.assertNotIn("A new action to take", tracked_actions)
+        self.assertIn("A new action to take", self.profile_page.get_created_actions())
+        self.assertNotIn("A new action to take", self.profile_page.get_tracked_actions())
+
         # Check todo list
         self.todo_page = ToDoPage(self.browser, root_uri=self.live_server_url)
         self.todo_page.go_to_todo_page(username=default_user)
@@ -43,9 +43,9 @@ class TestAddAndFollowAction(SeleniumTestCase):
         # Check profile page again
         self.profile_page = ProfilePage(self.browser, root_uri=self.live_server_url)
         self.profile_page.go_to_profile_page(username=default_user)
-        created_actions, tracked_actions = self.profile_page.get_actions()
-        self.assertIn("A new action to take", created_actions)
-        self.assertIn("A new action to take", tracked_actions)
+        self.assertIn("A new action to take", self.profile_page.get_created_actions())
+        self.assertIn("A new action to take", self.profile_page.get_tracked_actions())
+
         # Now it's in the todo list too
         self.todo_page = ToDoPage(self.browser, root_uri=self.live_server_url)
         self.todo_page.go_to_todo_page(username=default_user)
@@ -101,7 +101,7 @@ class PlayingWithPrivacySettings(SeleniumTestCase):
         self.actions_table.log_in(default_user, default_password)
         self.action_edit_form = ActionEditPage(self.browser, root_uri=self.live_server_url)
         self.action_edit_form.go_to_edit_page(title="A new action to take")
-        self.action_edit_form.select_privacy("Visible to Follows")
+        self.action_edit_form.select_privacy("Visible to follows")
         self.browser.execute_script("return arguments[0].scrollIntoView();", self.action_edit_form.submit_button)
         self.action_edit_form.submit_button.click()
 
@@ -116,7 +116,7 @@ class PlayingWithPrivacySettings(SeleniumTestCase):
         self.assertIn("A new action to take", self.actions_table.get_actions())
         self.profile_page = ProfilePage(self.browser, root_uri=self.live_server_url)
         self.profile_page.go_to_profile_page(username=default_user)
-        self.assertIn("A new action to take", self.profile_page.get_created_actions())
+        self.assertIn("buffysummers created A new action to take", self.profile_page.get_activity())
 
         # Log in as non-followed user and check default user's profile, no action
         self.actions_table.log_out()
@@ -124,7 +124,8 @@ class PlayingWithPrivacySettings(SeleniumTestCase):
         self.actions_table.go_to_default_actions_page_if_necessary()
         self.assertNotIn("A new action to take", self.actions_table.get_actions())
         self.profile_page.go_to_profile_page(username=default_user)
-        self.assertNotIn("A new action to take", self.profile_page.get_created_actions())
+
+        self.assertNotIn("buffysummers created A new action to take", self.profile_page.get_activity())
 
 class MakeAndEditCommitment(SeleniumTestCase):
     # User tries to find an action to commit to.  Can't commit to a closed action.

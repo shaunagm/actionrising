@@ -29,10 +29,13 @@ class LoginPage(PageObject):
     login_with_twitter_button = PageElement(id_="login_with_twitter")
 
     def go_to_login(self):
-        self.w.get(self.root_uri)
-        wait_helper(self.w) # Wait until the page is loaded to click "login"
         if self.log_button:
             self.log_button.click()
+        else:
+            self.w.get(self.root_uri)
+            wait_helper(self.w) # Wait until the page is loaded to click "login"
+            self.go_to_login()
+
 
     def log_in(self, username, password):
         self.go_to_login()
@@ -183,6 +186,7 @@ class BasicActionDetailPage(BaseObjectDetailPage):
     commitment_button = PageElement(id_="commitment_btn")
     manage_action_links = MultiPageElement(css=".manage-action-links")
     share = PageElement(css="span.share-popover")
+    deadline = PageElement(id_="deadline-info")
 
     def go_to_detail_page(self, title=None):
         if title:
@@ -263,23 +267,37 @@ class FollowedActivity(BasePage):
 
 class ProfilePage(BasePage):
     name = PageElement(id_="profile-username")
-    actions_created = MultiPageElement(css="div#created-actions-div tbody tr .actiondetails")
-    actions_tracked = MultiPageElement(css="div#tracked-actions-div tbody tr .actiondetails")
+    activity = MultiPageElement(css=".actstream-action")
     redirected_page = PageElement(css="#id_username")
-    location = PageElement(css="#location-info")
+    location = PageElement(css=".profile-location")
+    edit_page_button = PageElement(id_="edit-profile")
+    # other person's profile
+    friends = MultiPageElement(css="#friends a")
+    # own profile
+    tracked_actions = MultiPageElement(css="#tracked-actions a")
+    created_actions = MultiPageElement(css="#created-actions a")
 
     def go_to_profile_page(self, username=None):
         user = User.objects.get(username=username)
         self.w.get(self.root_uri + user.profile.get_absolute_url())
 
     def get_created_actions(self):
-        return [action.text for action in self.actions_created]
+        return [action.text for action in self.created_actions]
 
     def get_tracked_actions(self):
-        return [action.text for action in self.actions_tracked]
+        return [action.text for action in self.tracked_actions]
 
-    def get_actions(self):
-        return self.get_created_actions(), self.get_tracked_actions()
+    def get_activity(self):
+        return [act.text for act in self.activity]
+
+    def get_friends(self):
+        return [friend.text for friend in self.friends]
+
+class EditProfilePage(BasePage):
+    first_name = PageElement(id_="id_first_name")
+    last_name = PageElement(id_="id_last_name")
+    location = PageElement(id_="id_location")
+    submit_button = PageElement(css=".profile-submit-button")
 
 class ToDoPage(BasicActionListPage):
     suggested_actions_link = PageElement(id_="suggested_actions_button")
@@ -288,7 +306,6 @@ class ToDoPage(BasicActionListPage):
     manage_button_first_row = PageElement(css="span.glyphicon-wrench")
 
     def go_to_todo_page(self, username=None):
-        user = User.objects.get(username=username)
         self.w.get(self.root_uri + "/profiles/todo/")
 
     def get_notes(self):

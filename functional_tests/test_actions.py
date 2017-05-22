@@ -1,5 +1,3 @@
-import time
-
 from .base import SeleniumTestCase
 from .pageobjects import BasicActionListPage, BasicActionDetailPage
 
@@ -124,7 +122,7 @@ class TestActionDetail(SeleniumTestCase):
         self.assertIsNotNone(self.action_page.comments_div)
         self.assertIsNotNone(self.action_page.add_comment_button)
         self.assertEquals(self.action_page.priority.text, "Emergency priority")
-        self.assertEquals(self.action_page.privacy.text, "Visible Sitewide")
+        self.assertEquals(self.action_page.privacy.text, "Visible sitewide")
         self.assertEquals(self.action_page.status.text, "Open for action")
 
     def test_anonymous_action_detail(self):

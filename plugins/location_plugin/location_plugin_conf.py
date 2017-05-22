@@ -13,7 +13,7 @@ class PluginConf(object):
 
     templates = {
         "action_instance": "location_plugin/location_for_object.html",
-        "profile_instance": "location_plugin/location_for_object.html",
+        "profile_instance": "location_plugin/location_for_profile.html",
         "slate_instance": "location_plugin/location_for_object.html",
         "action_controls": "location_plugin/location_control_include.html",
         "action_header_hidden": "location_plugin/hidden_header.html",

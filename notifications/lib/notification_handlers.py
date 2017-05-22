@@ -123,9 +123,9 @@ def create_event_driven_notification(sender, instance, created, **kwargs):
     if created:
         if instance.verb == "started following":
             send_follow_notification(instance)
-        if instance.verb == "is taking action":
+        if instance.verb == "took on":
             send_take_action_notification(instance)
-        if instance.verb == "suggested action":
+        if instance.verb == "suggested":
             send_suggestion_notification(instance)
         if instance.verb == "added" and instance.target.get_cname() == "Slate":
             send_notification_to_action_creator(instance)

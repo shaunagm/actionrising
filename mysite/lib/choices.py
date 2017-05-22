@@ -2,9 +2,9 @@ from django.utils.translation import ugettext as _
 from djchoices import DjangoChoices, ChoiceItem
 
 class PrivacyChoices(DjangoChoices):
-    public = ChoiceItem('public', _('Visible to Public')) #pub
-    sitewide = ChoiceItem('sitewide', _('Visible Sitewide')) #sit
-    follows = ChoiceItem('follows', _('Visible to Follows')) #fol
+    public = ChoiceItem('public', _('Visible to public')) #pub
+    sitewide = ChoiceItem('sitewide', _('Visible sitewide')) #sit
+    follows = ChoiceItem('follows', _('Visible to follows')) #fol
     inherit = ChoiceItem('inherit', _('Inherit')) #inh
 
     @classmethod
