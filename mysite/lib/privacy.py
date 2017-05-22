@@ -1,5 +1,4 @@
-from django.contrib.auth.models import User, AnonymousUser
-from choices import PrivacyChoices
+from django.contrib.auth.models import User
 from django_comments.models import Comment
 
 #########################################################
@@ -48,7 +47,7 @@ def get_follows(user, follows_user = None):
     if follows_user:
         return follows_user
     else:
-        return user.profile.get_followers() if user.is_authenticated() else []
+        return user.profile.get_followers if user.is_authenticated() else []
 
 def check_anonymity(object, include_anonymous):
     '''
