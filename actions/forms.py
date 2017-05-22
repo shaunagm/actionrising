@@ -18,7 +18,7 @@ class SlateChoiceField(forms.ModelMultipleChoiceField):
 class ActionForm(forms.ModelForm):
     slates = SlateChoiceField(queryset=Slate.objects.all(), label="Add to your slates", required=False)
     deadline = forms.DateTimeField(required=False, input_formats=['%m/%d/%Y %I %p'],
-        widget=DateTimeWidget(options={'format': 'mm/dd/yyyy H P', 'minView': '1',
+        widget=DateTimeWidget(options={'format': 'mm/dd/yyyy HH P', 'minView': '1',
         'startDate': str(datetime.date.today())}, bootstrap_version=3), help_text='Day/Month/Year Hour')
 
     class Meta:
