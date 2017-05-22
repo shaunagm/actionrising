@@ -1,4 +1,4 @@
-from django.forms import CharField, BooleanField
+from django.forms import CharField, BooleanField, TextInput
 from plugins.location_plugin.models import Location, filter_queryset_by_location
 from plugins.location_plugin.forms import FilterWizard_Location
 from django.contrib.contenttypes.models import ContentType
@@ -6,6 +6,13 @@ from django.contrib.contenttypes.models import ContentType
 location_help_text = "Enter the location to help people filter by state and congressional district."
 location_help_text_profile = "Enter your location to help us filter state and congressional district."
 hide_location_help_text = "Keep your location private, but use it to filter actions."
+
+
+LOCATION_INPUT = CharField(
+    help_text=location_help_text,
+    required=False,
+    widget=TextInput(attrs={"placeholder": "Cambridge, MA"}))
+
 
 class PluginConf(object):
 
@@ -21,10 +28,10 @@ class PluginConf(object):
         }
 
     form_fields = {
-        "ActionForm": { 'location': CharField(help_text=location_help_text, required=False) },
-        "SlateForm": { 'location': CharField(help_text=location_help_text, required=False) },
+        "ActionForm": {'location': LOCATION_INPUT},
+        "SlateForm": { 'location': LOCATION_INPUT},
         "ProfileForm": {
-            'location': CharField(help_text=location_help_text_profile, required=False),
+            'location': LOCATION_INPUT,
             'hide_location': BooleanField(required=False, help_text=hide_location_help_text)
             }
         }
