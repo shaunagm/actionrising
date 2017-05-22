@@ -1,16 +1,13 @@
-from .base import SeleniumTestCase
+from .base import SeleniumTestCase, QuickLogin
 from .pageobjects import PhonescriptCreatePage, PhonescriptDetailPage
 
-default_user = "buffysummers"
-default_password = "apocalypse"
 
-class TestPhonescriptActionDetail(SeleniumTestCase):
+class TestPhonescriptActionDetail(QuickLogin, SeleniumTestCase):
 
     def setUp(self):
         super(TestPhonescriptActionDetail, self).setUp()
         # Login and create phonescript action (serves as super simple test of create page)
         self.phonescript_page = PhonescriptCreatePage(self.browser, root_uri=self.live_server_url)
-        self.phonescript_page.log_in(default_user, default_password)
         self.phonescript_page.go_to_create_page()
         # Add details
         self.phonescript_page.title = "Woo a title"

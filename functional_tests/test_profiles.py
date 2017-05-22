@@ -1,7 +1,5 @@
-import time
-from .base import SeleniumTestCase
+from .base import SeleniumTestCase, QuickLogin
 from .pageobjects import ProfileListPage, ProfilePage, FollowedActivity
-from mysite.settings import LOGIN_URL
 
 default_user = "buffysummers"
 default_password = "apocalypse"
@@ -26,12 +24,11 @@ class TestPublicProfileList(SeleniumTestCase):
     def test_protected_profiles_hidden(self):
         self.assertFalse("thewitch" in self.profiles)
 
-class TestProfileList(SeleniumTestCase):
+class TestProfileList(QuickLogin, SeleniumTestCase):
 
     def setUp(self):
         super(TestProfileList, self).setUp()
         self.profiles_table = ProfileListPage(self.browser, root_uri=self.live_server_url)
-        self.profiles_table.log_in(default_user, default_password)
         self.profiles_table.go_to_default_profiles_page()
 
     def test_display_profiles(self):
@@ -47,12 +44,11 @@ class TestProfileList(SeleniumTestCase):
         # follows that doesn't follow buffy
         self.assertTrue("tara_m" in profiles)
 
-class TestProfileDetail(SeleniumTestCase):
+class TestProfileDetail(QuickLogin, SeleniumTestCase):
 
     def setUp(self):
         super(TestProfileDetail, self).setUp()
         self.profile_page = ProfilePage(self.browser, root_uri=self.live_server_url)
-        self.profile_page.log_in(default_user, default_password)
 
     def test_public_profile(self):
         self.profile_page.go_to_profile_page(username="dru")
@@ -83,12 +79,11 @@ class TestProfileDetail(SeleniumTestCase):
         self.assertIsNone(self.profile_page.location)
         self.assertEqual(self.profile_page.get_activity(), [])
 
-class TestFollowedActivity(SeleniumTestCase):
+class TestFollowedActivity(QuickLogin, SeleniumTestCase):
 
     def setUp(self):
         super(TestFollowedActivity, self).setUp()
         self.feed = FollowedActivity(self.browser, root_uri=self.live_server_url)
-        self.feed.log_in(default_user, default_password)
         self.feed.go_to_feed()
         self.activity = self.feed.get_activity()
 

@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from selenium.common.exceptions import NoAlertPresentException
 
 from .base import SeleniumTestCase
-from .pageobjects import LoginPage, AccountSettingsPage, SignupPage
+from .pageobjects import LoginPage, SignupPage
 
 facebook_test_user = "Facebook TestUser"
 facebook_test_user_pwd = "apocalypsenow"
@@ -63,7 +63,7 @@ class TestAccountSettingsPage(SeleniumTestCase):
         # The following two steps may or may not be necessay
         try:
             self.browser.switch_to.alert.accept()
-        except NoAlertPresentException as e:
+        except NoAlertPresentException:
             pass
         time.sleep(3)
         try:

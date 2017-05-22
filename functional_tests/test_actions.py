@@ -1,8 +1,6 @@
-from .base import SeleniumTestCase
+from .base import SeleniumTestCase, QuickLogin
 from .pageobjects import BasicActionListPage, BasicActionDetailPage
 
-default_user = "buffysummers"
-default_password = "apocalypse"
 
 class TestPublicActionList(SeleniumTestCase):
 
@@ -21,12 +19,11 @@ class TestPublicActionList(SeleniumTestCase):
     def test_protected_action_hidden(self):
         self.assertFalse("Buffy Can See" in self.actions)
 
-class TestActionList(SeleniumTestCase):
+class TestActionList(QuickLogin, SeleniumTestCase):
 
     def setUp(self):
         super(TestActionList, self).setUp()
         self.actions_table = BasicActionListPage(self.browser, root_uri=self.live_server_url)
-        self.actions_table.log_in(default_user, default_password)
         self.actions_table.return_to_default_actions_page()
 
     def test_display_actions(self):
@@ -106,12 +103,11 @@ class TestActionList(SeleniumTestCase):
     # TODO add test for filter by deadline (will need a factory or something to generate
     # the right deadline data, the fixtures will quickly go out of date)
 
-class TestActionDetail(SeleniumTestCase):
+class TestActionDetail(QuickLogin, SeleniumTestCase):
 
     def setUp(self):
         super(TestActionDetail, self).setUp()
         self.action_page = BasicActionDetailPage(self.browser, root_uri=self.live_server_url)
-        self.action_page.log_in(default_user, default_password)
         self.action_page.go_to_detail_page(title="Denounce Trump's proposed appointment of Steve Bannon")
 
     def test_display_action_detail(self):
@@ -180,12 +176,11 @@ class TestActionDetail(SeleniumTestCase):
         self.assertEquals(len(self.action_page.done_trackers), 2)
         self.assertEqual(self.action_page.done_trackers[0].text, "Buffy Summers")
 
-class TestShareAction(SeleniumTestCase):
+class TestShareAction(QuickLogin, SeleniumTestCase):
 
     def setUp(self):
         super(TestShareAction, self).setUp()
         self.action_page = BasicActionDetailPage(self.browser, root_uri=self.live_server_url)
-        self.action_page.log_in(default_user, default_password)
 
     def test_share_public_action(self):
         self.action_page.go_to_detail_page(title="Public Test Action")

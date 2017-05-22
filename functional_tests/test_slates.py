@@ -1,8 +1,5 @@
-from .base import SeleniumTestCase
-from .pageobjects import SlateDetailPage, SlateListPage, SlateActionsListPage
-
-default_user = "buffysummers"
-default_password = "apocalypse"
+from .base import SeleniumTestCase, QuickLogin
+from .pageobjects import SlateListPage, SlateActionsListPage, SlateDetailPage
 
 # high stakes slate is public
 # how to prevent apocalyse is sitewide
@@ -24,12 +21,11 @@ class TestPublicSlateList(SeleniumTestCase):
     def test_protected_slate_hidden(self):
         self.assertFalse("Slate Buffy Can See" in self.slates)
 
-class TestSlateList(SeleniumTestCase):
+class TestSlateList(QuickLogin, SeleniumTestCase):
 
     def setUp(self):
         super(TestSlateList, self).setUp()
         self.slates_table = SlateListPage(self.browser, root_uri=self.live_server_url)
-        self.slates_table.log_in(default_user, default_password)
         self.slates_table.go_to_default_slates_page()
         self.wait_helper()
 
@@ -60,12 +56,10 @@ class TestSlateList(SeleniumTestCase):
         self.assertFalse("High stakes slate of actions" in slates)
         self.assertFalse("Slate Buffy Cannot See" in slates)
 
-class TestSlateDetail(SeleniumTestCase):
+class TestSlateDetail(QuickLogin, SeleniumTestCase):
 
     def test_slate_detail_info(self):
         self.slate_info = SlateDetailPage(self.browser, root_uri=self.live_server_url)
-        self.wait_helper()
-        self.slate_info.log_in(default_user, default_password)
         self.slate_info.go_to_detail_page(title="Things to do on the Hellmouth")
         self.wait_helper()
         self.slate_info.info_tab.click()
@@ -76,14 +70,11 @@ class TestSlateDetail(SeleniumTestCase):
         self.assertEquals(self.slate_info.privacy.text, "Visible sitewide")
         self.assertEquals(self.slate_info.status.text, "Open for action")
 
-class TestSlateActionList(SeleniumTestCase):
+class TestSlateActionList(QuickLogin, SeleniumTestCase):
 
     def setUp(self):
         super(TestSlateActionList, self).setUp()
         self.actions_table = SlateActionsListPage(self.browser, root_uri=self.live_server_url)
-        self.wait_helper()
-        self.actions_table.log_in(default_user, default_password)
-        self.wait_helper()
         self.actions_table.go_to_detail_page(title="High stakes slate of actions")
         self.wait_helper()
 
