@@ -1,5 +1,4 @@
 from __future__ import unicode_literals
-from itertools import chain
 import datetime, json
 
 from actstream import action

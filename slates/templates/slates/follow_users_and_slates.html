@@ -27,12 +27,9 @@
         {% load activity_tags %}
         {% load profile_extras %}
 
-        {% activity_stream 'model' user  %}
+        {% activity_stream 'others' user  %}
         {% for action in stream|slice:":1000" %}
-          {% others_filtered_feed action as filtered_action %}
-          {% if filtered_action %}
-            {% include 'profiles/feed_include.html' with user=user  %}
-          {% endif %}
+          {% include 'profiles/feed_include.html' with user=user  %}
         {% endfor %}
       </div>
     </div>
