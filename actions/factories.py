@@ -3,8 +3,14 @@ from factory.django import DjangoModelFactory
 import factory
 import slates.factories  # noqa # register Provider
 
+import plugins.location_plugin.models as lm
 from mysite.lib.choices import PrivacyChoices
 from . import models
+
+
+class Location(DjangoModelFactory):
+    class Meta:
+        model = lm.Location
 
 
 class Action(DjangoModelFactory):
@@ -15,6 +21,8 @@ class Action(DjangoModelFactory):
     creator = factory.SubFactory("accounts.factories.User")
     main_link = factory.Faker("url")
     description = factory.Faker("paragraph")
+
+    location = factory.RelatedFactory(Location, "content_object")
 
 
 class VisibleUnfollowedAction(factory.Factory):

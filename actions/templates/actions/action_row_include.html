@@ -5,7 +5,7 @@
     <td class="date" data-sort="{{ action.date_created|date:"Y m d"}}">
       {{ action.date_created|date:"D M d"}}</td>
     <td class="tags">{% include "tags/label_include.html" with object_list=action.get_tags %}</td>
-    <td class="trackers">{{ action.profile_set.count }}</td>
+    <td class="trackers">{{ action.trackers }}</td>
     <td class="deadline">{{ action.days_until_deadline }}</td>
     <td class="priority">{{ action.get_priority_display }}</td>
     <td class="active">{{ action.is_active }}</td>

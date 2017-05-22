@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.views import generic
 from django.contrib.auth.mixins import UserPassesTestMixin,  LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 
 from flags.lib.flag_helpers import get_user_flag_if_exists
 from mysite.lib.choices import StatusChoices
@@ -49,6 +50,9 @@ class ActionListView(generic.ListView):
     model = Action
     queryset = Action.objects\
         .filter(status__in=[StatusChoices.ready, StatusChoices.finished])\
+        .select_related("creator")\
+        .annotate(trackers=Count("profile"))\
+        .prefetch_related("tags", "locations")\
         .order_by("date_created")
 
     def get_context_data(self, **kwargs):

@@ -10,8 +10,16 @@ def get_location_helper(located_object):
         return
     if located_object.__class__.__name__ == "User":
         located_object = located_object.profile
-    ctype = ContentType.objects.get_for_model(located_object)
-    return Location.objects.filter(content_type=ctype, object_id=located_object.pk).first()
+
+    try:
+        # prefetch_related will make avoid querying for all() but can't access
+        # the prefetched location through another interface
+        return located_object.locations.all()[0]
+    except IndexError:
+        return
+    except AttributeError:
+        ctype = ContentType.objects.get_for_model(located_object)
+        return Location.objects.filter(content_type=ctype, object_id=located_object.pk).first()
 
 @register.assignment_tag(takes_context=True)
 def get_location(context, located_object, override_hide=False):
