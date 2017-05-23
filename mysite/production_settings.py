@@ -2,6 +2,7 @@ import os
 
 # SETTING 1: Django Secret Key
 SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 # SETTING 2: PG_DB_PASSWORD
 DATABASES = {

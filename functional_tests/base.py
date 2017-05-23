@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from unittest import skipIf
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.conf import settings
-from django.test import override_settings
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -12,7 +11,6 @@ from selenium.webdriver.support import expected_conditions as EC
 
 
 @skipIf(settings.SKIP_FUNCTIONAL_TESTS, 'Skipping functional tests')
-@override_settings(DEBUG=True)
 class SeleniumTestCase(StaticLiveServerTestCase):
 
     fixtures = ['fixtures.json']
