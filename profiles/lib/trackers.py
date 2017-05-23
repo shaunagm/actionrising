@@ -42,9 +42,8 @@ class Trackers(object):
         return "{0} {1}".format(num_trackers, word)
 
     def group_by_status_and_privacy(self, trackers):
-        keyfunc = lambda tracker: tracker.status
         # sort is a prereq for groupby
-        sorted_trackers = sorted(trackers, key = keyfunc)
-        grouped_trackers = groupby(sorted_trackers, keyfunc)
+        sorted_trackers = sorted(trackers, key=lambda tracker: (tracker.status, -tracker.id))
+        grouped_trackers = groupby(sorted_trackers, key=lambda tracker: tracker.status)
         return {status: filter_list_for_privacy_annotated(list(group), self.user, include_anonymous=True)
                 for status, group in grouped_trackers}.iteritems
