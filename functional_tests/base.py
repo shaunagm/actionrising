@@ -23,11 +23,9 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         super(SeleniumTestCase, cls).setUpClass()
 
     def setUp(self):
-        self.browser.get(self.live_server_url)
         super(SeleniumTestCase, self).setUp()
-
-    # def tearDown(self):
-    #     super(SeleniumTestCase, self).tearDown()
+        if not self.browser.current_url.startswith(self.live_server_url):
+            self.browser.get(self.live_server_url)
 
     @classmethod
     def tearDownClass(cls):
