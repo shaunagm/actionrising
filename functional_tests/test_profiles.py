@@ -15,14 +15,21 @@ class TestPublicProfileList(SeleniumTestCase):
         self.profiles_table.go_to_default_profiles_page()
         self.profiles = self.profiles_table.get_profiles()
 
-    def test_public_profiles_show(self):
+    def test_visibility(self):
+        self.assertTrue(self.profiles_table.datatables_js_is_enabled())
+        self.public_profiles_show()
+        self.sitewide_profiles_hidden()
+        self.protected_profiles_hidden()
+
+    def public_profiles_show(self):
         self.assertTrue("dru" in self.profiles)
 
-    def test_sitewide_profiles_hidden(self):
+    def sitewide_profiles_hidden(self):
         self.assertFalse("giles" in self.profiles)
 
-    def test_protected_profiles_hidden(self):
+    def protected_profiles_hidden(self):
         self.assertFalse("thewitch" in self.profiles)
+
 
 class TestProfileList(QuickLogin, SeleniumTestCase):
 
@@ -43,6 +50,7 @@ class TestProfileList(QuickLogin, SeleniumTestCase):
         self.assertTrue("thewitch" in profiles)
         # follows that doesn't follow buffy
         self.assertTrue("tara_m" in profiles)
+
 
 class TestProfileDetail(QuickLogin, SeleniumTestCase):
 
@@ -87,23 +95,29 @@ class TestFollowedActivity(QuickLogin, SeleniumTestCase):
         self.feed.go_to_feed()
         self.activity = self.feed.get_activity()
 
-    def test_anonymous_action_by_friend(self):
+    def test_visibility(self):
+        self.anonymous_action_by_friend()
+        self.restricted_relationships()
+        self.following()
+
+    def anonymous_action_by_friend(self):
         self.assertFalse("admin created Join the site" in self.activity)
         self.assertFalse("Join the site was created" in self.activity)
         self.assertFalse("Join the site was updated" in self.activity)
         self.assertFalse("Anonymous created Join the site" in self.activity)
 
-    def test_restricted_relationships(self):
+    def restricted_relationships(self):
         self.assertTrue("thewitch updated Buffy Can See" in self.activity)
         self.assertTrue("admin started following you" in self.activity)
         self.assertTrue("thewitch started following admin" in self.activity)
         self.assertFalse("tara_m updated Buffy Cannot See" in self.activity)
 
-    def test_following(self):
+    def following(self):
         # buffy doesn't follow vampire
         self.assertFalse("vampire updated Do Bad Stuff" in self.activity)
         # buffy follows thewitch and Do Bad Stuff is sitewide
         self.assertTrue("thewitch took on Do Bad Stuff" in self.activity)
+
 
 class TestPublicProfileDetail(SeleniumTestCase):
 

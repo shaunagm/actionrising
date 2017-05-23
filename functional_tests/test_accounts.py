@@ -46,6 +46,7 @@ class TestSignupForm(SeleniumTestCase):
         self.assertEquals(help_block.text, 'Enter a valid username. This value may ' \
             'contain only letters, numbers, hyphens and dashes.')
 
+
 class TestAccountSettingsPage(SeleniumTestCase):
 
     def setUp(self):

@@ -12,14 +12,20 @@ class TestPublicSlateList(SeleniumTestCase):
         self.slates_table.go_to_default_slates_page()
         self.slates = self.slates_table.get_slates()
 
-    def test_public_slate_shows(self):
+    def test_visibility(self):
+        self.public_slate_shows()
+        self.sitewide_slate_hidden()
+        self.protected_slate_hidden()
+
+    def public_slate_shows(self):
         self.assertTrue("High stakes slate of actions" in self.slates)
 
-    def test_sitewide_slate_hidden(self):
+    def sitewide_slate_hidden(self):
         self.assertFalse("How to prevent an apocalypse" in self.slates)
 
-    def test_protected_slate_hidden(self):
+    def protected_slate_hidden(self):
         self.assertFalse("Slate Buffy Can See" in self.slates)
+
 
 class TestSlateList(QuickLogin, SeleniumTestCase):
 

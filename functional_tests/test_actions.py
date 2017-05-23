@@ -10,14 +10,20 @@ class TestPublicActionList(SeleniumTestCase):
         self.actions_table.go_to_default_actions_page_if_necessary()
         self.actions = self.actions_table.get_actions()
 
-    def test_public_action_shows(self):
+    def test_action_visibility(self):
+        self.public_action_shows()
+        self.sitewide_action_hidden()
+        self.protected_action_hidden()
+
+    def public_action_shows(self):
         self.assertTrue("Public Test Action" in self.actions)
 
-    def test_sitewide_action_hidden(self):
+    def sitewide_action_hidden(self):
         self.assertFalse("Sitewide Test Action" in self.actions)
 
-    def test_protected_action_hidden(self):
+    def protected_action_hidden(self):
         self.assertFalse("Buffy Can See" in self.actions)
+
 
 class TestActionList(QuickLogin, SeleniumTestCase):
 
