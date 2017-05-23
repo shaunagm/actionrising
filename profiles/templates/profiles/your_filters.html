@@ -1,0 +1,24 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <a data-toggle="collapse" href="#filters">Your Filters
+      <a data-toggle="collapse" href="#filters" title="Collapse">
+          <div class="float-right">▼</div>
+      </a>
+    </h3>
+  </div>
+  <div id="filters" class="panel-collapse collapse">
+   <div class="panel-body">
+     {% for filter in your_filters %}
+         <a href="{% url 'filter' pk=filter.pk %}">Filter {{ filter.pk }}</a>:
+         <div class="well">
+             {% for line in filter.get_summary %}
+                {{line|safe }}<br />
+             {% endfor %}
+         </div>
+     {% empty %}
+        You don't have any filters yet. <a href="{% url 'action_filter' %}">Make one.</a>
+     {% endfor %}
+   </div>
+ </div>
+</div>
