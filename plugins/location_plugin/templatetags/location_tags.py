@@ -12,8 +12,7 @@ def get_location_helper(located_object):
         located_object = located_object.profile
 
     try:
-        # prefetch_related will make avoid querying for all() but can't access
-        # the prefetched location through another interface
+        # prefetch_related will cache all() but requires accessing the data through .all()
         return located_object.locations.all()[0]
     except IndexError:
         return
