@@ -162,11 +162,8 @@ LOCALE_PATHS = (
 
 # Actstream
 ACTSTREAM_SETTINGS = {
-    'MANAGER': 'actstream.managers.ActionManager',
-    'FETCH_RELATIONS': True,
-    'USE_PREFETCH': True,
+    "MANAGER": "profiles.managers.FilteredManager",
     'USE_JSONFIELD': False,
-    'GFK_FETCH_DEPTH': 1,
 }
 
 # SSL settings

@@ -11,7 +11,7 @@
     {% if object.duration %}
         <i id="duration-info" class="fa fa-clock-o" aria-hidden="true"> {{ object.get_duration_display }} </i>
     {% endif %}
-    {% if object.deadline %}
+    {% if object.deadline and not object.never_expires %}
         <i id="deadline-info" class="fa fa-calendar" aria-hidden="true"> Deadline {{ object.deadline }} </i>
     {% endif%}
 </span>

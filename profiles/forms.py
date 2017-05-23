@@ -75,7 +75,7 @@ class ProfileActionRelationshipForm(ModelForm):
         if 'par' in kwargs:
             par = kwargs.pop('par')
             super(ProfileActionRelationshipForm, self).__init__(*args, **kwargs)
-            self.fields['profiles'].queryset = par.profile.get_followers()
+            self.fields['profiles'].queryset = par.profile.get_followers
             self.fields['slates'].queryset = par.profile.user.slate_set.all()
         else:
             super(ProfileActionRelationshipForm, self).__init__(*args, **kwargs)

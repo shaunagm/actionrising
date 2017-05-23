@@ -29,10 +29,13 @@ class LoginPage(PageObject):
     login_with_twitter_button = PageElement(id_="login_with_twitter")
 
     def go_to_login(self):
-        self.w.get(self.root_uri)
-        wait_helper(self.w) # Wait until the page is loaded to click "login"
         if self.log_button:
             self.log_button.click()
+        else:
+            self.w.get(self.root_uri)
+            wait_helper(self.w) # Wait until the page is loaded to click "login"
+            self.go_to_login()
+
 
     def log_in(self, username, password):
         self.go_to_login()
@@ -183,6 +186,7 @@ class BasicActionDetailPage(BaseObjectDetailPage):
     commitment_button = PageElement(id_="commitment_btn")
     manage_action_links = MultiPageElement(css=".manage-action-links")
     share = PageElement(css="span.share-popover")
+    deadline = PageElement(id_="deadline-info")
 
     def go_to_detail_page(self, title=None):
         if title:
@@ -266,6 +270,7 @@ class ProfilePage(BasePage):
     activity = MultiPageElement(css=".actstream-action")
     redirected_page = PageElement(css="#id_username")
     location = PageElement(css=".profile-location")
+    edit_page_button = PageElement(id_="edit-profile")
     # other person's profile
     friends = MultiPageElement(css="#friends a")
     # own profile
@@ -288,6 +293,12 @@ class ProfilePage(BasePage):
     def get_friends(self):
         return [friend.text for friend in self.friends]
 
+class EditProfilePage(BasePage):
+    first_name = PageElement(id_="id_first_name")
+    last_name = PageElement(id_="id_last_name")
+    location = PageElement(id_="id_location")
+    submit_button = PageElement(css=".profile-submit-button")
+
 class ToDoPage(BasicActionListPage):
     suggested_actions_link = PageElement(id_="suggested_actions_button")
     toggle_notes_button = PageElement(id_="show-notes")
@@ -295,7 +306,6 @@ class ToDoPage(BasicActionListPage):
     manage_button_first_row = PageElement(css="span.glyphicon-wrench")
 
     def go_to_todo_page(self, username=None):
-        user = User.objects.get(username=username)
         self.w.get(self.root_uri + "/profiles/todo/")
 
     def get_notes(self):

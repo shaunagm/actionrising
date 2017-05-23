@@ -6,9 +6,8 @@ from django.contrib.auth.mixins import UserPassesTestMixin,  LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
 from flags.lib.flag_helpers import get_user_flag_if_exists
-from mysite.lib.choices import PrivacyChoices, StatusChoices
+from mysite.lib.choices import StatusChoices
 from mysite.lib.privacy import check_privacy, apply_check_privacy, filter_list_for_privacy_annotated
-from misc.models import RecommendationTracker
 from profiles.lib.trackers import Trackers
 from slates.models import Slate, SlateActionRelationship
 from slates.forms import SlateForm, SlateActionRelationshipForm
@@ -23,7 +22,8 @@ class SlateView(UserPassesTestMixin, generic.DetailView):
         context['can_edit_actions'] = True if self.object.creator == self.request.user else False
         context['is_slate'] = True
         context['flag'] = get_user_flag_if_exists(self.object, self.request.user)
-        annotated_list = filter_list_for_privacy_annotated(self.object.slateactionrelationship_set.all(),
+        annotated_list = filter_list_for_privacy_annotated(
+            self.object.slateactionrelationship_set.all().order_by("action__date_created"),
             self.request.user, include_anonymous = True)
         context['actions'] = annotated_list['visible_list']
         context['hidden_actions'] = annotated_list['restricted_count']
@@ -41,12 +41,16 @@ class SlateListView(generic.ListView):
     # Note: templates can likely be refactored to use same template as TopicListView
     template_name = "slates/slates.html"
     model = Slate
+    queryset = Slate.objects\
+        .filter(status__in=[StatusChoices.ready, StatusChoices.finished])\
+        .order_by("-date_created")
 
     def get_context_data(self, **kwargs):
         context = super(SlateListView, self).get_context_data(**kwargs)
-        visible_slates = [slate for slate in apply_check_privacy(Slate.objects.all(), self.request.user, include_anonymous = True)
-                          if slate.status in [StatusChoices.ready, StatusChoices.finished]]
-        context['object_list'] = sorted(visible_slates, key = lambda slate: getattr(slate, 'date_created'))
+        context['object_list'] = apply_check_privacy(
+            self.get_queryset(),
+            self.request.user,
+            include_anonymous=True)
         return context
 
 class SlateCreateView(LoginRequiredMixin, generic.edit.CreateView):
@@ -112,8 +116,4 @@ class FollowUsersAndSlates(LoginRequiredMixin, generic.TemplateView):
         context['created_slates'] = self.request.user.slate_set.all()
         context['followed_slates'] = self.request.user.profile.profileslaterelationship_set.all()
         context['friends'] = self.request.user.profile.get_list_of_relationships()
-        rectracker = RecommendationTracker.objects.first()
-        if rectracker:
-            context['users'] = rectracker.retrieve_users()
-            context['slates'] = rectracker.retrieve_slates()
         return context

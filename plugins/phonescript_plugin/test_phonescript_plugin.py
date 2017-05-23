@@ -137,8 +137,6 @@ class TestPhoneScriptLib(TestCase):
         ctype = ContentType.objects.get_for_model(self.user_with_location.profile)
         self.location = Location.objects.get(content_type=ctype, object_id=self.user_with_location.profile.pk)
         self.location.location = "Somerville, MA"
-        self.location.district = "7"
-        self.location.state = "MA"
         self.location.save()
 
     def test_get_legislators(self):

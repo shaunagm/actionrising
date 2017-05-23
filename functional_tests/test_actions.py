@@ -1,5 +1,3 @@
-import time
-
 from .base import SeleniumTestCase
 from .pageobjects import BasicActionListPage, BasicActionDetailPage
 

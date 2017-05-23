@@ -12,11 +12,17 @@ class Profile(factory.Factory):
 
     @classmethod
     def _generate(cls, create, attrs):
-        # profile is created in post_save and can't pass attrs into it
-        return attrs['user'].profile
+        # profile is created in post_save so we have to save attributes after
+        # it is created
+        profile = attrs['user'].profile
+
+        for k, v in attrs.items():
+            setattr(profile, k, v)
+        profile.save()
+        return profile
 
 
-class RelationShip(DjangoModelFactory):
+class Relationship(DjangoModelFactory):
     class Meta:
         model = models.Relationship
 
