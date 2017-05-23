@@ -880,7 +880,7 @@
         "current_privacy": "public",
         "status": "ready",
         "never_expires": false,
-        "deadline": null,
+        "deadline": "2017-05-18T19:58:00Z",
         "priority": "high",
         "date_created": "2016-11-25T04:14:02Z",
         "duration": "unknown"

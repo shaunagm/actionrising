@@ -1,9 +1,14 @@
+import mock
 from django.test import TestCase
+from django.test.utils import CaptureQueriesContext
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
-
+from django.db import connection
 from django.contrib.auth.models import User, AnonymousUser
 from django.utils import timezone
+
+from actstream.models import Action as Actstream
+
 from actions.models import Action
 from slates.models import Slate, SlateActionRelationship
 from commitments.models import Commitment
@@ -60,11 +65,11 @@ class TestProfileMethods(TestCase):
         profile_A = relationship.person_A
         profile_B = relationship.person_B
 
-        self.assertEqual(list(profile_A.get_followers()), [profile_B])
-        self.assertEqual(list(profile_B.get_followers()), [])
+        self.assertEqual(list(profile_A.get_followers), [profile_B])
+        self.assertEqual(list(profile_B.get_followers), [])
 
         profile_C = factories.Profile()
-        self.assertEqual(list(profile_C.get_followers()), [])
+        self.assertEqual(list(profile_C.get_followers), [])
 
     def test_get_people_user_follows(self):
         relationship = factories.Relationship(B_follows_A=True)
@@ -85,16 +90,17 @@ class TestProfileMethods(TestCase):
     def test_get_open_actions(self):
         par = factories.ProfileActionRelationship()
         self.assertEqual(
-            [par.action],
-            par.profile.get_open_actions())
+
+            par.action,
+            par.profile.get_open_actions().get())
 
     def test_get_suggested_actions(self):
         par = factories.ProfileActionRelationship(
             status=ToDoStatusChoices.suggested)
 
         self.assertEqual(
-            [par],
-            par.profile.get_suggested_actions())
+            par,
+            par.profile.get_suggested_actions().get())
 
     def test_is_visible_follows(self):
         relationship = factories.Relationship(
@@ -249,32 +255,46 @@ class TestRelationshipMethods(TestCase):
         self.assertTrue(self.relationship.current_profile_mutes_target(self.faith.profile))
         self.assertIsNone(self.relationship.current_profile_mutes_target(self.lorne.profile))
 
-    def test_toggle_following_for_current_profile(self):
-        self.buffy.profile.privacy = PrivacyChoices.follows
-        self.buffy.profile.save()
-        self.faith.profile.privacy = PrivacyChoices.follows
-        self.faith.profile.save()
-        # Starting with A (Buffy) not following B (Faith)
-        self.assertFalse(self.relationship.A_follows_B)
-        self.assertFalse(check_privacy(self.buffy.profile, self.faith))
-        # Toggle returns the new status, which is True - Buffy does now follow Faith
-        self.assertTrue(self.relationship.toggle_following_for_current_profile(self.buffy.profile))
-        # Confirm A now follows B
-        self.assertTrue(self.relationship.A_follows_B)
-        self.assertTrue(check_privacy(self.buffy.profile, self.faith))
-        # Confirm B does not follow A
-        self.assertFalse(self.relationship.B_follows_A)
-        self.assertFalse(check_privacy(self.faith.profile, self.buffy))
-        # Toggle back to not following
-        self.assertFalse(self.relationship.toggle_following_for_current_profile(self.buffy.profile))
-        self.assertFalse(check_privacy(self.buffy.profile, self.faith))
-        # Toggle the other direction - B (Faith) following A (Buffy)
-        self.assertTrue(self.relationship.toggle_following_for_current_profile(self.faith.profile))
-        self.assertTrue(check_privacy(self.faith.profile, self.buffy))
+    def test_not_following_visibility(self):
+        relationship = factories.Relationship(
+            person_A__privacy=PrivacyChoices.follows,
+            person_B__privacy=PrivacyChoices.follows)
+        self.assertFalse(check_privacy(relationship.person_A, relationship.person_B.user))
+
+    def test_toggle_following(self):
+        relationship = factories.Relationship(
+            person_A__privacy=PrivacyChoices.follows,
+            person_B__privacy=PrivacyChoices.follows)
+
+        # NOTE: can't also assert check privacy before since followers list is
+        # cached on the instance
+        self.assertTrue(relationship.toggle_following_for_current_profile(relationship.person_A))
+        self.assertTrue(relationship.A_follows_B)
+
+        self.assertTrue(check_privacy(relationship.person_A, relationship.person_B.user))
+
+        self.assertFalse(relationship.B_follows_A)
+        self.assertFalse(check_privacy(relationship.person_B, relationship.person_A.user))
+
+    def test_toggle_following_twice(self):
+        relationship = factories.Relationship(
+            person_A__privacy=PrivacyChoices.follows,
+            person_B__privacy=PrivacyChoices.follows)
+
+        # NOTE: can't also assert check privacy before since followers list is
+        # cached on the instance
+        self.assertTrue(relationship.toggle_following_for_current_profile(relationship.person_A))
+        self.assertFalse(relationship.toggle_following_for_current_profile(relationship.person_A))
+        self.assertFalse(relationship.B_follows_A)
+        self.assertFalse(check_privacy(relationship.person_A, relationship.person_B.user))
+
         # Toggling in one direction should not effect the other direction
-        self.assertTrue(self.relationship.toggle_following_for_current_profile(self.buffy.profile))
-        # Trying to toggle someone not part of the relationship should return none
-        self.assertIsNone(self.relationship.toggle_following_for_current_profile(self.lorne.profile))
+        self.assertTrue(relationship.toggle_following_for_current_profile(relationship.person_B))
+
+    def test_toggle_unrelated_profile(self):
+        relationship = factories.Relationship()
+        other_profile = factories.Profile()
+        self.assertIsNone(relationship.toggle_following_for_current_profile(other_profile))
 
     def test_toggle_accountability_for_current_profile(self):
         # This is essentially test_toggle_following_for_current_profile with method and var names changed
@@ -479,12 +499,6 @@ class TestProfileExtras(TestCase):
         self.relationship.delete()
         self.assertEqual(get_friendslist(self.context), [])
 
-    def get_status_phrase(self):
-        assertEqual(get_status_phrase('suggested'), 'Suggested to')
-
-    #TODO test filtered feed
-    def test_filtered_feed(self):
-        pass
 
 ################
 ### Test lib ###
@@ -748,3 +762,156 @@ class TestEditProfiles(TestCase):
         self.assertEqual(saved_buffy.profile.description, "Rawr")
         self.assertEqual(saved_buffy.profile.privacy_defaults.global_default,
                          PrivacyChoices.follows)
+
+
+@mock.patch("profiles.managers.apply_check_privacy", autospec=True)
+class TestOthersActionFeed(TestCase):
+    """ make sure that the feed of others' actions on Actions is accurate """
+
+    def setUp(self):
+        self.action = action_factories.Action()
+        self.assertTrue(self.action.target_actions.exists())
+
+    def test_exclude_my_action(self, apply_check_privacy):
+        user = self.action.creator
+        apply_check_privacy.return_value = []
+
+        stream = Actstream.objects.others(user)
+        self.assertEqual(
+            apply_check_privacy.call_args_list,
+            [mock.call([], user, True),  # actions
+             mock.call([], user, True),  # slates
+             mock.call([], user, True)  # users
+             ])
+
+        self.assertFalse(stream)
+
+    def test_show_others_public_action(self, apply_check_privacy):
+        profile = factories.Profile()
+        user = profile.user
+        apply_check_privacy.side_effect = [[self.action], [], [self.action.creator]]
+
+        stream = Actstream.objects.others(user)
+        self.assertEqual(
+            apply_check_privacy.call_args_list,
+            [mock.call([self.action], user, True),  # actions
+             mock.call([], user, True),  # slates
+             mock.call([self.action.creator], user, True)  # users
+             ])
+
+        self.assertTrue(stream)
+
+    def test_hide_private_actions(self, apply_check_privacy):
+        profile = factories.Profile()
+        user = profile.user
+        apply_check_privacy.return_value = []
+
+        stream = Actstream.objects.others(user)
+        self.assertEqual(
+            apply_check_privacy.call_args_list,
+            [mock.call([self.action], user, True),  # actions
+             mock.call([], user, True),  # slates
+             mock.call([self.action.creator], user, True)  # users
+             ])
+
+        self.assertFalse(stream)
+
+
+@mock.patch("profiles.managers.apply_check_privacy", autospec=True)
+class TestOthersSlateFeed(TestCase):
+    """ make sure that the feed of others' actions on Slates is accurate """
+
+    def setUp(self):
+        self.slate = slate_factories.Slate()
+        self.assertTrue(self.slate.target_actions.exists())
+
+    def test_exclude_my_slate(self, apply_check_privacy):
+        user = self.slate.creator
+        apply_check_privacy.return_value = []
+
+        stream = Actstream.objects.others(user)
+        self.assertEqual(
+            apply_check_privacy.call_args_list,
+            [mock.call([], user, True),  # actions
+             mock.call([], user, True),  # slates
+             mock.call([], user, True)  # users
+             ])
+
+        self.assertFalse(stream)
+
+    def test_show_others_public_slate(self, apply_check_privacy):
+        profile = factories.Profile()
+        user = profile.user
+        apply_check_privacy.side_effect = [[], [self.slate], [self.slate.creator]]
+
+        stream = Actstream.objects.others(user)
+        self.assertEqual(
+            apply_check_privacy.call_args_list,
+            [mock.call([], user, True),  # actions
+             mock.call([self.slate], user, True),  # slates
+             mock.call([self.slate.creator], user, True)  # users
+             ])
+
+        self.assertTrue(stream)
+
+    def test_hide_private_slate(self, apply_check_privacy):
+        profile = factories.Profile()
+        user = profile.user
+        apply_check_privacy.return_value = []
+
+        stream = Actstream.objects.others(user)
+        self.assertEqual(
+            apply_check_privacy.call_args_list,
+            [mock.call([], user, True),  # actions
+             mock.call([self.slate], user, True),  # slates
+             mock.call([self.slate.creator], user, True)  # users
+             ])
+
+        self.assertFalse(stream)
+
+
+class ProfileOthersFeed(TestCase):
+    def make_data(self):
+        actstream_count = Actstream.objects.count()
+
+        # mine
+        action_factories.Action.create_batch(5, creator=self.profile.user)
+        slate_factories.Slate.create_batch(5, creator=self.profile.user)
+        self.assertEqual(Actstream.objects.count(), actstream_count + 10)
+
+        # already following
+        factories.ProfileSlateRelationship.create_batch(5, profile=self.profile)
+        factories.ProfileActionRelationship.create_batch(5, profile=self.profile)
+        self.assertEqual(Actstream.objects.count(), actstream_count + 25)
+
+        # public
+        action_factories.Action.create_batch(5)
+        slate_factories.Slate.create_batch(5)
+        self.assertEqual(Actstream.objects.count(), actstream_count + 35)
+
+        # private
+        action_factories.Action.create_batch(5, privacy=PrivacyChoices.follows)
+        slate_factories.Slate.create_batch(5, privacy=PrivacyChoices.follows)
+        self.assertEqual(Actstream.objects.count(), actstream_count + 45)
+
+        # private but visible
+        action_factories.VisibleUnfollowedAction.create_batch(5)
+        slate_factories.VisibleUnfollowedSlate.create_batch(5)
+        self.assertEqual(Actstream.objects.count(), actstream_count + 55)
+
+    def test_profile(self):
+        self.profile = factories.Profile()
+        user = self.profile.user
+
+        self.make_data()
+
+        with CaptureQueriesContext(connection) as original_queries:
+            self.assertEqual(Actstream.objects.others(user).count(), 20)
+
+        self.make_data()
+
+        with CaptureQueriesContext(connection) as final_queries:
+            self.assertEqual(Actstream.objects.others(user).count(), 40)
+
+        # something other than ContentType is being cached but the number goes down
+        self.assertTrue(len(final_queries) < len(original_queries))

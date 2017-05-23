@@ -38,7 +38,7 @@ def get_user_legislators_given_location_string(location):
 def get_user_legislators_given_location_object(location):
     legs = []
     senators = Legislator.objects.filter(state=location.state, title="Sen")
-    reps = Legislator.objects.filter(state=location.state, district=location.district, title="Rep")
+    reps = Legislator.objects.filter(state=location.state, district=location.get_district_number(), title="Rep")
     return list(chain(senators, reps))
 
 def get_user_legislators(location):

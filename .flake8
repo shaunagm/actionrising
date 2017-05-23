@@ -1,0 +1,5 @@
+[flake8]
+ignore = E226,E302,E41,E111,E128,E126,E123,E121,E731,E114,E305,E302,E501,E401,E302,E128,E501,E251,E712,E261,E266,E265,E241,E231,E202,E201,E129,E262,W391,E225,E502,W292,E222,E131,E303
+max_line_length = 200
+max_complexity = 17
+exclude=migrations,management,settings.py,wsgi.py,*settings.py

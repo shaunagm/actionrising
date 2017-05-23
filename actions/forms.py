@@ -1,3 +1,4 @@
+import datetime
 from django import forms
 from datetimewidget.widgets import DateTimeWidget
 from django.forms.widgets import HiddenInput
@@ -16,20 +17,19 @@ class SlateChoiceField(forms.ModelMultipleChoiceField):
 
 class ActionForm(forms.ModelForm):
     slates = SlateChoiceField(queryset=Slate.objects.all(), label="Add to your slates", required=False)
+    deadline = forms.DateTimeField(required=False, input_formats=['%m/%d/%Y %I %p'],
+        widget=DateTimeWidget(options={'format': 'mm/dd/yyyy HH P', 'minView': '1',
+        'startDate': str(datetime.date.today())}, bootstrap_version=3), help_text='Day/Month/Year Hour')
 
     class Meta:
         model = Action
         fields = ['title', 'anonymize', 'description', 'privacy', 'priority', 'duration',
             'status', 'deadline', 'never_expires', 'slates']
-        widgets = {
-            'deadline': DateTimeWidget(options={'format': 'mm/dd/yyyy HH:mm'}, bootstrap_version=3),
-        }
         labels = {
             'never_expires': 'This action never expires. (Actions with no deadline otherwise expire automatically after ' + str(DEFAULT_ACTION_DURATION) + ' days.)'
         }
         help_texts = {
             'anonymize': 'Show "anonymous" as creator. (Note: this changes the display only, and you can change your mind and choose to show your username later.)',
-            'deadline': 'MM/DD/YYYY HH:MM:SS (hours, minutes and seconds optional, defaults to midnight)'
             }
 
     def __init__(self, user, formtype, *args, **kwargs):
