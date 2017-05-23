@@ -6,8 +6,6 @@ import mysite.views as mysite_views
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^actions/$', views.ActionListView.as_view(), name='actions'),
-    url(r'^find-actions/$', views.FindActionsLandingView.as_view(), name='find-actions-landing'),
-    url(r'^create-actions/$', views.CreateActionsLandingView.as_view(), name='create-actions-landing'),
     url(r'^learn-more/$', mysite_views.LearnMoreView.as_view(), name='learn-more'),
     url(r'^action/(?P<slug>[-\w]+)/$', views.ActionView.as_view(), name='action'),
     url(r'^keep_open/(?P<pk>[-\w]+)/$', views.keep_actions_open_view, name='keep_open_action'),
