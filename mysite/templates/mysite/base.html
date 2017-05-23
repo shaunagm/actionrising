@@ -28,6 +28,7 @@
     <script type="text/javascript" src="/static/ckeditor/ckeditor-init.js"></script>
 
     <link rel="stylesheet" href="{% static "css/font-awesome.min.css" %}" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="{% static "css/selectize.bootstrap3.css" %}" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static "css/jquery.dataTables.min.css" %}" crossorigin="anonymous">
@@ -38,6 +39,23 @@
 
     {% block page_specific_css %}
     {% endblock page_specific_css%}
+
+    <!-- Piwik -->
+    <!-- Note: this code is from innocraft and is necessary to do piwik analytics -->
+    <script type="text/javascript">
+      var _paq = _paq || [];
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      (function() {
+        var u="//actionrising.innocraft.cloud/";
+        _paq.push(['setTrackerUrl', u+'piwik.php']);
+        _paq.push(['setSiteId', '1']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+      })();
+    </script>
+    <!-- End Piwik Code -->
 
 </head>
 

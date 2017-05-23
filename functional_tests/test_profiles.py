@@ -57,27 +57,23 @@ class TestProfileDetail(SeleniumTestCase):
     def test_public_profile(self):
         self.profile_page.go_to_profile_page(username="dru")
         self.assertTrue('Drusilla' in self.profile_page.name.text)
-        self.assertTrue(len(self.profile_page.get_actions()) > 0)
         self.assertIsNotNone(self.profile_page.location)
-        # shows in full
 
     def test_sitewide_profile(self):
         self.profile_page.go_to_profile_page(username="giles")
         self.assertTrue('Giles' in self.profile_page.name.text)
-        self.assertTrue(len(self.profile_page.get_actions()) > 0)
-        # shows in full
+        self.assertIn('giles updated Donate to Planned Parenthood', self.profile_page.get_activity())
 
     def test_visible_protected_profile(self):
         self.profile_page.go_to_profile_page(username="thewitch")
         self.assertTrue('Willow' in self.profile_page.name.text)
-        self.assertTrue(len(self.profile_page.get_actions()) > 0)
         self.assertIsNotNone(self.profile_page.location)
-        # shows in full
+        self.assertIn('thewitch started following you', self.profile_page.get_activity())
 
     def test_anonymous_action_by_friend(self):
         self.profile_page.go_to_profile_page(username="admin")
         # admin created this anonymously
-        self.assertFalse("Join the site" in self.profile_page.actions_created)
+        self.assertFalse("admin created Join the site" in self.profile_page.get_activity())
 
     def test_restricted_profile(self):
         self.profile_page.go_to_profile_page(username="tara_m")
@@ -85,7 +81,7 @@ class TestProfileDetail(SeleniumTestCase):
         self.assertFalse('Tara' in self.profile_page.name.text)
         self.assertTrue('tara_m' in self.profile_page.name.text)
         self.assertIsNone(self.profile_page.location)
-        # shows minimal profile
+        self.assertEqual(self.profile_page.get_activity(), [])
 
 class TestFollowedActivity(SeleniumTestCase):
 
@@ -104,9 +100,8 @@ class TestFollowedActivity(SeleniumTestCase):
 
     def test_restricted_relationships(self):
         self.assertTrue("thewitch updated Buffy Can See" in self.activity)
-        self.assertTrue("admin started following buffysummers" in self.activity)
+        self.assertTrue("admin started following you" in self.activity)
         self.assertTrue("thewitch started following admin" in self.activity)
-        # privacy doesn't allow
         self.assertFalse("tara_m updated Buffy Cannot See" in self.activity)
 
     def test_following(self):
@@ -122,21 +117,20 @@ class TestPublicProfileDetail(SeleniumTestCase):
         self.profile_page = ProfilePage(self.browser, root_uri=self.live_server_url)
 
     def test_public_profile(self):
-        # shows in full
         self.profile_page.go_to_profile_page(username="dru")
         self.assertTrue('Drusilla' in self.profile_page.name.text)
         self.assertIsNotNone(self.profile_page.location)
 
     def test_sitewide_profile(self):
-        # minimal profile shows
         self.profile_page.go_to_profile_page(username="giles")
         self.assertFalse('Rupert' in self.profile_page.name.text)
         self.assertTrue('giles' in self.profile_page.name.text)
         self.assertFalse('login' in self.profile_page.w.current_url)
+        self.assertEqual(self.profile_page.get_activity(), [])
 
     def test_restricted_profile(self):
-        # minimal profile shows
         self.profile_page.go_to_profile_page(username="thewitch")
         self.assertFalse('Willow' in self.profile_page.name.text)
         self.assertTrue('thewitch' in self.profile_page.name.text)
         self.assertFalse('login' in self.profile_page.w.current_url)
+        self.assertEqual(self.profile_page.get_activity(), [])

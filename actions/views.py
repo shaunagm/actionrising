@@ -1,5 +1,3 @@
-from itertools import chain
-
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -8,10 +6,9 @@ from django.contrib.auth.mixins import UserPassesTestMixin,  LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
 from flags.lib.flag_helpers import get_user_flag_if_exists
-from mysite.lib.choices import PrivacyChoices, StatusChoices
+from mysite.lib.choices import StatusChoices
 from mysite.lib.privacy import check_privacy, apply_check_privacy
 from profiles.lib.trackers import Trackers
-from tags.lib import tag_helpers
 from actions.models import Action, ActionFilter
 from actions import forms
 from plugins import plugin_helpers
@@ -50,14 +47,16 @@ class ActionView(UserPassesTestMixin, generic.DetailView):
 class ActionListView(generic.ListView):
     template_name = "actions/actions.html"
     model = Action
+    queryset = Action.objects\
+        .filter(status__in=[StatusChoices.ready, StatusChoices.finished])\
+        .order_by("date_created")
 
     def get_context_data(self, **kwargs):
         context = super(ActionListView, self).get_context_data(**kwargs)
         if self.request.user.is_authenticated():
             context['your_filters'] = self.request.user.actionfilter_set.all().order_by('date_created')
-        visible_actions = [action for action in apply_check_privacy(Action.objects.all(), self.request.user, include_anonymous = True)
-                           if action.status in [StatusChoices.ready, StatusChoices.finished]]
-        context['object_list'] = sorted(visible_actions, key = lambda x: getattr(x, 'date_created'))
+
+        context['object_list'] = apply_check_privacy(self.get_queryset(), self.request.user, include_anonymous=True)
         return context
 
 class ActionCreateView(LoginRequiredMixin, generic.edit.CreateView):
@@ -127,7 +126,6 @@ def filter_wizard_forms(request):
     return form_list
 
 def process_filter_wizard_forms(request):
-    results = []
     actionfilter = ActionFilter.objects.create(creator=request.user)
     for form in filter_wizard_forms(request):
         form.update_filter(actionfilter, request)

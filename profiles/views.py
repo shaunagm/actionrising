@@ -44,6 +44,7 @@ class ProfileView(generic.DetailView):
         context['total_actions'] = obj.profile.profileactionrelationship_set.count()
         context['percent_finished'] = obj.profile.get_percent_finished()
         context['action_streak_current'] = obj.profile.get_action_streak()
+        context['friends'] = obj.profile.get_list_of_relationships()
         if self.request.user.is_authenticated():
             current_profile = self.request.user.profile
             relationship = current_profile.get_relationship(obj.profile)
@@ -264,16 +265,13 @@ class DashboardView(LoginRequiredMixin, generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
-        context['open_actions'] = self.request.user.profile.get_open_pars()
-        context['your_filters'] = self.request.user.actionfilter_set.all()
-        context['your_friends'] = self.request.user.profile.get_list_of_relationships()
-        context['followed_slates'] = self.request.user.profile.profileslaterelationship_set.all()
-        context['created_actions'] =  self.request.user.action_set.all()
-        context['created_slates'] = self.request.user.slate_set.all()
-        context['suggested_pars'] = self.request.user.profile.get_suggested_actions()
+        profile = self.request.user.profile
+        context['open_actions'] = profile.get_open_pars()
+        context['action_streak_current'] = profile.get_action_streak()
+        context['percent_finished'] = profile.get_percent_finished()
+        context['total_actions'] = profile.profileactionrelationship_set.count()
+        context['suggested_pars'] = profile.get_suggested_actions()
         # If none of the above is filled out, include alert.
-        if not (context['open_actions'] or context['your_friends'] or
-            context['your_filters'] or context['followed_slates'] or
-            context['created_actions'] or context['created_slates']):
+        if not (context['open_actions'] or context['action_streak_current'] or context['percent_finished']):
             context['new_user'] = True
         return context

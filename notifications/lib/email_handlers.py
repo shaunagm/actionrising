@@ -300,6 +300,15 @@ def close_action_email(recipient, action):
         log_unsent_email(subject, plain_message, recipient.user.email)
     return sent
 
+def close_action_emails(action, closed=False):
+    '''Handler to determine what, if any, emails we should send about action closures'''
+    if closed and not action.deadline:
+        # Only send notifications if it's a non-deadline action
+        close_action_email(action.creator.profile, action)
+        message = "<a href='%s'>%s</a>" % (action.get_keep_open_url_with_domain(), action.title)
+        generic_admin_email("Action closed", message)
+    elif action.send_warning():
+        close_action_warning_email(action.creator.profile, action)
 
 #############################
 ### ACCOUNTABILITY EMAILS ###
