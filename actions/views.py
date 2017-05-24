@@ -49,7 +49,7 @@ class ActionListView(generic.ListView):
     model = Action
     queryset = Action.objects\
         .filter(status__in=[StatusChoices.ready, StatusChoices.finished])\
-        .order_by("date_created")
+        .order_by("-date_created")
 
     def get_context_data(self, **kwargs):
         context = super(ActionListView, self).get_context_data(**kwargs)

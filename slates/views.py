@@ -23,7 +23,7 @@ class SlateView(UserPassesTestMixin, generic.DetailView):
         context['is_slate'] = True
         context['flag'] = get_user_flag_if_exists(self.object, self.request.user)
         annotated_list = filter_list_for_privacy_annotated(
-            self.object.slateactionrelationship_set.all().order_by("action__date_created"),
+            self.object.slateactionrelationship_set.all().order_by("-action__date_created"),
             self.request.user, include_anonymous = True)
         context['actions'] = annotated_list['visible_list']
         context['hidden_actions'] = annotated_list['restricted_count']
