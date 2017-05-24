@@ -10,6 +10,7 @@ from django.core.urlresolvers import reverse
 from django.utils.functional import cached_property
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.contenttypes.models import ContentType
 
 from ckeditor.fields import RichTextField
@@ -38,6 +39,8 @@ class Profile(models.Model):
     slates = models.ManyToManyField(Slate, through='ProfileSlateRelationship')
     privacy = models.CharField(max_length=10, choices=PrivacyChoices.choices, default=PrivacyChoices.inherit)
     current_privacy = models.CharField(max_length=10, choices=PrivacyChoices.choices, default=PrivacyChoices.follows)
+
+    locations = GenericRelation("location_plugin.Location")
 
     def __unicode__(self):
         return self.user.username

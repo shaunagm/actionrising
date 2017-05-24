@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.views import generic
 from django.contrib.auth.mixins import UserPassesTestMixin,  LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 
 from flags.lib.flag_helpers import get_user_flag_if_exists
 from mysite.lib.choices import StatusChoices
@@ -49,6 +50,9 @@ class ActionListView(generic.ListView):
     model = Action
     queryset = Action.objects\
         .filter(status__in=[StatusChoices.ready, StatusChoices.finished])\
+        .select_related("creator")\
+        .annotate(trackers=Count("profile"))\
+        .prefetch_related("tags", "locations")\
         .order_by("date_created")
 
     def get_context_data(self, **kwargs):
@@ -140,19 +144,18 @@ def filter_wizard_view(request):
         forms = filter_wizard_forms(request)
         return render(request, 'actions/filter_wizard.html', context={'forms': forms })
 
-class ActionFilterView(UserPassesTestMixin, generic.DetailView):
+class ActionFilterView(LoginRequiredMixin, generic.DetailView):
     template_name = 'actions/filter_wizard_results.html'
     model = ActionFilter
 
+    def get_queryset(self):
+        return self.request.user.actionfilter_set.all()
+
     def get_context_data(self, **kwargs):
         context = super(ActionFilterView, self).get_context_data(**kwargs)
-        context['actions'] = self.get_object().filter_actions()
+        context['actions'] = self.object.filter_actions()\
+            .prefetch_related("tags")
         return context
-
-    def test_func(self):
-        '''Don't display unless user owns Filter'''
-        obj = self.get_object()
-        return obj.creator == self.request.user
 
 def filter_save_status(request, pk, save_or_delete):
     actionfilter = ActionFilter.objects.get(pk=pk)

@@ -47,6 +47,8 @@ class Action(models.Model):
     flags = GenericRelation('flags.Flag')
     special_action = models.CharField(max_length=30, blank=True, null=True)
 
+    locations = GenericRelation("location_plugin.Location")
+
     def __unicode__(self):
         return self.title
 

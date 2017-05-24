@@ -10,7 +10,7 @@ from actions.forms import ActionForm
 from actions.models import DEFAULT_ACTION_DURATION, DAYS_WARNING_BEFORE_CLOSURE
 from tags.models import Tag
 from profiles import factories as profile_factories
-from actions import factories as action_factories
+from . import factories
 
 
 ###################
@@ -24,9 +24,10 @@ class TestActionMethods(TestCase):
         self.action = self.par.action
         self.buffy = self.action.creator
         old_date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=80)
-        self.old_action = action_factories.Action(date_created=old_date)
+        self.old_action = factories.Action(date_created=old_date)
+
         closing_soon_date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=40)
-        self.closing_soon_action = action_factories.Action(date_created=closing_soon_date)
+        self.closing_soon_action = factories.Action(date_created=closing_soon_date)
 
     def test_get_tags(self):
         tag_one = Tag.objects.create(name="Test Tag One", kind="topic")
@@ -56,24 +57,24 @@ class TestActionMethods(TestCase):
 
     def test_set_close_date_when_action_created_with_never_expires(self):
         date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=30)
-        action = action_factories.Action(date_created=date, never_expires=True)
+        action = factories.Action(date_created=date, never_expires=True)
         self.assertIsNone(action.close_date)
 
     def test_set_close_date_when_action_created_with_deadline(self):
         date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=30)
         deadline = datetime.datetime.now(timezone.utc) + datetime.timedelta(days=5)
-        action = action_factories.Action(date_created=date, deadline=deadline)
+        action = factories.Action(date_created=date, deadline=deadline)
         self.assertEqual(action.close_date, deadline)
 
     def test_set_close_date_when_action_created_with_never_expires_and_deadline(self):
         date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=30)
         deadline = datetime.datetime.now(timezone.utc) + datetime.timedelta(days=5)
-        action = action_factories.Action(date_created=date, deadline=deadline, never_expires=True)
+        action = factories.Action(date_created=date, deadline=deadline, never_expires=True)
         self.assertIsNone(action.close_date)
 
     def test_set_close_date_when_action_created_with_neither_never_expires_or_deadline(self):
         date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=30)
-        action = action_factories.Action(date_created=date)
+        action = factories.Action(date_created=date)
         self.assertEqual(action.close_date, date + datetime.timedelta(days=DEFAULT_ACTION_DURATION))
 
     def test_set_close_date_on_action_update_never_expires_added(self):
@@ -83,7 +84,7 @@ class TestActionMethods(TestCase):
 
     def test_set_close_date_on_action_update_never_expires_removed(self):
         date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=30)
-        action = action_factories.Action(date_created=date, never_expires=True)
+        action = factories.Action(date_created=date, never_expires=True)
         action.never_expires = False
         action.save()
         self.assertEqual(action.close_date, date + datetime.timedelta(days=DEFAULT_ACTION_DURATION))
@@ -91,14 +92,14 @@ class TestActionMethods(TestCase):
     def test_set_close_date_on_action_update_deadline_removed(self):
         date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=30)
         deadline = datetime.datetime.now(timezone.utc) + datetime.timedelta(days=5)
-        action = action_factories.Action(date_created=date, deadline=deadline)
+        action = factories.Action(date_created=date, deadline=deadline)
         action.deadline = None
         action.save()
         self.assertEqual(action.close_date, date + datetime.timedelta(days=DEFAULT_ACTION_DURATION))
 
     def test_set_close_date_on_action_update_deadline_added(self):
         date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=30)
-        action = action_factories.Action(date_created=date)
+        action = factories.Action(date_created=date)
         deadline = datetime.datetime.now(timezone.utc) + datetime.timedelta(days=5)
         action.deadline = deadline
         action.save()
@@ -106,7 +107,7 @@ class TestActionMethods(TestCase):
 
     def test_set_close_date_on_action_update_no_deadline_info_changed(self):
         date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=30)
-        action = action_factories.Action(date_created=date)
+        action = factories.Action(date_created=date)
         action.description = "Let's change things up!"
         action.save()
         self.assertEqual(action.close_date, date + datetime.timedelta(days=DEFAULT_ACTION_DURATION))
@@ -163,7 +164,7 @@ class TestActionMethods(TestCase):
         # Setup
         days_back = DEFAULT_ACTION_DURATION - DAYS_WARNING_BEFORE_CLOSURE
         warning_date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=days_back-1)
-        warning_action = action_factories.Action(date_created=warning_date)
+        warning_action = factories.Action(date_created=warning_date)
         # Send warning if no deadline set
         self.assertIsNone(warning_action.deadline)
         self.assertTrue(warning_action.send_warning())
