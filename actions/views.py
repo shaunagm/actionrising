@@ -49,7 +49,7 @@ class ActionListView(generic.ListView):
     model = Action
     queryset = Action.objects\
         .filter(status__in=[StatusChoices.ready, StatusChoices.finished])\
-        .order_by("date_created")
+        .order_by("-date_created")
 
     def get_context_data(self, **kwargs):
         context = super(ActionListView, self).get_context_data(**kwargs)
@@ -109,13 +109,6 @@ def keep_actions_open_view(request, pk):
         return render(request, 'actions/keep_open.html', context={'action': action })
     else:
         return HttpResponseRedirect(reverse('actions'))
-
-
-class FindActionsLandingView(LoginRequiredMixin, generic.TemplateView):
-    template_name = "actions/find_actions.html"
-
-class CreateActionsLandingView(LoginRequiredMixin, generic.TemplateView):
-    template_name = "actions/create_actions.html"
 
 def filter_wizard_forms(request):
     form_list = [forms.FilterWizard_Kind(), forms.FilterWizard_Topic(),

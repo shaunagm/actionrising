@@ -33,7 +33,7 @@
   </thead>
   <tbody>
 
-    {% for object in object_list reversed %}
+    {% for object in object_list %}
 
         {% if has_notes %}
             {% include "actions/action_row_include.html" with action=object.action rel=object %}
