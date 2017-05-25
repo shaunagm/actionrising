@@ -260,7 +260,7 @@ class FollowedActivity(BasePage):
     activity_lines = MultiPageElement(css=".actstream-action")
 
     def go_to_feed(self):
-        self.w.get(self.root_uri + '/profiles/feed')
+        self.w.get(self.root_uri + '/profiles/followed_activity')
 
     def get_activity(self):
         return [activity.text for activity in self.activity_lines]

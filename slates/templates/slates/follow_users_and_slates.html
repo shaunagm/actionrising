@@ -29,7 +29,7 @@
 
         {% activity_stream 'others' user  %}
         {% for action in stream|slice:":1000" %}
-          {% include 'profiles/feed_include.html' with user=user  %}
+          {% include 'profiles/activity_include.html' with user=user  %}
         {% endfor %}
       </div>
     </div>

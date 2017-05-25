@@ -13,7 +13,7 @@
      {% for action in stream|slice:":1000" %}
        {% filtered_feed action own=True as filtered_action %}
        {% if filtered_action %}
-          {% include 'profiles/feed_include.html' with user=user  %}
+          {% include 'profiles/activity_include.html' with user=user  %}
        {% endif %}
      {% empty %}
          You haven't done anything yet.  Find <a href="{% url 'actions' %}">an action
