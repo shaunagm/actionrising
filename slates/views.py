@@ -112,7 +112,7 @@ class Community(LoginRequiredMixin, generic.TemplateView):
     template_name = "slates/community.html"
 
     def get_context_data(self, **kwargs):
-        context = super(FollowUsersAndSlates, self).get_context_data(**kwargs)
+        context = super(Community, self).get_context_data(**kwargs)
         context['created_slates'] = self.request.user.slate_set.all()
         context['followed_slates'] = self.request.user.profile.profileslaterelationship_set.all()
         context['friends'] = self.request.user.profile.get_list_of_relationships()
