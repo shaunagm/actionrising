@@ -1,20 +1,20 @@
 {% extends "mysite/base.html" %}
 
-{% block title %}About ActionRising{% endblock %}
+{% block title %}About {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
 
 <div class="row">
    <div class="col-sm-10 col-sm-offset-1" id="about">
-     <h2>About ActionRising</h2>
+     <h2>About {{ SITE_NAME }}</h2>
 
      <h3>Our Mission</h3>
 
-     <p>ActionRising was created to help people keep track of and promote political actions.
+     <p>{{ SITE_NAME }} was created to help people keep track of and promote political actions.
        With so much going on, we need efficient ways to find out about new actions and to stay
        updated on the actions we've committed to.</p>
 
-     <p>Created in response to the 2016 election, ActionRising is dedicated to resisting
+     <p>Created in response to the 2016 election, {{ SITE_NAME }} is dedicated to resisting
        Donald Trump and the movement he represents, and to helping the progressive community grow.
        We work with existing and new organizations to figure out how we can help them achieve
        their goals, and with individuals to understand what they need to take action.</p>
@@ -26,7 +26,7 @@
        action by providing more details like a deadline, a location, tags and more.  When
        you're looking for actions, you can use this additional info to narrow down your options.</p>
      <p>There are many great individuals and organizations out there doing the hard work
-       of creating and vetting actions.  On ActionRising, you can follow a user and receive
+       of creating and vetting actions.  On {{ SITE_NAME }}, you can follow a user and receive
        updates whenever they add a new action.  Users can also create slates, which are curated
        lists of specific actions.  You can follow a slate and get updates whenever a new
        action is added to it. (Tip: slates are also great for pulling together a list
@@ -46,8 +46,8 @@
       <h4 class="text-warning">One Action, One Source</h4>
       <p>Many social media sites let you edit a post but won't show your changes in shares
         and reblogs.  This is a problem for actions, which often need updates and corrections,
-        or even to be withdrawn.  On ActionRising, changes to an action show up for everyone,
-        not just people viewing the original post.  Link to an ActionRising action on Twitter,
+        or even to be withdrawn.  On {{ SITE_NAME }}, changes to an action show up for everyone,
+        not just people viewing the original post.  Link to an {{ SITE_NAME }} action on Twitter,
         Facebook, etc and people will always find the most updated version when they click through.
       </p>
 
@@ -56,7 +56,7 @@
        For instance, when you "commit" to an action, you can select one or more friends to
        notify of your commitment.  They'll get periodic reminders while the action stays open,
        asking them to poke you and see how you're progressing.  This feature requires both social
-       relationships and technology to work.  Founded by a former psychologist, ActionRising has
+       relationships and technology to work.  Founded by a former psychologist, {{ SITE_NAME }} has
        great respect for the power of human relationships.</p>
 
       <h4 class="text-warning">Keep It Open(ish)</h4>
@@ -67,7 +67,7 @@
      <h3 id="gethelp">Get Help</h3>
 
      <p>Confused about how the site works?  Have a feature you want to request or a bug you want
-       to report?  Reach out to us at actionrisingsite@gmail.com.  We'll get back to you asap.</p>
+       to report?  Reach out to us at {{ OBFUSCATED_EMAIL_ADDRESS }}.  We'll get back to you asap.</p>
 
      <h3 id="getinvolved">Get Involved</h3>
 
@@ -75,7 +75,7 @@
        organizations or groups that have actions they could share on the platform.  If that
        describes you, we'd love to talk with you one-on-one and find out what kind of features
        would best meet your needs.  Anyone who wants to can also join the <a href="https://www.actionrising.com/actions/action/join-the-actionrisingcom-user-feedback-group">
-       ActionRising User Feedback Group.</a></p>
+       {{ SITE_NAME }} User Feedback Group.</a></p>
 
      <p>We're also looking for folks to contribute to developing the site itself.  We're especially
        looking for design, documentation, and publicity help, and for developers who specialize

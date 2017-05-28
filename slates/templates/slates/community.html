@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block title %} Users and Slates | ActionRising{% endblock %}
+{% block title %} Users and Slates | {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
 
@@ -22,7 +22,7 @@
     </div>
 
     <div class="col-sm-6">
-      <h4> ActionRising Activity </h4>
+      <h4> {{ SITE_NAME }} Activity </h4>
       <div class="well activity">
         {% load activity_tags %}
         {% load profile_extras %}

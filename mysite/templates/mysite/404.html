@@ -1,6 +1,6 @@
 {% extends "mysite/base.html" %}
 
-{% block title %}Page Not Found (404) | ActionRising{% endblock %}
+{% block title %}Page Not Found (404) | {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
 
@@ -10,7 +10,7 @@
 
      <p>The page you're looking for could not be found.  Please try again or,
        if you think this is due to an error on our end, reach out to us and let us
-       know at actionrisingsite@gmail.com.</p>
+       know at {{ OBFUSCATED_EMAIL_ADDRESS }}.</p>
 
    </div>
  </div>
