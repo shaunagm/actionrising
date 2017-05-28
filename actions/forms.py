@@ -3,7 +3,7 @@ from django import forms
 from datetimewidget.widgets import DateTimeWidget
 from django.forms.widgets import HiddenInput
 
-from actions.models import Action, DEFAULT_ACTION_DURATION
+from actions.models import Action
 from tags.lib import tag_helpers
 from tags.models import Tag
 from mysite.lib.choices import PrivacyChoices, TimeChoices
@@ -11,25 +11,42 @@ from mysite.lib.privacy import get_global_privacy_default
 from plugins import plugin_helpers
 from slates.models import Slate, SlateActionRelationship
 
+from mysite.constants import constants_table
+
+DEFAULT_ACTION_DURATION = constants_table["DEFAULT_ACTION_DURATION"]
+
 class SlateChoiceField(forms.ModelMultipleChoiceField):
    def label_from_instance(self, obj):
         return obj.title
 
 class ActionForm(forms.ModelForm):
-    slates = SlateChoiceField(queryset=Slate.objects.all(), label="Add to your slates", required=False)
-    deadline = forms.DateTimeField(required=False, input_formats=['%m/%d/%Y %I %p'],
-        widget=DateTimeWidget(options={'format': 'mm/dd/yyyy HH P', 'minView': '1',
-        'startDate': str(datetime.date.today())}, bootstrap_version=3), help_text='Day/Month/Year Hour')
+    slates = SlateChoiceField(
+        queryset=Slate.objects.all(),
+        label="Add to your slates",
+        required=False)
+    deadline = forms.DateTimeField(
+        required=False, input_formats=['%m/%d/%Y %I %p'],
+        widget=DateTimeWidget(options=
+            {
+                'format': 'mm/dd/yyyy HH P',
+                'minView': '1',
+                'startDate': str(datetime.date.today())
+            }, bootstrap_version=3
+        ), help_text='Day/Month/Year Hour')
 
     class Meta:
         model = Action
-        fields = ['title', 'anonymize', 'description', 'privacy', 'priority', 'duration',
-            'status', 'deadline', 'never_expires', 'slates']
+        fields = ['title', 'anonymize', 'description', 'privacy', 'priority',
+            'duration', 'status', 'deadline', 'never_expires', 'slates']
         labels = {
-            'never_expires': 'This action never expires. (Actions with no deadline otherwise expire automatically after ' + str(DEFAULT_ACTION_DURATION) + ' days.)'
+            'never_expires': 'This action never expires. (Actions with no ' +
+            'deadline otherwise expire automatically after {} days.'.format(
+                DEFAULT_ACTION_DURATION)
         }
         help_texts = {
-            'anonymize': 'Show "anonymous" as creator. (Note: this changes the display only, and you can change your mind and choose to show your username later.)',
+            'anonymize': 'Show "anonymous" as creator. (Note: this changes ' +
+            'the display only, and you can change your mind and choose to ' +
+            'show your username later.)',
             }
 
     def __init__(self, user, formtype, *args, **kwargs):
@@ -42,10 +59,12 @@ class ActionForm(forms.ModelForm):
             self.fields['status'].widget = HiddenInput()
 
         # Set privacy
-        self.fields['privacy'].choices = PrivacyChoices.personalized(get_global_privacy_default(user.profile, "decorated"))
+        self.fields['privacy'].choices = PrivacyChoices.personalized(
+            get_global_privacy_default(user.profile, "decorated"))
 
         # Set tags
-        self.fields = tag_helpers.add_tag_fields_to_form(self.fields, self.instance, formtype)
+        self.fields = tag_helpers.add_tag_fields_to_form(
+            self.fields, self.instance, formtype)
 
         # Set slates
         self.fields['slates'].queryset = user.slate_set.all()
@@ -70,7 +89,8 @@ class ActionForm(forms.ModelForm):
 
         # Handle slates
         for slate in self.cleaned_data['slates']:
-            SlateActionRelationship.objects.get_or_create(slate=slate, action=instance)
+            SlateActionRelationship.objects.get_or_create(slate=slate,
+                action=instance)
 
         return instance
 
@@ -79,7 +99,8 @@ class ActionForm(forms.ModelForm):
 
 class FilterWizard_Kind(forms.Form):
     question = "What kinds of actions do you want to hear about?"
-    kinds = forms.ModelMultipleChoiceField(queryset=Tag.objects.filter(kind="type"),
+    kinds = forms.ModelMultipleChoiceField(
+        queryset=Tag.objects.filter(kind="type"),
         required=False, label='')
 
     def update_filter(self, actionfilter, request):
@@ -88,7 +109,8 @@ class FilterWizard_Kind(forms.Form):
 
 class FilterWizard_Topic(forms.Form):
     question = "What topics are you most interested in?"
-    topics = forms.ModelMultipleChoiceField(queryset=Tag.objects.filter(kind="topic"),
+    topics = forms.ModelMultipleChoiceField(
+        queryset=Tag.objects.filter(kind="topic"),
         required=False, label='')
 
     def update_filter(self, actionfilter, request):
@@ -97,7 +119,8 @@ class FilterWizard_Topic(forms.Form):
 
 class FilterWizard_Time(forms.Form):
     question = "How much time can you spend on the action?"
-    time = forms.MultipleChoiceField(choices=TimeChoices.choices, required=False, label='',
+    time = forms.MultipleChoiceField(
+        choices=TimeChoices.choices, required=False, label='',
         initial=(label for label in TimeChoices.labels))
 
     def update_filter(self, actionfilter, request):
@@ -110,17 +133,21 @@ class FilterWizard_Friends(forms.Form):
 
     def __init__(self, request, *args, **kwargs):
         super(FilterWizard_Friends, self).__init__(*args, **kwargs)
-        friends = [(user, user) for user in request.user.profile.get_people_tracking()]
+        friends = [(user, user) for user
+            in request.user.profile.get_people_tracking()]
         if len(friends) < 10:
             if not friends: # if 0 friends
-                self.warning = """You don't follow anyone, which means choosing 'yes' will
-                    eliminate all actions. <br />Why not <a target='_blank' href='/profiles/profiles'>
-                    add some friends</a>?"""
+                self.warning = """You don't follow anyone, which means choosing
+                    'yes' will eliminate all actions. <br />Why not <a
+                    target='_blank' href='/profiles/profiles'>add some friends
+                    </a>?"""
             else:
-                people_statement = "only 1 person" if len(friends) == 1 else "only %s people" % len(friends)
-                self.warning = """You follow %s, which means choosing 'yes' will drastically
-                    limit available actions. <br />Why not <a target='_blank' href='/profiles/profiles'>
-                    add more friends</a>?""" % people_statement
+                people_statement = "only 1 person" if len(friends) == 1\
+                    else "only {} people".format(len(friends))
+                self.warning = """You follow {}, which means choosing 'yes' will
+                    drastically limit available actions. <br />Why not <a
+                    target='_blank' href='/profiles/profiles'>add more friends
+                    </a>?""".format(people_statement)
 
     def update_filter(self, actionfilter, request):
         if 'friends_yes' in request.POST:

@@ -10,9 +10,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from social_django.models import UserSocialAuth
 from notifications.lib.email_handlers import generic_admin_email
+from mysite.constants import constants_table
 
 from accounts.lib.tokens import account_activation_token
 from accounts.forms import SignUpForm
+
 
 # Sign up views
 
@@ -37,13 +39,15 @@ def confirmation(request, uidb64, token):
         user.save()
 
         #Notify admin of signup
-        message = "Name: %s, Email: %s" % ( user.username, user.email)
-        generic_admin_email("New user on ActionRising", message)
+        message = "Name: {}, Email: {}".format(user.username, user.email)
+        generic_admin_email(
+            "New user on {}".format(constants_table["SITE_NAME"], message)
 
         login(request, user, backend='mysite.lib.backends.CustomModelBackend')
         return redirect('index')
     else:
-        print("User confirmation error uidb64 %s token %s" % (uidb64, token))
+        print(
+            "User confirmation error uidb64 {} token {}".format(uidb64, token))
         return render(request, 'accounts/generic_problem.html')
 
 # Login/logout views
