@@ -41,7 +41,7 @@ def confirmation(request, uidb64, token):
         #Notify admin of signup
         message = "Name: {}, Email: {}".format(user.username, user.email)
         generic_admin_email(
-            "New user on {}".format(constants_table["SITE_NAME"], message)
+            "New user on {}".format(constants_table["SITE_NAME"], message))
 
         login(request, user, backend='mysite.lib.backends.CustomModelBackend')
         return redirect('index')

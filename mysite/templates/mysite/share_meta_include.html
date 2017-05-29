@@ -6,12 +6,14 @@
   <meta property="og:title" content="{{ SITE_NAME }}">
 {%endif %}
 
-<meta property="og:description" content="Take action with us on {{ SITE_URL }}!">
+<meta property="og:description"
+    content="Take action with us on {{ SITE_NAME }}!">
 
 {% if object.get_absolute_url_with_domain %}
   <meta property="og:url" content="{{ object.get_absolute_url_with_domain }}">
 {% else %}
-  <meta property="og:url" content="{{HOST_NAME}}">
+  <meta property="og:url" content="www.{{ SITE_URL }}">
 {%endif %}
 
-<meta property="og:image" content="https://{{SITE_URL }}{% static 'images/logo_for_mediashare.png' %}">
+<meta property="og:image"
+    content="https://{{ SITE_URL }}{% static 'images/logo_for_mediashare.png' %}">

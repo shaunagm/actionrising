@@ -40,6 +40,6 @@ constants_table = {
     'EMAIL_ADDRESS': 'actionrisingsite@gmail.com',
     'OBFUSCATED_EMAIL_ADDRESS':
         'actionrisingsite -at- gmail -dot- com',
-    'SITE_NAME': 'www.actionrising.com',
+    'SITE_URL': 'www.actionrising.com',
     'SITE_NAME': 'ActionRising',
 }
