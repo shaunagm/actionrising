@@ -52,6 +52,8 @@ We use [this git branching model](http://nvie.com/posts/a-successful-git-branchi
 
 Pick one of the headings below to find out how to contribute. Want to do something else? Let us know! We’ll help you _and_ update this guide, which we want to cover all situations.
 
+If your contribution requires you to make a pull request, please make sure to [sign the Contributor License Agreement](#signing-the-contributor-license-agreement).
+
 #### I want to report an issue
 
 Before submitting a bug report, do a quick search in [the issue tracker](https://github.com/shaunagm/actionrising/issues) to see if the problem has already been reported. If it has, add a comment to the existing issue instead of opening a new one. If not, you can open a new issue. Please try to follow our [guidelines for reporting a bug](#guidelines-for-reporting-a-bug).  
@@ -181,6 +183,20 @@ Finally, delete the branch:
     git branch -d hotfix-*
 
 ### Miscellaneous Guides
+
+##### Signing the Contributor License Agreement
+
+Before contributing to the ActionRising repository, you need to sign our
+Contributor License Agreement (CLA).  You can download a pdf copy of the agreement
+[here](https://github.com/shaunagm/actionrising/blob/develop/ActionRisingContributorLicenseAgreement.pdf).  Please sign it and email it to actionrisingsite@gmail.com. Include your github
+username in the email so we can easily keep track of which contributors have signed.  
+Once we receive your signed CLA, we will sign it and send you a copy of the final
+document.  
+
+If you prefer to use a digital signature, please email actionrisingsite@gmail, and
+we will invite you to sign the CLA via our preferred digital signature service.
+
+Our CLA was created using [ContributorAgreements.org](http://contributoragreements.org).
 
 ##### Guidelines for Reporting a Bug
 
