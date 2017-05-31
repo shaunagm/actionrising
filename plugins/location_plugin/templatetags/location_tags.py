@@ -14,13 +14,15 @@ def get_location_helper(located_object):
     return Location.objects.filter(content_type=ctype, object_id=located_object.pk).first()
 
 @register.assignment_tag(takes_context=True)
-def get_location(context, located_object, override_hide=False):
+def get_location(context, located_object, show_hidden_location=False):
     location = get_location_helper(located_object)
-    if location and (not location.hide_location or override_hide):
+    if location and (not location.hide_location or show_hidden_location):
         return location.location
 
 @register.assignment_tag(takes_context=True)
-def get_state_and_district(context, located_object, override_hide=False):
+def get_state_and_district(context, located_object, show_hidden_location=False):
     location = get_location_helper(located_object)
-    if location and (not location.hide_location or override_hide):
+    if location and (not location.hide_location or show_hidden_location):
         return {'state': location.state, 'district': location.district}
+    else:
+        return {'state': None, 'district': None}

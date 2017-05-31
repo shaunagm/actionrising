@@ -1,5 +1,5 @@
 {% load location_tags %}
-{% get_location object as location %}
+{% get_location object show_hidden_location=True as location %}
 
 {% if location %}
     <i id="location-info" class="fa fa-globe" aria-hidden="true">
