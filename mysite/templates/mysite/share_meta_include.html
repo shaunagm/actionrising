@@ -12,7 +12,7 @@
 {% if object.get_absolute_url_with_domain %}
   <meta property="og:url" content="{{ object.get_absolute_url_with_domain }}">
 {% else %}
-  <meta property="og:url" content="www.{{ SITE_URL }}">
+  <meta property="og:url" content="{{ SITE_URL }}">
 {%endif %}
 
 <meta property="og:image"
