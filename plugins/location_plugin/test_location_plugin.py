@@ -9,6 +9,7 @@ from django.utils import timezone
 from actions.models import Action
 from plugins.location_plugin.lib import locations
 from plugins.location_plugin.models import Location
+from plugins.location_plugin.templatetags import location_tags
 from mysite.middleware.middleware import TimezoneMiddleware
 
 class TestLocation(TestCase):
@@ -37,6 +38,57 @@ class TestLocation(TestCase):
         # self.assertEqual(self.action.state, "MA")
         # self.assertEqual(self.action.district, "MA-5")
 
+class TestTemplateTags(TestCase):
+
+    def setUp(self):
+        # Create user with no location set
+        self.user_with_unset_location = User.objects.create(username="Wesley")
+        # Create user with location set and shown
+        ctype = ContentType.objects.get_for_model(self.user_with_unset_location.profile)
+        self.user_showing_location = User.objects.create(username="Cordelia")
+        self.shown_location = Location.objects.get(content_type=ctype,
+            object_id=self.user_showing_location.profile.pk)
+        self.shown_location.location = "Cambridge, MA"
+        self.shown_location.save()
+        # Create user with location set but hidden
+        self.user_hiding_location = User.objects.create(username="Kendra")
+        self.hidden_location = Location.objects.get(content_type=ctype,
+            object_id=self.user_hiding_location.profile.pk)
+        self.hidden_location.location = "Cambridge, MA"
+        self.hidden_location.hide_location = True
+        self.hidden_location.save()
+        # Create actionw ith location
+        self.action = Action.objects.create(title="Test Action with Location",
+            creator=self.user_with_unset_location)
+        ctype = ContentType.objects.get_for_model(self.action)
+        self.action_location = Location.objects.create(content_type=ctype,
+            object_id=self.action.pk)
+        self.action_location.location = "Cambridge, MA"
+        self.action_location.save()
+
+    def test_get_location(self):
+        # We provide [] as the first param, it represents the empty context value
+        self.assertIsNone(location_tags.get_location([], self.user_with_unset_location))
+        self.assertEqual(location_tags.get_location([], self.user_showing_location),
+            "Cambridge, MA")
+        self.assertEqual(location_tags.get_location([], self.user_hiding_location,
+            show_hidden_location=True), "Cambridge, MA")
+        self.assertIsNone(location_tags.get_location([], self.user_hiding_location,
+            show_hidden_location=False))
+        self.assertEqual(location_tags.get_location([], self.action), "Cambridge, MA")
+
+    def test_get_state_and_district(self):
+        # We provide [] as the first param, it represents the empty context value
+        self.assertEqual(location_tags.get_state_and_district([], self.user_with_unset_location),
+            {'state': None, 'district': None})
+        self.assertEqual(location_tags.get_state_and_district([], self.user_showing_location),
+            {'state': u'MA', 'district': u'MA-5'})
+        self.assertEqual(location_tags.get_state_and_district([], self.user_hiding_location,
+            show_hidden_location=True), {'state': u'MA', 'district': u'MA-5'})
+        self.assertEqual(location_tags.get_state_and_district([], self.user_hiding_location,
+            show_hidden_location=False), {'state': None, 'district': None})
+        self.assertEqual(location_tags.get_state_and_district([], self.action),
+            {'state': u'MA', 'district': u'MA-5'})
 
 class TestTimezoneMiddleware(TestCase):
 
