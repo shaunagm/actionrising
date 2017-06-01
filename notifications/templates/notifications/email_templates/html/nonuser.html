@@ -9,7 +9,7 @@
         Hi there,</p>
       <p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">
         <a href='{{ notifier.get_absolute_url_with_domain }}'>{{ notifier }}</a> wants to
-        let you know about {{ notification_string }} on ActionRising:</p>
+        let you know about {{ notification_string }} on {{ SITE_NAME }}:</p>
 
         <p style="font-family:sans-serif;font-size:18px;font-weight:bold;margin:0;Margin-left:25px;Margin-bottom:15px;">
           <a href="{{ instance.get_absolute_url_with_domain }}">{{ instance.title }}</a>
@@ -28,10 +28,10 @@
         {% endif %}
 
         <p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">
-          ActionRising is a platform created to help individuals and communities figure
+          {{ SITE_NAME }} is a platform created to help individuals and communities figure
           out their next steps. We want you to take action - specific, meaningful,
           positive action - that fits the time and energy you have available.
-          You don't have to be a member of ActionRising to take action, but you're
+          You don't have to be a member of {{ SITE_NAME }} to take action, but you're
           welcome to join us.</p>
 
         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;box-sizing:border-box;width:100%;">

@@ -24,9 +24,12 @@ class Trackers(object):
 
     def get_people_tracking(self):
         if self.tracked.get_cname() == "Action":
-            trackers = ProfileActionRelationship.objects.filter(action=self.tracked).exclude(status=ToDoStatusChoices.rejected)
+            trackers = ProfileActionRelationship\
+                .objects.filter(action=self.tracked)\
+                .exclude(status=ToDoStatusChoices.rejected).order_by("profile")
         else:
-            trackers = ProfileSlateRelationship.objects.filter(slate=self.tracked)
+            trackers = ProfileSlateRelationship\
+                .objects.filter(slate=self.tracked).order_by("profile")
         return trackers
 
     def get_slates_tracking(self):

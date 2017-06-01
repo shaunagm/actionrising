@@ -7,10 +7,14 @@ from django.forms.widgets import HiddenInput
 
 from mysite.lib.choices import PrivacyChoices, StatusChoices
 from actions.forms import ActionForm
-from actions.models import DEFAULT_ACTION_DURATION, DAYS_WARNING_BEFORE_CLOSURE
+from mysite.constants import constants_table
 from tags.models import Tag
 from profiles import factories as profile_factories
 from actions import factories as action_factories
+
+
+DEFAULT_ACTION_DURATION = constants_table['DEFAULT_ACTION_DURATION']
+DAYS_WARNING_BEFORE_CLOSURE = constants_table['DAYS_WARNING_BEFORE_CLOSURE']
 
 
 ###################
@@ -20,13 +24,17 @@ from actions import factories as action_factories
 class TestActionMethods(TestCase):
 
     def setUp(self):
-        self.par = profile_factories.ProfileActionRelationship(action__title="Test Action")
+        self.par = profile_factories.ProfileActionRelationship(
+            action__title="Test Action")
         self.action = self.par.action
         self.buffy = self.action.creator
-        old_date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=80)
+        old_date = datetime.datetime.now(
+            timezone.utc) - datetime.timedelta(days=80)
         self.old_action = action_factories.Action(date_created=old_date)
-        closing_soon_date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=40)
-        self.closing_soon_action = action_factories.Action(date_created=closing_soon_date)
+        closing_soon_date = datetime.datetime.now(
+            timezone.utc) - datetime.timedelta(days=40)
+        self.closing_soon_action = action_factories.Action(
+            date_created=closing_soon_date)
 
     def test_get_tags(self):
         tag_one = Tag.objects.create(name="Test Tag One", kind="topic")
@@ -44,7 +52,8 @@ class TestActionMethods(TestCase):
         self.assertEqual(self.action.get_creator(), self.buffy)
 
     def test_get_robust_url(self):
-        self.assertEqual(self.action.get_robust_url(), '/actions/action/test-action/')
+        self.assertEqual(self.action.get_robust_url(),
+            '/actions/action/test-action/')
 
     def test_is_active(self):
         self.action.status = StatusChoices.ready
@@ -61,20 +70,25 @@ class TestActionMethods(TestCase):
 
     def test_set_close_date_when_action_created_with_deadline(self):
         date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=30)
-        deadline = datetime.datetime.now(timezone.utc) + datetime.timedelta(days=5)
+        deadline = datetime.datetime.now(
+            timezone.utc) + datetime.timedelta(days=5)
         action = action_factories.Action(date_created=date, deadline=deadline)
         self.assertEqual(action.close_date, deadline)
 
-    def test_set_close_date_when_action_created_with_never_expires_and_deadline(self):
+    def test_set_close_date_when_action_created_with_never_expires_and_deadline(
+        self):
         date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=30)
-        deadline = datetime.datetime.now(timezone.utc) + datetime.timedelta(days=5)
-        action = action_factories.Action(date_created=date, deadline=deadline, never_expires=True)
+        deadline = datetime.datetime.now(
+            timezone.utc) + datetime.timedelta(days=5)
+        action = action_factories.Action(
+            date_created=date, deadline=deadline, never_expires=True)
         self.assertIsNone(action.close_date)
 
     def test_set_close_date_when_action_created_with_neither_never_expires_or_deadline(self):
         date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=30)
         action = action_factories.Action(date_created=date)
-        self.assertEqual(action.close_date, date + datetime.timedelta(days=DEFAULT_ACTION_DURATION))
+        self.assertEqual(action.close_date, date + datetime.timedelta(
+            days=DEFAULT_ACTION_DURATION))
 
     def test_set_close_date_on_action_update_never_expires_added(self):
         self.closing_soon_action.never_expires = True
@@ -86,20 +100,24 @@ class TestActionMethods(TestCase):
         action = action_factories.Action(date_created=date, never_expires=True)
         action.never_expires = False
         action.save()
-        self.assertEqual(action.close_date, date + datetime.timedelta(days=DEFAULT_ACTION_DURATION))
+        self.assertEqual(action.close_date, date + datetime.timedelta(
+            days=DEFAULT_ACTION_DURATION))
 
     def test_set_close_date_on_action_update_deadline_removed(self):
         date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=30)
-        deadline = datetime.datetime.now(timezone.utc) + datetime.timedelta(days=5)
+        deadline = datetime.datetime.now(
+            timezone.utc) + datetime.timedelta(days=5)
         action = action_factories.Action(date_created=date, deadline=deadline)
         action.deadline = None
         action.save()
-        self.assertEqual(action.close_date, date + datetime.timedelta(days=DEFAULT_ACTION_DURATION))
+        self.assertEqual(action.close_date,
+            date + datetime.timedelta(days=DEFAULT_ACTION_DURATION))
 
     def test_set_close_date_on_action_update_deadline_added(self):
         date = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=30)
         action = action_factories.Action(date_created=date)
-        deadline = datetime.datetime.now(timezone.utc) + datetime.timedelta(days=5)
+        deadline = datetime.datetime.now(
+            timezone.utc) + datetime.timedelta(days=5)
         action.deadline = deadline
         action.save()
         self.assertEqual(action.close_date, deadline)
@@ -109,21 +127,26 @@ class TestActionMethods(TestCase):
         action = action_factories.Action(date_created=date)
         action.description = "Let's change things up!"
         action.save()
-        self.assertEqual(action.close_date, date + datetime.timedelta(days=DEFAULT_ACTION_DURATION))
+        self.assertEqual(action.close_date,
+            date + datetime.timedelta(days=DEFAULT_ACTION_DURATION))
 
     def test_days_until(self):
-        future_date = datetime.datetime.now(timezone.utc) + datetime.timedelta(days=21)
+        future_date = datetime.datetime.now(timezone.utc) + datetime.timedelta(
+            days=21)
         self.assertEqual(self.action.days_until(future_date), 20)
 
     def test_days_until_deadline(self):
         # Test default action with no deadline returns none
         self.assertEqual(self.action.days_until_deadline(), None)
         # Test future deadline returns correct number of days
-        self.action.deadline = datetime.datetime.now(timezone.utc) + datetime.timedelta(days=21)
+        self.action.deadline = datetime.datetime.now(
+            timezone.utc) + datetime.timedelta(days=21)
         self.action.save()
         self.assertEqual(self.action.days_until_deadline(), 20)
-        # Test past deadline returns correct number of days (though this really shouldn't get called)
-        self.action.deadline = datetime.datetime.now(timezone.utc) - datetime.timedelta(days=30)
+        # Test past deadline returns correct number of days
+        # (though this really shouldn't get called)
+        self.action.deadline = datetime.datetime.now(
+            timezone.utc) - datetime.timedelta(days=30)
         self.action.save()
         self.assertEqual(self.action.days_until_deadline(), -31)
         # Test setting never_expires turns it to none
