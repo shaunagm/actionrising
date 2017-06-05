@@ -52,7 +52,7 @@ We use [this git branching model](http://nvie.com/posts/a-successful-git-branchi
 
 Pick one of the headings below to find out how to contribute. Want to do something else? Let us know! We’ll help you _and_ update this guide, which we want to cover all situations.
 
-If your contribution requires you to make a pull request, please make sure to [sign the Contributor License Agreement](#signing-the-contributor-license-agreement).
+If your contribution requires you to make a pull request, please make sure to [sign the Contributor License Agreement](#signing-the-contributor-license-agreement).  
 
 #### I want to report an issue
 
@@ -186,9 +186,13 @@ Finally, delete the branch:
 
 ##### Signing the Contributor License Agreement
 
-Before contributing to the ActionRising repository, you need to sign our
-Contributor License Agreement (CLA).  You can download a pdf copy of the agreement
-[here](https://github.com/shaunagm/actionrising/blob/develop/ActionRisingContributorLicenseAgreement.pdf).  Please sign it and email it to actionrisingsite@gmail.com. Include your github
+People making significant contributions to the ActionRising repository need to sign a
+Contributor License Agreement (CLA).  If you're requesting a feature, reporting a bug,
+or making small changes to the repository, you can skip the CLA.  Not sure what kind of
+change counts as "small"?  Just ask us on Slack, or via email to actionrisingsite@gmail.com.
+
+You can download a pdf copy of the agreement
+[here](https://github.com/shaunagm/actionrising/blob/develop/ActionRisingContributorLicenseAgreement.pdf).  Please sign it and email it to . Include your github
 username in the email so we can easily keep track of which contributors have signed.  
 Once we receive your signed CLA, we will sign it and send you a copy of the final
 document.  
