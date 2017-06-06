@@ -192,7 +192,7 @@ or making small changes to the repository, you can skip the CLA.  Not sure what 
 change counts as "small"?  Just ask us on Slack, or via email to actionrisingsite@gmail.com.
 
 You can download a pdf copy of the agreement
-[here](https://github.com/shaunagm/actionrising/blob/develop/ActionRisingContributorLicenseAgreement.pdf).  Please sign it and email it to . Include your github
+[here](https://github.com/shaunagm/actionrising/blob/develop/ActionRisingContributorLicenseAgreement.pdf).  Please sign it and email it to actionrisingsite@gmail.com. Include your github
 username in the email so we can easily keep track of which contributors have signed.  
 Once we receive your signed CLA, we will sign it and send you a copy of the final
 document.  
