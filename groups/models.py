@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.contrib.auth.models import Group, User
 from django.db import models
 from django.utils import timezone
+from mysite.lib.utils import slugify_helper
 
 from ckeditor.fields import RichTextField
 from guardian.shortcuts import assign_perm, remove_perm
@@ -12,6 +13,7 @@ from mysite.lib.choices import PrivacyChoices
 class GroupProfile(models.Model):
     group = models.OneToOneField(Group, on_delete=models.CASCADE)
     owner = models.ForeignKey(User)
+    groupname = models.CharField(max_length=140)
     privacy = models.CharField(max_length=10, choices=PrivacyChoices.group_choices(),
         default=PrivacyChoices.public)
     description = RichTextField(max_length=4000, blank=True, null=True)
@@ -22,6 +24,12 @@ class GroupProfile(models.Model):
         permissions = (
             ('admin_group', 'Administer group'),
         )
+
+    def save(self, *args, **kwargs):
+        if not self.pk: # if being created
+            auth_group = Group.objects.create(name=slugify_helper(Group, self.groupname))
+            self.group = auth_group
+        super(GroupProfile, self).save(*args, **kwargs)
 
     def hasMember(self, user):
         return self.group.users.filter(username=user.username).exists()
