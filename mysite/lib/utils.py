@@ -77,3 +77,16 @@ def slugify_helper(object_model, slug):
             continue
         break
     return temp_slug
+
+# TODO: refactor groupname_helper and slugify_helper together
+def groupname_helper(name):
+    from django.contrib.auth.models import Group
+    counter = 0
+    new_name = slugify(name)
+    while True:
+        if Group.objects.filter(name=new_name):
+            new_name += str(counter)
+            counter += 1
+            continue
+        break
+    return new_name

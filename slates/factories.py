@@ -46,6 +46,12 @@ class ActionRisingProvider(BaseProvider):
         })
         return self.generator.parse(pattern)
 
+    def group_name(self):
+        pattern = self.random_element({
+            '{{adjective}} {{topic}} united',
+            'Citizens for better {{topic}}'
+        })
+        return self.generator.parse(pattern)
 
 class Slate(DjangoModelFactory):
     class Meta:

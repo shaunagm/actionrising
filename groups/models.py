@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.contrib.auth.models import Group, User
 from django.db import models
 from django.utils import timezone
-from mysite.lib.utils import slugify_helper
+from mysite.lib.utils import groupname_helper
 
 from ckeditor.fields import RichTextField
 from guardian.shortcuts import assign_perm, remove_perm
@@ -27,18 +27,18 @@ class GroupProfile(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.pk: # if being created
-            auth_group = Group.objects.create(name=slugify_helper(Group, self.groupname))
+            auth_group = Group.objects.create(name=groupname_helper(self.groupname))
             self.group = auth_group
         super(GroupProfile, self).save(*args, **kwargs)
 
     def hasMember(self, user):
-        return self.group.users.filter(username=user.username).exists()
+        return self.group.user_set.filter(username=user.username).exists()
 
     def hasAdmin(self, user):
         '''Checks if user is in group and has the admin permission'''
-        user = self.admins.filter(username=user.username)
+        user = self.group.user_set.filter(username=user.username)
         if user:
-            return user.has_perm('groupprofiles.admin_group', self.group)
+            return user[0].has_perm('groups.admin_group', self)
         return False
 
     def addMember(self, user):
@@ -46,12 +46,12 @@ class GroupProfile(models.Model):
 
     def addAdmin(self, user):
         self.addMember(user)
-        assign_perm('admin_group', user, self.group)
+        assign_perm('admin_group', user, self)
 
     def removeMember(self, user):
         if self.hasAdmin(user):
-            remove_perm('admin_group', user, self.group)
+            remove_perm('admin_group', user, self)
         self.group.user_set.remove(user)
 
     def removeAdmin(self, user):
-        remove_perm('admin_group', user, self.group)
+        remove_perm('admin_group', user, self)
