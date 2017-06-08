@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from groups.models import GroupProfile
+
+admin.site.register(GroupProfile)
