@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'notifications',
     'commitments',
     'blog',
+    'groups',
     'plugins.location_plugin',
     'plugins.phonescript_plugin',
     'functional_tests',
