@@ -6,7 +6,7 @@ from django.contrib.auth.models import User, AnonymousUser
 from django.contrib.contenttypes.models import ContentType
 
 from plugins.phonescript_plugin.models import (PhoneScript, Legislator, ScriptMatcher,
-    TypeChoices)
+    TypeChoices, PartyChoices)
 from plugins.phonescript_plugin.lib import phonescripts
 from plugins.location_plugin.models import Location
 
@@ -19,10 +19,12 @@ class TestLegislatorModels(TestCase):
     def setUp(self):
         self.testing_user = User.objects.create(username="testing_user")
         self.leg = Legislator.objects.create(bioguide_id="M000133", first_name="Edward",
-            last_name="Markey", party="d", title="sen", phone="202-224-2742", state="MA")
+            last_name="Markey", party=PartyChoices.democrat, title="sen", phone="202-224-2742",
+            state="MA")
         self.action = Action.objects.create(title="ActionX", creator=self.testing_user)
         self.constituent_phonescript = PhoneScript.objects.create(action=self.action,
-            content="Constituent script for ActionX", script_type=TypeChoices.constituent, party="d")
+            content="Constituent script for ActionX", script_type=TypeChoices.constituent,
+            party=PartyChoices.democrat)
 
     def test_get_script_given_action_with_default(self):
         # With no matched script and no default specified, return nothing
@@ -42,17 +44,17 @@ class TestPhoneScriptModels(TestCase):
 
     def setUp(self):
         Legislator.objects.create(bioguide_id="M000133", first_name="Edward", last_name="Markey",
-            party="d", title="sen", phone="202-224-2742", state="MA")
+            party=PartyChoices.democrat, title="sen", phone="202-224-2742", state="MA")
         Legislator.objects.create(bioguide_id="W000802", first_name="Sheldon", last_name="Whitehouse",
-            party="d", title="sen", phone="202-224-292", state="RI")
+            party=PartyChoices.democrat, title="sen", phone="202-224-292", state="RI")
         Legislator.objects.create(bioguide_id="C001071", first_name="Bob", last_name="Corker",
-            party="", title="sen", phone="202-224-3344", state="TN")
+            party=PartyChoices.republican, title="sen", phone="202-224-3344", state="TN")
         Legislator.objects.create(bioguide_id="C001037", first_name="Michael", last_name="Capuano",
-            party="d", title="rep", phone="202-225-5111", state="MA", district="7")
+            party=PartyChoices.democrat, title="rep", phone="202-225-5111", state="MA", district="7")
         Legislator.objects.create(bioguide_id="L000562", first_name="Stephen", last_name="Lynch",
-            party="d", title="rep", phone="202-225-8273", state="MA", district="8")
+            party=PartyChoices.democrat, title="rep", phone="202-225-8273", state="MA", district="8")
         Legislator.objects.create(bioguide_id="L000491", first_name="Frank", last_name="Lucas",
-            party="r", title="rep", phone="202-225-5565", state="OK", district="3")
+            party=PartyChoices.republican, title="rep", phone="202-225-5565", state="OK", district="3")
         self.testing_user = User.objects.create(username="testing_user")
         self.action = Action.objects.create(title="ActionX", creator=self.testing_user)
 
@@ -87,7 +89,7 @@ class TestPhoneScriptModels(TestCase):
 
     def test_does_rep_meet_conditions_party_and_title(self):
         phonescript = PhoneScript.objects.create(action=self.action, content="Phonescript for ActionX",
-            script_type=TypeChoices.constituent, rep_type="sen", party="d")
+            script_type=TypeChoices.constituent, rep_type="sen", party=PartyChoices.democrat)
         dem_senator = Legislator.objects.get(last_name="Markey")
         self.assertEqual(phonescript.does_rep_meet_conditions(dem_senator), True)
         rep_senator = Legislator.objects.get(last_name="Corker")
@@ -148,24 +150,24 @@ class TestPhoneScriptLib(TestCase):
     def test_get_constituent_script_for_leg(self):
         phonescripts.get_legislators()
         phonescript = PhoneScript.objects.create(action=self.action, content="High priority phonescript for ActionX",
-            script_type=TypeChoices.constituent, party="d")
+            script_type=TypeChoices.constituent, party=PartyChoices.democrat)
         markey = Legislator.objects.get(last_name="Markey")
         self.assertEqual(phonescripts.get_constituent_script_for_leg(markey, self.action), phonescript)
 
     def test_get_constituent_script_for_leg_with_different_priorities(self):
         phonescripts.get_legislators()
         phonescript1 = PhoneScript.objects.create(action=self.action, content="Low priority phonescript for ActionX",
-            script_type=TypeChoices.constituent, party="d", priority="1")
+            script_type=TypeChoices.constituent, party=PartyChoices.democrat, priority="1")
         phonescript2 = PhoneScript.objects.create(action=self.action, content="High priority phonescript for ActionX",
-            script_type=TypeChoices.constituent, party="d", priority="3")
+            script_type=TypeChoices.constituent, party=PartyChoices.democrat, priority="3")
         phonescript3 = PhoneScript.objects.create(action=self.action, content="Med priority phonescript for ActionX",
-            script_type=TypeChoices.constituent, party="d", priority="2")
+            script_type=TypeChoices.constituent, party=PartyChoices.democrat, priority="2")
         markey = Legislator.objects.get(last_name="Markey")
         self.assertEqual(phonescripts.get_constituent_script_for_leg(markey, self.action), phonescript2)
 
     def test_create_initial_script_matches(self):
         script_for_dems = PhoneScript.objects.create(action=self.action, content="Dem script for ActionX",
-            script_type=TypeChoices.constituent, party="d", priority="1")
+            script_type=TypeChoices.constituent, party=PartyChoices.democrat, priority="1")
         script_for_sens = PhoneScript.objects.create(action=self.action, content="Senator script for ActionX",
             script_type=TypeChoices.constituent, rep_type="sen", priority="3")
         default_script = PhoneScript.objects.create(action=self.action, content="Default script for ActionX",
@@ -197,7 +199,7 @@ class TestPhoneScriptLib(TestCase):
         # Setup!
         phonescripts.get_legislators() # Start by populating legislators
         dem_phonescript = PhoneScript.objects.create(action=self.action, content="Dem script for ActionX",
-            script_type=TypeChoices.constituent, party="d", priority="1") # Should match all three of the user's reps
+            script_type=TypeChoices.constituent, party=PartyChoices.democrat, priority="1") # Should match all three of the user's reps
         phonescripts.create_initial_script_matches(self.action)
         # Get constituent scripts for user
         legs = phonescripts.get_user_legislators_given_location_object(self.location)

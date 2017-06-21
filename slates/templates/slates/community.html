@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block title %} Users and Slates | ActionRising{% endblock %}
+{% block title %} Users and Slates | {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
 
@@ -12,24 +12,24 @@
       <h4>Your Community</h4>
 
       {% if created_slates %}
-        {% include 'profiles/slates_you_edit.html' %}
+        {% include 'profiles/slates_edited_panel.html' %}
       {% endif %}
 
-      {% include 'profiles/slates_you_follow.html' with search=True %}
+      {% include 'profiles/slates_followed_panel.html' with search=True %}
 
-      {% include 'profiles/your_connections.html' with search=True object=request.user %}
+      {% include 'profiles/friend_list_panel.html' with search=True object=request.user %}
 
     </div>
 
     <div class="col-sm-6">
-      <h4> ActionRising Activity </h4>
+      <h4> {{ SITE_NAME }} Activity </h4>
       <div class="well activity">
         {% load activity_tags %}
         {% load profile_extras %}
 
         {% activity_stream 'others' user  %}
         {% for action in stream|slice:":1000" %}
-          {% include 'profiles/feed_include.html' with user=user  %}
+          {% include 'profiles/activity_include.html' with user=user  %}
         {% endfor %}
       </div>
     </div>

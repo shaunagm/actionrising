@@ -2,7 +2,7 @@
   <div class="container">
     <div class="navbar-header">
 
-      <a href="{% url 'index' %}" class="navbar-brand">ActionRising</a>
+      <a href="{% url 'index' %}" class="navbar-brand">{{ SITE_NAME }}</a>
 
       <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
         <span class="icon-bar"></span>
@@ -16,7 +16,7 @@
 
         {% if request.user.is_authenticated %}
           <li><a href="{% url 'actions' %}">Actions</a></li>
-          <li><a href="{% url 'follow-users-and-slates' %}">Community</a></li>
+          <li><a href="{% url 'community' %}">Community</a></li>
         {% else %}
           <li><a href="{% url 'actions' %}">Actions</a></li>
           <li><a href="{% url 'slates' %}">Community</a></li>

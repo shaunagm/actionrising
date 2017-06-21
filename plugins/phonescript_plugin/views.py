@@ -217,10 +217,10 @@ def mass_position_editor(request, slug, partysplit):
     action = Action.objects.get(slug=slug)
     matches = ScriptMatcher.objects.filter(action=action)
     for match in matches:
-        if match.legislator.party == PartyChoices.dem:
+        if match.legislator.party == PartyChoices.democrat:
             match.position = PositionChoices.for_position if partysplit == "demfor" \
                 else PositionChoices.against_position
-        elif match.legislator.party == PartyChoices.rep:
+        elif match.legislator.party == PartyChoices.republican:
             match.position = PositionChoices.against_position if partysplit == "demfor" \
                 else PositionChoices.for_position
         match.save()

@@ -1,10 +1,18 @@
 import sys
 
 from django.core.mail import send_mail
-from django.template.loader import render_to_string
+from django.template.loader import render_to_string as shadowed_render_to_string
 from django.core.urlresolvers import reverse
 
 from mysite.settings import NOTIFY_EMAIL
+from mysite.constants import constants_table
+
+EMAIL_ADDRESS = constants_table["EMAIL_ADDRESS"]
+
+
+def render_to_string(path, context):
+    context.update(constants_table)
+    return shadowed_render_to_string(path, context)
 
 def get_notificationsettings_url(recipient):
     url_path = reverse('manage_notifications', kwargs={'pk': recipient.user.notificationsettings.pk})
@@ -448,11 +456,11 @@ def send_generic_email(recipient_email, generic_email):
 #######################
 
 def generic_admin_email(subject, plain_message):
-    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, ["actionrisingsite@gmail.com"], html_message=plain_message)
+    sent = send_mail(subject, plain_message, NOTIFY_EMAIL, [EMAIL_ADDRESS], html_message=plain_message)
     if sent:
-        log_sent_mail(subject, plain_message, "actionrisingsite@gmail.com")
+        log_sent_mail(subject, plain_message, EMAIL_ADDRESS)
     else:
-        log_unsent_email(subject, plain_message, "actionrisingsite@gmail.com")
+        log_unsent_email(subject, plain_message, EMAIL_ADDRESS)
     return sent
 
 def flag_email(instance):
@@ -462,7 +470,7 @@ def flag_email(instance):
     sent = send_mail(subject, plain_message, NOTIFY_EMAIL, ['actionrisingsite@gmail.com'],
         fail_silently=False, html_message=html_message)
     if sent:
-        log_sent_mail(subject, plain_message, "actionrisingsite@gmail.com")
+        log_sent_mail(subject, plain_message, EMAIL_ADDRESS)
     else:
-        log_unsent_email(subject, plain_message, "actionrisingsite@gmail.com")
+        log_unsent_email(subject, plain_message, EMAIL_ADDRESS)
     return sent

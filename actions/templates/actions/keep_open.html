@@ -1,16 +1,16 @@
 {% extends "mysite/base.html" %}
 
-{% block title %} Open {{ action.title }} | ActionRising{% endblock %}
+{% block title %} Open {{ action.title }} | {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
 
     <div class="row">
       <div class="col-sm-11 col-sm-offset-1">
-
-        <h4>You have chosen to keep action <a href="{{ action.get_absolute_url }}">
-          {{ action.title }}</a> open.  It is scheduled to close again in
-          50 days.</h4>
-
+        <h4>
+           You have chosen to keep action
+           <a href="{{ action.get_absolute_url }}">{{ action.title }}</a> open.
+           It is scheduled to close again in {{ DEFAULT_ACTION_DURATION }} days.
+        </h4>
       </div>
     </div>
 

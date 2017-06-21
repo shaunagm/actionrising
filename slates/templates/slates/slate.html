@@ -1,6 +1,6 @@
 {% extends "mysite/base.html" %}
 
-{% block title %} {{ object.title }} | ActionRising{% endblock %}
+{% block title %} {{ object.title }} | {{ SITE_NAME }}{% endblock %}
 
 {% block page_specific_meta %}
     {% include "mysite/share_meta_include.html" with object=object %}

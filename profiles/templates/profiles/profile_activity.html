@@ -13,11 +13,11 @@
      {% for action in stream|slice:":1000" %}
        {% filtered_feed action own=True as filtered_action %}
        {% if filtered_action %}
-          {% include 'profiles/feed_include.html' with user=user  %}
+          {% include 'profiles/activity_include.html' with user=user  %}
        {% endif %}
      {% empty %}
          You haven't done anything yet.  Find <a href="{% url 'actions' %}">an action
-         to take</a>, or <a href="{% url 'follow-users-and-slates' %}">people to follow</a>,
+         to take</a>, or <a href="{% url 'community' %}">people to follow</a>,
          or <a href="{% url 'create_slate' %}">create a slate of actions</a>, and all of your activity will appear here.
      {% endfor %}
 

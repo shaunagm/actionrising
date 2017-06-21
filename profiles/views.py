@@ -106,10 +106,10 @@ class ProfileSearchView(generic.ListView):
         return context
 
 class FeedView(LoginRequiredMixin, generic.TemplateView):
-    template_name = 'profiles/feed.html'
+    template_name = 'profiles/followed_activity.html'
 
 class ActivityView(LoginRequiredMixin, generic.TemplateView):
-    template_name = 'profiles/activity.html'
+    template_name = 'profiles/profile_activity.html'
 
 def toggle_relationships_helper(toggle_type, current_profile, target_profile):
     relationship = current_profile.get_relationship(target_profile)

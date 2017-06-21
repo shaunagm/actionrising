@@ -15,10 +15,14 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SEND_BROKEN_LINK_EMAILS = True
-MANAGERS = (('Admin', 'actionrisingsite@gmail.com'),)
+from mysite.constants import constants_table
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'act-now.herokuapp.com', 'actionrising.com', 'www.actionrising.com',
+SEND_BROKEN_LINK_EMAILS = True
+MANAGERS = (('Admin', constants_table["EMAIL_ADDRESS"]),)
+
+ALLOWED_HOSTS = [
+    'localhost', '127.0.0.1',
+    'act-now.herokuapp.com', 'actionrising.com', 'www.actionrising.com',
     'act-now-staging.herokuapp.com']
 
 SITE_ID = 1
@@ -87,6 +91,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
+                'mysite.constants.constants',
             ],
         },
     },

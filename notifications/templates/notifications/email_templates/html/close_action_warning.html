@@ -9,7 +9,7 @@
         Hi there,</p>
       <p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">
         Your action, <a href="{{ action.get_absolute_url_with_domain }}">{{ action.title }}</a>, will
-        be automatically closed in 3 days.</p>
+        be automatically closed in {{ DAYS_WARNING_BEFORE_CLOSURE }} days.</p>
 
       <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse:separate;mso-table-lspace:0pt;mso-table-rspace:0pt;box-sizing:border-box;width:100%;">
         <tbody>
@@ -31,7 +31,7 @@
 
       <p style="font-family:sans-serif;font-size:14px;font-weight:normal;margin:0;Margin-bottom:15px;">
         You can also edit the action and add a deadline.  Actions with deadlines are closed
-        when the action has passed, rather than after 50 days.</p>
+        when the action has passed, rather than after {{ DEFAULT_ACTION_DURATION }} days.</p>
 
         <p style="font-family:sans-serif;font-size:18px;font-weight:bold;margin:0;Margin-left:25px;Margin-bottom:15px;">
           <a href="{{ action.get_edit_url_with_domain }}">Edit your action</a>
