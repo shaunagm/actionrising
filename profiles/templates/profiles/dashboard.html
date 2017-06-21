@@ -22,17 +22,19 @@
   {% endif %}
 
   <div class="row">
-    <div class="col-sm-5 col-sm-offset-1">
-      {% if suggested_pars %}
-        {% include 'profiles/dash_panels/suggested_actions.html' %}
-      {% endif %}
 
-      {% include 'profiles/open_actions.html' %}
-    </div>
+     <div class="col-sm-5 col-sm-offset-1">
+       {% if suggested_pars %}
+         {% include 'profiles/dash_panels/suggested_actions.html' %}
+       {% endif %}
 
-    <div class="col-sm-5">
-      {% include 'profiles/your_feed.html' %}
-    </div>
+       {% include 'profiles/to_do_panel.html' %}
+     </div>
+
+     <div class="col-sm-5">
+       {% include 'profiles/followed_activity_panel.html' %}
+     </div>
+
   </div>
 
 {% endblock content %}
