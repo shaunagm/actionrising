@@ -158,6 +158,16 @@ class TestProfileMethods(TestCase):
 
         self.assertEqual(profile.get_percent_finished(), 33.3)
 
+    def test_format_suggesters(self):
+        buffy = User.objects.create(username="buffysummers")
+        par = factories.ProfileActionRelationship()
+        self.assertEqual(par.format_suggesters([buffy]), "<a href='/profiles/profile/buffysummers/'> buffysummers </a>")
+
+    def test_get_suggester_html(self):
+        suggester = User.objects.create(username="moorecheyenne")
+        par = factories.ProfileActionRelationship(last_suggester = suggester)
+        self.assertEqual(par.get_suggester_html(), "<a href='/profiles/profile/moorecheyenne/'> moorecheyenne </a> suggests")
+
 
 class TestStreak(TestCase):
     def setUp(self):
