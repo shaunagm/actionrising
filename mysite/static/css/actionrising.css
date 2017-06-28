@@ -1,7 +1,6 @@
 /*Sitewide styles*/
 
 body { padding-top: 70px; padding-bottom: 60px; }
-i { padding-right: 20px; }
 
 * {
   -webkit-transition: all 0.3s ease;
@@ -158,6 +157,35 @@ p.search-all a {
 
 a.btn {
   color: white;
+}
+
+/* Suggestion styles */
+
+ul.suggestion {
+  list-style: none;
+  padding-left: 0;
+}
+
+li.suggested-action {
+  display: flex;
+}
+
+.act-on-suggestion {
+  min-width: 40px;
+}
+
+.act-on-suggestion a {
+  text-decoration: none;
+}
+
+.accept-suggestion {
+  color: #5cb85c;
+  padding-right: 5px;
+}
+
+.decline-suggestion {
+  color: #d9534f;
+  padding-right: 5px;
 }
 
 /*Form styles*/
