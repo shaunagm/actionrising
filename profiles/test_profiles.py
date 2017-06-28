@@ -466,7 +466,7 @@ class TestManageSuggestedActionView(TestCase):
 
     def test_manage_suggested_action_helper_reject(self):
         self.assertEqual(self.par.status, ToDoStatusChoices.suggested)
-        par = manage_suggested_action_helper(self.par, "reject")
+        par = manage_suggested_action_helper(self.par, "decline")
         self.assertEqual(par.status, ToDoStatusChoices.rejected)
 
 #########################
