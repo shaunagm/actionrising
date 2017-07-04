@@ -96,8 +96,8 @@ class TestActionList(SeleniumTestCase):
         self.assertEquals(self.actions_table.first_row_action.text, "Sign petition to make Boston a sanctuary city")
         # Sort by national/global
         self.actions_table.select_location("National or Global")
-        self.assertEquals(len(self.actions_table.rows), 2)
-        self.assertEquals(self.actions_table.first_row_action.text, "Join the site")
+        self.assertEquals(len(self.actions_table.rows), 9)
+        self.assertEquals(self.actions_table.first_row_action.text, "Anonymous Action")
         # Back to all
         self.actions_table.select_location("Anywhere")
         self.assertEquals(len(self.actions_table.rows), 12)

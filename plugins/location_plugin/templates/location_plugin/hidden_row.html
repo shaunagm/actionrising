@@ -1,5 +1,5 @@
 {% load location_tags %}
-{% get_state_and_district action as location_dict %}
+{% get_state_and_district action show_hidden_location=True as location_dict %}
 
 <td>{{ location_dict.district }}</td>
 <td>{{ location_dict.state }}</td>
