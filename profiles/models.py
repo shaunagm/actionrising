@@ -159,6 +159,7 @@ class Profile(models.Model):
             action__status=StatusChoices.ready)
 
     def get_suggested_actions(self):
+        # note that date_accepted here is date suggested
         return self.profileactionrelationship_set.filter(
             status=ToDoStatusChoices.suggested,
             action__status=StatusChoices.ready).order_by('-date_accepted')
