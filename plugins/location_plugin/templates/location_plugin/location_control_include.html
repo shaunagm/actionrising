@@ -6,7 +6,7 @@
     {% if request.user.is_authenticated %}
 
         {% load location_tags %}
-        {% get_state_and_district request.user as location_dict %}
+        {% get_state_and_district request.user show_hidden_location=True as location_dict %}
 
         <li>
           {% if location_dict.district %}

@@ -19,7 +19,7 @@ function datelogic(days_til_deadline, deadline_status) {
 function locationlogic(filtered_location, data) {
 
       {% load location_tags %}
-      {% get_state_and_district request.user as location_dict %}
+      {% get_state_and_district request.user show_hidden_location=True as location_dict %}
 
       user_state = "{{ location_dict.state }}";
       user_district = "{{ location_dict.district }}";
@@ -27,11 +27,11 @@ function locationlogic(filtered_location, data) {
       var district = data[district_index];
 
       if (filtered_location == "My State") {
-          return (state == user_state);
+          return (state == user_state && state != "None");
       }
 
       if (filtered_location == "My District") {
-          return (district == user_district);
+          return (district == user_district && district != "None");
       }
 
       if (filtered_location == "National or Global") {
