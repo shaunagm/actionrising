@@ -15,8 +15,8 @@
           <td class="suggesters">{{ par.get_suggesters_html|safe }}</td>
           <td class="manage"><a href="{% url 'manage_suggested_action' slug=par.action.slug type='accept' %}">
                   <span class="label label-success">Accept</span></a>
-              <a href="{% url 'manage_suggested_action' slug=par.action.slug type='reject' %}">
-                  <span class="label label-danger">Reject</span></a>
+              <a href="{% url 'manage_suggested_action' slug=par.action.slug type='decline' %}">
+                  <span class="label label-danger">Decline</span></a>
           </td>
       </tr>
       {% endfor %}
