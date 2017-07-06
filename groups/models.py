@@ -27,8 +27,7 @@ class GroupProfile(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.pk: # if being created
-            auth_group = Group.objects.create(name=groupname_helper(self.groupname))
-            self.group = auth_group
+            self.group = Group.objects.create(name=groupname_helper(self.groupname))
         super(GroupProfile, self).save(*args, **kwargs)
 
     def hasMember(self, user):
@@ -36,9 +35,9 @@ class GroupProfile(models.Model):
 
     def hasAdmin(self, user):
         '''Checks if user is in group and has the admin permission'''
-        user = self.group.user_set.filter(username=user.username)
-        if user:
-            return user[0].has_perm('groups.admin_group', self)
+        member = self.group.user_set.filter(username=user.username).first()
+        if member:
+            return member.has_perm('groups.admin_group', self)
         return False
 
     def addMember(self, user):
