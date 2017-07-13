@@ -1,6 +1,6 @@
 {% extends "mysite/base.html" %}
 
-{% block title %}ActionRising{% endblock %}
+{% block title %}{{ SITE_NAME }}{% endblock %}
 
 {% block content %}
 
@@ -10,11 +10,11 @@
 
      <p class="text-warning">Last Updated 5/7/2017</p>
 
-     <p>This policy details how data about you is used when you access ActionRising.
+     <p>This policy details how data about you is used when you access {{ SITE_NAME }}.
      If we update it, we will revise the date, place notices on the site if changes
      are material, and/or obtain your consent as required by law.</p>
 
-     <h4>How Privacy Settings Work on ActionRising</h4>
+     <h4>How Privacy Settings Work on {{ SITE_NAME }}</h4>
 
      <p>There are three possible privacy settings: public, sitewide, and follows only. The first
        is visible to anyone on the internet, the second to anyone with an account on the site,
@@ -72,7 +72,7 @@
        exceptions:</p>
 
      <ul>
-       <li>The email you used to sign up with ActionRising should never be exposed to anyone
+       <li>The email you used to sign up with {{ SITE_NAME }} should never be exposed to anyone
          but you.</li>
        <li>If you set a location on your profile but select 'keep this hidden', no one should
          ever see your location but you.</li>
@@ -90,10 +90,10 @@
      <p>User-created data such as actions, slates, comments, etc may be used by
        other members of the site for a variety of purposes.  For instance, other
        members may copy your action outside the site in order to promote it.
-       By using the site, you recognize that neither you nor ActionRising can fully
+       By using the site, you recognize that neither you nor {{ SITE_NAME }} can fully
        control what happens to this class of data.</p>
 
-     <p>ActionRising site administrators may use member data to analyze site activity
+     <p>{{ SITE_NAME }} site administrators may use member data to analyze site activity
        and improve user experience.  Any public reports of this analysis will keep
        your identity private unless we receive explicit permission from you.</p>
 
@@ -114,7 +114,7 @@
 
      <h4>Connecting to Offsite Accounts</h4>
 
-     <p>ActionRising now offers the ability to register through Facebook and Google,
+     <p>{{ SITE_NAME }} now offers the ability to register through Facebook and Google,
        and to connect your account to Facebook, Google, and Twitter, through the
        <a href="https://oauth.net/" target="_blank">OAUTH protocol</a>. By using this
        protocol, we can authenticate your accounts without ever seeing or storing your

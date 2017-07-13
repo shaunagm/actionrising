@@ -1,6 +1,6 @@
 {% extends "mysite/base.html" %}
 
-{% block title %} {{ object.username }} | ActionRising{% endblock %}
+{% block title %} {{ object.username }} | {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
 
@@ -62,14 +62,14 @@
     <div class="row">
       <div class="col-sm-5 col-sm-offset-1" id="created-actions-div">
         {% ifequal request.user object %}
-          {% include 'profiles/dash_panels/actions_you_tracked.html' %}
-          {% include 'profiles/actions_you_created.html' %}
+          {% include 'profiles/actions_tracked_panel.html' %}
+          {% include 'profiles/actions_created_panel.html' %}
         {% else %}
-          {% include 'profiles/dash_panels/your_connections.html' %}
+          {% include 'profiles/friend_list_panel.html' %}
         {% endifequal %}
       </div>
       <div class="col-sm-5">
-        {% include 'profiles/dash_panels/activity_log.html' %}
+        {% include 'profiles/profile_activity_panel.html' %}
       </div>
     </div>
 

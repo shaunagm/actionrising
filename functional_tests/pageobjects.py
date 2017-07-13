@@ -260,7 +260,7 @@ class FollowedActivity(BasePage):
     activity_lines = MultiPageElement(css=".actstream-action")
 
     def go_to_feed(self):
-        self.w.get(self.root_uri + '/profiles/feed')
+        self.w.get(self.root_uri + '/profiles/followed-activity')
 
     def get_activity(self):
         return [activity.text for activity in self.activity_lines]
@@ -297,6 +297,7 @@ class EditProfilePage(BasePage):
     first_name = PageElement(id_="id_first_name")
     last_name = PageElement(id_="id_last_name")
     location = PageElement(id_="id_location")
+    hide_location = PageElement(id_="id_hide_location")
     submit_button = PageElement(css=".profile-submit-button")
 
 class ToDoPage(BasicActionListPage):

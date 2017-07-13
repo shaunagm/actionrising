@@ -1,6 +1,6 @@
 {% extends "mysite/base.html" %}
 
-{% block title %}Server Error (500) | ActionRising{% endblock %}
+{% block title %}Server Error (500) | {{ SITE_NAME }}{% endblock %}
 
 {% block content %}
 
@@ -9,7 +9,7 @@
      <h2>We're Sorry</h2>
 
      <p>There was an error with our server.  Please do us a favor and email
-       actionrisingsite@gmail.com with a brief description of what you were trying
+       {{ OBFUSCATED_EMAIL_ADDRESS }} with a brief description of what you were trying
        to do when this error occurred.</p>
 
    </div>

@@ -10,35 +10,45 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericRelation
 
 from ckeditor.fields import RichTextField
+from mysite.constants import constants_table
 from mysite.settings import PRODUCTION_DOMAIN
-from mysite.lib.choices import PrivacyChoices, PriorityChoices, StatusChoices, TimeChoices
+from mysite.lib.choices import\
+    PrivacyChoices, PriorityChoices, StatusChoices, TimeChoices
 from mysite.lib.privacy import privacy_tests
-from mysite.lib.utils import disable_for_loaddata, slug_validator, slugify_helper
-from profiles.lib.status_helpers import open_pars_when_action_reopens, close_pars_when_action_closes
+from mysite.lib.utils import\
+    disable_for_loaddata, slug_validator, slugify_helper
+from profiles.lib.status_helpers import\
+    open_pars_when_action_reopens, close_pars_when_action_closes
 
-DEFAULT_ACTION_DURATION = 60
-DAYS_WARNING_BEFORE_CLOSURE = 3
+DEFAULT_ACTION_DURATION = constants_table["DEFAULT_ACTION_DURATION"]
+DAYS_WARNING_BEFORE_CLOSURE = constants_table["DAYS_WARNING_BEFORE_CLOSURE"]
 
 class Action(models.Model):
     """ Stores a single action """
 
     # Basic action data
-    slug = models.CharField(max_length=50, unique=True, validators=slug_validator)
+    slug = models.CharField(max_length=50,
+        unique=True, validators=slug_validator)
     title = models.CharField(max_length=300)
     creator = models.ForeignKey(User)
     anonymize = models.BooleanField(default=False)
     main_link = models.CharField(max_length=300, blank=True, null=True)
     description = RichTextField(max_length=4000, blank=True, null=True)
     date_created = models.DateTimeField(default=timezone.now)
-    duration = models.CharField(max_length=10, choices=TimeChoices.choices, default=TimeChoices.unknown)
-    priority = models.CharField(max_length=10, choices=PriorityChoices.choices, default=PriorityChoices.medium)
+    duration = models.CharField(max_length=10,
+        choices=TimeChoices.choices, default=TimeChoices.unknown)
+    priority = models.CharField(max_length=10,
+        choices=PriorityChoices.choices, default=PriorityChoices.medium)
 
     # Privacy info
-    privacy = models.CharField(max_length=10, choices=PrivacyChoices.choices, default=PrivacyChoices.inherit)
-    current_privacy = models.CharField(max_length=10, choices=PrivacyChoices.choices, default=PrivacyChoices.sitewide)
+    privacy = models.CharField(max_length=10,
+        choices=PrivacyChoices.choices, default=PrivacyChoices.inherit)
+    current_privacy = models.CharField(max_length=10,
+        choices=PrivacyChoices.choices, default=PrivacyChoices.sitewide)
 
     # Status info
-    status = models.CharField(max_length=10, choices=StatusChoices.choices, default=StatusChoices.ready)
+    status = models.CharField(max_length=10,
+        choices=StatusChoices.choices, default=StatusChoices.ready)
     never_expires = models.BooleanField(default=False)
     deadline = models.DateTimeField(blank=True, null=True)
     close_date = models.DateTimeField(blank=True, null=True)
@@ -154,7 +164,8 @@ class Action(models.Model):
         elif self.deadline:
             self.close_date = self.deadline
         else:
-            self.close_date = self.date_created + datetime.timedelta(days=DEFAULT_ACTION_DURATION)
+            self.close_date = self.date_created + datetime.timedelta(
+                days=DEFAULT_ACTION_DURATION)
 
     def days_until(self, date):
         return (date - datetime.datetime.now(timezone.utc)).days
@@ -173,13 +184,16 @@ class Action(models.Model):
         return False
 
     def send_warning(self):
-        if not self.deadline and (self.days_until(self.close_date) == DAYS_WARNING_BEFORE_CLOSURE):
+        if not self.deadline and (
+            self.days_until(self.close_date) == DAYS_WARNING_BEFORE_CLOSURE):
             return True
         return False
 
     def keep_action_open(self):
         self.status = StatusChoices.ready
-        self.close_date = datetime.datetime.now(timezone.utc) + datetime.timedelta(days=DEFAULT_ACTION_DURATION)
+        self.close_date = datetime.datetime.now(
+            timezone.utc) + datetime.timedelta(
+            days=DEFAULT_ACTION_DURATION)
         self.save()
 
     def is_visible_to(self, viewer, follows_user = None):
@@ -188,10 +202,12 @@ class Action(models.Model):
 @disable_for_loaddata
 def action_handler(sender, instance, created, **kwargs):
     if not created and (timezone.now() - instance.date_created).seconds < 600:
-        return  # Don't show updated if the action was created in the last ten minutes
+        # Don't show updated if the action was created in the last ten minutes
+        return
     verb_to_use = "created" if created else "updated"
-    # TODO: This is still going to be a problem if you change anonymity after creation,
-    # we'll need to break some of the following links after anonymizing.
+    # TODO: This is still going to be a problem if you change anonymity after
+    # creation, we'll need to break some of the following links after
+    # anonymizing.
     if instance.named():
         action.send(instance.get_creator(), verb=verb_to_use, target=instance)
     else:
@@ -200,8 +216,10 @@ post_save.connect(action_handler, sender=Action)
 
 class ActionFilter(models.Model):
     creator = models.ForeignKey(User)
-    saved = models.BooleanField(default=False) # If saved == false and created > 24 hrs old, delete
+    # If saved == false and created > 24 hrs old, delete
+    saved = models.BooleanField(default=False) 
     date_created = models.DateTimeField(default=timezone.now)
+
     # Fields
     kinds = models.CharField(max_length=300, blank=True, null=True)
     topics = models.CharField(max_length=300, blank=True, null=True)
@@ -218,11 +236,12 @@ class ActionFilter(models.Model):
             return json.loads(self.kinds)
 
     def get_kinds_string(self):
-        # TODO: Fix naming issue, should be types rather than kinds
-        # (See also wrong name in filterwizard_forms, but this needs a db migration)
+        # TODO: Fix naming issue, should be types rather than kinds (See
+        # also wrong name in filterwizard_forms, but this needs a db migration)
         from tags.models import Tag
         kinds = Tag.objects.filter(kind="type").filter(id__in=self.get_kinds())
-        return "Types of actions: " + ", ".join([tag.get_link_string() for tag in kinds])
+        return "Types of actions: " + ", ".join(
+            [tag.get_link_string() for tag in kinds])
 
     def set_topics(self, pks):
         self.topics = json.dumps(pks)
@@ -234,8 +253,10 @@ class ActionFilter(models.Model):
 
     def get_topics_string(self):
         from tags.models import Tag
-        topics = Tag.objects.filter(kind="topic").filter(id__in=self.get_topics())
-        return "Topics of actions: " + ", ".join([tag.get_link_string() for tag in topics])
+        topics = Tag.objects.filter(kind="topic")\
+            .filter(id__in=self.get_topics())
+        return "Topics of actions: " + ", ".join(
+            [tag.get_link_string() for tag in topics])
 
     def set_time(self, options):
         self.time = json.dumps(options)
@@ -272,16 +293,21 @@ class ActionFilter(models.Model):
         '''Runs filter and returns queryset'''
         current_queryset = Action.objects.all()
         if self.kinds:
-            current_queryset = current_queryset.filter(tags__in=self.get_kinds())
+            current_queryset = current_queryset.filter(
+                tags__in=self.get_kinds())
         if self.topics:
-            current_queryset = current_queryset.filter(tags__in=self.get_topics())
+            current_queryset = current_queryset.filter(
+                tags__in=self.get_topics())
         if self.time:
-            current_queryset = current_queryset.filter(duration__in=self.get_time())
+            current_queryset = current_queryset.filter(
+                duration__in=self.get_time())
         if self.friends:
-            friend_ids = [user.id for user in self.creator.profile.get_people_tracking()]
+            friend_ids = [user.id for user
+                in self.creator.profile.get_people_tracking()]
             current_queryset = current_queryset.filter(creator__in=friend_ids)
         from plugins import plugin_helpers
-        current_queryset = plugin_helpers.run_filters_for_plugins(self, current_queryset)
+        current_queryset = plugin_helpers.run_filters_for_plugins(
+            self, current_queryset)
         return current_queryset
 
     def get_summary(self):

@@ -36,8 +36,8 @@ class TestSlateList(SeleniumTestCase):
     def test_display_slates(self):
         self.assertTrue(self.slates_table.datatables_js_is_enabled())
         self.assertEquals(len(self.slates_table.columns), 5)
-        self.assertEquals(self.slates_table.first_row_date.text, "Fri Dec 02")
         self.assertEquals(self.slates_table.first_row_slate.text, "Slate Buffy Can See")
+        self.assertEquals(self.slates_table.first_row_date.text, "Sat Dec 03")
         self.assertEquals(self.slates_table.first_row_creator.text, "thewitch")
         self.assertEquals(self.slates_table.first_row_action_count.text, "0")
         slates = self.slates_table.get_slates()

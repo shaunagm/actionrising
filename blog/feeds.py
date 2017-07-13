@@ -2,10 +2,12 @@ from django.contrib.syndication.views import Feed
 from django.urls import reverse
 from blog.models import Post
 
+from mysite.constants import constants_table
+
 class LatestEntriesFeed(Feed):
-    title = "ActionRising Blog"
+    title = "{} Blog".format(constants_table['SITE_NAME'])
     link = "/posts/"
-    description = "News, new features and more from ActionRising.com"
+    description = "News, new features and more from {}.com".format(constants_table['SITE_NAME'])
 
     def items(self):
         return Post.objects.order_by('-date_created')[:10]

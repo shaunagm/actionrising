@@ -106,10 +106,10 @@ class ProfileSearchView(generic.ListView):
         return context
 
 class FeedView(LoginRequiredMixin, generic.TemplateView):
-    template_name = 'profiles/feed.html'
+    template_name = 'profiles/followed_activity.html'
 
 class ActivityView(LoginRequiredMixin, generic.TemplateView):
-    template_name = 'profiles/activity.html'
+    template_name = 'profiles/profile_activity.html'
 
 def toggle_relationships_helper(toggle_type, current_profile, target_profile):
     relationship = current_profile.get_relationship(target_profile)
@@ -244,7 +244,7 @@ def manage_suggested_action_helper(par, type):
     if type == 'accept':
         par.status = ToDoStatusChoices.accepted
         par.date_accepted = datetime.datetime.now(tz=pytz.utc)
-    if type == 'reject':
+    if type == 'decline':
         par.status = ToDoStatusChoices.rejected
     par.save()
     return par
@@ -270,6 +270,7 @@ class DashboardView(LoginRequiredMixin, generic.TemplateView):
         context['action_streak_current'] = profile.get_action_streak()
         context['percent_finished'] = profile.get_percent_finished()
         context['total_actions'] = profile.profileactionrelationship_set.count()
+        context['suggested_pars'] = profile.get_suggested_actions()
         # If none of the above is filled out, include alert.
         if not (context['open_actions'] or context['action_streak_current'] or context['percent_finished']):
             context['new_user'] = True

@@ -25,8 +25,8 @@ class RepChoices(DjangoChoices):
     both = ChoiceItem('both', _('Both'))
 
 class PartyChoices(DjangoChoices):
-    dem = ChoiceItem('D', _('Democrat'))
-    rep = ChoiceItem('R', _('Republican'))
+    democrat = ChoiceItem('D', _('Democrat'))
+    republican = ChoiceItem('R', _('Republican'))
     all = ChoiceItem('all', _('All'))
 
 class PositionChoices(DjangoChoices):

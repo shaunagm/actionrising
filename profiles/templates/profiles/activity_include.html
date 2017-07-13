@@ -11,7 +11,8 @@
     {% ifequal request.user action.action_object %}
       you
     {% else %}
-      <a href="{{ action.action_object.get_absolute_url }}">{{ action.action_object }}</a>
+      <a href="{{ action.action_object.get_absolute_url }}">
+        {{ action.action_object }}</a>
     {% endifequal %}
     to
   {% endif %}
@@ -26,6 +27,6 @@
     {{ action.target }}</a>
   {% endifequal %}
 </div>
-<div class="actstream-action-time">
-  {{ action.timestamp }}
+<div class="actstream-action-time" title="{{ action.timestamp }}">
+    {{ action.timestamp|timesince }}
 </div>
