@@ -135,10 +135,11 @@ class Profile(models.Model):
         profiles = self.filter_connected_profiles(lambda rel: rel.target_notified_of_current_profile(self))
         return [profile.user for profile in profiles]
 
-    def get_most_recent_actions_created(self):
-        return self.user.action_set\
-            .filter(status__in=[StatusChoices.ready, StatusChoices.finished])\
-            .order_by('-date_created')[:5]
+    def get_most_recent_actions_created(self, viewer):
+        actions = self.user.action_set
+        filtered_actions = actions if viewer == self.user\
+            else actions.filter(status__in=[StatusChoices.ready, StatusChoices.finished])
+        return filtered_actions.order_by('-date_created')[:5]
 
     def get_most_recent_actions_tracked(self):
         return Action.objects.filter(

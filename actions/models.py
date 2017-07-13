@@ -291,7 +291,7 @@ class ActionFilter(models.Model):
 
     def filter_actions(self):
         '''Runs filter and returns queryset'''
-        current_queryset = Action.objects.all()
+        current_queryset = Action.objects.filter(status=StatusChoices.ready)
         if self.kinds:
             current_queryset = current_queryset.filter(
                 tags__in=self.get_kinds())
@@ -308,7 +308,7 @@ class ActionFilter(models.Model):
         from plugins import plugin_helpers
         current_queryset = plugin_helpers.run_filters_for_plugins(
             self, current_queryset)
-        return current_queryset
+        return apply_check_privacy(self.get_queryset(), self.request.user, include_anonymous=True)
 
     def get_summary(self):
         strings = []
