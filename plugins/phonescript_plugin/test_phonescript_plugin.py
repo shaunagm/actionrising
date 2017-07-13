@@ -145,7 +145,7 @@ class TestPhoneScriptLib(TestCase):
         leg = Legislator.objects.all()
         self.assertEqual(len(leg), 0)
         leg = phonescripts.get_legislators()
-        self.assertEqual(len(leg), 537)
+        self.assertTrue(530 <= len(leg) <= 545)
 
     def test_get_constituent_script_for_leg(self):
         phonescripts.get_legislators()
@@ -174,7 +174,7 @@ class TestPhoneScriptLib(TestCase):
             script_type=TypeChoices.default)
         created = phonescripts.create_initial_script_matches(self.action)
         self.assertEqual(created, True)
-        self.assertEqual(len(ScriptMatcher.objects.filter(action=self.action)), 537)
+        self.assertTrue(530 <= len(ScriptMatcher.objects.filter(action=self.action)) <= 545)
 
     def test_update_all_script_matches(self):
         pass

@@ -227,7 +227,7 @@ def followed_slate_updated_email(recipient, action, slate):
         # Email-specific fields
         'slate': slate,
         'action': action,
-        'toggle_notify_url': get_toggle_notify_url(slate)
+        'toggle_notify_url': get_toggle_notify_for_slate_url(slate)
     }
     plain_message = render_to_string('notifications/email_templates/plain/followed_slate_updated.html', ctx)
     html_message = render_to_string('notifications/email_templates/html/followed_slate_updated.html', ctx)

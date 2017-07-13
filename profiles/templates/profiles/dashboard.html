@@ -24,8 +24,11 @@
   <div class="row">
 
      <div class="col-sm-5 col-sm-offset-1">
-       {% include 'profiles/to_do_panel.html' %}
+       {% if suggested_pars %}
+         {% include 'profiles/suggested_panel.html' %}
+       {% endif %}
 
+       {% include 'profiles/to_do_panel.html' %}
      </div>
 
      <div class="col-sm-5">
