@@ -3,3 +3,4 @@ from production_settings import (SECRET_KEY, DEBUG, CHROMEDRIVER_PATH, DATABASES
 
 # Override production setting, set debug back to true, otherwise should have same settings
 DEBUG = True
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
