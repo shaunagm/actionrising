@@ -58,6 +58,7 @@ def get_content_object(model, pk):
 import re
 from django.core.validators import RegexValidator
 from django.template.defaultfilters import slugify
+from django.contrib.auth.models import Group
 
 slug_validator = [
     RegexValidator(
@@ -68,12 +69,18 @@ slug_validator = [
 ]
 
 def slugify_helper(object_model, slug):
+    new_slug = slugify(slug)[:45]
+    slug_filter = lambda x: object_model.objects.filter(slug=x)
+    return increment_name(new_slug, slug_filter)
+
+def groupname_helper(name):
+    group_filter = lambda x: Group.objects.filter(name=x)
+    return increment_name(name, group_filter)
+
+def increment_name(name, name_filter):
     counter = 0
-    temp_slug = slugify(slug)[:45]
-    while True:
-        if object_model.objects.filter(slug=temp_slug):
-            temp_slug += str(counter)
-            counter += 1
-            continue
-        break
-    return temp_slug
+    new_name = name
+    while name_filter(new_name):
+        counter += 1
+        new_name = "{0}-{1}".format(name, str(counter))
+    return new_name

@@ -7,6 +7,7 @@ django-bootstrap3==7.1.0
 django-ckeditor==5.1.1
 django-contrib-comments==1.7.3
 django-datetime-widget==0.9.3
+django-guardian==1.4.8
 django-jsonfield==1.0.1
 django-rq==0.9.4
 gunicorn==19.6.0

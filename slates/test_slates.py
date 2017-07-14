@@ -37,7 +37,7 @@ class TestSlateMethods(TestCase):
         self.assertFalse(self.slate.is_active())
 
     def test_slugify_helper(self):
-        self.assertEqual(slugify_helper(Slate, "Test Slate"), "test-slate0")
+        self.assertEqual(slugify_helper(Slate, "Test Slate"), "test-slate-1")
         self.assertEqual(slugify_helper(Slate, "Test Different Slate"), "test-different-slate")
 
 

@@ -8,6 +8,7 @@ from mysite.lib.utils import slug_validator, slugify_helper
 from actions.models import Action
 from slates.models import Slate
 from profiles.models import Profile
+from groups.models import GroupProfile
 
 TAG_CHOICES = (
     ('topic', _('Topic')),
@@ -24,6 +25,7 @@ class Tag(models.Model):
     actions = models.ManyToManyField(Action, blank=True, related_name="tags")
     slates = models.ManyToManyField(Slate, blank=True, related_name="tags")
     profiles = models.ManyToManyField(Profile, blank=True, related_name="tags")
+    groups = models.ManyToManyField(GroupProfile, blank=True, related_name="tags")
 
     def __unicode__(self):
         return self.name

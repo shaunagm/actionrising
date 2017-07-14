@@ -52,11 +52,13 @@ INSTALLED_APPS = [
     'notifications',
     'commitments',
     'blog',
+    'groups',
     'plugins.location_plugin',
     'plugins.phonescript_plugin',
     'functional_tests',
     'django_comments',
     'ckeditor',
+    'guardian',
     'django_rq',
     'actstream',
 ]
@@ -195,6 +197,7 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.facebook.FacebookOAuth2',
     'social_core.backends.google.GoogleOAuth2',
     'mysite.lib.backends.CustomModelBackend',
+    'guardian.backends.ObjectPermissionBackend',
     )
 
 # Auth keys

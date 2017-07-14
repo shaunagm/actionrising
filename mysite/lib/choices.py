@@ -15,6 +15,10 @@ class PrivacyChoices(DjangoChoices):
     def personalized(cls, user_choice):
         return cls.choices[:-1] + (('inherit', user_choice),)
 
+    @classmethod
+    def group_choices(cls):
+        return cls.choices[:-2] + (('members', 'Visible to group members'),)
+
 class StatusChoices(DjangoChoices):
     ready = ChoiceItem('ready', _('Open for action'))
     finished = ChoiceItem('finished', _('Finished'))
