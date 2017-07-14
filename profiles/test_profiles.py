@@ -90,6 +90,7 @@ class TestProfileMethods(TestCase):
     def test_get_open_actions(self):
         par = factories.ProfileActionRelationship()
         self.assertEqual(
+
             par.action,
             par.profile.get_open_actions().get())
 
