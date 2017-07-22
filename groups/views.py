@@ -12,11 +12,6 @@ class GroupListView(generic.ListView):
     template_name = "groups/groups.html"
     model = GroupProfile
 
-    def get_context_data(self, **kwargs):
-        context = super(GroupListView, self).get_context_data(**kwargs)
-        context['object_list'] = apply_check_privacy(self.get_queryset(), self.request.user)
-        return context
-
 
 class GroupView(generic.DetailView):
     template_name = "groups/group.html"
