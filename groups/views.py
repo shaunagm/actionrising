@@ -3,12 +3,19 @@ from django.contrib.auth.mixins import UserPassesTestMixin,  LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import Group
 
+from mysite.lib.privacy import apply_check_privacy
+
 from groups.models import GroupProfile
 
 
 class GroupListView(generic.ListView):
     template_name = "groups/groups.html"
     model = GroupProfile
+
+    def get_context_data(self, **kwargs):
+        context = super(GroupListView, self).get_context_data(**kwargs)
+        context['object_list'] = apply_check_privacy(self.get_queryset(), self.request.user)
+        return context
 
 
 class GroupView(generic.DetailView):

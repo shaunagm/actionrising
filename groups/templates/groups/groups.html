@@ -2,6 +2,11 @@
 
 {% block content %}
 
-Groups.html
+    {% for object in object_list %}
+
+        <a href="{{ object.get_absolute_url }}">{{ object.groupname }}</a>: {{ object.summary }}
+
+    {% endfor %}
+
 
 {% endblock content %}
