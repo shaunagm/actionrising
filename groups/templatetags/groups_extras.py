@@ -7,3 +7,8 @@ register = template.Library()
 def can_access(context, object):
     viewer = context['request'].user
     return check_privacy(object, viewer)
+
+@register.assignment_tag(takes_context=True)
+def is_member(context, object):
+    viewer = context['request'].user
+    return object.hasMember(viewer)

@@ -10,6 +10,7 @@
     {% for object in object_list %}
 
         {% can_access object as accessible %}
+        {% is_member object as member %}
 
         {% if accessible %}
             <a href="{{ object.get_absolute_url }}">{{ object.groupname }}</a>
@@ -18,6 +19,10 @@
         {% endif %}
 
         : {{ object.summary }}
+
+        {% if member %}
+            <span class="label label-info">Member</span>
+        {% endif %}
 
         <br /><br />
     {% endfor %}
