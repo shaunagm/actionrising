@@ -1,5 +1,7 @@
 from django.views import generic
 from django.contrib.auth.mixins import UserPassesTestMixin,  LoginRequiredMixin
+from django.http import HttpResponseRedirect
+from django.contrib.auth.models import Group
 
 from groups.models import GroupProfile
 
@@ -9,7 +11,7 @@ class GroupListView(generic.ListView):
     model = GroupProfile
 
 
-class GroupView(UserPassesTestMixin, generic.DetailView):
+class GroupView(generic.DetailView):
     template_name = "groups/group.html"
     model = GroupProfile
     slug_field = "groupname"
@@ -17,13 +19,30 @@ class GroupView(UserPassesTestMixin, generic.DetailView):
 
 class GroupCreateView(LoginRequiredMixin, generic.edit.CreateView):
     model = GroupProfile
-    template_name = "groups/create_group.html"
+    template_name = "groups/group_form.html"
+    fields = ['groupname', 'privacy', 'description', 'summary']
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        new_group, created = Group.objects.get_or_create(name=self.object.groupname)
+        self.object.group = new_group
+        self.object.owner = self.request.user
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self, **kwargs):
+        return self.object.get_absolute_url()
 
 
 class GroupEditView(UserPassesTestMixin, generic.edit.UpdateView):
     model = GroupProfile
     slug_field = "groupname"
-    template_name = "groups/edit_group.html"
+    template_name = "groups/group_form.html"
+    fields = ['privacy', 'description', 'summary']
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj.owner == self.request.user
 
 
 class GroupAdminView(UserPassesTestMixin, generic.DetailView):

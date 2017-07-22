@@ -2,6 +2,12 @@
 
 {% block content %}
 
-Group.html
+{{ object.groupname }}
+
+{{ object.privacy }}
+
+{{ object.description|safe }}
+
+{{ object.summary }}
 
 {% endblock content %}

@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.contrib.auth.models import Group, User
 from django.db import models
 from django.utils import timezone
+from django.core.urlresolvers import reverse
 from mysite.lib.utils import groupname_helper
 
 from ckeditor.fields import RichTextField
@@ -54,3 +55,6 @@ class GroupProfile(models.Model):
 
     def removeAdmin(self, user):
         remove_perm('admin_group', user, self)
+
+    def get_absolute_url(self):
+        return reverse('group', kwargs={'slug': self.groupname})
