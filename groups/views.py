@@ -31,8 +31,6 @@ class GroupCreateView(LoginRequiredMixin, generic.edit.CreateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        new_group, created = Group.objects.get_or_create(name=self.object.groupname)
-        self.object.group = new_group
         self.object.owner = self.request.user
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
