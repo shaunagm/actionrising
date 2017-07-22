@@ -31,6 +31,8 @@ class GroupProfile(models.Model):
         if not self.pk: # if being created
             self.group = Group.objects.create(name=groupname_helper(self.groupname))
         super(GroupProfile, self).save(*args, **kwargs)
+        if not self.hasAdmin(self.owner):
+            self.addAdmin(self.owner)
 
     def hasMember(self, user):
         return self.group.user_set.filter(username=user.username).exists()
