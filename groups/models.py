@@ -10,6 +10,7 @@ from ckeditor.fields import RichTextField
 from guardian.shortcuts import assign_perm, remove_perm
 
 from mysite.lib.choices import PrivacyChoices
+from mysite.lib.privacy import privacy_tests
 
 class GroupProfile(models.Model):
     group = models.OneToOneField(Group, on_delete=models.CASCADE)
@@ -58,3 +59,6 @@ class GroupProfile(models.Model):
 
     def get_absolute_url(self):
         return reverse('group', kwargs={'slug': self.groupname})
+
+    def is_visible_to(self, viewer, follows_user=None):
+        return privacy_tests[self.privacy](self, viewer, follows_user)

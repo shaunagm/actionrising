@@ -26,11 +26,20 @@ def follows_test(object, user, follows_user = None):
     creator = object.get_creator()
     return creator == user or creator.profile in get_follows(user, follows_user)
 
+def members_test(object, user, follows_user = None):
+    """
+    object: groupprofile object with privacy setting
+    user: User trying to view object
+    follows_user: takes an extra argument for conformity
+    """
+    return object.hasMember(user)
+
 # maps privacy settings to functions that can be applied to test them
 privacy_tests = {
     'public': public_test,
     'sitewide': sitewide_test,
-    'follows': follows_test
+    'follows': follows_test,
+    'members': members_test
 }
 
 ##########################################################
