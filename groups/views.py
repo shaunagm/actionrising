@@ -58,6 +58,10 @@ class GroupEditView(UserPassesTestMixin, generic.edit.UpdateView):
 
 
 class GroupAdminView(UserPassesTestMixin, generic.DetailView):
-    emplate_name = "groups/admin_group.html"
+    template_name = "groups/admin_group.html"
     model = GroupProfile
     slug_field = "groupname"
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj.hasAdmin(self.request.user)
