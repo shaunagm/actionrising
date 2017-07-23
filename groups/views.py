@@ -1,12 +1,16 @@
 from django.views import generic
 from django.contrib.auth.mixins import UserPassesTestMixin,  LoginRequiredMixin
 from django.http import HttpResponseRedirect
-from django.contrib.auth.models import Group
+from django.core.urlresolvers import reverse
 
 from mysite.lib.privacy import apply_check_privacy, check_privacy
 
 from groups.models import GroupProfile
 from groups.forms import GroupForm
+
+
+def index(request):
+    return HttpResponseRedirect(reverse('groups'))
 
 
 class GroupListView(generic.ListView):
