@@ -27,6 +27,9 @@ class GroupProfile(models.Model):
             ('admin_group', 'Administer group'),
         )
 
+    def __unicode__(self):
+        return self.groupname
+
     def save(self, *args, **kwargs):
         if not self.pk: # if being created
             self.group = Group.objects.create(name=groupname_helper(self.groupname))
@@ -62,5 +65,15 @@ class GroupProfile(models.Model):
     def get_absolute_url(self):
         return reverse('group', kwargs={'slug': self.groupname})
 
+    def get_edit_url(self):
+        return reverse('edit_group', kwargs={'slug': self.groupname})
+
+    def get_admin_url(self):
+        return reverse('admin_group', kwargs={'slug': self.groupname})
+
     def is_visible_to(self, viewer, follows_user=None):
         return privacy_tests[self.privacy](self, viewer, follows_user)
+
+    def get_members(self):
+        return User.objects.filter(groups__name=self.group.name)
+

@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin,  LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import Group
 
-from mysite.lib.privacy import apply_check_privacy
+from mysite.lib.privacy import apply_check_privacy, check_privacy
 
 from groups.models import GroupProfile
 
@@ -13,10 +13,22 @@ class GroupListView(generic.ListView):
     model = GroupProfile
 
 
-class GroupView(generic.DetailView):
+class GroupView(UserPassesTestMixin, generic.DetailView):
     template_name = "groups/group.html"
     model = GroupProfile
     slug_field = "groupname"
+
+    def get_context_data(self, **kwargs):
+        context = super(GroupView, self).get_context_data(**kwargs)
+        context['can_access'] = check_privacy(self.object, self.request.user)
+        context['is_member'] = self.object.hasMember(self.request.user)
+        context['is_admin'] = self.object.hasAdmin(self.request.user)
+        context['is_owner'] = self.object.owner == self.request.user
+        return context
+
+    def test_func(self):
+        obj = self.get_object()
+        return check_privacy(obj, self.request.user)
 
 
 class GroupCreateView(LoginRequiredMixin, generic.edit.CreateView):
