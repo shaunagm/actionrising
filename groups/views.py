@@ -6,6 +6,7 @@ from django.contrib.auth.models import Group
 from mysite.lib.privacy import apply_check_privacy, check_privacy
 
 from groups.models import GroupProfile
+from groups.forms import GroupForm
 
 
 class GroupListView(generic.ListView):
@@ -24,6 +25,7 @@ class GroupView(UserPassesTestMixin, generic.DetailView):
         context['is_member'] = self.object.hasMember(self.request.user)
         context['is_admin'] = self.object.hasAdmin(self.request.user)
         context['is_owner'] = self.object.owner == self.request.user
+        context['tag_list'] = self.object.tags.all()
         return context
 
     def test_func(self):
@@ -34,13 +36,12 @@ class GroupView(UserPassesTestMixin, generic.DetailView):
 class GroupCreateView(LoginRequiredMixin, generic.edit.CreateView):
     model = GroupProfile
     template_name = "groups/group_form.html"
-    fields = ['groupname', 'privacy', 'description', 'summary']
+    form_class = GroupForm
 
-    def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.owner = self.request.user
-        self.object.save()
-        return HttpResponseRedirect(self.get_success_url())
+    def get_form_kwargs(self):
+        form_kws = super(GroupCreateView, self).get_form_kwargs()
+        form_kws["user"] = self.request.user
+        return form_kws
 
     def get_success_url(self, **kwargs):
         return self.object.get_absolute_url()
@@ -50,7 +51,7 @@ class GroupEditView(UserPassesTestMixin, generic.edit.UpdateView):
     model = GroupProfile
     slug_field = "groupname"
     template_name = "groups/group_form.html"
-    fields = ['privacy', 'description', 'summary']
+    form_class = GroupForm
 
     def test_func(self):
         obj = self.get_object()

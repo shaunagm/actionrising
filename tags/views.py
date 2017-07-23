@@ -19,6 +19,7 @@ class TagView(generic.DetailView):
         context['action_list'] = apply_check_privacy(self.object.actions.all(), self.request.user, include_anonymous = True)
         context['slate_list'] = apply_check_privacy(self.object.slates.all(), self.request.user, include_anonymous = True)
         context['profile_list'] = apply_check_privacy(self.object.profiles.all(), self.request.user, include_anonymous = True)
+        context['group_list'] = apply_check_privacy(self.object.groups.all(), self.request.user, include_anonymous = True )
         return context
 
 class TagListView(generic.ListView):

@@ -2,7 +2,7 @@
 
 {% for group in request.user.groups.all %}
 
-  <a href="{{ group.groupprofile.get_absolute_url" class="extra-padding-right">
+  <a href="{{ group.groupprofile.get_absolute_url }}" class="extra-padding-right">
       {{ group.groupprofile.groupname }}</a>
 
   {% is_admin group.groupprofile as admin %}

@@ -30,6 +30,13 @@
     </div>
   </div>
 
+    <div class="row">
+       <div class="col-sm-11 col-sm-offset-1">
+          {% include "tags/label_include.html" with object_list=object.tags.all %}
+       </div>
+    </div>
+
+
   <div class="row">
       <div class="col-sm-6 col-sm-offset-1">
           <div class="well" id="summary">

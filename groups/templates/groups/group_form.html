@@ -23,3 +23,7 @@
 </div>
 
 {% endblock content %}
+
+{% block page_specific_javascript %}
+  $("#id_topic_tags, #id_type_tags").chosen()
+{% endblock page_specific_javascript %}
