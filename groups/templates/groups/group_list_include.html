@@ -1,0 +1,24 @@
+{% load groups_extras %}
+
+{% for group in request.user.groups.all %}
+
+  <a href="{{ group.groupprofile.get_absolute_url" class="extra-padding-right">
+      {{ group.groupprofile.groupname }}</a>
+
+  {% is_admin group.groupprofile as admin %}
+
+  {% if admin %}
+    <span class="label label-info">Admin</span>
+  {% endif %}
+
+  {% ifequal group.groupprofile.owner request.user %}
+    <span class="label label-success">Owner</span>
+  {% endifequal %}
+
+  <br />
+
+{% empty %}
+  {% if own %}
+    <p>You aren't in any groups.</p>
+  {% endif %}
+{% endfor %}
