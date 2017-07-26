@@ -70,4 +70,10 @@ class TestGroupProfileMethods(TestCase):
             owner=self.test_member.user)
         self.assertEqual(test_group.group.name, "a-test-groupname")
 
-   
+    def test_get_urls(self):
+        test_group = GroupProfile.objects.create(groupname="A test groupname",
+                                                 owner=self.test_member.user)
+        self.assertEqual(test_group.get_absolute_url(), "/groups/group/a-test-groupname/")
+        self.assertEqual(test_group.get_edit_url(), "/groups/edit/a-test-groupname/")
+        self.assertEqual(test_group.get_admin_url(), "/groups/admin/a-test-groupname/")
+

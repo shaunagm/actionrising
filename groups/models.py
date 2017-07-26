@@ -63,13 +63,13 @@ class GroupProfile(models.Model):
         remove_perm('admin_group', user, self)
 
     def get_absolute_url(self):
-        return reverse('group', kwargs={'slug': self.groupname})
+        return reverse('group', kwargs={'slug': self.group.name})
 
     def get_edit_url(self):
-        return reverse('edit_group', kwargs={'slug': self.groupname})
+        return reverse('edit_group', kwargs={'slug': self.group.name})
 
     def get_admin_url(self):
-        return reverse('admin_group', kwargs={'slug': self.groupname})
+        return reverse('admin_group', kwargs={'slug': self.group.name})
 
     def is_visible_to(self, viewer, follows_user=None):
         return privacy_tests[self.privacy](self, viewer, follows_user)

@@ -2,6 +2,7 @@ from django.views import generic
 from django.contrib.auth.mixins import UserPassesTestMixin,  LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import Group
 
 from mysite.lib.privacy import apply_check_privacy, check_privacy
 
@@ -17,11 +18,15 @@ class GroupListView(generic.ListView):
     template_name = "groups/groups.html"
     model = GroupProfile
 
-
 class GroupView(UserPassesTestMixin, generic.DetailView):
     template_name = "groups/group.html"
-    model = GroupProfile
-    slug_field = "groupname"
+    model = Group
+    slug_field = "name"
+
+    def get_object(self, queryset=None):
+        '''We want the groupprofile, but the url-safe slug is the auth group name.'''
+        auth_group = super(GroupView, self).get_object()
+        return auth_group.groupprofile
 
     def get_context_data(self, **kwargs):
         context = super(GroupView, self).get_context_data(**kwargs)
@@ -52,10 +57,15 @@ class GroupCreateView(LoginRequiredMixin, generic.edit.CreateView):
 
 
 class GroupEditView(UserPassesTestMixin, generic.edit.UpdateView):
-    model = GroupProfile
-    slug_field = "groupname"
+    model = Group
+    slug_field = "name"
     template_name = "groups/group_form.html"
     form_class = GroupForm
+
+    def get_object(self, queryset=None):
+        '''We want the groupprofile, but the url-safe slug is the auth group name.'''
+        auth_group = super(GroupEditView, self).get_object()
+        return auth_group.groupprofile
 
     def test_func(self):
         obj = self.get_object()
@@ -64,8 +74,13 @@ class GroupEditView(UserPassesTestMixin, generic.edit.UpdateView):
 
 class GroupAdminView(UserPassesTestMixin, generic.DetailView):
     template_name = "groups/admin_group.html"
-    model = GroupProfile
-    slug_field = "groupname"
+    model = Group
+    slug_field = "name"
+
+    def get_object(self, queryset=None):
+        '''We want the groupprofile, but the url-safe slug is the auth group name.'''
+        auth_group = super(GroupView, self).get_object()
+        return auth_group.groupprofile
 
     def test_func(self):
         obj = self.get_object()
