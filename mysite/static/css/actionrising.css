@@ -348,3 +348,13 @@ li.nav-item.active {
 .alert-dismissible a {
    font-weight: bold;
 }
+
+.group_item {
+    clear: both;
+    font-size: 125%;
+}
+
+.group_summary {
+    font-size: 100%;
+    padding: 0px 0px 20px 20px;
+}

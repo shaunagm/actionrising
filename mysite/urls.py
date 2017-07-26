@@ -32,6 +32,7 @@ urlpatterns = [
     url(r'^accounts/', include('accounts.urls')),
     url(r'^specialactions/', include('plugins.urls')),
     url(r'^slates/', include('slates.urls')),
+    url(r'^groups/', include('groups.urls')),
     url(r'^tags/', include('tags.urls')),
     url(r'^flags/', include('flags.urls')),
     url(r'^blog/', include('blog.urls')),

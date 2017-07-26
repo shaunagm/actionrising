@@ -16,18 +16,59 @@
      </div>
   </div>
 
-  <div class="row">
+  <div class="row extra-padding-top">
      <div class="col-sm-10 col-sm-offset-1">
-
-       <h2>Tagged Actions</h2>
-
-       {% load profile_extras %}
-       {% get_friendslist as friendlist %}
-
-       {% include "actions/action_list_include.html" with object_list=action_list %}
-
+       <ul class="nav nav-tabs">
+         <li class="active"><a id="actionslink" aria-expanded="true" href="#tagged_actions" data-toggle="tab">Tagged Actions</a></li>
+         <li class=""><a id="slatelink" aria-expanded="false" href="#tagged_slates" data-toggle="tab">Tagged Slates</a></li>
+         <li class=""><a id="grouplink" aria-expanded="false" href="#tagged_groups" data-toggle="tab">Tagged Groups</a></li>
+       </ul>
      </div>
   </div>
 
+<div id="myTabContent" class="tab-content extra-padding-top">
+
+    <div class="tab-pane fade active in" id="tagged_actions">
+
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+
+                <h2>Tagged Actions</h2>
+
+                {% load profile_extras %}
+                {% get_friendslist as friendlist %}
+
+                {% include "actions/action_list_include.html" with object_list=action_list %}
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="tab-pane fade" id="tagged_slates">
+
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+                <h2>Tagged Slates</h2>
+
+                {% include "slates/slate_list_limited_include.html" with object_list=slate_list %}
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="tab-pane fade" id="tagged_groups">
+
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+                <h2>Tagged Groups</h2>
+
+                 {% include "groups/group_list_limited_include.html" with object_list=group_list %}
+
+            </div>
+        </div>
+
+    </div>
 
 {% endblock content %}

@@ -3,12 +3,14 @@ from __future__ import unicode_literals
 from django.contrib.auth.models import Group, User
 from django.db import models
 from django.utils import timezone
+from django.core.urlresolvers import reverse
 from mysite.lib.utils import groupname_helper
 
 from ckeditor.fields import RichTextField
 from guardian.shortcuts import assign_perm, remove_perm
 
 from mysite.lib.choices import PrivacyChoices
+from mysite.lib.privacy import privacy_tests
 
 class GroupProfile(models.Model):
     group = models.OneToOneField(Group, on_delete=models.CASCADE)
@@ -25,10 +27,15 @@ class GroupProfile(models.Model):
             ('admin_group', 'Administer group'),
         )
 
+    def __unicode__(self):
+        return self.groupname
+
     def save(self, *args, **kwargs):
         if not self.pk: # if being created
             self.group = Group.objects.create(name=groupname_helper(self.groupname))
         super(GroupProfile, self).save(*args, **kwargs)
+        if not self.hasAdmin(self.owner):
+            self.addAdmin(self.owner)
 
     def hasMember(self, user):
         return self.group.user_set.filter(username=user.username).exists()
@@ -54,3 +61,19 @@ class GroupProfile(models.Model):
 
     def removeAdmin(self, user):
         remove_perm('admin_group', user, self)
+
+    def get_absolute_url(self):
+        return reverse('group', kwargs={'slug': self.group.name})
+
+    def get_edit_url(self):
+        return reverse('edit_group', kwargs={'slug': self.group.name})
+
+    def get_admin_url(self):
+        return reverse('admin_group', kwargs={'slug': self.group.name})
+
+    def is_visible_to(self, viewer, follows_user=None):
+        return privacy_tests[self.privacy](self, viewer, follows_user)
+
+    def get_members(self):
+        return User.objects.filter(groups__name=self.group.name)
+

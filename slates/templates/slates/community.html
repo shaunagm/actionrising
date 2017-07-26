@@ -15,6 +15,8 @@
         {% include 'profiles/slates_edited_panel.html' %}
       {% endif %}
 
+      {% include 'groups/group_list_panel.html' with object=request.user %}
+
       {% include 'profiles/slates_followed_panel.html' with search=True %}
 
       {% include 'profiles/friend_list_panel.html' with search=True object=request.user %}
