@@ -6,18 +6,19 @@ class PrivacyChoices(DjangoChoices):
     sitewide = ChoiceItem('sitewide', _('Visible sitewide')) #sit
     follows = ChoiceItem('follows', _('Visible to follows')) #fol
     inherit = ChoiceItem('inherit', _('Inherit')) #inh
+    members = ChoiceItem('members', _('Visible to group members'))
 
     @classmethod
     def default_choices(cls):
-        return cls.choices[:-1]
+        return cls.choices[:-2]
 
     @classmethod
     def personalized(cls, user_choice):
-        return cls.choices[:-1] + (('inherit', user_choice),)
+        return cls.choices[:-2] + (('inherit', user_choice),)
 
     @classmethod
     def group_choices(cls):
-        return cls.choices[:-2] + (('members', 'Visible to group members'),)
+        return cls.choices[:-2] + cls.choices[4:]
 
 class StatusChoices(DjangoChoices):
     ready = ChoiceItem('ready', _('Open for action'))
