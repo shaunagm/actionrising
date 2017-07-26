@@ -5,8 +5,9 @@ from actions.models import Action
 from slates.models import Slate, SlateActionRelationship
 from profiles.models import Profile, ProfileActionRelationship
 from tags.models import Tag
+from groups.models import GroupProfile
 
-from mysite.lib.utils import slugify_helper
+from mysite.lib.utils import slugify_helper, groupname_helper
 from mysite.lib.choices import PrivacyChoices
 from mysite.lib.privacy import check_privacy, get_global_privacy_default
 
@@ -126,3 +127,10 @@ class TestMiscUtils(TestCase):
         self.assertEqual(slugify_helper(Slate, "Test Different Slate"), "test-different-slate")
         self.assertEqual(slugify_helper(Tag, "Test Tag"), "test-tag")
         self.assertEqual(slugify_helper(Tag, "Test Different Tag"), "test-different-tag")
+
+    def test_groupname_helper(self):
+        self.assertEqual(groupname_helper("Test Group Name"), "test-group-name")
+        # Test that groupname increments when name already in DB
+        buffy = User.objects.create(username="buffysummers")
+        GroupProfile.objects.create(groupname="Test Group Name", owner=buffy)
+        self.assertEqual(groupname_helper("Test Group Name"), "test-group-name-1")

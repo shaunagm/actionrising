@@ -79,8 +79,8 @@ def groupname_helper(name):
 
 def increment_name(name, name_filter):
     counter = 0
-    new_name = name
+    new_name = slugify(name)
     while name_filter(new_name):
         counter += 1
-        new_name = "{0}-{1}".format(name, str(counter))
+        new_name = "{0}-{1}".format(slugify(name), str(counter))
     return new_name

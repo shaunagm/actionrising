@@ -68,4 +68,6 @@ class TestGroupProfileMethods(TestCase):
         '''Check that automatic group creation & the groupname helper work'''
         test_group = GroupProfile.objects.create(groupname="A test groupname",
             owner=self.test_member.user)
-        self.assertTrue(test_group.group.name, "a-test-groupname")
+        self.assertEqual(test_group.group.name, "a-test-groupname")
+
+   
