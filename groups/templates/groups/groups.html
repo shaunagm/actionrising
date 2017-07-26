@@ -5,26 +5,31 @@
 {% block content %}
 
   <div class="row">
-    <div class="col-sm-10 col-sm-offset-1">
+    <div class="col-sm-10 col-sm-offset-1" id="groups">
 
     {% for object in object_list %}
 
-        {% can_access object as accessible %}
-        {% is_member object as member %}
+        <div class="group_item">
 
-        {% if accessible %}
-            <a href="{{ object.get_absolute_url }}">{{ object.groupname }}</a>
-        {% else %}
-            {{ object.groupname }}
-        {% endif %}
+            {% can_access object as accessible %}
+            {% is_member object as member %}
 
-        : {{ object.summary }}
+            {% if accessible %}
+                <a href="{{ object.get_absolute_url }}">{{ object.groupname }}</a>
+            {% else %}
+                {{ object.groupname }}
+            {% endif %}
 
-        {% if member %}
-            <span class="label label-info">Member</span>
-        {% endif %}
+            {% if member %}
+                <span class="label label-info member-label">Member</span>
+            {% endif %}
 
-        <br /><br />
+            <div class="group_summary">
+                {{ object.summary }}
+            </div>
+
+        </div>
+
     {% endfor %}
 
     </div>

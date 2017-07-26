@@ -6,7 +6,7 @@ from page_objects import PageObject, PageElement, MultiPageElement
 from django.contrib.auth.models import User
 from actions.models import Action
 from slates.models import Slate
-
+from groups.models import GroupProfile
 
 def wait_helper(browser, id="actionrisingbody"):
     """ make sure element is visible on page """
@@ -385,3 +385,43 @@ class SignupPage(BasePage):
 
     def go_to_signup(self):
         self.w.get(self.root_uri + "/accounts/sign-up")
+
+class GroupListPage(BasePage):
+    groups_table = MultiPageElement(id_="groups")
+    group_items = MultiPageElement(css=".group_item")
+
+class GroupProfilePage(BasePage):
+    group_name = PageElement(id_="group_name")
+    owner_info = PageElement(id_="owner_info")
+    privacy = PageElement(id_="privacy-info")
+    description = PageElement(id_="description")
+    summary = PageElement(id_="summary")
+    members = PageElement(id_="members")
+    member = MultiPageElement(css=".member")
+    admin_button = PageElement(id_="admin_link")
+    edit_button = PageElement(id_="edit_link")
+
+    def go_to_profile_page(self, name):
+        self.group = GroupProfile.objects.get(groupname=name)
+        self.w.get(self.root_uri + self.group.get_absolute_url())
+
+class GroupEditPage(BasePage):
+    form = PageElement(id_="group-form")
+    groupname = PageElement(id_="id_groupname")
+    privacy = PageElement(id_="id_privacy")
+    description = PageElement(id_="id_description")
+    summary = PageElement(id_="id_summary")
+    id_topic_tags = PageElement(id_="id_topic_tags")
+    id_type_tags = PageElement(id_="id_type_tags")
+    submit_button = PageElement(css=".group-submit-button")
+
+    def select_privacy(self, selection):
+        select = Select(self.w.find_element_by_id('id_privacy'))
+        select.select_by_visible_text(selection)
+
+    def go_to_create_page(self):
+        self.w.get(self.root_uri + "/groups/create")
+
+    def go_to_update_page(self, name):
+        self.group = GroupProfile.objects.get(groupname=name)
+        self.w.get(self.root_uri + self.group.get_edit_url())
