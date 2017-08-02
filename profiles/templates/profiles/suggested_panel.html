@@ -1,0 +1,34 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <a data-toggle="collapse" href="#suggested-actions">
+        Suggested Actions
+      </a>
+      <a href="{% url 'suggested' %}" title="Open in new page" class="float-right">
+        <span class="material-icons">open_in_new</span>
+      </a>
+    </h3>
+  </div>
+  <div id="suggested-actions" class="panel-collapse">
+    <div class="panel-body">
+      <ul class="suggestion">
+        {% for par in suggested_pars %}
+          <li class="suggested-action">
+            <div class="act-on-suggestion">
+              <a href="{% url 'manage_suggested_action' slug=par.action.slug type='accept' %}">
+                <i class="fa fa-plus accept-suggestion" title="Add to To Do list"></i>
+              </a>
+              <a href="{% url 'manage_suggested_action' slug=par.action.slug type='decline' %}">
+                <i class="fa fa-times decline-suggestion" title="Decline suggested action"></i>
+              </a>
+            </div>
+            <div>
+              {{ par.get_suggester_html|safe }}
+              <a href="{{ par.action.get_robust_url }}">{{ par.action.title }}</a>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>

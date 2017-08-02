@@ -160,9 +160,10 @@ class Profile(models.Model):
             action__status=StatusChoices.ready)
 
     def get_suggested_actions(self):
+        # note that date_accepted here is date suggested
         return self.profileactionrelationship_set.filter(
             status=ToDoStatusChoices.suggested,
-            action__status=StatusChoices.ready)
+            action__status=StatusChoices.ready).order_by('-date_accepted')
 
     def get_suggested_actions_count(self):
         return self.get_suggested_actions().count()
@@ -478,11 +479,22 @@ class ProfileActionRelationship(models.Model):
         return []
 
     def get_suggesters_html(self):
-        suggesters = ""
-        for user in self.get_suggesters():
-            user_obj = User.objects.get(username=user)
-            suggesters += "<a href='" + user_obj.profile.get_absolute_url() + "'>" + user_obj.username + "</a>, "
-        return suggesters[0:-2]
+        return self.format_suggesters(self.fetch_suggesters())
+
+    def fetch_suggesters(self):
+        return User.objects.filter(username__in=self.get_suggesters())
+
+    def format_suggesters(self, suggesters):
+        suggester_html = ["<a href='{0}'> {1} </a>".format(suggester.profile.get_absolute_url(), suggester.username)
+                          for suggester in suggesters]
+        return ' ,'.join(suggester_html)
+
+    def get_suggester_html(self):
+        last = self.format_suggesters([self.last_suggester])
+        if len(self.get_suggesters()) > 1:
+            return "{0} and <a href={1}>others</a> suggest".format(last, reverse('suggested', kwargs={'slug': self.profile.user }))
+        else:
+            return "{0} suggests".format(last)
 
     def set_suggesters(self, suggesters):
         self.suggested_by = json.dumps(suggesters)
@@ -492,7 +504,7 @@ class ProfileActionRelationship(models.Model):
         suggesters = self.get_suggesters()
         if suggester not in suggesters:
             suggesters.append(suggester)
-        self.set_suggesters(suggesters)
+            self.set_suggesters(suggesters)
 
     def is_visible_to(self, viewer, follows_user = None):
         return self.profile.is_visible_to(viewer, follows_user) and self.action.is_visible_to(viewer, follows_user)
