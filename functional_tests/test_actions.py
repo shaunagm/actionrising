@@ -21,6 +21,9 @@ class TestPublicActionList(SeleniumTestCase):
     def test_protected_action_hidden(self):
         self.assertFalse("Buffy Can See" in self.actions)
 
+    def test_withdrawn_action_hidden(self):
+        self.assertFalse("Withdrawn Action" in self.actions)
+
 class TestActionList(SeleniumTestCase):
 
     def setUp(self):
@@ -128,6 +131,10 @@ class TestActionDetail(SeleniumTestCase):
     def test_anonymous_action_detail(self):
         self.action_page.go_to_detail_page(title="Anonymous Action")
         self.assertEquals(self.action_page.creator.text, "Created anonymously")
+
+    def test_withdrawn_action_detail(self):
+        self.action_page.go_to_detail_page(title="Withdrawn Action")
+        self.assertTrue('login' in self.action_page.w.current_url)
 
     def test_action_tracking_display(self):
         self.action_page.display_tracker_link.click()

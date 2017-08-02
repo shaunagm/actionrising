@@ -844,6 +844,28 @@
 },
 {
     "model": "actions.action",
+    "pk": 319,
+    "fields": {
+        "slug": "withdrawn-action",
+        "title": "Withdrawn Action",
+        "creator": [
+            "dru"
+        ],
+        "anonymize": false,
+        "main_link": "www.fakelinktomoreinfo.com",
+        "description": "<p>Here&#39;s some instructions!</p>",
+        "privacy": "public",
+        "current_privacy": "public",
+        "status": "withdrawn",
+        "never_expires": false,
+        "deadline": null,
+        "priority": "emergency",
+        "date_created": "2017-04-22T04:14:04Z",
+        "duration": "unknown"
+    }
+},
+{
+    "model": "actions.action",
     "pk": 9,
     "fields": {
         "slug": "denounce-bannon",
