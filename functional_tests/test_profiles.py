@@ -75,6 +75,10 @@ class TestProfileDetail(SeleniumTestCase):
         # admin created this anonymously
         self.assertFalse("admin created Join the site" in self.profile_page.get_activity())
 
+    def test_withdrawn_action_by_friend(self):
+        self.profile_page.go_to_profile_page(username="dru")
+        self.assertFalse("Withdrawn Action" in self.profile_page.get_created_actions())
+
     def test_restricted_profile(self):
         self.profile_page.go_to_profile_page(username="tara_m")
         self.assertFalse('login' in self.profile_page.w.current_url)

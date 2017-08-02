@@ -42,7 +42,9 @@ class ActionView(UserPassesTestMixin, generic.DetailView):
 
     def test_func(self):
         obj = self.get_object()
-        return check_privacy(obj, self.request.user)
+        privacy_ok = check_privacy(obj, self.request.user)
+        status_ok = obj.status != StatusChoices.withdrawn or self.request.user is obj.creator
+        return privacy_ok and status_ok
 
 class ActionListView(generic.ListView):
     template_name = "actions/actions.html"

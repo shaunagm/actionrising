@@ -23,7 +23,9 @@ class SlateView(UserPassesTestMixin, generic.DetailView):
         context['is_slate'] = True
         context['flag'] = get_user_flag_if_exists(self.object, self.request.user)
         annotated_list = filter_list_for_privacy_annotated(
-            self.object.slateactionrelationship_set.all().order_by("-action__date_created"),
+            self.object.slateactionrelationship_set\
+                .filter(action__status__in=[StatusChoices.ready, StatusChoices.finished])
+                .order_by("-action__date_created"),
             self.request.user, include_anonymous = True)
         context['actions'] = annotated_list['visible_list']
         context['hidden_actions'] = annotated_list['restricted_count']
@@ -114,6 +116,7 @@ class Community(LoginRequiredMixin, generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super(Community, self).get_context_data(**kwargs)
         context['created_slates'] = self.request.user.slate_set.all()
-        context['followed_slates'] = self.request.user.profile.profileslaterelationship_set.all()
+        context['followed_slates'] = self.request.user.profile.profileslaterelationship_set.filter(
+            slate__status__in=[StatusChoices.ready, StatusChoices.finished])
         context['friends'] = self.request.user.profile.get_list_of_relationships()
         return context

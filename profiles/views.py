@@ -34,7 +34,7 @@ class ProfileView(generic.DetailView):
         own = self.request.user == obj
         context['visible_to_user'] = check_privacy(obj.profile, self.request.user)
         context['created_actions'] = apply_check_privacy(
-            self.object.profile.get_most_recent_actions_created(),
+            self.object.profile.get_most_recent_actions_created(self.request.user),
             self.request.user,
             include_anonymous = own)
         context['tracked_actions'] = apply_check_privacy(
