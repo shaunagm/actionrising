@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^create/$', views.GroupCreateView.as_view(), name='create_group'),
     url(r'^join_group/$', views.join_group, name='join_group'),
     url(r'^leave_group/$', views.leave_group, name='leave_group'),
+    url(r'^remove_from_group/$', views.remove_from_group, name='remove_from_group'),
     url(r'^request_to_join_group/$', views.request_to_join_group, name='request_to_join_group'),
     url(r'^approve_request_to_join_group/$', views.approve_request_to_join_group,
         name='approve_request_to_join_group'),

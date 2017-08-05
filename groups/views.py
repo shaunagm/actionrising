@@ -113,6 +113,17 @@ def leave_group(request):
         groupprofile.removeMember(request.user)
         return JsonResponse({'message': 'You have left this group.'})
 
+@login_required
+def remove_from_group(request):
+    group_pk = request.GET.get('group_pk', None)
+    groupprofile = GroupProfile.objects.get(pk=group_pk)
+    if request.user != groupprofile.owner: # only owners can remove users for now
+        return JsonResponse({'message':
+            'You do not have permission to remove users.'})
+    user_pk = request.GET.get('user_pk', None)
+    removed_user = User.objects.get(pk=user_pk)
+    groupprofile.removeMember(removed_user)
+    return JsonResponse({'message': 'User has been removed from group.'})
 
 @login_required
 def request_to_join_group(request):
