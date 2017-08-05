@@ -87,3 +87,9 @@ class PendingMember(models.Model):
         default=MembershipChoices.request)
     inviter = models.ForeignKey(User, blank=True, null=True, related_name="invitations")
     date_created = models.DateTimeField(default=timezone.now)
+
+    def __unicode__(self):
+        if self.status == "invite":
+            return u'%s invited to %s by %s' % (self.user, self.group, self.inviter)
+        else:
+            return u'%s requested to join %s' % (self.user, self.group)

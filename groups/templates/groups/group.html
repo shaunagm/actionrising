@@ -1,7 +1,5 @@
 {% extends "mysite/base.html" %}
 
-{% load groups_extras %}
-
 {% block content %}
 
   <div class="row">
@@ -52,17 +50,7 @@
         <div class="col-sm-11 col-sm-offset-1" id="members">
             {% for user in object.get_members %}
 
-                <div class="member">
-
-                    {% profile_is_admin user as admin %}
-
-                    <a href="{{ user.profile.get_absolute_url }}">
-                        {{ user.profile.get_full_name }}</a>
-
-                    {% if admin %}
-                        <span class="label label-info">Admin</span>
-                    {% endif %}
-                </div>
+                {% include "groups/member_display_include.html" %}
 
             {% endfor %}
 

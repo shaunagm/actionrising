@@ -18,4 +18,5 @@ urlpatterns = [
     url(r'^invite_to_group/$', views.invite_to_group, name='invite_to_group'),
     url(r'^approve_invite_to_group/$', views.approve_invite_to_group,
         name='approve_invite_to_group'),
+    url(r'^change_admin/$', views.change_admin, name='change_admin'),
 ]

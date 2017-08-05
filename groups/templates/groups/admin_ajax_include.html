@@ -1,0 +1,61 @@
+
+<script>
+    function removeUser(user_pk) {
+        $.ajax({
+            url: '{% url "remove_from_group" %}',
+            data: {
+              'group_pk': {{ object.pk }},
+              'user_pk': user_pk
+            },
+            dataType: 'json',
+            success: function (data) {
+                divclass = ".remove" + user_pk;
+                $(divclass).text(data.message);
+            }
+          });
+    }
+</script>
+
+
+{% ifequal object.membership "request" %}
+<script>
+    function handleRequest(pending_pk, approved) {
+        $.ajax({
+            url: '{% url "approve_request_to_join_group" %}',
+            data: {
+              'group_pk': {{ object.pk }},
+              'pending_pk': pending_pk,
+              'approved': approved
+            },
+            dataType: 'json',
+            success: function (data) {
+                divclass = ".request" + pending_pk;
+                $(divclass).text(data.message);
+            }
+          });
+    }
+</script>
+{% endifequal %}
+
+
+{% ifequal request.user object.owner %}
+
+    <script>
+        function changeAdmin(user_pk, action) {
+            $.ajax({
+                url: '{% url "change_admin" %}',
+                data: {
+                  'group_pk': {{ object.pk }},
+                  'user_pk': user_pk,
+                  'action': action
+                },
+                dataType: 'json',
+                success: function (data) {
+                    divclass = ".changeadmin" + user_pk;
+                    $(divclass).text(data.message);
+                }
+              });
+        }
+    </script>
+
+{% endifequal %}

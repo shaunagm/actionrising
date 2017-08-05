@@ -87,8 +87,14 @@ class GroupAdminView(UserPassesTestMixin, generic.DetailView):
 
     def get_object(self, queryset=None):
         # We want groupprofile, but the url-safe slug is auth group name.
-        auth_group = super(GroupView, self).get_object()
+        auth_group = super(GroupAdminView, self).get_object()
         return auth_group.groupprofile
+
+    def get_context_data(self, **kwargs):
+        context = super(GroupAdminView, self).get_context_data(**kwargs)
+        context['requests'] = PendingMember.objects.filter(group=self.object, status="request")
+        context['invites'] = PendingMember.objects.filter(group=self.object, status="invite")
+        return context
 
     def test_func(self):
         obj = self.get_object()
@@ -118,17 +124,22 @@ def leave_group(request):
         groupprofile.removeMember(request.user)
         return JsonResponse({'message': 'You have left this group.'})
 
+
 @login_required
 def remove_from_group(request):
     group_pk = request.GET.get('group_pk', None)
     groupprofile = GroupProfile.objects.get(pk=group_pk)
-    if request.user != groupprofile.owner: # only owners can remove users for now
-        return JsonResponse({'message':
-            'You do not have permission to remove users.'})
     user_pk = request.GET.get('user_pk', None)
+    if str(request.user.pk) == user_pk:
+        return JsonResponse({'message':
+            'You cannot remove yourself from the group.'})
     removed_user = User.objects.get(pk=user_pk)
+    if groupprofile.hasAdmin(removed_user) and request.user != groupprofile.owner:
+        return JsonResponse({'message':
+            'You do not have permission to remove admins.'})
     groupprofile.removeMember(removed_user)
     return JsonResponse({'message': 'User has been removed from group.'})
+
 
 @login_required
 def request_to_join_group(request):
@@ -196,3 +207,23 @@ def approve_invite_to_group(request):
         return JsonResponse({'message': 'You have declined to join the group.'})
     return JsonResponse({'message':
         'There was an error processing your invite to join this group.'})
+
+
+@login_required
+def change_admin(request):
+    group_pk = request.GET.get('group_pk', None)
+    groupprofile = GroupProfile.objects.get(pk=group_pk)
+    if request.user != groupprofile.owner:
+        return JsonResponse({'message':
+            'You do not have permission to add or remove admins.'})
+    user_pk = request.GET.get('user_pk', None)
+    user_to_change = User.objects.get(pk=user_pk)
+    action = request.GET.get('action', None)
+    if action == "add":
+        groupprofile.addAdmin(user_to_change)
+        return JsonResponse({'message': 'User added as admin.'})
+    if action == "remove":
+        groupprofile.removeAdmin(user_to_change)
+        return JsonResponse({'message': 'User removed as admin.'})
+    return JsonResponse({'message':
+        'There was a problem changing the admin status of the user.'})
