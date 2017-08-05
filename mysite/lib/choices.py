@@ -68,3 +68,12 @@ class CommitmentStatusChoices(DjangoChoices):
     completed = ChoiceItem('completed', _('Commitment carried out'))
     expired = ChoiceItem('expired', _('Commitment expired, user took too long'))
     removed = ChoiceItem('removed', _('Par was closed or deleted'))
+
+class MembershipChoices(DjangoChoices):
+    open = ChoiceItem('open', _('Members can join without approval'))
+    request = ChoiceItem('request', _('Members must request to join and be approved'))
+    invite = ChoiceItem('invite', _('Members must be invited'))
+
+    @classmethod
+    def pending_choices(cls):
+        return cls.choices[1:]

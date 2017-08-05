@@ -9,7 +9,7 @@ from mysite.lib.utils import groupname_helper
 from ckeditor.fields import RichTextField
 from guardian.shortcuts import assign_perm, remove_perm
 
-from mysite.lib.choices import PrivacyChoices
+from mysite.lib.choices import PrivacyChoices, MembershipChoices
 from mysite.lib.privacy import privacy_tests
 
 class GroupProfile(models.Model):
@@ -18,6 +18,8 @@ class GroupProfile(models.Model):
     groupname = models.CharField(max_length=140)
     privacy = models.CharField(max_length=10, choices=PrivacyChoices.group_choices(),
         default=PrivacyChoices.public)
+    membership = models.CharField(max_length=7, choices=MembershipChoices.choices,
+        default=MembershipChoices.open)
     description = RichTextField(max_length=4000, blank=True, null=True)
     summary = models.CharField(max_length=300, blank=True, null=True)
     date_created = models.DateTimeField(default=timezone.now)
@@ -77,3 +79,11 @@ class GroupProfile(models.Model):
     def get_members(self):
         return User.objects.filter(groups__name=self.group.name)
 
+
+class PendingMember(models.Model):
+    group = models.OneToOneField(GroupProfile, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    status = models.CharField(max_length=7, choices=MembershipChoices.pending_choices(),
+        default=MembershipChoices.request)
+    inviter = models.ForeignKey(User, blank=True, null=True, related_name="invitations")
+    date_created = models.DateTimeField(default=timezone.now)
