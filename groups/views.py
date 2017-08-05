@@ -38,6 +38,11 @@ class GroupView(UserPassesTestMixin, generic.DetailView):
         context['is_admin'] = self.object.hasAdmin(self.request.user)
         context['is_owner'] = self.object.owner == self.request.user
         context['tag_list'] = self.object.tags.all()
+        # There's a small chance that an invite & request will both be active at once.
+        context['pending_request'] = PendingMember.objects.filter(group=self.object,
+            user=self.request.user, status="request").first()
+        context['pending_invite'] = PendingMember.objects.filter(group=self.object,
+            user=self.request.user, status="invite").first()
         return context
 
     def test_func(self):

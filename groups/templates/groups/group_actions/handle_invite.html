@@ -1,0 +1,21 @@
+You've been invited to join this group by {{ pending_invite.inviter }}.
+
+<button onClick="handleInvite('yes')">Accept</button>
+<button onClick="handleInvite('no')">Decline</button>
+
+<script>
+    function handleInvite(invite_response) {
+        $.ajax({
+            url: '{% url "approve_invite_to_group" %}',
+            data: {
+              'group_pk': {{ object.pk }},
+              'approved': invite_response,
+              'pending_pk': {{ pending_invite.pk }}
+            },
+            dataType: 'json',
+            success: function (data) {
+                $("#group_membership_info").text(data.message);
+            }
+          });
+    }
+</script>

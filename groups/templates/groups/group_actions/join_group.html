@@ -1,0 +1,16 @@
+<button onClick="joinGroup()">Join this group</button>
+
+<script>
+    function joinGroup() {
+        $.ajax({
+            url: '{% url "join_group" %}',
+            data: {
+              'group_pk': {{ object.pk }}
+            },
+            dataType: 'json',
+            success: function (data) {
+                $("#group_membership_info").text(data.message);
+            }
+          });
+    }
+</script>

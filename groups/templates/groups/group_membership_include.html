@@ -1,0 +1,71 @@
+{% if is_member %}
+
+    {% if is_owner %}
+
+        You own this group.
+        <a href="{{ object.get_edit_url }}" title="Edit" id="edit_link">
+            <i class="fa fa-pencil-square-o" aria-hidden="true">Edit</i>
+        </a>
+        <a href="{{ object.get_admin_url }}" title="Admin" id="admin_link">
+            <i class="fa fa-pencil-square-o" aria-hidden="true">Admin</i>
+        </a>
+
+    {% else %}
+
+        {% if is_admin %}
+
+            You are an admin of this group.
+            <a href="{{ object.get_admin_url }}" title="Admin" id="admin_link">
+                <i class="fa fa-pencil-square-o" aria-hidden="true">Admin</i>
+            </a>
+
+        {% else %}
+
+            You are a member of this group.
+
+        {% endif %}
+
+        <!-- Members & admins can leave but not owners-->
+        {% include "groups/group_actions/leave_group.html" %}
+
+    {% endif %}
+
+{% else %} <!--if user isn't a member-->
+
+    {% ifequal object.membership "open" %}
+
+        {% include "groups/group_actions/join_group.html" %}
+
+    {% else %}
+
+       {% if pending_invite %}
+
+            {% include "groups/group_actions/handle_invite.html" %}
+
+        {% else %}
+
+            {% ifequal object.membership "request" %}
+
+                {% if pending_request %}
+
+                    Your request to join the group is waiting for approval.
+
+                {% else %}
+
+                    {% include "groups/group_actions/request_to_join_group.html" %}
+
+                {% endif %}
+
+            {% else %}
+
+                <!--We know this group is invite only because it's not open or request,-->
+                <!--and we no the user has no outstanding invites.-->
+                This group is invite only.
+
+            {% endifequal %}
+
+        {% endif %}
+
+    {% endifequal %}
+
+{% endif %}
