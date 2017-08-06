@@ -94,6 +94,9 @@ class GroupAdminView(UserPassesTestMixin, generic.DetailView):
         context = super(GroupAdminView, self).get_context_data(**kwargs)
         context['requests'] = PendingMember.objects.filter(group=self.object, status="request")
         context['invites'] = PendingMember.objects.filter(group=self.object, status="invite")
+        # Note: This gets a double of the user, and also doesn't check for pending memberships
+        my_friends = self.request.user.profile.get_connected_people()
+        context['friends'] = [friend.user for friend in my_friends if not self.object.hasMember(friend.user)]
         return context
 
     def test_func(self):
@@ -178,8 +181,9 @@ def approve_request_to_join_group(request):
 def invite_to_group(request):
     group_pk = request.GET.get('group_pk', None)
     groupprofile = GroupProfile.objects.get(pk=group_pk)
-    user_pk = request.GET.get('user_pk', None)
-    invited_user = User.objects.get(pk=user_pk)
+    username = request.GET.get('username', None)
+    print(username)
+    invited_user = User.objects.get(username=username)
     if groupprofile.hasMember(invited_user):
         return JsonResponse({'message': 'This user is already in the group.'})
     pending, created = PendingMember.objects.get_or_create(group=groupprofile,
