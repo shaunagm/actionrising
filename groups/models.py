@@ -81,7 +81,7 @@ class GroupProfile(models.Model):
 
 
 class PendingMember(models.Model):
-    group = models.OneToOneField(GroupProfile, on_delete=models.CASCADE)
+    group = models.ForeignKey(GroupProfile, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.CharField(max_length=7, choices=MembershipChoices.pending_choices(),
         default=MembershipChoices.request)
