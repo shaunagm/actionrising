@@ -36,17 +36,30 @@
 
                 {% include "groups/group_actions/handle_request.html" %}
 
+            {% empty %}
+
+                There are no outstanding requests.
+
             {% endfor %}
 
             <h4>Invites</h4>
 
-            {% include "groups/group_actions/invite_users.html" %}
+            Invited users:
 
             {% for invitee in invites %}
 
-                {{ invitee.user }} <br />
+                <a href="{{ invitee.user.profile.get_absolute_url }}">{{ invitee.user }}</a>
+
+            {% empty %}
+
+                there are no outstanding invites.
 
             {% endfor %}
+
+            <br /><br />
+
+            {% include "groups/group_actions/invite_users.html" %}
+
 
         </div>
     </div>

@@ -16,13 +16,12 @@
     }
 
     function inviteUser() {
-        username = $("#invite-friends").val();
-        alert(username);
+        usernames = $("#invite-friends").val();
         $.ajax({
             url: '{% url "invite_to_group" %}',
             data: {
               'group_pk': {{ object.pk }},
-              'username': username
+              'usernames': usernames
             },
             dataType: 'json',
             success: function (data) {

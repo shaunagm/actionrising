@@ -10,6 +10,7 @@ from mysite.lib.privacy import apply_check_privacy, check_privacy
 
 from groups.models import GroupProfile, PendingMember
 from groups.forms import GroupForm
+from groups.lib.utils import get_potential_invitees
 
 
 def index(request):
@@ -94,9 +95,7 @@ class GroupAdminView(UserPassesTestMixin, generic.DetailView):
         context = super(GroupAdminView, self).get_context_data(**kwargs)
         context['requests'] = PendingMember.objects.filter(group=self.object, status="request")
         context['invites'] = PendingMember.objects.filter(group=self.object, status="invite")
-        # Note: This gets a double of the user, and also doesn't check for pending memberships
-        my_friends = self.request.user.profile.get_connected_people()
-        context['friends'] = [friend.user for friend in my_friends if not self.object.hasMember(friend.user)]
+        context['friends'] = get_potential_invitees(self.object, self.request.user)
         return context
 
     def test_func(self):
@@ -181,18 +180,18 @@ def approve_request_to_join_group(request):
 def invite_to_group(request):
     group_pk = request.GET.get('group_pk', None)
     groupprofile = GroupProfile.objects.get(pk=group_pk)
-    username = request.GET.get('username', None)
-    print(username)
-    invited_user = User.objects.get(username=username)
-    if groupprofile.hasMember(invited_user):
-        return JsonResponse({'message': 'This user is already in the group.'})
-    pending, created = PendingMember.objects.get_or_create(group=groupprofile,
-        user=invited_user, inviter=request.user, status="invite")
-    if created:
-        return JsonResponse({'message': 'The user has been invited to group.'})
-    else:
-        return JsonResponse({'message':
-            'The user has already been invited to the group.'})
+    usernames = request.GET.getlist('usernames[]')
+    invitees = []
+    for user in usernames:
+        invited_user = User.objects.get(username=user)
+        if groupprofile.hasMember(invited_user):
+            continue
+        pending, created = PendingMember.objects.get_or_create(group=groupprofile,
+            user=invited_user, inviter=request.user, status="invite")
+        if created:
+            invitees.append(invited_user)
+    invitee_string = 'You have invited ' + ' '.join([user.username for user in invitees])
+    return JsonResponse({'message': invitee_string})
 
 
 @login_required
