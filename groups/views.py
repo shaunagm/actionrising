@@ -108,7 +108,7 @@ def join_group(request):
     group_pk = request.GET.get('group_pk', None)
     groupprofile = GroupProfile.objects.get(pk=group_pk)
     if groupprofile.hasMember(request.user):
-        return JsonResponse({'message': 'You are already a member of this group'})
+        return JsonResponse({'message': 'You are already a member of this group.'})
     if groupprofile.membership == "open":
         groupprofile.addMember(request.user)
         return JsonResponse({'message': 'You have joined this group.'})
@@ -150,7 +150,7 @@ def request_to_join_group(request):
     group_pk = request.GET.get('group_pk', None)
     groupprofile = GroupProfile.objects.get(pk=group_pk)
     if groupprofile.hasMember(request.user):
-        return JsonResponse({'message': 'You are already a member of this group'})
+        return JsonResponse({'message': 'You are already a member of this group.'})
     if groupprofile.membership != "request":
         return JsonResponse({'message':
             'There was an error processing your request to join this group.'})
@@ -187,8 +187,11 @@ def invite_to_group(request):
         if groupprofile.hasMember(invited_user):
             continue
         pending, created = PendingMember.objects.get_or_create(group=groupprofile,
-            user=invited_user, inviter=request.user, status="invite")
+            user=invited_user)
         if created:
+            pending.status = "invite"
+            pending.inviter = request.user
+            pending.save()
             invitees.append(invited_user)
     invitee_string = 'You have invited ' + ' '.join([user.username for user in invitees])
     return JsonResponse({'message': invitee_string})

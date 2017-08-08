@@ -30,6 +30,8 @@ def get_user_role(context, user):
         return "owner"
     if group.hasAdmin(user):
         return "admin"
-    return "member"
+    if group.hasMember(user):
+        return "member"
+    return None
 
 
