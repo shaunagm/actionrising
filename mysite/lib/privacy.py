@@ -28,11 +28,14 @@ def follows_test(object, user, follows_user = None):
 
 def members_test(object, user, follows_user = None):
     """
-    object: groupprofile object with privacy setting
+    object: groupprofile or slate with privacy setting
     user: User trying to view object
     follows_user: takes an extra argument for conformity
     """
-    return object.hasMember(user)
+    if type(object).__name__ == 'GroupProfile':
+        return object.hasMember(user)
+    if type(object).__name__ == 'Slate':
+        return user.has_perm('view_slate', object)
 
 # maps privacy settings to functions that can be applied to test them
 privacy_tests = {

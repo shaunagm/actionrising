@@ -1,5 +1,6 @@
 from django.forms import ModelForm, ModelMultipleChoiceField
 from datetimewidget.widgets import DateTimeWidget
+from guardian.shortcuts import get_groups_with_perms, assign_perm, remove_perm
 
 from actions.models import Action
 from mysite.lib.choices import PrivacyChoices, StatusChoices
@@ -27,7 +28,14 @@ class SlateForm(ModelForm):
             self.fields['actions'].initial = self.instance.actions.all()
 
         # Set privacy
-        self.fields['privacy'].choices = PrivacyChoices.personalized(get_global_privacy_default(user.profile, "decorated"))
+        self.fields['privacy'].choices = PrivacyChoices.personalized_with_groups(get_global_privacy_default(user.profile, "decorated"))
+
+        # Get potential groups
+        help_text = "Select some groups" if self.user.groups.all() else "You have no groups to select"
+        self.fields['groups'] = ModelMultipleChoiceField(label="Groups that can access this slate",
+            required=False, queryset=self.user.groups.all(), help_text=help_text)
+        if self.formtype == "update":
+            self.fields['groups'].initial = get_groups_with_perms(self.instance)
 
         # Set tags
         self.fields = tag_helpers.add_tag_fields_to_form(self.fields, self.instance, formtype)
@@ -46,6 +54,18 @@ class SlateForm(ModelForm):
         # Manage action queryset
         actions = self.cleaned_data.pop('actions')
         slate_helpers.manage_actions(self.formtype, instance, actions)
+
+        # Handle groups
+        if instance.privacy == "members":
+            new_groups = self.cleaned_data.pop('groups')
+            groups_to_remove = list(set(get_groups_with_perms(instance)) - set(new_groups))
+            for new_group in new_groups:
+                assign_perm('view_slate', new_group, instance)
+            for old_group in groups_to_remove:
+                remove_perm('view_slate', old_group, instance)
+        else:
+            old_groups = get_groups_with_perms(instance)
+            [remove_perm('view_slate', old_group, instance) for old_group in old_groups]
 
         # Handle tags
         tags, form = tag_helpers.get_tags_from_valid_form(self)
