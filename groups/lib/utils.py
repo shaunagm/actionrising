@@ -4,11 +4,5 @@ def get_potential_invitees(groupprofile, user):
     pending invitations or requests already.'''
     follow_filter = lambda rel: rel.target_follows_current_profile(user.profile)
     friends = user.profile.filter_connected_profiles(follow_filter)
-    filtered_friends = []
-    for friend in friends:
-        if groupprofile.hasMember(friend.user):
-            continue
-        if friend.user.pendingmember_set.filter(group=groupprofile):
-            continue
-        filtered_friends.append(friend)
-    return filtered_friends
+    return [friend for friend in friends if not (groupprofile.hasMember(friend.user)
+        or friend.user.pendingmember_set.filter(group=groupprofile))]
