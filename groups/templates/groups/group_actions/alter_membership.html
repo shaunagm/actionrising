@@ -1,0 +1,28 @@
+{% load groups_extras %}
+
+{% get_user_role user as role %}
+
+{% ifequal role "member" %}
+
+    {% ifequal request.user object.owner %}
+
+        {% include "groups/group_actions/make_admin.html" %}
+
+    {% endifequal %}
+
+    {% include "groups/group_actions/remove_user.html" %}
+
+{% else %}
+
+    {% ifequal role "admin" %}
+
+        {% ifequal request.user object.owner %}
+
+            {% include "groups/group_actions/remove_admin.html" %}
+            {% include "groups/group_actions/remove_user.html" %}
+
+        {% endifequal %}
+
+    {% endifequal %}
+
+{% endifequal %}

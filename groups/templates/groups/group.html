@@ -1,7 +1,5 @@
 {% extends "mysite/base.html" %}
 
-{% load groups_extras %}
-
 {% block content %}
 
   <div class="row">
@@ -16,27 +14,21 @@
                     {{ object.owner.profile.get_name }}</a>
             </div>
         {% endif %}
-
-        {% if is_admin %}
-            <a href="{{ object.get_admin_url }}" title="Admin" id="admin_link">
-                <i class="fa fa-pencil-square-o" aria-hidden="true">Admin</i>
-            </a>
-        {% endif %}
-
-        {% if is_owner %}
-            <a href="{{ object.get_edit_url }}" title="Edit" id="edit_link">
-                <i class="fa fa-pencil-square-o" aria-hidden="true">Edit</i>
-            </a>
-        {% endif %}
-
     </div>
   </div>
 
-    <div class="row">
-       <div class="col-sm-11 col-sm-offset-1">
-          {% include "tags/label_include.html" with object_list=object.tags.all %}
-       </div>
+  <div class="row">
+    <div class="col-sm-11 col-sm-offset-1" id="group_membership_info">
+        {% include "groups/group_membership_include.html" %}
     </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-sm-11 col-sm-offset-1">
+      {% include "tags/label_include.html" with object_list=object.tags.all %}
+    </div>
+  </div>
 
 
   <div class="row">
@@ -58,16 +50,7 @@
         <div class="col-sm-11 col-sm-offset-1" id="members">
             {% for user in object.get_members %}
 
-                <div class="member">
-
-                    {% profile_is_admin user as admin %}
-
-                    <a href="{{ user.profile.get_absolute_url }}">{{ user.profile.get_full_name }}</a>
-
-                    {% if admin %}
-                        <span class="label label-info">Admin</span>
-                    {% endif %}
-                </div>
+                {% include "groups/member_display_include.html" %}
 
             {% endfor %}
 
@@ -75,11 +58,5 @@
     </div>
 
   {% endif %}
-
-
-
-
-
-
 
 {% endblock content %}

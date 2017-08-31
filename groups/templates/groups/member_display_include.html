@@ -1,0 +1,15 @@
+{% load groups_extras %}
+
+<div class="member">
+
+    {% profile_is_admin user as admin %}
+
+    <a href="{{ user.profile.get_absolute_url }}">
+        {{ user.profile.get_full_name }}</a>
+
+    {% if admin %}
+        <span class="label label-info">Admin</span>
+    {% endif %}
+
+</div>
+

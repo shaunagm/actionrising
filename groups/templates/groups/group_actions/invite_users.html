@@ -1,0 +1,21 @@
+<div class="">
+
+    <select multiple id="invite-friends">
+        {% for friend in friends %}
+            <option value="{{ friend }}">{{ friend }}</option>
+        {% endfor %}
+    </select>
+
+    <button onClick="inviteUser()">Invite</button>
+
+    <br />
+
+    <span id="invite-message"></span>
+
+</div>
+
+
+<script>
+$("#invite-friends").chosen({width: "95%", placeholder_text_multiple: "Invite some friends",
+    no_results_text: "No eligible friends"});
+</script>

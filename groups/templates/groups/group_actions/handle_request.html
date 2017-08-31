@@ -1,0 +1,5 @@
+<div class="request{{ requester.pk }}">
+    {{ requester.user }}
+    <button onClick="handleRequest({{ requester.pk }}, 'yes')">Accept</button>
+    <button onClick="handleRequest({{ requester.pk }}, 'no')">Decline</button>
+</div>

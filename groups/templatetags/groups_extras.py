@@ -22,3 +22,16 @@ def is_admin(context, object):
 def profile_is_admin(context, user):
     group = context['object']
     return group.hasAdmin(user)
+
+@register.assignment_tag(takes_context=True)
+def get_user_role(context, user):
+    group = context['object']
+    if user == group.owner:
+        return "owner"
+    if group.hasAdmin(user):
+        return "admin"
+    if group.hasMember(user):
+        return "member"
+    return None
+
+

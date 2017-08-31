@@ -1,0 +1,18 @@
+<button onClick="leaveGroup()">Leave this group</button>
+
+<script>
+    function leaveGroup() {
+        $.ajax({
+            url: '{% url "leave_group" %}',
+            data: {
+              'group_pk': {{ object.pk }}
+            },
+            dataType: 'json',
+            success: function (data) {
+                $("#group_membership_info").text(data.message);
+            }
+          });
+    }
+
+</script>
+
