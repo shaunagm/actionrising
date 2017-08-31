@@ -31,6 +31,13 @@ class Slate(models.Model):
     date_created = models.DateTimeField(default=timezone.now)
     flags = GenericRelation('flags.Flag')
 
+    class Meta:
+        permissions = (
+            ('administer_slate', 'Administer slate'),
+            ('contribute_actions', 'Contribute actions to slate'),
+            ('view_slate', 'View slate'),
+        )
+
     def __unicode__(self):
         return self.title
 
