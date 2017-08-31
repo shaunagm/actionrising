@@ -2,6 +2,8 @@ import datetime
 from django import forms
 from datetimewidget.widgets import DateTimeWidget
 from django.forms.widgets import HiddenInput
+from guardian.shortcuts import get_objects_for_user
+from itertools import chain
 
 from actions.models import Action
 from tags.lib import tag_helpers
@@ -67,7 +69,9 @@ class ActionForm(forms.ModelForm):
             self.fields, self.instance, formtype)
 
         # Set slates
-        self.fields['slates'].queryset = user.slate_set.all()
+        other_slates = get_objects_for_user(self.user, ['contribute_actions',
+            'administer_slate'], Slate)
+        self.fields['slates'].queryset = other_slates | user.slate_set.all()
 
         # Set plugin fields
         self = plugin_helpers.add_plugin_fields(self)
