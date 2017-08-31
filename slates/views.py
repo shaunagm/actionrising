@@ -87,7 +87,7 @@ class SlateEditView(UserPassesTestMixin, generic.edit.UpdateView):
 
     def test_func(self):
         obj = self.get_object()
-        return obj.creator == self.request.user
+        return obj.creator == self.request.user or self.request.user.has_perm('administer_slate', obj)
 
 @login_required
 def manage_action_for_slate(request, pk):

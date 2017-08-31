@@ -1,4 +1,4 @@
-from django.forms import ModelForm, ModelMultipleChoiceField
+from django.forms import ModelForm, ModelMultipleChoiceField, HiddenInput
 from datetimewidget.widgets import DateTimeWidget
 from guardian.shortcuts import get_groups_with_perms, assign_perm, remove_perm
 
@@ -22,6 +22,11 @@ class SlateForm(ModelForm):
         self.user = user
         self.formtype = formtype
 
+        # If user is not owner, hide title
+        if self.formtype == "update" and self.user != self.instance.creator:
+            self.fields['title'].widget = HiddenInput()
+
+
         # Set actions queryset
         self.fields['actions'].queryset = Action.objects.filter(status=StatusChoices.ready).filter(current_privacy__in=[PrivacyChoices.public, PrivacyChoices.sitewide]).order_by("title")
         if self.formtype == "update":
@@ -30,7 +35,7 @@ class SlateForm(ModelForm):
         # Set privacy
         self.fields['privacy'].choices = PrivacyChoices.personalized_with_groups(get_global_privacy_default(user.profile, "decorated"))
 
-        # Get potential groups
+        # Set potential groups
         help_text = "Select some groups" if self.user.groups.all() else "You have no groups to select"
         self.fields['groups'] = ModelMultipleChoiceField(label="Groups that can access this slate",
             required=False, queryset=self.user.groups.all(), help_text=help_text)
