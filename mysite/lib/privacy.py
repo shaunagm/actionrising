@@ -35,7 +35,9 @@ def members_test(object, user, follows_user = None):
     if type(object).__name__ == 'GroupProfile':
         return object.hasMember(user)
     if type(object).__name__ == 'Slate':
-        return user.has_perm('view_slate', object)
+        return (user == object.creator or user.has_perm('view_slate', object)
+                or user.has_perm('administer_slate', object)
+                or user.has_perm('contribute_actions', object))
 
 # maps privacy settings to functions that can be applied to test them
 privacy_tests = {

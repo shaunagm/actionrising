@@ -1,7 +1,7 @@
 from .base import SeleniumTestCase
 from .pageobjects import (BasicActionListPage, ActionEditPage, ProfilePage, ToDoPage,
     BasicActionDetailPage, ManageActionPage, LoggedOutLandingPage,
-    SlateDetailPage)
+    SlateDetailPage, SlateEditPage, GroupEditPage, GroupProfilePage)
 
 default_user = "buffysummers"
 default_password = "apocalypse"
@@ -195,3 +195,50 @@ class LoggedOutUser(SeleniumTestCase):
         self.slate_info.go_to_detail_page(title="High stakes slate of actions")
         self.wait_helper()
         self.assertEquals(self.slate_info.hidden_actions.text, "This slate has 2 private actions. Try logging in to access them.")
+
+class SlateAdminAndAccess(SeleniumTestCase):
+
+    def create_public_group_helper(self, groupname="A Test Group"):
+        '''This helper logs in as Buffy and creates a public group.  Used in at least
+        two tests below.'''
+        # Create group
+        self.groupform = GroupEditPage(self.browser, root_uri=self.live_server_url)
+        self.groupform.go_to_create_page()
+        self.groupform.groupname = groupname
+        self.groupform.select_privacy("Visible to public")
+        self.browser.execute_script("return arguments[0].scrollIntoView();", self.groupform.summary)
+        self.groupform.summary = "A quick summary"
+        self.groupform.submit_button.click()
+        # Test that it worked
+        self.groupdetail = GroupProfilePage(self.browser, root_uri=self.live_server_url)
+        self.groupdetail.go_to_profile_page(name="A Test Group")
+        self.assertEquals(self.groupdetail.group_name.text, "A Test Group")
+
+    # User X creates a slate, and set privacy to limited to a public group.
+    # User Y attempts to view the slate and can't.  They join the public group,
+    # and now they can.  (Public group chosen to avoid having to add invite/request steps.
+    def test_slate_privacy_when_set_to_groups(self):
+        self.landing_page = LoggedOutLandingPage(self.browser,
+                                                 root_uri=self.live_server_url)
+        self.landing_page.log_in(default_user, default_password)
+        self.create_public_group_helper()
+        self.create_public_group_helper("Woo")
+        self.slate_page = SlateEditPage(self.browser, root_uri=self.live_server_url)
+        self.slate_page.go_to_create_page()
+        self.slate_page.title = "A Test Slate"
+        self.slate_page.select_privacy("Visible to group members")
+        pass
+        # self.slate_page.select_group(2)  # This is broken
+        # self.browser.execute_script("return arguments[0].scrollIntoView();", self.slate_page.submit_button)
+        # self.slate_page.submit_button.click()
+
+    # User X creates a slate and adds User A as admin and User C as contributor.
+    # User A checks out the admin page and sees they can add and remove contributors.
+    # They check out Action form and see they can add that slate to their actions there.
+    # User C checks out PAR form and sees they can add action to that slate.
+    def test2(self):
+        pass
+
+    # Same as above but membership via groups rather than directly.
+    def test3(self):
+        pass
