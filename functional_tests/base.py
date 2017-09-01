@@ -40,3 +40,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         )
         if not element:
             raise Exception("Page didn't load after 15 seconds")
+
+    def sleep(self, sleep=15):
+        import time
+        time.sleep(sleep)

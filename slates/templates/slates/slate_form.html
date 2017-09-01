@@ -3,7 +3,23 @@
 {% load bootstrap3 %}
 
 {% block page_specific_javascript %}
-$("#id_actions, #id_topic_tags, #id_type_tags, #id_goal_tags").chosen()
+
+$("#id_actions, #id_topic_tags, #id_type_tags, #id_goal_tags, #id_groups").chosen();
+
+function check_field_value() {
+  if($("#id_privacy").val() == 'members') {
+        $('#id_groups_chosen, label[for=id_groups], #id_groups_chosen + span.help-block').show();
+    } else {
+        $('#id_groups_chosen, label[for=id_groups], #id_groups_chosen + span.help-block').hide();
+    }
+}
+
+$(document).ready(function() {
+    check_field_value();
+    $('#id_privacy').change(check_field_value);
+});
+
+
 {% endblock page_specific_javascript %}
 
 {% block content %}

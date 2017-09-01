@@ -1,6 +1,8 @@
 from django.test import TestCase
-
 from django.contrib.auth.models import User, AnonymousUser
+
+from guardian.shortcuts import assign_perm
+
 from actions.models import Action
 from slates.models import Slate, SlateActionRelationship
 from profiles.models import Profile, ProfileActionRelationship
@@ -117,6 +119,27 @@ class TestPrivacyUtils(TestCase):
         self.sar.action.save()
         self.assertTrue(check_privacy(self.sar, self.buffy))
         self.assertFalse(check_privacy(self.sar, self.anon))
+
+    def test_check_privacy_of_members_only_slate(self):
+        # Global default is public, so before changes, Buffy & Anon should both have access
+        self.assertTrue(check_privacy(self.slate, self.buffy))
+        self.assertTrue(check_privacy(self.slate, self.anon))
+        # Once privacy is changed to members only, neither Buffy nor Anon should have access.
+        self.slate.privacy = PrivacyChoices.members
+        self.slate.save()
+        self.assertFalse(check_privacy(self.slate, self.buffy))
+        self.assertFalse(check_privacy(self.slate, self.anon))
+        # Add a group to the slate (typically added via form, so doing this indirectly)
+        groupprofile = GroupProfile.objects.create(groupname="TestGroup", owner=self.faith)
+        assign_perm('view_slate', groupprofile.group, self.slate)
+        self.assertFalse(check_privacy(self.slate, self.buffy))
+        self.assertFalse(check_privacy(self.slate, self.anon))
+        # Finally, add Buffy to group, now she but not anon should have access.
+        groupprofile.addMember(self.buffy)
+        self.assertTrue(check_privacy(self.slate, self.buffy))
+        self.assertFalse(check_privacy(self.slate, self.anon))
+
+
 
 class TestMiscUtils(TestCase):
 

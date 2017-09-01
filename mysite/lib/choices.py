@@ -17,6 +17,10 @@ class PrivacyChoices(DjangoChoices):
         return cls.choices[:-2] + (('inherit', user_choice),)
 
     @classmethod
+    def personalized_with_groups(cls, user_choice):
+        return cls.choices[:-2] + cls.choices[4:] + (('inherit', user_choice),)
+
+    @classmethod
     def group_choices(cls):
         return cls.choices[:-2] + cls.choices[4:]
 

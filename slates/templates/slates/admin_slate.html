@@ -1,0 +1,32 @@
+{% extends "mysite/base.html" %}
+
+{% load bootstrap3 %}
+
+{% block page_specific_javascript %}
+
+$("#id_group_contributors, #id_group_admins, #id_user_contributors, #id_user_admins").chosen();
+
+{% endblock page_specific_javascript %}
+
+{% block content %}
+
+    <div class="row">
+      <div class="col-sm-11 col-sm-offset-1">
+         <h2>Admin view for <a href="{{ object.get_absolute_url }}">{{ object }}</a></h2>
+      </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-1" id="admin_form">
+
+            <form method="POST" class="post-form">{% csrf_token %}
+                {{ form.as_p }}
+                {% bootstrap_button "Save" button_type="submit" button_class="btn-primary group-submit-button" icon="star" %}
+            </form>
+
+        </div>
+    </div>
+
+
+{% endblock content %}

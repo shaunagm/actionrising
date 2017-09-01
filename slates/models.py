@@ -31,6 +31,13 @@ class Slate(models.Model):
     date_created = models.DateTimeField(default=timezone.now)
     flags = GenericRelation('flags.Flag')
 
+    class Meta:
+        permissions = (
+            ('administer_slate', 'Administer slate'),
+            ('contribute_actions', 'Contribute actions to slate'),
+            ('view_slate', 'View slate'),
+        )
+
     def __unicode__(self):
         return self.title
 
@@ -69,6 +76,9 @@ class Slate(models.Model):
 
     def get_edit_url(self):
         return reverse('edit_slate', kwargs={'slug': self.slug})
+
+    def get_admin_url(self):
+        return reverse('admin_slate', kwargs={'slug': self.slug})
 
     # TODO rename method?
     def get_sar_given_action(self, action):

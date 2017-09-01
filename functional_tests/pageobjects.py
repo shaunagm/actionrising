@@ -1,6 +1,8 @@
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common import keys
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver import ActionChains
 from page_objects import PageObject, PageElement, MultiPageElement
 
 from django.contrib.auth.models import User
@@ -214,6 +216,39 @@ class SlateDetailPage(BaseObjectDetailPage):
         else:
             self.slate = Slate.objects.last()
         self.w.get(self.root_uri + self.slate.get_absolute_url())
+
+class SlateEditPage(BasePage):
+    title = PageElement(id_="id_title")
+    creator = PageElement(id_="id_creator")
+    submit_button = PageElement(css="button[type='submit']")
+
+    def go_to_create_page(self):
+        self.w.get(self.root_uri + "/slates/slate-create")
+
+    def go_to_edit_page(self, title=None):
+        if title:
+            self.slate = Slate.objects.get(title=title)
+        else:
+            self.slate = Slate.objects.last()
+        self.w.get(self.root_uri + self.slate.get_edit_url())
+
+    def select_privacy(self, selection):
+        select = Select(self.w.find_element_by_id('id_privacy'))
+        select.select_by_visible_text(selection)
+
+    def select_group(self, index):
+        # TODO: fix this, it's broken
+        actions = ActionChains(self.w)
+        initial_field = self.w.find_element_by_css_selector("#id_groups_chosen ul.chosen-choices li.search-field input")
+        actions.move_to_element(initial_field)
+        actions.click(initial_field)
+        # why won't a dropdown appear whyyyyyyyyyyyyy
+        selector = "#id_groups_chosen div.chosen-drop ul li:nth-child(1)"
+        group_choice = self.w.find_element_by_css_selector(selector)
+        # actions.move_to_element(group_choice)
+        actions.click(group_choice)
+        actions.perform()
+
 
 class ActionEditPage(BasePage):
     title = PageElement(id_="id_title")

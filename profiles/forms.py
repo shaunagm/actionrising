@@ -4,6 +4,7 @@ from django.forms import (ModelForm, ModelMultipleChoiceField, ModelChoiceField,
     ChoiceField, Select, CharField, SelectMultiple)
 from django.forms import inlineformset_factory
 from django.forms.widgets import HiddenInput
+from guardian.shortcuts import get_objects_for_user
 
 from mysite.lib.choices import PrivacyChoices
 from mysite.lib.privacy import get_global_privacy_default
@@ -76,6 +77,8 @@ class ProfileActionRelationshipForm(ModelForm):
             par = kwargs.pop('par')
             super(ProfileActionRelationshipForm, self).__init__(*args, **kwargs)
             self.fields['profiles'].queryset = par.profile.get_followers
-            self.fields['slates'].queryset = par.profile.user.slate_set.all()
+            other_slates = get_objects_for_user(par.profile.user,
+                ['contribute_actions', 'administer_slate'], Slate)
+            self.fields['slates'].queryset = other_slates | par.profile.user.slate_set.all()
         else:
             super(ProfileActionRelationshipForm, self).__init__(*args, **kwargs)

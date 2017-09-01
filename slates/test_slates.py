@@ -1,12 +1,15 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.forms.widgets import HiddenInput
+from guardian.shortcuts import assign_perm
 
 from mysite.lib.choices import StatusChoices, PrivacyChoices
 from mysite.lib.utils import slugify_helper
 from actions.models import Action
 from slates.models import Slate
 from slates.forms import SlateForm
+from slates.templatetags import slate_extras
 from . import factories
 
 
@@ -54,12 +57,45 @@ class TestSlateForms(TestCase):
 
     def setUp(self):
         self.buffy = User.objects.create(username="buffysummers")
+        self.slate = factories.Slate(title="Test Slate", creator=self.buffy)
+        self.giles = User.objects.create(username="giles")
 
     def test_slate_form_privacy_choices(self):
         initial_form = SlateForm(user=self.buffy, formtype="create")
         form_inherited_privacy = initial_form.fields['privacy'].choices[0][1]
         user_privacy = self.buffy.profile.privacy_defaults.get_global_default_display()
         self.assertEqual(form_inherited_privacy, user_privacy)
+
+    def test_slate_title_is_hidden_on_update_if_not_owner(self):
+        update_form = SlateForm(instance=self.slate, user=self.buffy, formtype="update")
+        self.assertNotEqual(type(update_form.fields['title'].widget), HiddenInput)
+        update_form = SlateForm(instance=self.slate, user=self.giles, formtype="update")
+        self.assertEqual(type(update_form.fields['title'].widget), HiddenInput)
+
+
+class TestSlateTemplateTags(TestCase):
+
+    def setUp(self):
+        self.buffy = User.objects.create(username="buffysummers")
+        self.slate = factories.Slate(title="Test Slate", creator=self.buffy)
+        self.giles = User.objects.create(username="giles")
+        class Request(object):
+            user = self.buffy
+        self.mockRequest = Request()
+
+    def test_check_can_edit(self):
+        # Test owner
+        context = {'request': self.mockRequest }
+        can_edit = slate_extras.check_can_edit(context, self.slate)
+        self.assertTrue(can_edit)
+        # Test non-owner
+        context['request'].user = self.giles
+        can_edit = slate_extras.check_can_edit(context, self.slate)
+        self.assertFalse(can_edit)
+        # Add non-owner as admin
+        assign_perm('administer_slate', self.giles, self.slate)
+        can_edit = slate_extras.check_can_edit(context, self.slate)
+        self.assertTrue(can_edit)
 
 
 class TestSlatePrivacy(TestCase):

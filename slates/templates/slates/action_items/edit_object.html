@@ -1,5 +1,8 @@
-{% if request.user.is_authenticated %}
-  {% ifequal object.creator.username request.user.username %}
+{% load slate_extras %}
+
+{% check_can_edit object as can_edit %}
+
+{% if can_edit %}
 
       <div class="action-item">
         <a href="{{ object.get_edit_url }}" title="Edit">
@@ -7,5 +10,10 @@
         </a>
       </div>
 
-   {% endifequal %}
+      <div class="action-item">
+        <a href="{{ object.get_admin_url }}" title="Admin">
+          <i class="fa fa-pencil-square-o" aria-hidden="true"></i>Administer your {{ object.get_cname }}
+        </a>
+      </div>
+
 {% endif %}
