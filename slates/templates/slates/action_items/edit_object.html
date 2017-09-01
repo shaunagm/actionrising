@@ -1,11 +1,19 @@
 {% load slate_extras %}
 
-{% check_can_edit for object as can_edit %}
+{% check_can_edit object as can_edit %}
 
 {% if can_edit %}
+
       <div class="action-item">
         <a href="{{ object.get_edit_url }}" title="Edit">
           <i class="fa fa-pencil-square-o" aria-hidden="true"></i>Edit your {{ object.get_cname }}
         </a>
       </div>
+
+      <div class="action-item">
+        <a href="{{ object.get_admin_url }}" title="Admin">
+          <i class="fa fa-pencil-square-o" aria-hidden="true"></i>Administer your {{ object.get_cname }}
+        </a>
+      </div>
+
 {% endif %}

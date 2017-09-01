@@ -5,12 +5,15 @@ from django.views import generic
 from django.contrib.auth.mixins import UserPassesTestMixin,  LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
+from guardian.shortcuts import get_users_with_perms, get_groups_with_perms
+
 from flags.lib.flag_helpers import get_user_flag_if_exists
 from mysite.lib.choices import StatusChoices
 from mysite.lib.privacy import check_privacy, apply_check_privacy, filter_list_for_privacy_annotated
 from profiles.lib.trackers import Trackers
 from slates.models import Slate, SlateActionRelationship
-from slates.forms import SlateForm, SlateActionRelationshipForm
+from slates.forms import SlateForm, SlateActionRelationshipForm, SlateAdminForm
+from groups.lib.utils import get_potential_invitees
 
 class SlateView(UserPassesTestMixin, generic.DetailView):
     template_name = 'slates/slate.html'
@@ -88,6 +91,31 @@ class SlateEditView(UserPassesTestMixin, generic.edit.UpdateView):
     def test_func(self):
         obj = self.get_object()
         return obj.creator == self.request.user or self.request.user.has_perm('administer_slate', obj)
+
+class SlateAdminView(UserPassesTestMixin, generic.edit.FormView):
+    template_name = "slates/admin_slate.html"
+    form_class = SlateAdminForm
+    success_url = "/actualurldefinedinmethodbelow/"
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj.creator == self.request.user or self.request.user.has_perm('administer_slate', obj)
+
+    def get_object(self):
+        return Slate.objects.get(slug=self.kwargs['slug'])
+
+    def get_form_kwargs(self):
+        form_kws = super(SlateAdminView, self).get_form_kwargs()
+        form_kws["user"] = self.request.user
+        form_kws["slate"] = self.get_object()
+        return form_kws
+
+    def form_valid(self, form):
+        form.process_form()
+        return super(SlateAdminView, self).form_valid(form)
+
+    def get_success_url(self):
+        return self.get_object().get_absolute_url()
 
 @login_required
 def manage_action_for_slate(request, pk):
